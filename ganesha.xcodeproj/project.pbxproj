@@ -1,0 +1,505 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		06A1C86F278CC21000D6A0AC /* libvulkan.1.2.198.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 06A1C86E278CC21000D6A0AC /* libvulkan.1.2.198.dylib */; };
+		06A1C870278CC21000D6A0AC /* libvulkan.1.2.198.dylib in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 06A1C86E278CC21000D6A0AC /* libvulkan.1.2.198.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		06A1C872278CC26F00D6A0AC /* libMoltenVK.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 06A1C871278CC26F00D6A0AC /* libMoltenVK.dylib */; };
+		06A1C873278CC26F00D6A0AC /* libMoltenVK.dylib in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 06A1C871278CC26F00D6A0AC /* libMoltenVK.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		E389E67826BEC2EA004AD786 /* gcamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E389E67526BE8533004AD786 /* gcamera.cpp */; };
+		E3BF735126B2FEC90093F6B5 /* gvector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3BF734F26B2FEC90093F6B5 /* gvector.cpp */; };
+		E3C0C9A326AAEE23004F764A /* CPPBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = E3C0C99E26AAEE23004F764A /* CPPBridge.mm */; };
+		E3C0C9A426AAEE23004F764A /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C0C99F26AAEE23004F764A /* Application.swift */; };
+		E3C0C9A526AAEE23004F764A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C0C9A126AAEE23004F764A /* AppDelegate.swift */; };
+		E3C0C9A626AAEE23004F764A /* ViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C0C9A226AAEE23004F764A /* ViewContoller.swift */; };
+		E3C0C9B126AAEEEE004F764A /* frag.spv in Resources */ = {isa = PBXBuildFile; fileRef = E3C0C9AD26AAEEEE004F764A /* frag.spv */; };
+		E3C0C9B426AAEEEE004F764A /* vert.spv in Resources */ = {isa = PBXBuildFile; fileRef = E3C0C9B026AAEEEE004F764A /* vert.spv */; };
+		E3C0C9B826AAEF13004F764A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E3C0C9B726AAEF13004F764A /* Assets.xcassets */; };
+		E3C0C9C226AAEF28004F764A /* gvulkaninstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3C0C9B926AAEF28004F764A /* gvulkaninstance.cpp */; };
+		E3C0C9C326AAEF28004F764A /* gbundle.mm in Sources */ = {isa = PBXBuildFile; fileRef = E3C0C9BA26AAEF28004F764A /* gbundle.mm */; };
+		E3C0C9C426AAEF28004F764A /* gganesha.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3C0C9BB26AAEF28004F764A /* gganesha.cpp */; };
+		E3C0C9C526AAEF28004F764A /* gvulkanapi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3C0C9BD26AAEF28004F764A /* gvulkanapi.cpp */; };
+		E3C0C9CD26AB186C004F764A /* gcolor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3C0C9CA26AB186C004F764A /* gcolor.cpp */; };
+		E3C0C9CE26AB186C004F764A /* gpoint2d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3C0C9CB26AB186C004F764A /* gpoint2d.cpp */; };
+		E3D8AB6E26B2A94000D01698 /* gpoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3D8AB6A26B2A94000D01698 /* gpoint.cpp */; };
+		E3D8AB6F26B2A94000D01698 /* gmatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3D8AB6C26B2A94000D01698 /* gmatrix.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		06A1C86D278CB1AB00D6A0AC /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				06A1C873278CC26F00D6A0AC /* libMoltenVK.dylib in Embed Frameworks */,
+				06A1C870278CC21000D6A0AC /* libvulkan.1.2.198.dylib in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		06A1C86E278CC21000D6A0AC /* libvulkan.1.2.198.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvulkan.1.2.198.dylib; path = "vulkansdk-macos-1.2.198.1/macOS/lib/libvulkan.1.2.198.dylib"; sourceTree = "<group>"; };
+		06A1C871278CC26F00D6A0AC /* libMoltenVK.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMoltenVK.dylib; path = "vulkansdk-macos-1.2.198.1/macOS/lib/libMoltenVK.dylib"; sourceTree = "<group>"; };
+		E307E72926AEE3EF00B18688 /* compile_shaders.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = compile_shaders.sh; sourceTree = "<group>"; };
+		E389E67526BE8533004AD786 /* gcamera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gcamera.cpp; path = engine/gcamera.cpp; sourceTree = "<group>"; };
+		E389E67626BE8533004AD786 /* gcamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gcamera.h; path = engine/gcamera.h; sourceTree = "<group>"; };
+		E3BF734F26B2FEC90093F6B5 /* gvector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gvector.cpp; path = engine/gvector.cpp; sourceTree = "<group>"; };
+		E3BF735026B2FEC90093F6B5 /* gvector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvector.h; path = engine/gvector.h; sourceTree = "<group>"; };
+		E3C0C99D26AAEE23004F764A /* ganesha-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ganesha-Bridging-Header.h"; path = "ganesha/ganesha-Bridging-Header.h"; sourceTree = "<group>"; };
+		E3C0C99E26AAEE23004F764A /* CPPBridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CPPBridge.mm; path = ganesha/CPPBridge.mm; sourceTree = "<group>"; };
+		E3C0C99F26AAEE23004F764A /* Application.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Application.swift; path = ganesha/Application.swift; sourceTree = "<group>"; };
+		E3C0C9A026AAEE23004F764A /* CPPBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPPBridge.h; path = ganesha/CPPBridge.h; sourceTree = "<group>"; };
+		E3C0C9A126AAEE23004F764A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = ganesha/AppDelegate.swift; sourceTree = "<group>"; };
+		E3C0C9A226AAEE23004F764A /* ViewContoller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewContoller.swift; path = ganesha/ViewContoller.swift; sourceTree = "<group>"; };
+		E3C0C9A826AAEEB1004F764A /* ganesha.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = ganesha.entitlements; path = ganesha/ganesha.entitlements; sourceTree = "<group>"; };
+		E3C0C9A926AAEEB1004F764A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ganesha/Info.plist; sourceTree = "<group>"; };
+		E3C0C9AD26AAEEEE004F764A /* frag.spv */ = {isa = PBXFileReference; lastKnownFileType = file; name = frag.spv; path = resources/shaders/frag.spv; sourceTree = "<group>"; };
+		E3C0C9AE26AAEEEE004F764A /* shader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = shader.frag; path = resources/shaders/shader.frag; sourceTree = "<group>"; };
+		E3C0C9AF26AAEEEE004F764A /* shader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = shader.vert; path = resources/shaders/shader.vert; sourceTree = "<group>"; };
+		E3C0C9B026AAEEEE004F764A /* vert.spv */ = {isa = PBXFileReference; lastKnownFileType = file; name = vert.spv; path = resources/shaders/vert.spv; sourceTree = "<group>"; };
+		E3C0C9B726AAEF13004F764A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = resources/Assets.xcassets; sourceTree = "<group>"; };
+		E3C0C9B926AAEF28004F764A /* gvulkaninstance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gvulkaninstance.cpp; path = engine/gvulkaninstance.cpp; sourceTree = "<group>"; };
+		E3C0C9BA26AAEF28004F764A /* gbundle.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = gbundle.mm; path = engine/gbundle.mm; sourceTree = "<group>"; };
+		E3C0C9BB26AAEF28004F764A /* gganesha.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gganesha.cpp; path = engine/gganesha.cpp; sourceTree = "<group>"; };
+		E3C0C9BC26AAEF28004F764A /* gvulkanapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvulkanapi.h; path = engine/gvulkanapi.h; sourceTree = "<group>"; };
+		E3C0C9BD26AAEF28004F764A /* gvulkanapi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gvulkanapi.cpp; path = engine/gvulkanapi.cpp; sourceTree = "<group>"; };
+		E3C0C9BE26AAEF28004F764A /* gvulkaninstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvulkaninstance.h; path = engine/gvulkaninstance.h; sourceTree = "<group>"; };
+		E3C0C9BF26AAEF28004F764A /* ganesha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ganesha.h; path = engine/ganesha.h; sourceTree = "<group>"; };
+		E3C0C9C026AAEF28004F764A /* gbundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gbundle.h; path = engine/gbundle.h; sourceTree = "<group>"; };
+		E3C0C9C126AAEF28004F764A /* gganesha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gganesha.h; path = engine/gganesha.h; sourceTree = "<group>"; };
+		E3C0C9C826AB1766004F764A /* ganeshatypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ganeshatypes.h; path = engine/ganeshatypes.h; sourceTree = "<group>"; };
+		E3C0C9C926AB186C004F764A /* gcolor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gcolor.h; path = engine/gcolor.h; sourceTree = "<group>"; };
+		E3C0C9CA26AB186C004F764A /* gcolor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gcolor.cpp; path = engine/gcolor.cpp; sourceTree = "<group>"; };
+		E3C0C9CB26AB186C004F764A /* gpoint2d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gpoint2d.cpp; path = engine/gpoint2d.cpp; sourceTree = "<group>"; };
+		E3C0C9CC26AB186C004F764A /* gpoint2d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gpoint2d.h; path = engine/gpoint2d.h; sourceTree = "<group>"; };
+		E3C8E96D26AA06EE00C2713C /* ganesha.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ganesha.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E3D8AB6A26B2A94000D01698 /* gpoint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gpoint.cpp; path = engine/gpoint.cpp; sourceTree = "<group>"; };
+		E3D8AB6B26B2A94000D01698 /* gmatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gmatrix.h; path = engine/gmatrix.h; sourceTree = "<group>"; };
+		E3D8AB6C26B2A94000D01698 /* gmatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gmatrix.cpp; path = engine/gmatrix.cpp; sourceTree = "<group>"; };
+		E3D8AB6D26B2A94000D01698 /* gpoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gpoint.h; path = engine/gpoint.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E3C8E96A26AA06EE00C2713C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				06A1C872278CC26F00D6A0AC /* libMoltenVK.dylib in Frameworks */,
+				06A1C86F278CC21000D6A0AC /* libvulkan.1.2.198.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		06A1C874278CC4C400D6A0AC /* primitives */ = {
+			isa = PBXGroup;
+			children = (
+				E3BF734F26B2FEC90093F6B5 /* gvector.cpp */,
+				E3BF735026B2FEC90093F6B5 /* gvector.h */,
+				E3D8AB6B26B2A94000D01698 /* gmatrix.h */,
+				E3D8AB6C26B2A94000D01698 /* gmatrix.cpp */,
+				E3D8AB6D26B2A94000D01698 /* gpoint.h */,
+				E3D8AB6A26B2A94000D01698 /* gpoint.cpp */,
+				E3C0C9C926AB186C004F764A /* gcolor.h */,
+				E3C0C9CA26AB186C004F764A /* gcolor.cpp */,
+				E3C0C9CC26AB186C004F764A /* gpoint2d.h */,
+				E3C0C9CB26AB186C004F764A /* gpoint2d.cpp */,
+			);
+			name = primitives;
+			sourceTree = "<group>";
+		};
+		E3C0C98526AAED6D004F764A /* VULKAN */ = {
+			isa = PBXGroup;
+			children = (
+				E3C0C9BC26AAEF28004F764A /* gvulkanapi.h */,
+				E3C0C9BD26AAEF28004F764A /* gvulkanapi.cpp */,
+				E3C0C9BE26AAEF28004F764A /* gvulkaninstance.h */,
+				E3C0C9B926AAEF28004F764A /* gvulkaninstance.cpp */,
+			);
+			name = VULKAN;
+			sourceTree = "<group>";
+		};
+		E3C0C9A726AAEE35004F764A /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				E3C0C9B726AAEF13004F764A /* Assets.xcassets */,
+				E3C8E99026AA160F00C2713C /* shaders */,
+			);
+			name = resources;
+			sourceTree = "<group>";
+		};
+		E3C8E96426AA06EE00C2713C = {
+			isa = PBXGroup;
+			children = (
+				E3C8E98F26AA131000C2713C /* engine */,
+				E3C0C9A726AAEE35004F764A /* resources */,
+				E3C8E96F26AA06EE00C2713C /* ganesha */,
+				E3C8E96E26AA06EE00C2713C /* Products */,
+				E3C8E99B26AA172C00C2713C /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		E3C8E96E26AA06EE00C2713C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E3C8E96D26AA06EE00C2713C /* ganesha.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E3C8E96F26AA06EE00C2713C /* ganesha */ = {
+			isa = PBXGroup;
+			children = (
+				E3C0C9A126AAEE23004F764A /* AppDelegate.swift */,
+				E3C0C99F26AAEE23004F764A /* Application.swift */,
+				E3C0C9A226AAEE23004F764A /* ViewContoller.swift */,
+				E3C0C9A026AAEE23004F764A /* CPPBridge.h */,
+				E3C0C99E26AAEE23004F764A /* CPPBridge.mm */,
+				E3C0C99D26AAEE23004F764A /* ganesha-Bridging-Header.h */,
+				E3C0C9A826AAEEB1004F764A /* ganesha.entitlements */,
+				E3C0C9A926AAEEB1004F764A /* Info.plist */,
+			);
+			name = ganesha;
+			sourceTree = "<group>";
+		};
+		E3C8E98F26AA131000C2713C /* engine */ = {
+			isa = PBXGroup;
+			children = (
+				06A1C874278CC4C400D6A0AC /* primitives */,
+				E3C0C98526AAED6D004F764A /* VULKAN */,
+				E389E67626BE8533004AD786 /* gcamera.h */,
+				E389E67526BE8533004AD786 /* gcamera.cpp */,
+				E3C0C9C026AAEF28004F764A /* gbundle.h */,
+				E3C0C9BA26AAEF28004F764A /* gbundle.mm */,
+				E3C0C9C126AAEF28004F764A /* gganesha.h */,
+				E3C0C9BB26AAEF28004F764A /* gganesha.cpp */,
+				E3C0C9BF26AAEF28004F764A /* ganesha.h */,
+				E3C0C9C826AB1766004F764A /* ganeshatypes.h */,
+			);
+			name = engine;
+			sourceTree = "<group>";
+		};
+		E3C8E99026AA160F00C2713C /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+				E307E72926AEE3EF00B18688 /* compile_shaders.sh */,
+				E3C0C9AD26AAEEEE004F764A /* frag.spv */,
+				E3C0C9AE26AAEEEE004F764A /* shader.frag */,
+				E3C0C9AF26AAEEEE004F764A /* shader.vert */,
+				E3C0C9B026AAEEEE004F764A /* vert.spv */,
+			);
+			name = shaders;
+			sourceTree = "<group>";
+		};
+		E3C8E99B26AA172C00C2713C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				06A1C871278CC26F00D6A0AC /* libMoltenVK.dylib */,
+				06A1C86E278CC21000D6A0AC /* libvulkan.1.2.198.dylib */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E3C8E96C26AA06EE00C2713C /* ganesha */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E3C8E97D26AA06EF00C2713C /* Build configuration list for PBXNativeTarget "ganesha" */;
+			buildPhases = (
+				E3C8E96926AA06EE00C2713C /* Sources */,
+				E3C8E96A26AA06EE00C2713C /* Frameworks */,
+				E3C8E96B26AA06EE00C2713C /* Resources */,
+				06A1C86D278CB1AB00D6A0AC /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ganesha;
+			productName = ganesha;
+			productReference = E3C8E96D26AA06EE00C2713C /* ganesha.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E3C8E96526AA06EE00C2713C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1250;
+				LastUpgradeCheck = 1250;
+				TargetAttributes = {
+					E3C8E96C26AA06EE00C2713C = {
+						CreatedOnToolsVersion = 12.5.1;
+						LastSwiftMigration = 1250;
+					};
+				};
+			};
+			buildConfigurationList = E3C8E96826AA06EE00C2713C /* Build configuration list for PBXProject "ganesha" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E3C8E96426AA06EE00C2713C;
+			productRefGroup = E3C8E96E26AA06EE00C2713C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E3C8E96C26AA06EE00C2713C /* ganesha */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E3C8E96B26AA06EE00C2713C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E3C0C9B126AAEEEE004F764A /* frag.spv in Resources */,
+				E3C0C9B826AAEF13004F764A /* Assets.xcassets in Resources */,
+				E3C0C9B426AAEEEE004F764A /* vert.spv in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E3C8E96926AA06EE00C2713C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E3C0C9CD26AB186C004F764A /* gcolor.cpp in Sources */,
+				E3D8AB6E26B2A94000D01698 /* gpoint.cpp in Sources */,
+				E3BF735126B2FEC90093F6B5 /* gvector.cpp in Sources */,
+				E3D8AB6F26B2A94000D01698 /* gmatrix.cpp in Sources */,
+				E3C0C9A426AAEE23004F764A /* Application.swift in Sources */,
+				E3C0C9C526AAEF28004F764A /* gvulkanapi.cpp in Sources */,
+				E3C0C9C326AAEF28004F764A /* gbundle.mm in Sources */,
+				E3C0C9C426AAEF28004F764A /* gganesha.cpp in Sources */,
+				E389E67826BEC2EA004AD786 /* gcamera.cpp in Sources */,
+				E3C0C9A326AAEE23004F764A /* CPPBridge.mm in Sources */,
+				E3C0C9A626AAEE23004F764A /* ViewContoller.swift in Sources */,
+				E3C0C9A526AAEE23004F764A /* AppDelegate.swift in Sources */,
+				E3C0C9CE26AB186C004F764A /* gpoint2d.cpp in Sources */,
+				E3C0C9C226AAEF28004F764A /* gvulkaninstance.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		E3C8E97B26AA06EF00C2713C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		E3C8E97C26AA06EF00C2713C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		E3C8E97E26AA06EF00C2713C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ganesha/ganesha.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = UAVM255T7W;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					VK_USE_PLATFORM_METAL_EXT,
+				);
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/vulkansdk-macos-1.2.198.1/macOS/include/**";
+				INFOPLIST_FILE = ganesha/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/vulkansdk-macos-1.2.198.1/macOS/lib",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.icgsmartcosmetics.ganesha;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "ganesha/ganesha-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		E3C8E97F26AA06EF00C2713C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ganesha/ganesha.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = UAVM255T7W;
+				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/vulkansdk-macos-1.2.198.1/macOS/include/**";
+				INFOPLIST_FILE = ganesha/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/vulkansdk-macos-1.2.198.1/macOS/lib",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.icgsmartcosmetics.ganesha;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "ganesha/ganesha-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E3C8E96826AA06EE00C2713C /* Build configuration list for PBXProject "ganesha" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E3C8E97B26AA06EF00C2713C /* Debug */,
+				E3C8E97C26AA06EF00C2713C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E3C8E97D26AA06EF00C2713C /* Build configuration list for PBXNativeTarget "ganesha" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E3C8E97E26AA06EF00C2713C /* Debug */,
+				E3C8E97F26AA06EF00C2713C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E3C8E96526AA06EE00C2713C /* Project object */;
+}
