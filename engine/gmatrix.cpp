@@ -139,10 +139,7 @@ GMatrix GMatrix::lookAt(const GVector& eye, const GVector& center, const GVector
     lookAtMatrix.m[2][1] = zaxis.y;
     lookAtMatrix.m[2][2] = zaxis.z;
     lookAtMatrix.m[2][3] = -zdotEye;
-    
-    lookAtMatrix.m[3][0] = 0.0f;
-    lookAtMatrix.m[3][1] = 0.0f;
-    lookAtMatrix.m[3][2] = 0.0f;
+
     lookAtMatrix.m[3][3] = 1.0f;
     
     lookAtMatrix.transponate();

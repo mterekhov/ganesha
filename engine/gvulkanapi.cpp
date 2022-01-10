@@ -2,8 +2,6 @@
 #include <set>
 #include <array>
 #include <math.h>
-//#include <glm/glm.hpp>
-//#include <glm/gtc/matrix_transform.hpp>
 
 #include "gvulkanapi.h"
 #include "gbundle.h"

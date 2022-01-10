@@ -49,7 +49,7 @@
 }
 
 - (void)processKeyboardEventWithKeyCode: (NSInteger)keyCode {
-    
+    self.ganeshaEngine->processKeyboard(keyCode);
 }
 
 @end

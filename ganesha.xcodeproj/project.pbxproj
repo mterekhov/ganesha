@@ -159,8 +159,8 @@
 		E3C8E96F26AA06EE00C2713C /* ganesha */ = {
 			isa = PBXGroup;
 			children = (
-				E3C0C9A126AAEE23004F764A /* AppDelegate.swift */,
 				E3C0C99F26AAEE23004F764A /* Application.swift */,
+				E3C0C9A126AAEE23004F764A /* AppDelegate.swift */,
 				E3C0C9A226AAEE23004F764A /* ViewContoller.swift */,
 				E3C0C9A026AAEE23004F764A /* CPPBridge.h */,
 				E3C0C99E26AAEE23004F764A /* CPPBridge.mm */,
