@@ -41,7 +41,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let metalView = MTKView(frame: NSMakeRect(0, 0, windowSize.width, windowSize.height))
         metalView.device = MTLCreateSystemDefaultDevice()
         
-        let viewController = ViewContoller()
+        let viewController = ViewController()
         viewController.view = metalView
         metalView.delegate = viewController
         newWindow.contentViewController = viewController

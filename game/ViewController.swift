@@ -8,7 +8,7 @@
 import Cocoa
 import MetalKit
 
-class ViewContoller: NSViewController, MTKViewDelegate {
+class ViewController: NSViewController, MTKViewDelegate {
     
     private let ganeshaBridge = CPPBridge()
     private var ganeshaReady = false
@@ -70,7 +70,6 @@ class ViewContoller: NSViewController, MTKViewDelegate {
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         ganeshaBridge.drawableSizeWillChange(size)
     }
-
 
 }
 
