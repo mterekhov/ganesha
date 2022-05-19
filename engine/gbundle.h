@@ -2,6 +2,7 @@
 #define SPCGANESHAENGINE_GBUNDLE_H
 
 #include <string>
+#include <vector>
 
 namespace spcGaneshaEngine {
 

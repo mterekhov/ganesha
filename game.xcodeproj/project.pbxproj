@@ -12,10 +12,6 @@
 		06AD81BB278CE96700AFF874 /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AD81B4278CE96700AFF874 /* Application.swift */; };
 		06AD81BC278CE96700AFF874 /* CPPBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 06AD81B5278CE96700AFF874 /* CPPBridge.mm */; };
 		06AD81BE278CE96700AFF874 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 06AD81B7278CE96700AFF874 /* Assets.xcassets */; };
-		06AD81C2278CEA7600AFF874 /* libvulkan.1.2.198.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 06AD81C1278CEA7600AFF874 /* libvulkan.1.2.198.dylib */; };
-		06AD81C3278CEA7600AFF874 /* libvulkan.1.2.198.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 06AD81C1278CEA7600AFF874 /* libvulkan.1.2.198.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		06AD81C6278CEA7D00AFF874 /* libMoltenVK.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 06AD81C5278CEA7D00AFF874 /* libMoltenVK.dylib */; };
-		06AD81C7278CEA7D00AFF874 /* libMoltenVK.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 06AD81C5278CEA7D00AFF874 /* libMoltenVK.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		06AD8209278CEB2000AFF874 /* gpoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06AD81F5278CEB2000AFF874 /* gpoint.cpp */; };
 		06AD820A278CEB2000AFF874 /* gpoint2d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06AD81F7278CEB2000AFF874 /* gpoint2d.cpp */; };
 		06AD820B278CEB2000AFF874 /* gmatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06AD81F8278CEB2000AFF874 /* gmatrix.cpp */; };
@@ -28,6 +24,10 @@
 		06AD8212278CEB2000AFF874 /* gvulkaninstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06AD8203278CEB2000AFF874 /* gvulkaninstance.cpp */; };
 		06AD8217278CEB3300AFF874 /* vert.spv in Resources */ = {isa = PBXBuildFile; fileRef = 06AD8213278CEB3300AFF874 /* vert.spv */; };
 		06AD8218278CEB3300AFF874 /* frag.spv in Resources */ = {isa = PBXBuildFile; fileRef = 06AD8214278CEB3300AFF874 /* frag.spv */; };
+		DE9C3B782836DD0E00B877F6 /* libvulkan.1.3.211.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DE9C3B772836DD0E00B877F6 /* libvulkan.1.3.211.dylib */; };
+		DE9C3B792836DD0E00B877F6 /* libvulkan.1.3.211.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = DE9C3B772836DD0E00B877F6 /* libvulkan.1.3.211.dylib */; };
+		DE9C3B7D2836DD2D00B877F6 /* libMoltenVK.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DE9C3B7A2836DD1800B877F6 /* libMoltenVK.dylib */; };
+		DE9C3B7E2836DD2D00B877F6 /* libMoltenVK.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = DE9C3B7A2836DD1800B877F6 /* libMoltenVK.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -37,8 +37,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				06AD81C7278CEA7D00AFF874 /* libMoltenVK.dylib in Embed Libraries */,
-				06AD81C3278CEA7600AFF874 /* libvulkan.1.2.198.dylib in Embed Libraries */,
+				DE9C3B7E2836DD2D00B877F6 /* libMoltenVK.dylib in Embed Libraries */,
+				DE9C3B792836DD0E00B877F6 /* libvulkan.1.3.211.dylib in Embed Libraries */,
 			);
 			name = "Embed Libraries";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -55,8 +55,6 @@
 		06AD81B7278CE96700AFF874 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = game/Assets.xcassets; sourceTree = "<group>"; };
 		06AD81B8278CE96700AFF874 /* game.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = game.entitlements; path = game/game.entitlements; sourceTree = "<group>"; };
 		06AD81BF278CE9F200AFF874 /* game-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "game-Bridging-Header.h"; path = "game/game-Bridging-Header.h"; sourceTree = "<group>"; };
-		06AD81C1278CEA7600AFF874 /* libvulkan.1.2.198.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvulkan.1.2.198.dylib; path = "vulkansdk-macos-1.2.198.1/macOS/lib/libvulkan.1.2.198.dylib"; sourceTree = "<group>"; };
-		06AD81C5278CEA7D00AFF874 /* libMoltenVK.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMoltenVK.dylib; path = "vulkansdk-macos-1.2.198.1/macOS/lib/libMoltenVK.dylib"; sourceTree = "<group>"; };
 		06AD81F3278CEB2000AFF874 /* gmatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gmatrix.h; path = engine/gmatrix.h; sourceTree = "<group>"; };
 		06AD81F4278CEB2000AFF874 /* gcolor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gcolor.h; path = engine/gcolor.h; sourceTree = "<group>"; };
 		06AD81F5278CEB2000AFF874 /* gpoint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gpoint.cpp; path = engine/gpoint.cpp; sourceTree = "<group>"; };
@@ -83,6 +81,8 @@
 		06AD8214278CEB3300AFF874 /* frag.spv */ = {isa = PBXFileReference; lastKnownFileType = file; name = frag.spv; path = resources/shaders/frag.spv; sourceTree = "<group>"; };
 		06AD8215278CEB3300AFF874 /* shader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = shader.frag; path = resources/shaders/shader.frag; sourceTree = "<group>"; };
 		06AD8216278CEB3300AFF874 /* shader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = shader.vert; path = resources/shaders/shader.vert; sourceTree = "<group>"; };
+		DE9C3B772836DD0E00B877F6 /* libvulkan.1.3.211.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvulkan.1.3.211.dylib; path = ../../../../../usr/local/lib/libvulkan.1.3.211.dylib; sourceTree = "<group>"; };
+		DE9C3B7A2836DD1800B877F6 /* libMoltenVK.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMoltenVK.dylib; path = ../../../../../usr/local/lib/libMoltenVK.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,8 +90,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				06AD81C6278CEA7D00AFF874 /* libMoltenVK.dylib in Frameworks */,
-				06AD81C2278CEA7600AFF874 /* libvulkan.1.2.198.dylib in Frameworks */,
+				DE9C3B7D2836DD2D00B877F6 /* libMoltenVK.dylib in Frameworks */,
+				DE9C3B782836DD0E00B877F6 /* libvulkan.1.3.211.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,8 +135,8 @@
 		06AD81C0278CEA7600AFF874 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				06AD81C5278CEA7D00AFF874 /* libMoltenVK.dylib */,
-				06AD81C1278CEA7600AFF874 /* libvulkan.1.2.198.dylib */,
+				DE9C3B7A2836DD1800B877F6 /* libMoltenVK.dylib */,
+				DE9C3B772836DD0E00B877F6 /* libvulkan.1.3.211.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -167,8 +167,8 @@
 				06AD821C278CEC3C00AFF874 /* vulkan */,
 				06AD821B278CEC3400AFF874 /* primitives */,
 				06AD8206278CEB2000AFF874 /* ganeshatypes.h */,
-				06AD81FF278CEB2000AFF874 /* gganesha.cpp */,
 				06AD8202278CEB2000AFF874 /* gganesha.h */,
+				06AD81FF278CEB2000AFF874 /* gganesha.cpp */,
 				06AD81FB278CEB2000AFF874 /* ganesha.h */,
 			);
 			name = engine;
@@ -177,16 +177,16 @@
 		06AD821B278CEC3400AFF874 /* primitives */ = {
 			isa = PBXGroup;
 			children = (
-				06AD8200278CEB2000AFF874 /* gcolor.cpp */,
 				06AD81F4278CEB2000AFF874 /* gcolor.h */,
-				06AD81F8278CEB2000AFF874 /* gmatrix.cpp */,
+				06AD8200278CEB2000AFF874 /* gcolor.cpp */,
 				06AD81F3278CEB2000AFF874 /* gmatrix.h */,
-				06AD81F5278CEB2000AFF874 /* gpoint.cpp */,
+				06AD81F8278CEB2000AFF874 /* gmatrix.cpp */,
 				06AD81F6278CEB2000AFF874 /* gpoint.h */,
-				06AD81F7278CEB2000AFF874 /* gpoint2d.cpp */,
+				06AD81F5278CEB2000AFF874 /* gpoint.cpp */,
 				06AD8207278CEB2000AFF874 /* gpoint2d.h */,
-				06AD81FA278CEB2000AFF874 /* gvector.cpp */,
+				06AD81F7278CEB2000AFF874 /* gpoint2d.cpp */,
 				06AD8204278CEB2000AFF874 /* gvector.h */,
+				06AD81FA278CEB2000AFF874 /* gvector.cpp */,
 			);
 			name = primitives;
 			sourceTree = "<group>";
@@ -194,10 +194,10 @@
 		06AD821C278CEC3C00AFF874 /* vulkan */ = {
 			isa = PBXGroup;
 			children = (
-				06AD81FC278CEB2000AFF874 /* gvulkanapi.cpp */,
 				06AD8208278CEB2000AFF874 /* gvulkanapi.h */,
-				06AD8203278CEB2000AFF874 /* gvulkaninstance.cpp */,
+				06AD81FC278CEB2000AFF874 /* gvulkanapi.cpp */,
 				06AD8205278CEB2000AFF874 /* gvulkaninstance.h */,
+				06AD8203278CEB2000AFF874 /* gvulkaninstance.cpp */,
 			);
 			name = vulkan;
 			sourceTree = "<group>";
@@ -207,8 +207,8 @@
 			children = (
 				06AD8201278CEB2000AFF874 /* gbundle.h */,
 				06AD81F9278CEB2000AFF874 /* gbundle.mm */,
-				06AD81FE278CEB2000AFF874 /* gcamera.cpp */,
 				06AD81FD278CEB2000AFF874 /* gcamera.h */,
+				06AD81FE278CEB2000AFF874 /* gcamera.cpp */,
 			);
 			name = misc;
 			sourceTree = "<group>";
@@ -242,7 +242,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1310;
-				LastUpgradeCheck = 1310;
+				LastUpgradeCheck = 1330;
 				TargetAttributes = {
 					06AD819B278CE91700AFF874 = {
 						CreatedOnToolsVersion = 13.1;
@@ -357,6 +357,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 11.6;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -412,6 +414,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 11.6;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -428,6 +432,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = game/game.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -439,7 +444,6 @@
 					VK_USE_PLATFORM_METAL_EXT,
 				);
 				GENERATE_INFOPLIST_FILE = YES;
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/vulkansdk-macos-1.2.198.1/macOS/include/**";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSPrincipalClass = "$(PRODUCT_NAME).Application";
@@ -447,13 +451,10 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/vulkansdk-macos-1.2.198.1/macOS/lib",
-				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.icgsmartcosmetics.game;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "game/game-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -468,13 +469,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = game/game.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = UAVM255T7W;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/vulkansdk-macos-1.2.198.1/macOS/include/**";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSPrincipalClass = "$(PRODUCT_NAME).Application";
@@ -482,13 +483,10 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/vulkansdk-macos-1.2.198.1/macOS/lib",
-				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.icgsmartcosmetics.game;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "game/game-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

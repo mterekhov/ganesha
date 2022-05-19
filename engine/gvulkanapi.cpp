@@ -445,7 +445,7 @@ bool GVULKANAPI::checkDeviceCapability(const VkPhysicalDevice& device) {
     //  Find discrete GPU
     VkPhysicalDeviceProperties deviceProperties;
     vkGetPhysicalDeviceProperties(device, &deviceProperties);
-    if (deviceProperties.deviceType != VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
+    if (deviceProperties.deviceType != VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU) {
         return false;
     }
     

@@ -1,7 +1,6 @@
 #import <Foundation/Foundation.h>
 
 #include "gbundle.h"
-#include <vector>
 
 namespace spcGaneshaEngine {
 

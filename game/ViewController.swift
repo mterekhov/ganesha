@@ -19,6 +19,12 @@ class ViewController: NSViewController, MTKViewDelegate {
         }
     }
     
+    override var acceptsFirstResponder: Bool {
+        get {
+            return true
+        }
+    }
+    
     override func viewDidAppear() {
         super.viewDidAppear()
 
@@ -30,12 +36,6 @@ class ViewController: NSViewController, MTKViewDelegate {
         super.viewDidDisappear()
         
         ganeshaBridge.stopEngine()
-    }
-    
-    override var acceptsFirstResponder: Bool {
-        get {
-            return true
-        }
     }
     
     override func keyDown(with event: NSEvent) {

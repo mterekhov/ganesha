@@ -46,6 +46,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         metalView.delegate = viewController
         newWindow.contentViewController = viewController
         newWindow.makeFirstResponder(viewController)
+        
         return newWindow
     }
 
