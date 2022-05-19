@@ -19,10 +19,6 @@ void GGanesha::setViewSize(const uint32_t width, const uint32_t height) {
     
 }
 
-void GGanesha::setView(void *pView) {
-    
-}
-
 void GGanesha::processKeyboard(const uint32_t keyCode) {
     vulkanInstance.installViewMatrix(camera.viewMatrix());
 }

@@ -13,8 +13,13 @@
 
 namespace spcGaneshaEngine {
 
+/// Precision for comparison of float values
 #define FLOAT_PRECISION 0.000001f
+
+/// converts degrees into radians
 #define DEG_TO_RAD(deg) ((deg) * M_PI / 180.0f)
+
+/// converts radians into degrees
 #define RAD_TO_DEG(rad) ((rad) * 180.0f / M_PI)
 
 typedef std::vector<VkExtensionProperties> TInstanceExtensionsArray;

@@ -6,6 +6,7 @@
 
 namespace spcGaneshaEngine {
 
+/// Finds resources
 class GBundle {
 public:
     std::string resourceFullPath(const std::string& resourceName);

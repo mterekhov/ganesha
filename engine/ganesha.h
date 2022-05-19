@@ -8,6 +8,8 @@
 #ifndef GANESHA_H
 #define GANESHA_H
 
+//  This is umbrella header of Ganesha engine
+
 #include "gganesha.h"
 
 #endif  //  GANESHA_H

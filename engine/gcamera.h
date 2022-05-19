@@ -7,6 +7,7 @@
 
 namespace spcGaneshaEngine {
 
+/// Manipulates with current position
 class GCamera {
 private:
     GVector position;

@@ -16,6 +16,7 @@ struct SwapChainSupportDetails {
     std::vector<VkPresentModeKHR> presentModes;
 };
 
+/// A LOT OF FUCKING SHIT
 class GVULKANAPI {
 public:
     void createInstance(void *metalLayer, const uint32_t frameWidth, const uint32_t frameHeight);
