@@ -14,20 +14,20 @@ static const TCharPointersArray khronosValidationLayers = {
     "VK_LAYER_KHRONOS_validation"
 };
 
-GVULKANInstance::GVULKANInstance() {
-    
-}
-
-GVULKANInstance::~GVULKANInstance() {
-    destroyDebugUtilsMessenger(vulkanInstance, debugMessenger, nullptr);
-    vkDestroyInstance(vulkanInstance, nullptr);
-    
-    for (const auto& name : extensionsNamesList) {
-        delete [] name;
+GVULKANInstance::GVULKANInstance(const bool useValidationLayers) {
+    createNewInstance(useValidationLayers);
+    if (useValidationLayers) {
+        if (createDebugUtilsMessenger(vulkanInstance, &debugUtilsMessengerInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
+            printf("GaneshaEngine: failed to set up debug messenger\n");
+        }
     }
 }
 
-void GVULKANInstance::init(const bool useValidationLayers) {
+GVULKANInstance::~GVULKANInstance() {
+    destroyInstance();
+}
+
+void GVULKANInstance::createNewInstance(const bool useValidationLayers) {
     extensionsList = collectInstanceExtensions();
     extensionsNamesList = collectInstanceExtensionsNames(extensionsList);
     availableValidationLayersList = collectValidationLayers(khronosValidationLayers);
@@ -39,11 +39,14 @@ void GVULKANInstance::init(const bool useValidationLayers) {
         printf("GaneshaEngine: error creating VULKAN instance\n");
         return;
     }
+}
+
+void GVULKANInstance::destroyInstance() {
+    destroyDebugUtilsMessenger(vulkanInstance, debugMessenger, nullptr);
+    vkDestroyInstance(vulkanInstance, nullptr);
     
-    if (useValidationLayers) {
-        if (createDebugUtilsMessenger(vulkanInstance, &debugUtilsMessengerInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
-            printf("GaneshaEngine: failed to set up debug messenger\n");
-        }
+    for (const auto& name : extensionsNamesList) {
+        delete [] name;
     }
 }
 
@@ -61,10 +64,10 @@ VkApplicationInfo GVULKANInstance::createApplicationInfo() {
     
     newApplicationInfo.apiVersion = pApiVersion;
     newApplicationInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    newApplicationInfo.pApplicationName = "Ganesha";
-    newApplicationInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
-    newApplicationInfo.pEngineName = "GaneshaEngine";
-    newApplicationInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
+    newApplicationInfo.pApplicationName = "GAME";
+    newApplicationInfo.applicationVersion = VK_MAKE_API_VERSION(1, 0, 0, 0);
+    newApplicationInfo.pEngineName = "Ganesha";
+    newApplicationInfo.engineVersion = VK_MAKE_API_VERSION(1, 0, 0, 0);
     
     return newApplicationInfo;
 }
@@ -168,7 +171,7 @@ TInstanceExtensionsArray GVULKANInstance::collectInstanceExtensions() {
 TCharPointersArray GVULKANInstance::collectInstanceExtensionsNames(TInstanceExtensionsArray extensionsList) {
     TCharPointersArray namesList = TCharPointersArray();
     for (const auto& extension : extensionsList) {
-        char *newString = new char[256];
+        char *newString = new char[VK_MAX_EXTENSION_NAME_SIZE];
         memcpy(newString, extension.extensionName, VK_MAX_EXTENSION_NAME_SIZE);
         namesList.insert(namesList.end(), newString);
     }

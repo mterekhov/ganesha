@@ -15,12 +15,8 @@ namespace spcGaneshaEngine {
 /// Instance of VULKAN render machine
 class GVULKANInstance {
 public:
-    GVULKANInstance();
+    GVULKANInstance(const bool useValidationLayers = true);
     ~GVULKANInstance();
-    
-    /// create all VULKAN objects
-    /// @param useValidationLayers  true if we need to check error with validation error
-    void init(const bool useValidationLayers);
     
     /// returns reference to created VULKAN instance object
     VkInstance& getVulkanInstance();
@@ -35,6 +31,8 @@ private:
     TInstanceExtensionsArray extensionsList;
     TCharPointersArray extensionsNamesList;
     
+    void createNewInstance(const bool useValidationLayers);
+    void destroyInstance();
     TInstanceExtensionsArray collectInstanceExtensions();
     TCharPointersArray collectInstanceExtensionsNames(TInstanceExtensionsArray extensionsList);
     VkInstanceCreateInfo createInstanceInfo(const bool useValidationLayers);

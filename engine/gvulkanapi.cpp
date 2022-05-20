@@ -69,7 +69,7 @@ void GVULKANAPI::createInstance(void *metalLayer, const uint32_t frameWidth, con
     height = frameHeight;
     updateFrameSize = false;
     
-    vulkanInstance.init(false);
+    vulkanInstance = GVULKANInstance();
     
     setupSurface(metalLayer);
     setupDevice();
