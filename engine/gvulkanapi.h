@@ -6,6 +6,7 @@
 #include <vulkan/vulkan.h>
 
 #include "gvulkaninstance.h"
+#include "gvulkandevice.h"
 #include "gmatrix.h"
 
 namespace spcGaneshaEngine {
@@ -27,12 +28,13 @@ public:
     void installViewMatrix(const GMatrix& newViewMatrix);
 
 private:
+    GVULKANDevice device;
+    
     GMatrix projectionMatrix;
     GMatrix viewMatrix;
 
     bool updateFrameSize;
     GVULKANInstance vulkanInstance;
-    VkPhysicalDevice physicalDevice;
     VkSurfaceKHR metalSurface;
 
     std::vector<VkSemaphore> imageAvailableSemaphores;
@@ -44,9 +46,6 @@ private:
     std::vector<VkCommandBuffer> commandBuffers;
     VkCommandPool commandPool;
     
-    VkQueue graphicsQueue;
-    VkQueue presentQueue;
-    VkDevice logicalDevice;
     VkBuffer vertexBuffer;
     VkDeviceMemory vertexBufferMemory;
     VkBuffer indexBuffer;
@@ -69,8 +68,6 @@ private:
     VkRenderPass renderPass;
     VkPipeline graphicsPipeline;
     
-    int32_t graphicQueueFamilyIndex = -1;
-    int32_t presentQueueFamilyIndex = -1;
     uint32_t width = 0;
     uint32_t height = 0;
     uint32_t maxFramesInFlight = 2;
@@ -104,15 +101,7 @@ private:
     SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
     void createImageViews();
 
-    void setupDevice();
-    bool checkDeviceExtensionSupport(VkPhysicalDevice& device);
-    bool checkDeviceCapability(const VkPhysicalDevice& device);
-    
-    void setupLogicalDevice();
-
     void setupSurface(void *metalLayer);
-    
-    void findQueuesIndeces();
 };
 
 }   //  namespace spcGaneshaEngine

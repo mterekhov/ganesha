@@ -60,23 +60,21 @@ struct UniformBufferObject {
     GMatrix proj;
 };
 
-const TCharPointersArray deviceExtensions = {
-    VK_KHR_SWAPCHAIN_EXTENSION_NAME
-};
-
 void GVULKANAPI::createInstance(void *metalLayer, const uint32_t frameWidth, const uint32_t frameHeight) {
     width = frameWidth;
     height = frameHeight;
     updateFrameSize = false;
-    
-    vulkanInstance = GVULKANInstance();
-    
+        
+    //  creates metalSurface
     setupSurface(metalLayer);
-    setupDevice();
     
-    findQueuesIndeces();
-    querySwapChainSupport(physicalDevice);
-    setupLogicalDevice();
+    //  creates physicalDevice
+    device.createPhysicalDevice(vulkanInstance, metalSurface);
+
+    querySwapChainSupport(device.getPhysicalDevice());
+
+    //  creates logicalDevice
+    device.createLogicalDevice();
     
     createSwapChain();
     createImageViews();
@@ -87,7 +85,9 @@ void GVULKANAPI::createInstance(void *metalLayer, const uint32_t frameWidth, con
     createUniformBuffers();
     createDescriptorPool();
     createDescriptorSets();
-    createCommandPool();
+    
+    commandPool = device.createCommandPool();
+    
     createVertexBuffer();
     createIndicesBuffer();
     createCommandBuffers();
@@ -96,7 +96,7 @@ void GVULKANAPI::createInstance(void *metalLayer, const uint32_t frameWidth, con
 
 uint32_t GVULKANAPI::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
     VkPhysicalDeviceMemoryProperties memoryProperties;
-    vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memoryProperties);
+    vkGetPhysicalDeviceMemoryProperties(device.getPhysicalDevice(), &memoryProperties);
     
     for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; i++) {
         if ((typeFilter & (1 << i)) &&
@@ -116,7 +116,7 @@ void GVULKANAPI::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize
     commandBufferAllocateInfo.commandBufferCount = 1;
     
     VkCommandBuffer commandBuffer;
-    vkAllocateCommandBuffers(logicalDevice, &commandBufferAllocateInfo, &commandBuffer);
+    vkAllocateCommandBuffers(device.getLogicalDevice(), &commandBufferAllocateInfo, &commandBuffer);
 
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -134,10 +134,10 @@ void GVULKANAPI::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     submitInfo.commandBufferCount = 1;
     submitInfo.pCommandBuffers = &commandBuffer;
-    vkQueueSubmit(graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
-    vkQueueWaitIdle(graphicsQueue);
+    vkQueueSubmit(device.getGraphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE);
+    vkQueueWaitIdle(device.getGraphicsQueue());
     
-    vkFreeCommandBuffers(logicalDevice, commandPool, 1, &commandBuffer);
+    vkFreeCommandBuffers(device.getLogicalDevice(), commandPool, 1, &commandBuffer);
 }
 
 void GVULKANAPI::createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory) {
@@ -146,22 +146,22 @@ void GVULKANAPI::createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMem
     bufferInfo.size = size;
     bufferInfo.usage = usage;
     bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-    if (vkCreateBuffer(logicalDevice, &bufferInfo, nullptr, &buffer) != VK_SUCCESS) {
+    if (vkCreateBuffer(device.getLogicalDevice(), &bufferInfo, nullptr, &buffer) != VK_SUCCESS) {
         printf("GaneshaEngine: failed to create vertex buffer\n");
     }
 
     VkMemoryRequirements memoryRequirements;
-    vkGetBufferMemoryRequirements(logicalDevice, buffer, &memoryRequirements);
+    vkGetBufferMemoryRequirements(device.getLogicalDevice(), buffer, &memoryRequirements);
     
     VkMemoryAllocateInfo memoryAllocateInfo{};
     memoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     memoryAllocateInfo.allocationSize = memoryRequirements.size;
     memoryAllocateInfo.memoryTypeIndex = findMemoryType(memoryRequirements.memoryTypeBits, properties);
-    if (vkAllocateMemory(logicalDevice, &memoryAllocateInfo, nullptr, &bufferMemory) != VK_SUCCESS) {
+    if (vkAllocateMemory(device.getLogicalDevice(), &memoryAllocateInfo, nullptr, &bufferMemory) != VK_SUCCESS) {
         printf("GaneshaEngine: failed to allocate vertex buffer memory\n");
         return;
     }
-    vkBindBufferMemory(logicalDevice, buffer, bufferMemory, 0);
+    vkBindBufferMemory(device.getLogicalDevice(), buffer, bufferMemory, 0);
 }
 
 void GVULKANAPI::createIndicesBuffer() {
@@ -175,9 +175,9 @@ void GVULKANAPI::createIndicesBuffer() {
                  stagingBufferMemory);
     
     void *data;
-    vkMapMemory(logicalDevice, stagingBufferMemory, 0, bufferSize, 0, &data);
+    vkMapMemory(device.getLogicalDevice(), stagingBufferMemory, 0, bufferSize, 0, &data);
     memcpy(data, indices.data(), (size_t) bufferSize);
-    vkUnmapMemory(logicalDevice, stagingBufferMemory);
+    vkUnmapMemory(device.getLogicalDevice(), stagingBufferMemory);
 
     createBuffer(bufferSize,
                  VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
@@ -187,8 +187,8 @@ void GVULKANAPI::createIndicesBuffer() {
     
     copyBuffer(stagingBuffer, indexBuffer, bufferSize);
 
-    vkDestroyBuffer(logicalDevice, stagingBuffer, nullptr);
-    vkFreeMemory(logicalDevice, stagingBufferMemory, nullptr);
+    vkDestroyBuffer(device.getLogicalDevice(), stagingBuffer, nullptr);
+    vkFreeMemory(device.getLogicalDevice(), stagingBufferMemory, nullptr);
 }
 
 void GVULKANAPI::createVertexBuffer() {
@@ -202,9 +202,9 @@ void GVULKANAPI::createVertexBuffer() {
                  stagingBufferMemory);
     
     void *data;
-    vkMapMemory(logicalDevice, stagingBufferMemory, 0, bufferSize, 0, &data);
+    vkMapMemory(device.getLogicalDevice(), stagingBufferMemory, 0, bufferSize, 0, &data);
     memcpy(data, vertices.data(), (size_t) bufferSize);
-    vkUnmapMemory(logicalDevice, stagingBufferMemory);
+    vkUnmapMemory(device.getLogicalDevice(), stagingBufferMemory);
 
     createBuffer(bufferSize,
                  VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
@@ -214,8 +214,8 @@ void GVULKANAPI::createVertexBuffer() {
     
     copyBuffer(stagingBuffer, vertexBuffer, bufferSize);
 
-    vkDestroyBuffer(logicalDevice, stagingBuffer, nullptr);
-    vkFreeMemory(logicalDevice, stagingBufferMemory, nullptr);
+    vkDestroyBuffer(device.getLogicalDevice(), stagingBuffer, nullptr);
+    vkFreeMemory(device.getLogicalDevice(), stagingBufferMemory, nullptr);
 }
 
 void GVULKANAPI::createDescriptorPool() {
@@ -228,7 +228,7 @@ void GVULKANAPI::createDescriptorPool() {
     poolInfo.poolSizeCount = 1;
     poolInfo.pPoolSizes = &poolSize;
     poolInfo.maxSets = static_cast<uint32_t>(swapChainImages.size());
-    if (vkCreateDescriptorPool(logicalDevice, &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
+    if (vkCreateDescriptorPool(device.getLogicalDevice(), &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
         printf("GaneshaEngine: failed to create descriptor pool\n");
     }
 }
@@ -242,7 +242,7 @@ void GVULKANAPI::createDescriptorSets() {
     allocInfo.pSetLayouts = layouts.data();
 
     descriptorSets.resize(swapChainImages.size());
-    if (vkAllocateDescriptorSets(logicalDevice, &allocInfo, descriptorSets.data()) != VK_SUCCESS) {
+    if (vkAllocateDescriptorSets(device.getLogicalDevice(), &allocInfo, descriptorSets.data()) != VK_SUCCESS) {
         printf("GaneshaEngine: failed to allocate descriptor sets\n");
     }
 
@@ -263,7 +263,7 @@ void GVULKANAPI::createDescriptorSets() {
         descriptorWrite.pImageInfo = nullptr; // Optional
         descriptorWrite.pTexelBufferView = nullptr; // Optional
         
-        vkUpdateDescriptorSets(logicalDevice, 1, &descriptorWrite, 0, nullptr);
+        vkUpdateDescriptorSets(device.getLogicalDevice(), 1, &descriptorWrite, 0, nullptr);
     }
     
 }
@@ -303,42 +303,42 @@ void GVULKANAPI::updateUniformBuffer(uint32_t currentImage) {
     ubo.proj = projectionMatrix;
 
     void* data;
-    vkMapMemory(logicalDevice, uniformBuffersMemory[currentImage], 0, sizeof(ubo), 0, &data);
+    vkMapMemory(device.getLogicalDevice(), uniformBuffersMemory[currentImage], 0, sizeof(ubo), 0, &data);
     memcpy(data, &ubo, sizeof(ubo));
-    vkUnmapMemory(logicalDevice, uniformBuffersMemory[currentImage]);
+    vkUnmapMemory(device.getLogicalDevice(), uniformBuffersMemory[currentImage]);
 }
 
 void GVULKANAPI::destroyInstance() {
     for (size_t i = 0; i < maxFramesInFlight; i++) {
-        vkDestroySemaphore(logicalDevice, renderFinishedSemaphores[i], nullptr);
-        vkDestroySemaphore(logicalDevice, imageAvailableSemaphores[i], nullptr);
-        vkDestroyFence(logicalDevice, inFlightFences[i], nullptr);
+        vkDestroySemaphore(device.getLogicalDevice(), renderFinishedSemaphores[i], nullptr);
+        vkDestroySemaphore(device.getLogicalDevice(), imageAvailableSemaphores[i], nullptr);
+        vkDestroyFence(device.getLogicalDevice(), inFlightFences[i], nullptr);
     }
     
-    vkDestroyCommandPool(logicalDevice, commandPool, nullptr);
+    vkDestroyCommandPool(device.getLogicalDevice(), commandPool, nullptr);
     for (auto framebuffer : swapChainFramebuffers) {
-        vkDestroyFramebuffer(logicalDevice, framebuffer, nullptr);
+        vkDestroyFramebuffer(device.getLogicalDevice(), framebuffer, nullptr);
     }
-    vkDestroyPipeline(logicalDevice, graphicsPipeline, nullptr);
-    vkDestroyPipelineLayout(logicalDevice, pipelineLayout, nullptr);
-    vkDestroyRenderPass(logicalDevice, renderPass, nullptr);
+    vkDestroyPipeline(device.getLogicalDevice(), graphicsPipeline, nullptr);
+    vkDestroyPipelineLayout(device.getLogicalDevice(), pipelineLayout, nullptr);
+    vkDestroyRenderPass(device.getLogicalDevice(), renderPass, nullptr);
     for (auto imageView : swapChainImageViews) {
-        vkDestroyImageView(logicalDevice, imageView, nullptr);
+        vkDestroyImageView(device.getLogicalDevice(), imageView, nullptr);
     }
-    vkDestroySwapchainKHR(logicalDevice, swapChain, nullptr);
+    vkDestroySwapchainKHR(device.getLogicalDevice(), swapChain, nullptr);
 
     for (size_t i = 0; i < swapChainImages.size(); i++) {
-        vkDestroyBuffer(logicalDevice, uniformBuffers[i], nullptr);
-        vkFreeMemory(logicalDevice, uniformBuffersMemory[i], nullptr);
+        vkDestroyBuffer(device.getLogicalDevice(), uniformBuffers[i], nullptr);
+        vkFreeMemory(device.getLogicalDevice(), uniformBuffersMemory[i], nullptr);
     }
-    vkDestroyDescriptorPool(logicalDevice, descriptorPool, nullptr);
+    vkDestroyDescriptorPool(device.getLogicalDevice(), descriptorPool, nullptr);
     
-    vkDestroyDescriptorSetLayout(logicalDevice, descriptorSetLayout, nullptr);
-    vkDestroyBuffer(logicalDevice, vertexBuffer, nullptr);
-    vkFreeMemory(logicalDevice, vertexBufferMemory, nullptr);
-    vkDestroyBuffer(logicalDevice, indexBuffer, nullptr);
-    vkFreeMemory(logicalDevice, indexBufferMemory, nullptr);
-    vkDestroyDevice(logicalDevice, nullptr);
+    vkDestroyDescriptorSetLayout(device.getLogicalDevice(), descriptorSetLayout, nullptr);
+    vkDestroyBuffer(device.getLogicalDevice(), vertexBuffer, nullptr);
+    vkFreeMemory(device.getLogicalDevice(), vertexBufferMemory, nullptr);
+    vkDestroyBuffer(device.getLogicalDevice(), indexBuffer, nullptr);
+    vkFreeMemory(device.getLogicalDevice(), indexBufferMemory, nullptr);
+    device.destroyDevice();
     vkDestroySurfaceKHR(vulkanInstance.getVulkanInstance(), metalSurface, nullptr);
 }
 
@@ -356,9 +356,9 @@ void GVULKANAPI::createSemaphores() {
     fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
     
     for (size_t i = 0; i < maxFramesInFlight; i++) {
-        if (vkCreateSemaphore(logicalDevice, &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
-            vkCreateSemaphore(logicalDevice, &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS ||
-            vkCreateFence(logicalDevice, &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
+        if (vkCreateSemaphore(device.getLogicalDevice(), &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
+            vkCreateSemaphore(device.getLogicalDevice(), &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS ||
+            vkCreateFence(device.getLogicalDevice(), &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
             printf("GaneshaEngine: failed to create semaphores\n");
             return;
         }
@@ -372,12 +372,12 @@ void GVULKANAPI::frameResized(const float width, const float height) {
 }
 
 void GVULKANAPI::drawFrame() {
-    VkResult result = vkWaitForFences(logicalDevice, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
+    VkResult result = vkWaitForFences(device.getLogicalDevice(), 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
 
     uint32_t imageIndex;
-    result = vkAcquireNextImageKHR(logicalDevice, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
+    result = vkAcquireNextImageKHR(device.getLogicalDevice(), swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
     if (imagesInFlight[imageIndex] != VK_NULL_HANDLE) {
-        vkWaitForFences(logicalDevice, 1, &imagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
+        vkWaitForFences(device.getLogicalDevice(), 1, &imagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
     }
     imagesInFlight[imageIndex] = inFlightFences[currentFrame];
     
@@ -400,9 +400,9 @@ void GVULKANAPI::drawFrame() {
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores = signalSemaphores;
     
-    vkResetFences(logicalDevice, 1, &inFlightFences[currentFrame]);
+    vkResetFences(device.getLogicalDevice(), 1, &inFlightFences[currentFrame]);
     
-    if (vkQueueSubmit(graphicsQueue, 1, &submitInfo, inFlightFences[currentFrame]) != VK_SUCCESS) {
+    if (vkQueueSubmit(device.getGraphicsQueue(), 1, &submitInfo, inFlightFences[currentFrame]) != VK_SUCCESS) {
         printf("GaneshaEngine: failed to submit draw command buffer\n");
     }
 
@@ -415,7 +415,7 @@ void GVULKANAPI::drawFrame() {
     presentInfo.swapchainCount = 1;
     presentInfo.pSwapchains = swapChains;
     presentInfo.pImageIndices = &imageIndex;
-    result = vkQueuePresentKHR(presentQueue, &presentInfo);
+    result = vkQueuePresentKHR(device.getPresentQueue(), &presentInfo);
     if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || updateFrameSize) {
         updateFrameSize = false;
     } else if (result != VK_SUCCESS) {
@@ -425,48 +425,6 @@ void GVULKANAPI::drawFrame() {
     currentFrame = (currentFrame + 1) % maxFramesInFlight;
 }
 
-#pragma mark - Device -
-
-void GVULKANAPI::setupDevice() {
-    uint32_t devicesCount = 0;
-    vkEnumeratePhysicalDevices(vulkanInstance.getVulkanInstance(), &devicesCount, nullptr);
-    
-    std::vector<VkPhysicalDevice> devicesList(devicesCount);
-    vkEnumeratePhysicalDevices(vulkanInstance.getVulkanInstance(), &devicesCount, devicesList.data());
-    for (const auto& device : devicesList) {
-        if (checkDeviceCapability(device)) {
-            physicalDevice = device;
-            return;
-        }
-    }
-}
-
-bool GVULKANAPI::checkDeviceCapability(const VkPhysicalDevice& device) {
-    //  Find discrete GPU
-    VkPhysicalDeviceProperties deviceProperties;
-    vkGetPhysicalDeviceProperties(device, &deviceProperties);
-    if (deviceProperties.deviceType != VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU) {
-        return false;
-    }
-    
-    printf("GaneshaEngine: using this device %s\n", deviceProperties.deviceName);
-    return true;
-}
-
-bool GVULKANAPI::checkDeviceExtensionSupport(VkPhysicalDevice& device) {
-    uint32_t extensionCount;
-    vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
-    
-    std::vector<VkExtensionProperties> availableExtensions(extensionCount);
-    vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableExtensions.data());
-    
-    std::set<std::string> requiredExtensions(deviceExtensions.begin(), deviceExtensions.end());
-    for (const auto& extension : availableExtensions) {
-        requiredExtensions.erase(extension.extensionName);
-    }
-    
-    return requiredExtensions.empty();
-}
 
 #pragma mark - Surface -
 
@@ -494,7 +452,7 @@ void GVULKANAPI::createCommandBuffers() {
     allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
     allocInfo.commandBufferCount = static_cast<uint32_t>(commandBuffers.size());
 
-    if (vkAllocateCommandBuffers(logicalDevice, &allocInfo, commandBuffers.data()) != VK_SUCCESS) {
+    if (vkAllocateCommandBuffers(device.getLogicalDevice(), &allocInfo, commandBuffers.data()) != VK_SUCCESS) {
         printf("GaneshaEngine: failed to create command buffer\n");
     }
     
@@ -538,16 +496,6 @@ void GVULKANAPI::createCommandBuffers() {
     }
 }
 
-void GVULKANAPI::createCommandPool() {
-    VkCommandPoolCreateInfo poolInfo{};
-    poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-    poolInfo.queueFamilyIndex = graphicQueueFamilyIndex;
-
-    if (vkCreateCommandPool(logicalDevice, &poolInfo, nullptr, &commandPool) != VK_SUCCESS) {
-        printf("GaneshaEngine: failed to create command pool\n");
-    }
-}
-
 #pragma mark - Pipeline -
 
 void GVULKANAPI::createDescriptorSetLayout() {
@@ -563,7 +511,7 @@ void GVULKANAPI::createDescriptorSetLayout() {
     layoutInfo.bindingCount = 1;
     layoutInfo.pBindings = &uboLayoutBinding;
 
-    if (vkCreateDescriptorSetLayout(logicalDevice, &layoutInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
+    if (vkCreateDescriptorSetLayout(device.getLogicalDevice(), &layoutInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
         printf("GaneshaEngine: failed to create descriptor set layout\n");
     }
     
@@ -606,7 +554,7 @@ void GVULKANAPI::createRenderPass() {
     renderPassInfo.dependencyCount =  1;
     renderPassInfo.pDependencies = &dependency;
 
-    if (vkCreateRenderPass(logicalDevice, &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS) {
+    if (vkCreateRenderPass(device.getLogicalDevice(), &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS) {
         printf("GaneshaEngine: failed to create render pass\n");
     }
 }
@@ -699,7 +647,7 @@ void GVULKANAPI::createGraphicsPipeline() {
     pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
     pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
 
-    if (vkCreatePipelineLayout(logicalDevice, &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
+    if (vkCreatePipelineLayout(device.getLogicalDevice(), &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
         printf("GaneshaEngine: error while creating pipeline layout\n");
     }
 
@@ -718,13 +666,13 @@ void GVULKANAPI::createGraphicsPipeline() {
     pipelineInfo.subpass = 0;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
     
-    VkResult result = vkCreateGraphicsPipelines(logicalDevice, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline);
+    VkResult result = vkCreateGraphicsPipelines(device.getLogicalDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline);
     if (result != VK_SUCCESS) {
         printf("GaneshaEngine: error while creating pipeline itself\n");
     }
     
-    vkDestroyShaderModule(logicalDevice, fragShaderModule, nullptr);
-    vkDestroyShaderModule(logicalDevice, vertShaderModule, nullptr);
+    vkDestroyShaderModule(device.getLogicalDevice(), fragShaderModule, nullptr);
+    vkDestroyShaderModule(device.getLogicalDevice(), vertShaderModule, nullptr);
 }
 
 VkShaderModule GVULKANAPI::createShaderModule(const std::vector<uint8_t>& code) {
@@ -735,7 +683,7 @@ VkShaderModule GVULKANAPI::createShaderModule(const std::vector<uint8_t>& code) 
     createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
     VkShaderModule shaderModule;
-    if (vkCreateShaderModule(logicalDevice, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
+    if (vkCreateShaderModule(device.getLogicalDevice(), &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
         printf("GaneshaEngine: No chance to create shader module\n");
     }
     
@@ -760,14 +708,14 @@ void GVULKANAPI::createFramebuffers() {
         framebufferInfo.height = swapChainExtent.height;
         framebufferInfo.layers = 1;
 
-        if (vkCreateFramebuffer(logicalDevice, &framebufferInfo, nullptr, &swapChainFramebuffers[i]) != VK_SUCCESS) {
+        if (vkCreateFramebuffer(device.getLogicalDevice(), &framebufferInfo, nullptr, &swapChainFramebuffers[i]) != VK_SUCCESS) {
             printf("GaneshaEngine: failed to create framebuffer with index %zu\n", i);
         }
     }
 }
 
 void GVULKANAPI::createSwapChain() {
-    SwapChainSupportDetails swapChainSupport = querySwapChainSupport(physicalDevice);
+    SwapChainSupportDetails swapChainSupport = querySwapChainSupport(device.getPhysicalDevice());
 
     VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
     VkPresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupport.presentModes);
@@ -793,15 +741,15 @@ void GVULKANAPI::createSwapChain() {
     swapChainInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
     swapChainInfo.presentMode = presentMode;
     swapChainInfo.clipped = VK_TRUE;
-    if (vkCreateSwapchainKHR(logicalDevice, &swapChainInfo, nullptr, &swapChain) != VK_SUCCESS) {
+    if (vkCreateSwapchainKHR(device.getLogicalDevice(), &swapChainInfo, nullptr, &swapChain) != VK_SUCCESS) {
         printf("GaneshaEngine: failed to create swap chain\n");
     }
     
     swapChainImageFormat = surfaceFormat.format;
     swapChainExtent = extent;
-    vkGetSwapchainImagesKHR(logicalDevice, swapChain, &imageCount, nullptr);
+    vkGetSwapchainImagesKHR(device.getLogicalDevice(), swapChain, &imageCount, nullptr);
     swapChainImages.resize(imageCount);
-    vkGetSwapchainImagesKHR(logicalDevice, swapChain, &imageCount, swapChainImages.data());
+    vkGetSwapchainImagesKHR(device.getLogicalDevice(), swapChain, &imageCount, swapChainImages.data());
 }
 
 VkExtent2D GVULKANAPI::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) {
@@ -817,7 +765,7 @@ VkExtent2D GVULKANAPI::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabili
     }
 }
 
-SwapChainSupportDetails GVULKANAPI::querySwapChainSupport(VkPhysicalDevice device) {
+SwapChainSupportDetails GVULKANAPI::querySwapChainSupport(VkPhysicalDevice physicalDevice) {
     SwapChainSupportDetails details = {0};
     vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, metalSurface, &details.capabilities);
     
@@ -878,72 +826,10 @@ void GVULKANAPI::createImageViews() {
         imageViewInfo.subresourceRange.baseArrayLayer = 0;
         imageViewInfo.subresourceRange.layerCount = 1;
         
-        if (vkCreateImageView(logicalDevice, &imageViewInfo, nullptr, &swapChainImageViews[i]) != VK_SUCCESS) {
+        if (vkCreateImageView(device.getLogicalDevice(), &imageViewInfo, nullptr, &swapChainImageViews[i]) != VK_SUCCESS) {
             printf("GaneshaEngine: failed to create image view\n");
         }
     }
-}
-
-#pragma mark - Queues -
-
-void GVULKANAPI::findQueuesIndeces() {
-    uint32_t queueFamilyCount = 0;
-    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, nullptr);
-    std::vector<VkQueueFamilyProperties> queueFamiliesList(queueFamilyCount);
-    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, queueFamiliesList.data());
-
-    for (uint32_t i = 0; i < queueFamiliesList.size(); i++) {
-        const auto& queueFamily = queueFamiliesList[i];
-        if ((queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)) {
-            graphicQueueFamilyIndex = i;
-        }
-        
-        VkBool32 presentSupport = false;
-        vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, i, metalSurface, &presentSupport);
-        if (presentSupport) {
-            presentQueueFamilyIndex = i;
-        }
-
-        if (presentQueueFamilyIndex > 0 && graphicQueueFamilyIndex > 0) {
-            return;
-        }
-    }
-}
-
-#pragma mark - Device -
-
-void GVULKANAPI::setupLogicalDevice() {
-    std::vector<VkDeviceQueueCreateInfo> queueCreateInfosList;
-    std::set<int32_t> uniqueQueueFamilies = {graphicQueueFamilyIndex, presentQueueFamilyIndex};
-    float queuePriority = 1.0f;
-    for (int queueIndex : uniqueQueueFamilies) {
-        VkDeviceQueueCreateInfo deviceQueueInfo = {};
-        
-        deviceQueueInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-        deviceQueueInfo.queueFamilyIndex = queueIndex;
-        deviceQueueInfo.queueCount = 1;
-        deviceQueueInfo.pQueuePriorities = &queuePriority;
-
-        queueCreateInfosList.push_back(deviceQueueInfo);
-    }
-
-    VkPhysicalDeviceFeatures deviceFeatures = {};
-
-    VkDeviceCreateInfo deviceInfo = {};
-    deviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-    deviceInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfosList.size());
-    deviceInfo.pQueueCreateInfos = queueCreateInfosList.data();
-    deviceInfo.pEnabledFeatures = &deviceFeatures;
-    if (checkDeviceExtensionSupport(physicalDevice)) {
-        deviceInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
-        deviceInfo.ppEnabledExtensionNames = deviceExtensions.data();
-    }
-    if (vkCreateDevice(physicalDevice, &deviceInfo, nullptr, &logicalDevice) != VK_SUCCESS) {
-        printf("GaneshaEngine: error creating logical device\n");
-    }
-
-    vkGetDeviceQueue(logicalDevice, graphicQueueFamilyIndex, 0, &graphicsQueue);
-    vkGetDeviceQueue(logicalDevice, presentQueueFamilyIndex, 0, &presentQueue);
 }
 
 }

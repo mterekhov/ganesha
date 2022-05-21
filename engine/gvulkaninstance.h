@@ -33,12 +33,9 @@ private:
     
     void createNewInstance(const bool useValidationLayers);
     void destroyInstance();
-    TInstanceExtensionsArray collectInstanceExtensions();
-    TCharPointersArray collectInstanceExtensionsNames(TInstanceExtensionsArray extensionsList);
     VkInstanceCreateInfo createInstanceInfo(const bool useValidationLayers);
     VkApplicationInfo createApplicationInfo();
     
-    TCharPointersArray collectValidationLayers(const TCharPointersArray& layersNamesList);
     VkDebugUtilsMessengerCreateInfoEXT createDebugUtilsMessengerInfo();
     VkResult createDebugUtilsMessenger(VkInstance instance,
                                        const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
