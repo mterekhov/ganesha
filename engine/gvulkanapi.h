@@ -20,8 +20,8 @@ struct SwapChainSupportDetails {
 /// A LOT OF FUCKING SHIT
 class GVULKANAPI {
 public:
-    void createInstance(void *metalLayer, const uint32_t frameWidth, const uint32_t frameHeight);
-    void destroyInstance();
+    void initAPI(void *metalLayer, const uint32_t frameWidth, const uint32_t frameHeight);
+    void destroyAPI();
     void drawFrame();
     void frameResized(const float width, const float height);
     void installIsometricView(const TFloat fieldOfView, const TFloat near, const TFloat far);

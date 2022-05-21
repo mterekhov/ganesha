@@ -18,11 +18,13 @@ struct UniformBufferObject {
     GMatrix proj;
 };
 
-void GVULKANAPI::createInstance(void *metalLayer, const uint32_t frameWidth, const uint32_t frameHeight) {
+void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint32_t frameHeight) {
     width = frameWidth;
     height = frameHeight;
     updateFrameSize = false;
         
+    vulkanInstance.createInstance(true);
+    
     //  creates metalSurface
     setupSurface(metalLayer);
     
@@ -50,6 +52,41 @@ void GVULKANAPI::createInstance(void *metalLayer, const uint32_t frameWidth, con
     createIndicesBuffer();
     createCommandBuffers();
     createSemaphores();
+}
+
+void GVULKANAPI::destroyAPI() {
+    for (size_t i = 0; i < maxFramesInFlight; i++) {
+        vkDestroySemaphore(device.getLogicalDevice(), renderFinishedSemaphores[i], nullptr);
+        vkDestroySemaphore(device.getLogicalDevice(), imageAvailableSemaphores[i], nullptr);
+        vkDestroyFence(device.getLogicalDevice(), inFlightFences[i], nullptr);
+    }
+    
+    vkDestroyCommandPool(device.getLogicalDevice(), commandPool, nullptr);
+    for (auto framebuffer : swapChainFramebuffers) {
+        vkDestroyFramebuffer(device.getLogicalDevice(), framebuffer, nullptr);
+    }
+    vkDestroyPipeline(device.getLogicalDevice(), graphicsPipeline, nullptr);
+    vkDestroyPipelineLayout(device.getLogicalDevice(), pipelineLayout, nullptr);
+    vkDestroyRenderPass(device.getLogicalDevice(), renderPass, nullptr);
+    for (auto imageView : swapChainImageViews) {
+        vkDestroyImageView(device.getLogicalDevice(), imageView, nullptr);
+    }
+    vkDestroySwapchainKHR(device.getLogicalDevice(), swapChain, nullptr);
+
+    for (size_t i = 0; i < swapChainImages.size(); i++) {
+        vkDestroyBuffer(device.getLogicalDevice(), uniformBuffers[i], nullptr);
+        vkFreeMemory(device.getLogicalDevice(), uniformBuffersMemory[i], nullptr);
+    }
+    vkDestroyDescriptorPool(device.getLogicalDevice(), descriptorPool, nullptr);
+    
+    vkDestroyDescriptorSetLayout(device.getLogicalDevice(), descriptorSetLayout, nullptr);
+    vkDestroyBuffer(device.getLogicalDevice(), vertexBuffer, nullptr);
+    vkFreeMemory(device.getLogicalDevice(), vertexBufferMemory, nullptr);
+    vkDestroyBuffer(device.getLogicalDevice(), indexBuffer, nullptr);
+    vkFreeMemory(device.getLogicalDevice(), indexBufferMemory, nullptr);
+    device.destroyDevice();
+    vkDestroySurfaceKHR(vulkanInstance.getVulkanInstance(), metalSurface, nullptr);
+    vulkanInstance.destroyInstance();
 }
 
 uint32_t GVULKANAPI::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
@@ -264,40 +301,6 @@ void GVULKANAPI::updateUniformBuffer(uint32_t currentImage) {
     vkMapMemory(device.getLogicalDevice(), uniformBuffersMemory[currentImage], 0, sizeof(ubo), 0, &data);
     memcpy(data, &ubo, sizeof(ubo));
     vkUnmapMemory(device.getLogicalDevice(), uniformBuffersMemory[currentImage]);
-}
-
-void GVULKANAPI::destroyInstance() {
-    for (size_t i = 0; i < maxFramesInFlight; i++) {
-        vkDestroySemaphore(device.getLogicalDevice(), renderFinishedSemaphores[i], nullptr);
-        vkDestroySemaphore(device.getLogicalDevice(), imageAvailableSemaphores[i], nullptr);
-        vkDestroyFence(device.getLogicalDevice(), inFlightFences[i], nullptr);
-    }
-    
-    vkDestroyCommandPool(device.getLogicalDevice(), commandPool, nullptr);
-    for (auto framebuffer : swapChainFramebuffers) {
-        vkDestroyFramebuffer(device.getLogicalDevice(), framebuffer, nullptr);
-    }
-    vkDestroyPipeline(device.getLogicalDevice(), graphicsPipeline, nullptr);
-    vkDestroyPipelineLayout(device.getLogicalDevice(), pipelineLayout, nullptr);
-    vkDestroyRenderPass(device.getLogicalDevice(), renderPass, nullptr);
-    for (auto imageView : swapChainImageViews) {
-        vkDestroyImageView(device.getLogicalDevice(), imageView, nullptr);
-    }
-    vkDestroySwapchainKHR(device.getLogicalDevice(), swapChain, nullptr);
-
-    for (size_t i = 0; i < swapChainImages.size(); i++) {
-        vkDestroyBuffer(device.getLogicalDevice(), uniformBuffers[i], nullptr);
-        vkFreeMemory(device.getLogicalDevice(), uniformBuffersMemory[i], nullptr);
-    }
-    vkDestroyDescriptorPool(device.getLogicalDevice(), descriptorPool, nullptr);
-    
-    vkDestroyDescriptorSetLayout(device.getLogicalDevice(), descriptorSetLayout, nullptr);
-    vkDestroyBuffer(device.getLogicalDevice(), vertexBuffer, nullptr);
-    vkFreeMemory(device.getLogicalDevice(), vertexBufferMemory, nullptr);
-    vkDestroyBuffer(device.getLogicalDevice(), indexBuffer, nullptr);
-    vkFreeMemory(device.getLogicalDevice(), indexBufferMemory, nullptr);
-    device.destroyDevice();
-    vkDestroySurfaceKHR(vulkanInstance.getVulkanInstance(), metalSurface, nullptr);
 }
 
 void GVULKANAPI::createSemaphores() {

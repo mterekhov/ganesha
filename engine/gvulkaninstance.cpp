@@ -15,30 +15,12 @@ static const TCharPointersArray khronosValidationLayers = {
     "VK_LAYER_KHRONOS_validation"
 };
 
-GVULKANInstance::GVULKANInstance(const bool useValidationLayers) {
+void GVULKANInstance::createInstance(const bool useValidationLayers) {
     createNewInstance(useValidationLayers);
     if (useValidationLayers) {
         if (createDebugUtilsMessenger(vulkanInstance, &debugUtilsMessengerInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
             printf("GaneshaEngine: failed to set up debug messenger\n");
         }
-    }
-}
-
-GVULKANInstance::~GVULKANInstance() {
-    destroyInstance();
-}
-
-void GVULKANInstance::createNewInstance(const bool useValidationLayers) {
-    extensionsList = collectInstanceExtensions();
-    extensionsNamesList = collectInstanceExtensionsNames(extensionsList);
-    availableValidationLayersList = collectValidationLayers(khronosValidationLayers);
-    
-    VkInstanceCreateInfo instanceInfo = createInstanceInfo(useValidationLayers);
-    VkResult error = VK_SUCCESS;
-    error = vkCreateInstance(&instanceInfo, nullptr, &vulkanInstance);
-    if (error != VK_SUCCESS) {
-        printf("GaneshaEngine: error creating VULKAN instance\n");
-        return;
     }
 }
 
@@ -56,6 +38,20 @@ VkInstance& GVULKANInstance::getVulkanInstance() {
 }
 
 #pragma mark - Routine -
+
+void GVULKANInstance::createNewInstance(const bool useValidationLayers) {
+    extensionsList = collectInstanceExtensions();
+    extensionsNamesList = collectInstanceExtensionsNames(extensionsList);
+    availableValidationLayersList = collectValidationLayers(khronosValidationLayers);
+    
+    VkInstanceCreateInfo instanceInfo = createInstanceInfo(useValidationLayers);
+    VkResult error = VK_SUCCESS;
+    error = vkCreateInstance(&instanceInfo, nullptr, &vulkanInstance);
+    if (error != VK_SUCCESS) {
+        printf("GaneshaEngine: error creating VULKAN instance\n");
+        return;
+    }
+}
 
 VkApplicationInfo GVULKANInstance::createApplicationInfo() {
     VkApplicationInfo newApplicationInfo = {};
