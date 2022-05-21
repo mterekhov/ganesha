@@ -25,6 +25,7 @@
 		06AD8217278CEB3300AFF874 /* vert.spv in Resources */ = {isa = PBXBuildFile; fileRef = 06AD8213278CEB3300AFF874 /* vert.spv */; };
 		06AD8218278CEB3300AFF874 /* frag.spv in Resources */ = {isa = PBXBuildFile; fileRef = 06AD8214278CEB3300AFF874 /* frag.spv */; };
 		DE2F6DBC283825560018A635 /* gvulkandevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE2F6DBA283825560018A635 /* gvulkandevice.cpp */; };
+		DE2F6DBF283972090018A635 /* ganeshastubdata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE2F6DBD283972090018A635 /* ganeshastubdata.cpp */; };
 		DE32A7B828381932007E6E04 /* ganeshatools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE32A7B628381932007E6E04 /* ganeshatools.cpp */; };
 		DE9C3B782836DD0E00B877F6 /* libvulkan.1.3.211.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DE9C3B772836DD0E00B877F6 /* libvulkan.1.3.211.dylib */; };
 		DE9C3B792836DD0E00B877F6 /* libvulkan.1.3.211.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = DE9C3B772836DD0E00B877F6 /* libvulkan.1.3.211.dylib */; };
@@ -85,6 +86,8 @@
 		06AD8216278CEB3300AFF874 /* shader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = shader.vert; path = resources/shaders/shader.vert; sourceTree = "<group>"; };
 		DE2F6DBA283825560018A635 /* gvulkandevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gvulkandevice.cpp; path = engine/gvulkandevice.cpp; sourceTree = "<group>"; };
 		DE2F6DBB283825560018A635 /* gvulkandevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gvulkandevice.h; path = engine/gvulkandevice.h; sourceTree = "<group>"; };
+		DE2F6DBD283972090018A635 /* ganeshastubdata.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ganeshastubdata.cpp; path = engine/ganeshastubdata.cpp; sourceTree = "<group>"; };
+		DE2F6DBE283972090018A635 /* ganeshastubdata.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ganeshastubdata.h; path = engine/ganeshastubdata.h; sourceTree = "<group>"; };
 		DE32A7B628381932007E6E04 /* ganeshatools.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ganeshatools.cpp; path = engine/ganeshatools.cpp; sourceTree = "<group>"; };
 		DE32A7B728381932007E6E04 /* ganeshatools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ganeshatools.h; path = engine/ganeshatools.h; sourceTree = "<group>"; };
 		DE9C3B772836DD0E00B877F6 /* libvulkan.1.3.211.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvulkan.1.3.211.dylib; path = ../../../../../usr/local/lib/libvulkan.1.3.211.dylib; sourceTree = "<group>"; };
@@ -204,10 +207,12 @@
 				06AD81FC278CEB2000AFF874 /* gvulkanapi.cpp */,
 				06AD8205278CEB2000AFF874 /* gvulkaninstance.h */,
 				06AD8203278CEB2000AFF874 /* gvulkaninstance.cpp */,
-				DE32A7B728381932007E6E04 /* ganeshatools.h */,
-				DE32A7B628381932007E6E04 /* ganeshatools.cpp */,
 				DE2F6DBB283825560018A635 /* gvulkandevice.h */,
 				DE2F6DBA283825560018A635 /* gvulkandevice.cpp */,
+				DE32A7B728381932007E6E04 /* ganeshatools.h */,
+				DE32A7B628381932007E6E04 /* ganeshatools.cpp */,
+				DE2F6DBE283972090018A635 /* ganeshastubdata.h */,
+				DE2F6DBD283972090018A635 /* ganeshastubdata.cpp */,
 			);
 			name = vulkan;
 			sourceTree = "<group>";
@@ -308,6 +313,7 @@
 				06AD820B278CEB2000AFF874 /* gmatrix.cpp in Sources */,
 				DE2F6DBC283825560018A635 /* gvulkandevice.cpp in Sources */,
 				06AD81B9278CE96700AFF874 /* AppDelegate.swift in Sources */,
+				DE2F6DBF283972090018A635 /* ganeshastubdata.cpp in Sources */,
 				06AD81BA278CE96700AFF874 /* ViewController.swift in Sources */,
 				06AD820F278CEB2000AFF874 /* gcamera.cpp in Sources */,
 				06AD8210278CEB2000AFF874 /* gganesha.cpp in Sources */,

@@ -29,13 +29,13 @@ public:
 
 private:
     GVULKANDevice device;
-    
+    GVULKANInstance vulkanInstance;
+    VkSurfaceKHR metalSurface;
+
     GMatrix projectionMatrix;
     GMatrix viewMatrix;
 
     bool updateFrameSize;
-    GVULKANInstance vulkanInstance;
-    VkSurfaceKHR metalSurface;
 
     std::vector<VkSemaphore> imageAvailableSemaphores;
     std::vector<VkSemaphore> renderFinishedSemaphores;
