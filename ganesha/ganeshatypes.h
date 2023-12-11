@@ -9,7 +9,6 @@
 #define SPCGANESHAENGINE_GANESHATYPES_H
 
 #include <vector>
-#include <vulkan/vulkan.h>
 
 namespace spcGaneshaEngine {
 
@@ -22,7 +21,6 @@ namespace spcGaneshaEngine {
 /// converts radians into degrees
 #define RAD_TO_DEG(rad) ((rad) * 180.0f / M_PI)
 
-typedef std::vector<VkExtensionProperties> TInstanceExtensionsArray;
 typedef std::vector<const char *> TCharPointersArray;
 typedef std::vector<std::string> TStringsArray;
 typedef float TFloat;

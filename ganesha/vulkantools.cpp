@@ -5,7 +5,7 @@
 //  Created by cipher on 20.05.2022.
 //
 
-#include "ganeshatools.h"
+#include "vulkantools.h"
 
 namespace spcGaneshaEngine {
 

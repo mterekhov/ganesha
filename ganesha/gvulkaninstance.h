@@ -9,6 +9,8 @@
 #define SPCGANESHAENGINE_GVULKANINSATANCE_H
 
 #include "ganeshatypes.h"
+#include "vulkantools.h"
+#include <vulkan/vulkan.h>
 
 namespace spcGaneshaEngine {
 

@@ -9,8 +9,11 @@
 #define SPCGANESHAENGINE_GANESHATOOLS_H
 
 #include "ganeshatypes.h"
+#include <vulkan/vulkan.h>
 
 namespace spcGaneshaEngine {
+
+typedef std::vector<VkExtensionProperties> TInstanceExtensionsArray;
 
 /// Collects extensions for VULKAN instance, e.g. VK_EXT_metal_surface, VK_EXT_debug_utils, VK_KHR_external_semaphore_capabilities, etc
 TInstanceExtensionsArray collectInstanceExtensions();

@@ -7,7 +7,6 @@
 
 #include "gvulkaninstance.h"
 #include <vulkan/vulkan.h>
-#include "ganeshatools.h"
 
 namespace spcGaneshaEngine {
 
