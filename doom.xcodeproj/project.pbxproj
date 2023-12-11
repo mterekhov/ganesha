@@ -14,7 +14,6 @@
 		DE55F20E2B27900C0017E3E9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE55F20D2B27900C0017E3E9 /* AppDelegate.swift */; };
 		DE55F2102B27900C0017E3E9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE55F20F2B27900C0017E3E9 /* ViewController.swift */; };
 		DE55F2122B27900D0017E3E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE55F2112B27900D0017E3E9 /* Assets.xcassets */; };
-		DE55F2152B27900D0017E3E9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE55F2132B27900D0017E3E9 /* Main.storyboard */; };
 		DE55F2242B27903F0017E3E9 /* ganesha.h in Headers */ = {isa = PBXBuildFile; fileRef = DE55F2232B27903F0017E3E9 /* ganesha.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE55F2272B27903F0017E3E9 /* ganesha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE55F2212B27903F0017E3E9 /* ganesha.framework */; };
 		DE55F2282B27903F0017E3E9 /* ganesha.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DE55F2212B27903F0017E3E9 /* ganesha.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -109,7 +108,6 @@
 		DE55F20D2B27900C0017E3E9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DE55F20F2B27900C0017E3E9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		DE55F2112B27900D0017E3E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		DE55F2142B27900D0017E3E9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DE55F2162B27900D0017E3E9 /* doom.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = doom.entitlements; sourceTree = "<group>"; };
 		DE55F2212B27903F0017E3E9 /* ganesha.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ganesha.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE55F2232B27903F0017E3E9 /* ganesha.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ganesha.h; sourceTree = "<group>"; };
@@ -252,7 +250,6 @@
 				DE55F22D2B27909A0017E3E9 /* Application.swift */,
 				DE55F20F2B27900C0017E3E9 /* ViewController.swift */,
 				DE55F2112B27900D0017E3E9 /* Assets.xcassets */,
-				DE55F2132B27900D0017E3E9 /* Main.storyboard */,
 				DE55F2162B27900D0017E3E9 /* doom.entitlements */,
 			);
 			path = doom;
@@ -405,7 +402,6 @@
 				DE55F2122B27900D0017E3E9 /* Assets.xcassets in Resources */,
 				DE4690292B27BAC900006EAA /* frag.spv in Resources */,
 				DE46902C2B27BAC900006EAA /* vert.spv in Resources */,
-				DE55F2152B27900D0017E3E9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -459,17 +455,6 @@
 			targetProxy = DE55F2252B27903F0017E3E9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		DE55F2132B27900D0017E3E9 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				DE55F2142B27900D0017E3E9 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		DE55F2172B27900D0017E3E9 /* Debug */ = {
@@ -604,8 +589,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = DOOM;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMainStoryboardFile = Main;
-				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				INFOPLIST_KEY_NSPrincipalClass = "$(PRODUCT_NAME).Application";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -641,8 +625,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = DOOM;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMainStoryboardFile = Main;
-				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				INFOPLIST_KEY_NSPrincipalClass = "$(PRODUCT_NAME).Application";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
