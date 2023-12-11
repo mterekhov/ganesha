@@ -8,6 +8,7 @@
 #include "gvulkaninstance.h"
 #include "gvulkandevice.h"
 #include "gmatrix.h"
+#include "ggraphicsapi.h"
 
 namespace spcGaneshaEngine {
 
@@ -18,14 +19,17 @@ struct SwapChainSupportDetails {
 };
 
 /// A LOT OF FUCKING SHIT
-class GVULKANAPI {
+class GVULKANAPI: public GGraphicsAPI {
 public:
-    void initAPI(void *metalLayer, const uint32_t frameWidth, const uint32_t frameHeight);
-    void destroyAPI();
-    void drawFrame();
-    void frameResized(const float width, const float height);
-    void installIsometricView(const TFloat fieldOfView, const TFloat near, const TFloat far);
-    void installViewMatrix(const GMatrix& newViewMatrix);
+    GVULKANAPI();
+    virtual ~GVULKANAPI();
+
+    virtual void initAPI(void *metalLayer, const uint32_t frameWidth, const uint32_t frameHeight);
+    virtual void destroyAPI();
+    virtual void drawFrame();
+    virtual void frameResized(const float width, const float height);
+    virtual void installIsometricView(const TFloat fieldOfView, const TFloat near, const TFloat far);
+    virtual void installViewMatrix(const GMatrix& newViewMatrix);
 
 private:
     GVULKANDevice device;

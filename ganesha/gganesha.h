@@ -2,7 +2,7 @@
 #define SPCGANESHAENGINE_GGANESHA_H
 
 #include <stdio.h>
-#include "gvulkanapi.h"
+#include "ggraphicsapi.h"
 #include "gcamera.h"
 
 namespace spcGaneshaEngine {
@@ -10,6 +10,9 @@ namespace spcGaneshaEngine {
 /// This class is the main entry point for engine usage. You need to create this object and provide critical info(windows size, key touches, etc)
 class GGanesha {
 public:
+    GGanesha();
+    ~GGanesha();
+    
     /// Init engine
     /// @param metalLayer  layer of MTKView
     /// @param width window width
@@ -32,7 +35,7 @@ public:
     void processKeyboard(const uint32_t keyCode);
     
 private:
-    GVULKANAPI vulkanInstance;
+    GGraphicsAPI *graphicsAPI;
     GCamera camera;
 
 };

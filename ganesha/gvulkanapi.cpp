@@ -18,6 +18,14 @@ struct UniformBufferObject {
     GMatrix proj;
 };
 
+GVULKANAPI::GVULKANAPI() {
+    
+}
+
+GVULKANAPI::~GVULKANAPI() {
+    
+}
+
 void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint32_t frameHeight) {
     width = frameWidth;
     height = frameHeight;
