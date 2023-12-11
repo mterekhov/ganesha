@@ -6,7 +6,7 @@
 //
 
 #import "CPPBridge.h"
-#import "ganesha.h"
+#import <ganesha/ganesha.h>
 
 @interface CPPBridge ()
 

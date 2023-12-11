@@ -1,0 +1,771 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DE4690212B27BA1000006EAA /* libvulkan.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DE4690202B27BA1000006EAA /* libvulkan.1.dylib */; };
+		DE4690222B27BA1000006EAA /* libvulkan.1.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = DE4690202B27BA1000006EAA /* libvulkan.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		DE4690292B27BAC900006EAA /* frag.spv in Resources */ = {isa = PBXBuildFile; fileRef = DE4690252B27BAC900006EAA /* frag.spv */; };
+		DE46902C2B27BAC900006EAA /* vert.spv in Resources */ = {isa = PBXBuildFile; fileRef = DE4690282B27BAC900006EAA /* vert.spv */; };
+		DE55F20E2B27900C0017E3E9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE55F20D2B27900C0017E3E9 /* AppDelegate.swift */; };
+		DE55F2102B27900C0017E3E9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE55F20F2B27900C0017E3E9 /* ViewController.swift */; };
+		DE55F2122B27900D0017E3E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE55F2112B27900D0017E3E9 /* Assets.xcassets */; };
+		DE55F2152B27900D0017E3E9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE55F2132B27900D0017E3E9 /* Main.storyboard */; };
+		DE55F2242B27903F0017E3E9 /* ganesha.h in Headers */ = {isa = PBXBuildFile; fileRef = DE55F2232B27903F0017E3E9 /* ganesha.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE55F2272B27903F0017E3E9 /* ganesha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE55F2212B27903F0017E3E9 /* ganesha.framework */; };
+		DE55F2282B27903F0017E3E9 /* ganesha.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DE55F2212B27903F0017E3E9 /* ganesha.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		DE55F22E2B27909A0017E3E9 /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE55F22D2B27909A0017E3E9 /* Application.swift */; };
+		DE55F2322B2790ED0017E3E9 /* CPPBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = DE55F2312B2790ED0017E3E9 /* CPPBridge.mm */; };
+		DE55F24E2B2791120017E3E9 /* gcamera.h in Headers */ = {isa = PBXBuildFile; fileRef = DE55F2332B2791120017E3E9 /* gcamera.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE55F24F2B2791120017E3E9 /* gvulkaninstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE55F2342B2791120017E3E9 /* gvulkaninstance.cpp */; };
+		DE55F2502B2791120017E3E9 /* ganeshatools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE55F2352B2791120017E3E9 /* ganeshatools.cpp */; };
+		DE55F2512B2791120017E3E9 /* gbundle.mm in Sources */ = {isa = PBXBuildFile; fileRef = DE55F2362B2791120017E3E9 /* gbundle.mm */; };
+		DE55F2522B2791120017E3E9 /* gganesha.h in Headers */ = {isa = PBXBuildFile; fileRef = DE55F2372B2791120017E3E9 /* gganesha.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE55F2532B2791120017E3E9 /* gvector.h in Headers */ = {isa = PBXBuildFile; fileRef = DE55F2382B2791120017E3E9 /* gvector.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE55F2542B2791120017E3E9 /* gvulkanapi.h in Headers */ = {isa = PBXBuildFile; fileRef = DE55F2392B2791120017E3E9 /* gvulkanapi.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE55F2552B2791120017E3E9 /* gganesha.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE55F23A2B2791120017E3E9 /* gganesha.cpp */; };
+		DE55F2562B2791120017E3E9 /* gcolor.h in Headers */ = {isa = PBXBuildFile; fileRef = DE55F23B2B2791120017E3E9 /* gcolor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE55F2572B2791120017E3E9 /* gvulkandevice.h in Headers */ = {isa = PBXBuildFile; fileRef = DE55F23C2B2791120017E3E9 /* gvulkandevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE55F2582B2791120017E3E9 /* gpoint2d.h in Headers */ = {isa = PBXBuildFile; fileRef = DE55F23D2B2791120017E3E9 /* gpoint2d.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE55F2592B2791120017E3E9 /* gbundle.h in Headers */ = {isa = PBXBuildFile; fileRef = DE55F23E2B2791120017E3E9 /* gbundle.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE55F25A2B2791120017E3E9 /* gcolor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE55F23F2B2791120017E3E9 /* gcolor.cpp */; };
+		DE55F25B2B2791120017E3E9 /* gpoint2d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE55F2402B2791120017E3E9 /* gpoint2d.cpp */; };
+		DE55F25C2B2791120017E3E9 /* gvector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE55F2412B2791120017E3E9 /* gvector.cpp */; };
+		DE55F25D2B2791120017E3E9 /* ganeshastubdata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE55F2422B2791120017E3E9 /* ganeshastubdata.cpp */; };
+		DE55F25E2B2791120017E3E9 /* gmatrix.h in Headers */ = {isa = PBXBuildFile; fileRef = DE55F2432B2791120017E3E9 /* gmatrix.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE55F25F2B2791120017E3E9 /* ganeshatypes.h in Headers */ = {isa = PBXBuildFile; fileRef = DE55F2442B2791120017E3E9 /* ganeshatypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE55F2602B2791120017E3E9 /* gvulkandevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE55F2452B2791120017E3E9 /* gvulkandevice.cpp */; };
+		DE55F2612B2791120017E3E9 /* ganeshatools.h in Headers */ = {isa = PBXBuildFile; fileRef = DE55F2462B2791120017E3E9 /* ganeshatools.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE55F2622B2791120017E3E9 /* gcamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE55F2472B2791120017E3E9 /* gcamera.cpp */; };
+		DE55F2632B2791120017E3E9 /* gvulkanapi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE55F2482B2791120017E3E9 /* gvulkanapi.cpp */; };
+		DE55F2642B2791120017E3E9 /* gpoint.h in Headers */ = {isa = PBXBuildFile; fileRef = DE55F2492B2791120017E3E9 /* gpoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE55F2652B2791120017E3E9 /* gmatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE55F24A2B2791120017E3E9 /* gmatrix.cpp */; };
+		DE55F2662B2791120017E3E9 /* ganeshastubdata.h in Headers */ = {isa = PBXBuildFile; fileRef = DE55F24B2B2791120017E3E9 /* ganeshastubdata.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE55F2672B2791120017E3E9 /* gvulkaninstance.h in Headers */ = {isa = PBXBuildFile; fileRef = DE55F24C2B2791120017E3E9 /* gvulkaninstance.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE55F2682B2791120017E3E9 /* gpoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE55F24D2B2791120017E3E9 /* gpoint.cpp */; };
+		DE6729522B27B2C700894C75 /* libvulkan.1.3.268.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DE6729502B27B2C700894C75 /* libvulkan.1.3.268.dylib */; };
+		DE6729532B27B2C700894C75 /* libvulkan.1.3.268.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = DE6729502B27B2C700894C75 /* libvulkan.1.3.268.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		DE6729542B27B2C700894C75 /* libMoltenVK.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DE6729512B27B2C700894C75 /* libMoltenVK.dylib */; };
+		DE6729552B27B2C700894C75 /* libMoltenVK.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = DE6729512B27B2C700894C75 /* libMoltenVK.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		DE6729582B27B35600894C75 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE6729572B27B35600894C75 /* Cocoa.framework */; };
+		DE67295A2B27B37C00894C75 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE6729592B27B37C00894C75 /* MetalKit.framework */; };
+		DE67295E2B27B3D600894C75 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE67295D2B27B3D600894C75 /* IOKit.framework */; };
+		DE6729602B27B3FD00894C75 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE67295F2B27B3FD00894C75 /* IOSurface.framework */; };
+		DE6729622B27B41B00894C75 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE6729612B27B41B00894C75 /* CoreMedia.framework */; };
+		DEB4133D2B27B496003F1DFD /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEB4133C2B27B496003F1DFD /* Metal.framework */; };
+		DEB4133F2B27B52B003F1DFD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEB4133E2B27B52B003F1DFD /* CoreGraphics.framework */; };
+		DEB413402B27B612003F1DFD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEB4133E2B27B52B003F1DFD /* CoreGraphics.framework */; };
+		DEB413412B27B738003F1DFD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEB4133E2B27B52B003F1DFD /* CoreGraphics.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DE55F2252B27903F0017E3E9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DE55F2022B27900C0017E3E9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DE55F2202B27903F0017E3E9;
+			remoteInfo = ganesha;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		DE55F22C2B27903F0017E3E9 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				DE55F2282B27903F0017E3E9 /* ganesha.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DE6729562B27B2C700894C75 /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				DE4690222B27BA1000006EAA /* libvulkan.1.dylib in Embed Libraries */,
+				DE6729552B27B2C700894C75 /* libMoltenVK.dylib in Embed Libraries */,
+				DE6729532B27B2C700894C75 /* libvulkan.1.3.268.dylib in Embed Libraries */,
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		DE4690202B27BA1000006EAA /* libvulkan.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvulkan.1.dylib; path = "vulkansdk-macos-1.3.268.1/macOS/lib/libvulkan.1.dylib"; sourceTree = "<group>"; };
+		DE4690252B27BAC900006EAA /* frag.spv */ = {isa = PBXFileReference; lastKnownFileType = file; path = frag.spv; sourceTree = "<group>"; };
+		DE4690262B27BAC900006EAA /* shader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shader.vert; sourceTree = "<group>"; };
+		DE4690272B27BAC900006EAA /* shader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shader.frag; sourceTree = "<group>"; };
+		DE4690282B27BAC900006EAA /* vert.spv */ = {isa = PBXFileReference; lastKnownFileType = file; path = vert.spv; sourceTree = "<group>"; };
+		DE55F20A2B27900C0017E3E9 /* doom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = doom.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE55F20D2B27900C0017E3E9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		DE55F20F2B27900C0017E3E9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		DE55F2112B27900D0017E3E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DE55F2142B27900D0017E3E9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		DE55F2162B27900D0017E3E9 /* doom.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = doom.entitlements; sourceTree = "<group>"; };
+		DE55F2212B27903F0017E3E9 /* ganesha.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ganesha.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE55F2232B27903F0017E3E9 /* ganesha.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ganesha.h; sourceTree = "<group>"; };
+		DE55F22D2B27909A0017E3E9 /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
+		DE55F22F2B2790ED0017E3E9 /* doom-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "doom-Bridging-Header.h"; sourceTree = "<group>"; };
+		DE55F2302B2790ED0017E3E9 /* CPPBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPPBridge.h; sourceTree = "<group>"; };
+		DE55F2312B2790ED0017E3E9 /* CPPBridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CPPBridge.mm; sourceTree = "<group>"; };
+		DE55F2332B2791120017E3E9 /* gcamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gcamera.h; sourceTree = "<group>"; };
+		DE55F2342B2791120017E3E9 /* gvulkaninstance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gvulkaninstance.cpp; sourceTree = "<group>"; };
+		DE55F2352B2791120017E3E9 /* ganeshatools.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ganeshatools.cpp; sourceTree = "<group>"; };
+		DE55F2362B2791120017E3E9 /* gbundle.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = gbundle.mm; sourceTree = "<group>"; };
+		DE55F2372B2791120017E3E9 /* gganesha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gganesha.h; sourceTree = "<group>"; };
+		DE55F2382B2791120017E3E9 /* gvector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gvector.h; sourceTree = "<group>"; };
+		DE55F2392B2791120017E3E9 /* gvulkanapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gvulkanapi.h; sourceTree = "<group>"; };
+		DE55F23A2B2791120017E3E9 /* gganesha.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gganesha.cpp; sourceTree = "<group>"; };
+		DE55F23B2B2791120017E3E9 /* gcolor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gcolor.h; sourceTree = "<group>"; };
+		DE55F23C2B2791120017E3E9 /* gvulkandevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gvulkandevice.h; sourceTree = "<group>"; };
+		DE55F23D2B2791120017E3E9 /* gpoint2d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gpoint2d.h; sourceTree = "<group>"; };
+		DE55F23E2B2791120017E3E9 /* gbundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gbundle.h; sourceTree = "<group>"; };
+		DE55F23F2B2791120017E3E9 /* gcolor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gcolor.cpp; sourceTree = "<group>"; };
+		DE55F2402B2791120017E3E9 /* gpoint2d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gpoint2d.cpp; sourceTree = "<group>"; };
+		DE55F2412B2791120017E3E9 /* gvector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gvector.cpp; sourceTree = "<group>"; };
+		DE55F2422B2791120017E3E9 /* ganeshastubdata.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ganeshastubdata.cpp; sourceTree = "<group>"; };
+		DE55F2432B2791120017E3E9 /* gmatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gmatrix.h; sourceTree = "<group>"; };
+		DE55F2442B2791120017E3E9 /* ganeshatypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ganeshatypes.h; sourceTree = "<group>"; };
+		DE55F2452B2791120017E3E9 /* gvulkandevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gvulkandevice.cpp; sourceTree = "<group>"; };
+		DE55F2462B2791120017E3E9 /* ganeshatools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ganeshatools.h; sourceTree = "<group>"; };
+		DE55F2472B2791120017E3E9 /* gcamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gcamera.cpp; sourceTree = "<group>"; };
+		DE55F2482B2791120017E3E9 /* gvulkanapi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gvulkanapi.cpp; sourceTree = "<group>"; };
+		DE55F2492B2791120017E3E9 /* gpoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gpoint.h; sourceTree = "<group>"; };
+		DE55F24A2B2791120017E3E9 /* gmatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gmatrix.cpp; sourceTree = "<group>"; };
+		DE55F24B2B2791120017E3E9 /* ganeshastubdata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ganeshastubdata.h; sourceTree = "<group>"; };
+		DE55F24C2B2791120017E3E9 /* gvulkaninstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gvulkaninstance.h; sourceTree = "<group>"; };
+		DE55F24D2B2791120017E3E9 /* gpoint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gpoint.cpp; sourceTree = "<group>"; };
+		DE6729502B27B2C700894C75 /* libvulkan.1.3.268.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvulkan.1.3.268.dylib; path = "../ganesha/vulkansdk-macos-1.3.268.1/macOS/lib/libvulkan.1.3.268.dylib"; sourceTree = "<group>"; };
+		DE6729512B27B2C700894C75 /* libMoltenVK.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMoltenVK.dylib; path = "../ganesha/vulkansdk-macos-1.3.268.1/macOS/lib/libMoltenVK.dylib"; sourceTree = "<group>"; };
+		DE6729572B27B35600894C75 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		DE6729592B27B37C00894C75 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
+		DE67295D2B27B3D600894C75 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		DE67295F2B27B3FD00894C75 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
+		DE6729612B27B41B00894C75 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		DEB4133C2B27B496003F1DFD /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		DEB4133E2B27B52B003F1DFD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DE55F2072B27900C0017E3E9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE55F2272B27903F0017E3E9 /* ganesha.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DE55F21E2B27903F0017E3E9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE6729602B27B3FD00894C75 /* IOSurface.framework in Frameworks */,
+				DE6729542B27B2C700894C75 /* libMoltenVK.dylib in Frameworks */,
+				DE67295A2B27B37C00894C75 /* MetalKit.framework in Frameworks */,
+				DEB4133F2B27B52B003F1DFD /* CoreGraphics.framework in Frameworks */,
+				DE6729522B27B2C700894C75 /* libvulkan.1.3.268.dylib in Frameworks */,
+				DE6729582B27B35600894C75 /* Cocoa.framework in Frameworks */,
+				DE4690212B27BA1000006EAA /* libvulkan.1.dylib in Frameworks */,
+				DE67295E2B27B3D600894C75 /* IOKit.framework in Frameworks */,
+				DEB4133D2B27B496003F1DFD /* Metal.framework in Frameworks */,
+				DEB413402B27B612003F1DFD /* CoreGraphics.framework in Frameworks */,
+				DEB413412B27B738003F1DFD /* CoreGraphics.framework in Frameworks */,
+				DE6729622B27B41B00894C75 /* CoreMedia.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DE4690232B27BAC900006EAA /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				DE4690242B27BAC900006EAA /* shaders */,
+			);
+			path = resources;
+			sourceTree = SOURCE_ROOT;
+		};
+		DE4690242B27BAC900006EAA /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+				DE4690252B27BAC900006EAA /* frag.spv */,
+				DE4690262B27BAC900006EAA /* shader.vert */,
+				DE4690272B27BAC900006EAA /* shader.frag */,
+				DE4690282B27BAC900006EAA /* vert.spv */,
+			);
+			path = shaders;
+			sourceTree = "<group>";
+		};
+		DE50571F2B27AA4400BED84E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DE4690202B27BA1000006EAA /* libvulkan.1.dylib */,
+				DEB4133E2B27B52B003F1DFD /* CoreGraphics.framework */,
+				DEB4133C2B27B496003F1DFD /* Metal.framework */,
+				DE6729612B27B41B00894C75 /* CoreMedia.framework */,
+				DE67295F2B27B3FD00894C75 /* IOSurface.framework */,
+				DE67295D2B27B3D600894C75 /* IOKit.framework */,
+				DE6729592B27B37C00894C75 /* MetalKit.framework */,
+				DE6729572B27B35600894C75 /* Cocoa.framework */,
+				DE6729512B27B2C700894C75 /* libMoltenVK.dylib */,
+				DE6729502B27B2C700894C75 /* libvulkan.1.3.268.dylib */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DE55F2012B27900C0017E3E9 = {
+			isa = PBXGroup;
+			children = (
+				DE55F20C2B27900C0017E3E9 /* doom */,
+				DE55F2222B27903F0017E3E9 /* ganesha */,
+				DE55F20B2B27900C0017E3E9 /* Products */,
+				DE50571F2B27AA4400BED84E /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		DE55F20B2B27900C0017E3E9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DE55F20A2B27900C0017E3E9 /* doom.app */,
+				DE55F2212B27903F0017E3E9 /* ganesha.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DE55F20C2B27900C0017E3E9 /* doom */ = {
+			isa = PBXGroup;
+			children = (
+				DE4690232B27BAC900006EAA /* resources */,
+				DE55F22F2B2790ED0017E3E9 /* doom-Bridging-Header.h */,
+				DE55F2302B2790ED0017E3E9 /* CPPBridge.h */,
+				DE55F2312B2790ED0017E3E9 /* CPPBridge.mm */,
+				DE55F20D2B27900C0017E3E9 /* AppDelegate.swift */,
+				DE55F22D2B27909A0017E3E9 /* Application.swift */,
+				DE55F20F2B27900C0017E3E9 /* ViewController.swift */,
+				DE55F2112B27900D0017E3E9 /* Assets.xcassets */,
+				DE55F2132B27900D0017E3E9 /* Main.storyboard */,
+				DE55F2162B27900D0017E3E9 /* doom.entitlements */,
+			);
+			path = doom;
+			sourceTree = "<group>";
+		};
+		DE55F2222B27903F0017E3E9 /* ganesha */ = {
+			isa = PBXGroup;
+			children = (
+				DE55F2422B2791120017E3E9 /* ganeshastubdata.cpp */,
+				DE55F24B2B2791120017E3E9 /* ganeshastubdata.h */,
+				DE55F2352B2791120017E3E9 /* ganeshatools.cpp */,
+				DE55F2462B2791120017E3E9 /* ganeshatools.h */,
+				DE55F2442B2791120017E3E9 /* ganeshatypes.h */,
+				DE55F23E2B2791120017E3E9 /* gbundle.h */,
+				DE55F2362B2791120017E3E9 /* gbundle.mm */,
+				DE55F2472B2791120017E3E9 /* gcamera.cpp */,
+				DE55F2332B2791120017E3E9 /* gcamera.h */,
+				DE55F23F2B2791120017E3E9 /* gcolor.cpp */,
+				DE55F23B2B2791120017E3E9 /* gcolor.h */,
+				DE55F23A2B2791120017E3E9 /* gganesha.cpp */,
+				DE55F2372B2791120017E3E9 /* gganesha.h */,
+				DE55F24A2B2791120017E3E9 /* gmatrix.cpp */,
+				DE55F2432B2791120017E3E9 /* gmatrix.h */,
+				DE55F24D2B2791120017E3E9 /* gpoint.cpp */,
+				DE55F2492B2791120017E3E9 /* gpoint.h */,
+				DE55F2402B2791120017E3E9 /* gpoint2d.cpp */,
+				DE55F23D2B2791120017E3E9 /* gpoint2d.h */,
+				DE55F2412B2791120017E3E9 /* gvector.cpp */,
+				DE55F2382B2791120017E3E9 /* gvector.h */,
+				DE55F2482B2791120017E3E9 /* gvulkanapi.cpp */,
+				DE55F2392B2791120017E3E9 /* gvulkanapi.h */,
+				DE55F2452B2791120017E3E9 /* gvulkandevice.cpp */,
+				DE55F23C2B2791120017E3E9 /* gvulkandevice.h */,
+				DE55F2342B2791120017E3E9 /* gvulkaninstance.cpp */,
+				DE55F24C2B2791120017E3E9 /* gvulkaninstance.h */,
+				DE55F2232B27903F0017E3E9 /* ganesha.h */,
+			);
+			path = ganesha;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		DE55F21C2B27903F0017E3E9 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE55F2562B2791120017E3E9 /* gcolor.h in Headers */,
+				DE55F2592B2791120017E3E9 /* gbundle.h in Headers */,
+				DE55F2542B2791120017E3E9 /* gvulkanapi.h in Headers */,
+				DE55F2522B2791120017E3E9 /* gganesha.h in Headers */,
+				DE55F2612B2791120017E3E9 /* ganeshatools.h in Headers */,
+				DE55F2532B2791120017E3E9 /* gvector.h in Headers */,
+				DE55F25E2B2791120017E3E9 /* gmatrix.h in Headers */,
+				DE55F25F2B2791120017E3E9 /* ganeshatypes.h in Headers */,
+				DE55F2242B27903F0017E3E9 /* ganesha.h in Headers */,
+				DE55F24E2B2791120017E3E9 /* gcamera.h in Headers */,
+				DE55F2672B2791120017E3E9 /* gvulkaninstance.h in Headers */,
+				DE55F2642B2791120017E3E9 /* gpoint.h in Headers */,
+				DE55F2572B2791120017E3E9 /* gvulkandevice.h in Headers */,
+				DE55F2662B2791120017E3E9 /* ganeshastubdata.h in Headers */,
+				DE55F2582B2791120017E3E9 /* gpoint2d.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		DE55F2092B27900C0017E3E9 /* doom */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DE55F2192B27900D0017E3E9 /* Build configuration list for PBXNativeTarget "doom" */;
+			buildPhases = (
+				DE55F2062B27900C0017E3E9 /* Sources */,
+				DE55F2072B27900C0017E3E9 /* Frameworks */,
+				DE55F2082B27900C0017E3E9 /* Resources */,
+				DE55F22C2B27903F0017E3E9 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DE55F2262B27903F0017E3E9 /* PBXTargetDependency */,
+			);
+			name = doom;
+			productName = doom;
+			productReference = DE55F20A2B27900C0017E3E9 /* doom.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DE55F2202B27903F0017E3E9 /* ganesha */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DE55F2292B27903F0017E3E9 /* Build configuration list for PBXNativeTarget "ganesha" */;
+			buildPhases = (
+				DE55F21C2B27903F0017E3E9 /* Headers */,
+				DE55F21D2B27903F0017E3E9 /* Sources */,
+				DE55F21E2B27903F0017E3E9 /* Frameworks */,
+				DE55F21F2B27903F0017E3E9 /* Resources */,
+				DE6729562B27B2C700894C75 /* Embed Libraries */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ganesha;
+			productName = ganesha;
+			productReference = DE55F2212B27903F0017E3E9 /* ganesha.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DE55F2022B27900C0017E3E9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					DE55F2092B27900C0017E3E9 = {
+						CreatedOnToolsVersion = 15.0.1;
+						LastSwiftMigration = 1500;
+					};
+					DE55F2202B27903F0017E3E9 = {
+						CreatedOnToolsVersion = 15.0.1;
+					};
+				};
+			};
+			buildConfigurationList = DE55F2052B27900C0017E3E9 /* Build configuration list for PBXProject "doom" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = DE55F2012B27900C0017E3E9;
+			productRefGroup = DE55F20B2B27900C0017E3E9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DE55F2092B27900C0017E3E9 /* doom */,
+				DE55F2202B27903F0017E3E9 /* ganesha */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DE55F2082B27900C0017E3E9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE55F2122B27900D0017E3E9 /* Assets.xcassets in Resources */,
+				DE4690292B27BAC900006EAA /* frag.spv in Resources */,
+				DE46902C2B27BAC900006EAA /* vert.spv in Resources */,
+				DE55F2152B27900D0017E3E9 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DE55F21F2B27903F0017E3E9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DE55F2062B27900C0017E3E9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE55F2322B2790ED0017E3E9 /* CPPBridge.mm in Sources */,
+				DE55F22E2B27909A0017E3E9 /* Application.swift in Sources */,
+				DE55F2102B27900C0017E3E9 /* ViewController.swift in Sources */,
+				DE55F20E2B27900C0017E3E9 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DE55F21D2B27903F0017E3E9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE55F25B2B2791120017E3E9 /* gpoint2d.cpp in Sources */,
+				DE55F25A2B2791120017E3E9 /* gcolor.cpp in Sources */,
+				DE55F24F2B2791120017E3E9 /* gvulkaninstance.cpp in Sources */,
+				DE55F25D2B2791120017E3E9 /* ganeshastubdata.cpp in Sources */,
+				DE55F2512B2791120017E3E9 /* gbundle.mm in Sources */,
+				DE55F2632B2791120017E3E9 /* gvulkanapi.cpp in Sources */,
+				DE55F2602B2791120017E3E9 /* gvulkandevice.cpp in Sources */,
+				DE55F2622B2791120017E3E9 /* gcamera.cpp in Sources */,
+				DE55F2652B2791120017E3E9 /* gmatrix.cpp in Sources */,
+				DE55F25C2B2791120017E3E9 /* gvector.cpp in Sources */,
+				DE55F2502B2791120017E3E9 /* ganeshatools.cpp in Sources */,
+				DE55F2682B2791120017E3E9 /* gpoint.cpp in Sources */,
+				DE55F2552B2791120017E3E9 /* gganesha.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DE55F2262B27903F0017E3E9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DE55F2202B27903F0017E3E9 /* ganesha */;
+			targetProxy = DE55F2252B27903F0017E3E9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		DE55F2132B27900D0017E3E9 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DE55F2142B27900D0017E3E9 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		DE55F2172B27900D0017E3E9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		DE55F2182B27900D0017E3E9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		DE55F21A2B27900D0017E3E9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = doom/doom.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UAVM255T7W;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/vulkansdk-macos-1.3.268.1/macOS/include";
+				INFOPLIST_KEY_CFBundleDisplayName = DOOM;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/vulkansdk-macos-1.3.268.1/macOS/lib",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.icgsmartcosmetics.doom;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "doom/doom-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		DE55F21B2B27900D0017E3E9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = doom/doom.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UAVM255T7W;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/vulkansdk-macos-1.3.268.1/macOS/include";
+				INFOPLIST_KEY_CFBundleDisplayName = DOOM;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/vulkansdk-macos-1.3.268.1/macOS/lib",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.icgsmartcosmetics.doom;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "doom/doom-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		DE55F22A2B27903F0017E3E9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = UAVM255T7W;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					VK_USE_PLATFORM_METAL_EXT,
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/vulkansdk-macos-1.3.268.1/macOS/include";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/vulkansdk-macos-1.3.268.1/macOS/lib";
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.icgsmartcosmetics.ganesha;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		DE55F22B2B27903F0017E3E9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = UAVM255T7W;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = VK_USE_PLATFORM_METAL_EXT;
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/vulkansdk-macos-1.3.268.1/macOS/include";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/vulkansdk-macos-1.3.268.1/macOS/lib";
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.icgsmartcosmetics.ganesha;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DE55F2052B27900C0017E3E9 /* Build configuration list for PBXProject "doom" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DE55F2172B27900D0017E3E9 /* Debug */,
+				DE55F2182B27900D0017E3E9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DE55F2192B27900D0017E3E9 /* Build configuration list for PBXNativeTarget "doom" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DE55F21A2B27900D0017E3E9 /* Debug */,
+				DE55F21B2B27900D0017E3E9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DE55F2292B27903F0017E3E9 /* Build configuration list for PBXNativeTarget "ganesha" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DE55F22A2B27903F0017E3E9 /* Debug */,
+				DE55F22B2B27903F0017E3E9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DE55F2022B27900C0017E3E9 /* Project object */;
+}

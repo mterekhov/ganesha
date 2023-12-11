@@ -1,8 +1,8 @@
 //
 //  ViewController.swift
-//  ganesha
+//  doom
 //
-//  Created by Mihail Terekhov on 22.07.2021.
+//  Created by cipher on 11.12.2023.
 //
 
 import Cocoa
