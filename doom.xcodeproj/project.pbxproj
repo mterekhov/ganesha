@@ -60,6 +60,8 @@
 		DEB4133F2B27B52B003F1DFD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEB4133E2B27B52B003F1DFD /* CoreGraphics.framework */; };
 		DEB413402B27B612003F1DFD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEB4133E2B27B52B003F1DFD /* CoreGraphics.framework */; };
 		DEB413412B27B738003F1DFD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEB4133E2B27B52B003F1DFD /* CoreGraphics.framework */; };
+		DEEFDBD92B28420B0038E297 /* glog.h in Headers */ = {isa = PBXBuildFile; fileRef = DEEFDBD72B28420B0038E297 /* glog.h */; };
+		DEEFDBDA2B28420B0038E297 /* glog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEEFDBD82B28420B0038E297 /* glog.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -153,6 +155,8 @@
 		DEA031712B27C03200F1BB36 /* ggraphicsapi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ggraphicsapi.h; path = ganesha/ggraphicsapi.h; sourceTree = "<group>"; };
 		DEB4133C2B27B496003F1DFD /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		DEB4133E2B27B52B003F1DFD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		DEEFDBD72B28420B0038E297 /* glog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glog.h; path = ganesha/glog.h; sourceTree = "<group>"; };
+		DEEFDBD82B28420B0038E297 /* glog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glog.cpp; path = ganesha/glog.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -268,6 +272,7 @@
 				DEA0314F2B27BD0A00F1BB36 /* gganesha.h */,
 				DEA031372B27BD0900F1BB36 /* gganesha.cpp */,
 				DEA0313A2B27BD0900F1BB36 /* ganeshatypes.h */,
+				DEA031712B27C03200F1BB36 /* ggraphicsapi.h */,
 				DEA0314D2B27BD0A00F1BB36 /* ganesha.h */,
 			);
 			name = ganesha;
@@ -293,6 +298,8 @@
 		DEA0316F2B27BDB600F1BB36 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				DEEFDBD72B28420B0038E297 /* glog.h */,
+				DEEFDBD82B28420B0038E297 /* glog.cpp */,
 				DEA031472B27BD0900F1BB36 /* gbundle.h */,
 				DEA031412B27BD0900F1BB36 /* gbundle.mm */,
 				DEA031492B27BD0A00F1BB36 /* ganeshastubdata.h */,
@@ -306,13 +313,12 @@
 			children = (
 				DEA031362B27BD0900F1BB36 /* vulkantools.cpp */,
 				DEA031452B27BD0900F1BB36 /* vulkantools.h */,
-				DEA031712B27C03200F1BB36 /* ggraphicsapi.h */,
+				DEA031462B27BD0900F1BB36 /* gvulkaninstance.h */,
+				DEA0313E2B27BD0900F1BB36 /* gvulkaninstance.cpp */,
 				DEA0314C2B27BD0A00F1BB36 /* gvulkanapi.h */,
 				DEA031512B27BD0A00F1BB36 /* gvulkanapi.cpp */,
 				DEA0314B2B27BD0A00F1BB36 /* gvulkandevice.cpp */,
 				DEA0313D2B27BD0900F1BB36 /* gvulkandevice.h */,
-				DEA0313E2B27BD0900F1BB36 /* gvulkaninstance.cpp */,
-				DEA031462B27BD0900F1BB36 /* gvulkaninstance.h */,
 			);
 			name = VULKAN;
 			sourceTree = "<group>";
@@ -331,6 +337,7 @@
 				DEA031562B27BD0A00F1BB36 /* ganeshatypes.h in Headers */,
 				DEA031552B27BD0A00F1BB36 /* gcamera.h in Headers */,
 				DEA031722B27C10400F1BB36 /* ggraphicsapi.h in Headers */,
+				DEEFDBD92B28420B0038E297 /* glog.h in Headers */,
 				DEA0315B2B27BD0A00F1BB36 /* gvector.h in Headers */,
 				DEA031612B27BD0A00F1BB36 /* vulkantools.h in Headers */,
 				DEA031582B27BD0A00F1BB36 /* gpoint.h in Headers */,
@@ -467,6 +474,7 @@
 				DEA031672B27BD0A00F1BB36 /* gvulkandevice.cpp in Sources */,
 				DEA0315A2B27BD0A00F1BB36 /* gvulkaninstance.cpp in Sources */,
 				DEA031602B27BD0A00F1BB36 /* gpoint2d.cpp in Sources */,
+				DEEFDBDA2B28420B0038E297 /* glog.cpp in Sources */,
 				DEA0316C2B27BD0A00F1BB36 /* gpoint.cpp in Sources */,
 				DEA031532B27BD0A00F1BB36 /* gganesha.cpp in Sources */,
 				DEA0315E2B27BD0A00F1BB36 /* gvector.cpp in Sources */,
