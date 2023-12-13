@@ -27,7 +27,6 @@
 		DE67295E2B27B3D600894C75 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE67295D2B27B3D600894C75 /* IOKit.framework */; };
 		DE6729602B27B3FD00894C75 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE67295F2B27B3FD00894C75 /* IOSurface.framework */; };
 		DE6729622B27B41B00894C75 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE6729612B27B41B00894C75 /* CoreMedia.framework */; };
-		DEA031522B27BD0A00F1BB36 /* vulkantools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEA031362B27BD0900F1BB36 /* vulkantools.cpp */; };
 		DEA031532B27BD0A00F1BB36 /* gganesha.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEA031372B27BD0900F1BB36 /* gganesha.cpp */; };
 		DEA031542B27BD0A00F1BB36 /* ganeshastubdata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEA031382B27BD0900F1BB36 /* ganeshastubdata.cpp */; };
 		DEA031552B27BD0A00F1BB36 /* gcamera.h in Headers */ = {isa = PBXBuildFile; fileRef = DEA031392B27BD0900F1BB36 /* gcamera.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -42,7 +41,6 @@
 		DEA0315E2B27BD0A00F1BB36 /* gvector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEA031422B27BD0900F1BB36 /* gvector.cpp */; };
 		DEA0315F2B27BD0A00F1BB36 /* gcolor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEA031432B27BD0900F1BB36 /* gcolor.cpp */; };
 		DEA031602B27BD0A00F1BB36 /* gpoint2d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEA031442B27BD0900F1BB36 /* gpoint2d.cpp */; };
-		DEA031612B27BD0A00F1BB36 /* vulkantools.h in Headers */ = {isa = PBXBuildFile; fileRef = DEA031452B27BD0900F1BB36 /* vulkantools.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DEA031622B27BD0A00F1BB36 /* gvulkaninstance.h in Headers */ = {isa = PBXBuildFile; fileRef = DEA031462B27BD0900F1BB36 /* gvulkaninstance.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DEA031632B27BD0A00F1BB36 /* gbundle.h in Headers */ = {isa = PBXBuildFile; fileRef = DEA031472B27BD0900F1BB36 /* gbundle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DEA031642B27BD0A00F1BB36 /* gcamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEA031482B27BD0900F1BB36 /* gcamera.cpp */; };
@@ -124,7 +122,6 @@
 		DE67295D2B27B3D600894C75 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		DE67295F2B27B3FD00894C75 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
 		DE6729612B27B41B00894C75 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		DEA031362B27BD0900F1BB36 /* vulkantools.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = vulkantools.cpp; path = ganesha/vulkantools.cpp; sourceTree = "<group>"; };
 		DEA031372B27BD0900F1BB36 /* gganesha.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gganesha.cpp; path = ganesha/gganesha.cpp; sourceTree = "<group>"; };
 		DEA031382B27BD0900F1BB36 /* ganeshastubdata.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ganeshastubdata.cpp; path = ganesha/ganeshastubdata.cpp; sourceTree = "<group>"; };
 		DEA031392B27BD0900F1BB36 /* gcamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gcamera.h; path = ganesha/gcamera.h; sourceTree = "<group>"; };
@@ -139,7 +136,6 @@
 		DEA031422B27BD0900F1BB36 /* gvector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gvector.cpp; path = ganesha/gvector.cpp; sourceTree = "<group>"; };
 		DEA031432B27BD0900F1BB36 /* gcolor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gcolor.cpp; path = ganesha/gcolor.cpp; sourceTree = "<group>"; };
 		DEA031442B27BD0900F1BB36 /* gpoint2d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gpoint2d.cpp; path = ganesha/gpoint2d.cpp; sourceTree = "<group>"; };
-		DEA031452B27BD0900F1BB36 /* vulkantools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vulkantools.h; path = ganesha/vulkantools.h; sourceTree = "<group>"; };
 		DEA031462B27BD0900F1BB36 /* gvulkaninstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvulkaninstance.h; path = ganesha/gvulkaninstance.h; sourceTree = "<group>"; };
 		DEA031472B27BD0900F1BB36 /* gbundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gbundle.h; path = ganesha/gbundle.h; sourceTree = "<group>"; };
 		DEA031482B27BD0900F1BB36 /* gcamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gcamera.cpp; path = ganesha/gcamera.cpp; sourceTree = "<group>"; };
@@ -311,8 +307,6 @@
 		DEA031702B27BDD500F1BB36 /* VULKAN */ = {
 			isa = PBXGroup;
 			children = (
-				DEA031362B27BD0900F1BB36 /* vulkantools.cpp */,
-				DEA031452B27BD0900F1BB36 /* vulkantools.h */,
 				DEA031462B27BD0900F1BB36 /* gvulkaninstance.h */,
 				DEA0313E2B27BD0900F1BB36 /* gvulkaninstance.cpp */,
 				DEA0314C2B27BD0A00F1BB36 /* gvulkanapi.h */,
@@ -339,7 +333,6 @@
 				DEA031722B27C10400F1BB36 /* ggraphicsapi.h in Headers */,
 				DEEFDBD92B28420B0038E297 /* glog.h in Headers */,
 				DEA0315B2B27BD0A00F1BB36 /* gvector.h in Headers */,
-				DEA031612B27BD0A00F1BB36 /* vulkantools.h in Headers */,
 				DEA031582B27BD0A00F1BB36 /* gpoint.h in Headers */,
 				DEA031662B27BD0A00F1BB36 /* gpoint2d.h in Headers */,
 				DEA031682B27BD0A00F1BB36 /* gvulkanapi.h in Headers */,
@@ -465,7 +458,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DEA031522B27BD0A00F1BB36 /* vulkantools.cpp in Sources */,
 				DEA031642B27BD0A00F1BB36 /* gcamera.cpp in Sources */,
 				DEA0316A2B27BD0A00F1BB36 /* gmatrix.cpp in Sources */,
 				DEA0316D2B27BD0A00F1BB36 /* gvulkanapi.cpp in Sources */,

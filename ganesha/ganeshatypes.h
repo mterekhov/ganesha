@@ -9,6 +9,7 @@
 #define SPCGANESHAENGINE_GANESHATYPES_H
 
 #include <vector>
+#include <string>
 
 namespace spcGaneshaEngine {
 
@@ -24,6 +25,7 @@ namespace spcGaneshaEngine {
 typedef std::vector<const char *> TCharPointersArray;
 typedef std::vector<std::string> TStringsArray;
 typedef float TFloat;
+typedef bool TBool;
 
 }   //  namespace spcGaneshaEngine
 

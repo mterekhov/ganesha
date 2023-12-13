@@ -10,12 +10,14 @@
 
 namespace spcGaneshaEngine {
 
+typedef std::vector<VkExtensionProperties> TInstanceExtensionsArray;
 static const TCharPointersArray khronosValidationLayers = {
     "VK_LAYER_KHRONOS_validation"
 };
 
 void GVULKANInstance::createInstance(const bool useValidationLayers) {
     createNewInstance(useValidationLayers);
+    
     if (useValidationLayers) {
         if (createDebugUtilsMessenger(vulkanInstance, &debugUtilsMessengerInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
             printf("GaneshaEngine: failed to set up debug messenger\n");
@@ -26,10 +28,6 @@ void GVULKANInstance::createInstance(const bool useValidationLayers) {
 void GVULKANInstance::destroyInstance() {
     destroyDebugUtilsMessenger(vulkanInstance, debugMessenger, nullptr);
     vkDestroyInstance(vulkanInstance, nullptr);
-    
-    for (const auto& name : extensionsNamesList) {
-        delete [] name;
-    }
 }
 
 VkInstance& GVULKANInstance::getVulkanInstance() {
@@ -38,18 +36,84 @@ VkInstance& GVULKANInstance::getVulkanInstance() {
 
 #pragma mark - Routine -
 
-void GVULKANInstance::createNewInstance(const bool useValidationLayers) {
-    extensionsList = collectInstanceExtensions();
-    extensionsNamesList = collectInstanceExtensionsNames(extensionsList);
-    availableValidationLayersList = collectValidationLayers(khronosValidationLayers);
-    
-    VkInstanceCreateInfo instanceInfo = createInstanceInfo(useValidationLayers);
-    VkResult error = VK_SUCCESS;
-    error = vkCreateInstance(&instanceInfo, nullptr, &vulkanInstance);
-    if (error != VK_SUCCESS) {
-        printf("GaneshaEngine: error creating VULKAN instance\n");
-        return;
+TCharPointersArray GVULKANInstance::collectValidationLayers(const TCharPointersArray& layersNamesArray) {
+    TCharPointersArray supportedValidationLayersArray;
+
+    uint32_t count;
+    if (vkEnumerateInstanceLayerProperties(&count, nullptr) != VK_SUCCESS) {
+        return supportedValidationLayersArray;
     }
+    std::vector<VkLayerProperties> availableLayersArray(count);
+    if (vkEnumerateInstanceLayerProperties(&count, availableLayersArray.data()) != VK_SUCCESS) {
+        return supportedValidationLayersArray;
+    }
+
+    for (const auto layerName : layersNamesArray) {
+        for (const auto& layerProperties : availableLayersArray) {
+            if (strcmp(layerName, layerProperties.layerName) == 0) {
+                supportedValidationLayersArray.push_back(layerName);
+            }
+        }
+    }
+    
+    return supportedValidationLayersArray;
+}
+
+TCharPointersArray GVULKANInstance::collectInstanceExtensionsNames() {
+    TCharPointersArray namesList = TCharPointersArray();
+    //  Collect instance extensions
+    uint32_t count = 0;
+    if (vkEnumerateInstanceExtensionProperties(nullptr, &count, nullptr) != VK_SUCCESS) {
+        return namesList;
+    }
+    TInstanceExtensionsArray instanceExtensionsArray(count);
+    if (vkEnumerateInstanceExtensionProperties(nullptr, &count, instanceExtensionsArray.data()) != VK_SUCCESS) {
+        return namesList;
+    }
+
+    //  Collect names
+    for (const auto& extension : instanceExtensionsArray) {
+        char *newString = new char[VK_MAX_EXTENSION_NAME_SIZE];
+        memcpy(newString, extension.extensionName, VK_MAX_EXTENSION_NAME_SIZE);
+        namesList.insert(namesList.end(), newString);
+    }
+    
+    return namesList;
+}
+
+void GVULKANInstance::createNewInstance(const bool useValidationLayers) {
+    VkApplicationInfo applicationInfo = createApplicationInfo();
+    TCharPointersArray extensionsNamesArray = collectInstanceExtensionsNames();
+    TCharPointersArray availableValidationLayersList = collectValidationLayers(khronosValidationLayers);
+    
+    VkInstanceCreateInfo instanceInfo = createInstanceInfo(applicationInfo, availableValidationLayersList, extensionsNamesArray);
+    if (vkCreateInstance(&instanceInfo, nullptr, &vulkanInstance) != VK_SUCCESS) {
+        printf("GaneshaEngine: error creating VULKAN instance\n");
+    }
+    
+    for (const auto& name : extensionsNamesArray) {
+        delete [] name;
+    }
+}
+
+VkInstanceCreateInfo GVULKANInstance::createInstanceInfo(const VkApplicationInfo& applicationInfo,
+                                                         const TCharPointersArray availableValidationLayersList,
+                                                         const TCharPointersArray& extensionsNamesArray) {
+    VkInstanceCreateInfo instanceInfo = {};
+    
+    instanceInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+    instanceInfo.enabledExtensionCount = static_cast<uint32_t>(extensionsNamesArray.size());
+    instanceInfo.ppEnabledExtensionNames = extensionsNamesArray.data();
+    instanceInfo.pApplicationInfo = &applicationInfo;
+    
+    if (availableValidationLayersList.size() > 0) {
+        instanceInfo.enabledLayerCount = static_cast<uint32_t>(availableValidationLayersList.size());
+        instanceInfo.ppEnabledLayerNames = availableValidationLayersList.data();
+        debugUtilsMessengerInfo = createDebugUtilsMessengerInfo();
+        instanceInfo.pNext = &debugUtilsMessengerInfo;
+    }
+    
+    return instanceInfo;
 }
 
 VkApplicationInfo GVULKANInstance::createApplicationInfo() {
@@ -60,32 +124,12 @@ VkApplicationInfo GVULKANInstance::createApplicationInfo() {
     
     newApplicationInfo.apiVersion = pApiVersion;
     newApplicationInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    newApplicationInfo.pApplicationName = "GAME";
-    newApplicationInfo.applicationVersion = VK_MAKE_API_VERSION(1, 0, 0, 0);
+    newApplicationInfo.pApplicationName = "DOOM";
+    newApplicationInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
     newApplicationInfo.pEngineName = "Ganesha";
-    newApplicationInfo.engineVersion = VK_MAKE_API_VERSION(1, 0, 0, 0);
+    newApplicationInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
     
     return newApplicationInfo;
-}
-
-VkInstanceCreateInfo GVULKANInstance::createInstanceInfo(const bool useValidationLayers) {
-    VkInstanceCreateInfo instanceInfo = {};
-    
-    instanceInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-    instanceInfo.enabledExtensionCount = static_cast<uint32_t>(extensionsNamesList.size());
-    instanceInfo.ppEnabledExtensionNames = extensionsNamesList.data();
-    
-    applicationInfo = createApplicationInfo();
-    instanceInfo.pApplicationInfo = &applicationInfo;
-    
-    if (useValidationLayers && availableValidationLayersList.size() > 0) {
-        instanceInfo.enabledLayerCount = static_cast<uint32_t>(availableValidationLayersList.size());
-        instanceInfo.ppEnabledLayerNames = availableValidationLayersList.data();
-        debugUtilsMessengerInfo = createDebugUtilsMessengerInfo();
-        instanceInfo.pNext = &debugUtilsMessengerInfo;
-    }
-    
-    return instanceInfo;
 }
 
 #pragma mark - Validation Layers -
