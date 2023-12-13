@@ -18,7 +18,7 @@ struct UniformBufferObject {
     GMatrix proj;
 };
 
-GVULKANAPI::GVULKANAPI() {
+GVULKANAPI::GVULKANAPI() : log("Ganesha"), vulkanInstance(log) {
     
 }
 
@@ -31,7 +31,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint
     height = frameHeight;
     updateFrameSize = false;
         
-    vulkanInstance.createInstance(true);
+    vulkanInstance.createInstance("DOOM", true);
     
     //  creates metalSurface
     setupSurface(metalLayer);

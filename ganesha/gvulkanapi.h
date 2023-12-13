@@ -32,6 +32,7 @@ public:
     virtual void installViewMatrix(const GMatrix& newViewMatrix);
 
 private:
+    GLog log;
     GVULKANDevice device;
     GVULKANInstance vulkanInstance;
     VkSurfaceKHR metalSurface;

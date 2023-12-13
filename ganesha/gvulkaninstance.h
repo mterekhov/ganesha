@@ -8,30 +8,35 @@
 #ifndef SPCGANESHAENGINE_GVULKANINSATANCE_H
 #define SPCGANESHAENGINE_GVULKANINSATANCE_H
 
-#include "ganeshatypes.h"
 #include <vulkan/vulkan.h>
+
+#include "ganeshatypes.h"
+#include "glog.h"
 
 namespace spcGaneshaEngine {
 
 /// Instance of VULKAN render machine
 class GVULKANInstance {
 public:
-    void createInstance(const bool useValidationLayers);
+    GVULKANInstance(GLog& log);
+    ~GVULKANInstance();
+    
+    void createInstance(const std::string& applicationName, const bool useValidationLayers);
     void destroyInstance();
 
     /// returns reference to created VULKAN instance object
     VkInstance& getVulkanInstance();
     
 private:
+    GLog& log;
     VkInstance vulkanInstance;
     VkDebugUtilsMessengerCreateInfoEXT debugUtilsMessengerInfo;
     VkDebugUtilsMessengerEXT debugMessenger;
 
-    void createNewInstance(const bool useValidationLayers);
     VkInstanceCreateInfo createInstanceInfo(const VkApplicationInfo& applicationInfo,
                                             const TCharPointersArray availableValidationLayersList,
                                             const TCharPointersArray& extensionsNamesArray);
-    VkApplicationInfo createApplicationInfo();
+    VkApplicationInfo createApplicationInfo(const std::string& title);
     
     TCharPointersArray collectValidationLayers(const TCharPointersArray& layersNamesArray);
     TCharPointersArray collectInstanceExtensionsNames();

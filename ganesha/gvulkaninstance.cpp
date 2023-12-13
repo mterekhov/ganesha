@@ -10,17 +10,40 @@
 
 namespace spcGaneshaEngine {
 
-typedef std::vector<VkExtensionProperties> TInstanceExtensionsArray;
 static const TCharPointersArray khronosValidationLayers = {
     "VK_LAYER_KHRONOS_validation"
 };
 
-void GVULKANInstance::createInstance(const bool useValidationLayers) {
-    createNewInstance(useValidationLayers);
+GVULKANInstance::GVULKANInstance(GLog& log) : log(log) {
     
+}
+
+GVULKANInstance::~GVULKANInstance() {
+    
+}
+
+void GVULKANInstance::createInstance(const std::string& applicationName, const bool useValidationLayers) {
+    VkApplicationInfo applicationInfo = createApplicationInfo(applicationName);
+    TCharPointersArray extensionsNamesArray = collectInstanceExtensionsNames();
+    TCharPointersArray availableValidationLayersList;
+    if (useValidationLayers) {
+        availableValidationLayersList = collectValidationLayers(khronosValidationLayers);
+    }
+    
+    VkInstanceCreateInfo instanceInfo = createInstanceInfo(applicationInfo, availableValidationLayersList, extensionsNamesArray);
+    if (vkCreateInstance(&instanceInfo, nullptr, &vulkanInstance) != VK_SUCCESS) {
+        log.error("error creating VULKAN instance\n");
+    }
+    
+    log.info("extensions:\n");
+    for (const auto& name : extensionsNamesArray) {
+        log.info("\t%s\n", name);
+        delete [] name;
+    }
+
     if (useValidationLayers) {
         if (createDebugUtilsMessenger(vulkanInstance, &debugUtilsMessengerInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
-            printf("GaneshaEngine: failed to set up debug messenger\n");
+            log.error("failed to set up debug messenger\n");
         }
     }
 }
@@ -61,12 +84,11 @@ TCharPointersArray GVULKANInstance::collectValidationLayers(const TCharPointersA
 
 TCharPointersArray GVULKANInstance::collectInstanceExtensionsNames() {
     TCharPointersArray namesList = TCharPointersArray();
-    //  Collect instance extensions
     uint32_t count = 0;
     if (vkEnumerateInstanceExtensionProperties(nullptr, &count, nullptr) != VK_SUCCESS) {
         return namesList;
     }
-    TInstanceExtensionsArray instanceExtensionsArray(count);
+    std::vector<VkExtensionProperties> instanceExtensionsArray(count);
     if (vkEnumerateInstanceExtensionProperties(nullptr, &count, instanceExtensionsArray.data()) != VK_SUCCESS) {
         return namesList;
     }
@@ -79,21 +101,6 @@ TCharPointersArray GVULKANInstance::collectInstanceExtensionsNames() {
     }
     
     return namesList;
-}
-
-void GVULKANInstance::createNewInstance(const bool useValidationLayers) {
-    VkApplicationInfo applicationInfo = createApplicationInfo();
-    TCharPointersArray extensionsNamesArray = collectInstanceExtensionsNames();
-    TCharPointersArray availableValidationLayersList = collectValidationLayers(khronosValidationLayers);
-    
-    VkInstanceCreateInfo instanceInfo = createInstanceInfo(applicationInfo, availableValidationLayersList, extensionsNamesArray);
-    if (vkCreateInstance(&instanceInfo, nullptr, &vulkanInstance) != VK_SUCCESS) {
-        printf("GaneshaEngine: error creating VULKAN instance\n");
-    }
-    
-    for (const auto& name : extensionsNamesArray) {
-        delete [] name;
-    }
 }
 
 VkInstanceCreateInfo GVULKANInstance::createInstanceInfo(const VkApplicationInfo& applicationInfo,
@@ -116,7 +123,7 @@ VkInstanceCreateInfo GVULKANInstance::createInstanceInfo(const VkApplicationInfo
     return instanceInfo;
 }
 
-VkApplicationInfo GVULKANInstance::createApplicationInfo() {
+VkApplicationInfo GVULKANInstance::createApplicationInfo(const std::string& title) {
     VkApplicationInfo newApplicationInfo = {};
     
     uint32_t pApiVersion = 0;
@@ -124,7 +131,7 @@ VkApplicationInfo GVULKANInstance::createApplicationInfo() {
     
     newApplicationInfo.apiVersion = pApiVersion;
     newApplicationInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    newApplicationInfo.pApplicationName = "DOOM";
+    newApplicationInfo.pApplicationName = title.c_str();
     newApplicationInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
     newApplicationInfo.pEngineName = "Ganesha";
     newApplicationInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
