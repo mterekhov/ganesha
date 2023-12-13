@@ -12,6 +12,10 @@
 
 namespace spcGaneshaEngine {
 
+static const TCharPointersArray khronosValidationLayers = {
+    "VK_LAYER_KHRONOS_validation"
+};
+
 struct UniformBufferObject {
     GMatrix model;
     GMatrix view;
@@ -31,7 +35,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint
     height = frameHeight;
     updateFrameSize = false;
         
-    vulkanInstance.createInstance("DOOM", true);
+    vulkanInstance.createInstance("DOOM", khronosValidationLayers);
     
     //  creates metalSurface
     setupSurface(metalLayer);

@@ -10,10 +10,6 @@
 
 namespace spcGaneshaEngine {
 
-static const TCharPointersArray khronosValidationLayers = {
-    "VK_LAYER_KHRONOS_validation"
-};
-
 GVULKANInstance::GVULKANInstance(GLog& log) : log(log) {
     
 }
@@ -22,14 +18,11 @@ GVULKANInstance::~GVULKANInstance() {
     
 }
 
-void GVULKANInstance::createInstance(const std::string& applicationName, const bool useValidationLayers) {
+void GVULKANInstance::createInstance(const std::string& applicationName, const TCharPointersArray& khronosValidationLayers) {
     VkApplicationInfo applicationInfo = createApplicationInfo(applicationName);
     TCharPointersArray extensionsNamesArray = collectInstanceExtensionsNames();
-    TCharPointersArray availableValidationLayersList;
-    if (useValidationLayers) {
-        availableValidationLayersList = collectValidationLayers(khronosValidationLayers);
-    }
-    
+    TCharPointersArray availableValidationLayersList = collectValidationLayers(khronosValidationLayers);
+
     VkInstanceCreateInfo instanceInfo = createInstanceInfo(applicationInfo, availableValidationLayersList, extensionsNamesArray);
     if (vkCreateInstance(&instanceInfo, nullptr, &vulkanInstance) != VK_SUCCESS) {
         log.error("error creating VULKAN instance\n");
@@ -41,7 +34,7 @@ void GVULKANInstance::createInstance(const std::string& applicationName, const b
         delete [] name;
     }
 
-    if (useValidationLayers) {
+    if (!availableValidationLayersList.empty()) {
         if (createDebugUtilsMessenger(vulkanInstance, &debugUtilsMessengerInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
             log.error("failed to set up debug messenger\n");
         }
@@ -113,7 +106,7 @@ VkInstanceCreateInfo GVULKANInstance::createInstanceInfo(const VkApplicationInfo
     instanceInfo.ppEnabledExtensionNames = extensionsNamesArray.data();
     instanceInfo.pApplicationInfo = &applicationInfo;
     
-    if (availableValidationLayersList.size() > 0) {
+    if (!availableValidationLayersList.empty()) {
         instanceInfo.enabledLayerCount = static_cast<uint32_t>(availableValidationLayersList.size());
         instanceInfo.ppEnabledLayerNames = availableValidationLayersList.data();
         debugUtilsMessengerInfo = createDebugUtilsMessengerInfo();

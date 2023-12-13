@@ -21,7 +21,7 @@ public:
     GVULKANInstance(GLog& log);
     ~GVULKANInstance();
     
-    void createInstance(const std::string& applicationName, const bool useValidationLayers);
+    void createInstance(const std::string& applicationName, const TCharPointersArray& khronosValidationLayers);
     void destroyInstance();
 
     /// returns reference to created VULKAN instance object
