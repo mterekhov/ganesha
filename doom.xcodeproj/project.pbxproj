@@ -22,11 +22,6 @@
 		DE6729532B27B2C700894C75 /* libvulkan.1.3.268.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = DE6729502B27B2C700894C75 /* libvulkan.1.3.268.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		DE6729542B27B2C700894C75 /* libMoltenVK.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DE6729512B27B2C700894C75 /* libMoltenVK.dylib */; };
 		DE6729552B27B2C700894C75 /* libMoltenVK.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = DE6729512B27B2C700894C75 /* libMoltenVK.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		DE6729582B27B35600894C75 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE6729572B27B35600894C75 /* Cocoa.framework */; };
-		DE67295A2B27B37C00894C75 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE6729592B27B37C00894C75 /* MetalKit.framework */; };
-		DE67295E2B27B3D600894C75 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE67295D2B27B3D600894C75 /* IOKit.framework */; };
-		DE6729602B27B3FD00894C75 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE67295F2B27B3FD00894C75 /* IOSurface.framework */; };
-		DE6729622B27B41B00894C75 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE6729612B27B41B00894C75 /* CoreMedia.framework */; };
 		DEA031532B27BD0A00F1BB36 /* gganesha.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEA031372B27BD0900F1BB36 /* gganesha.cpp */; };
 		DEA031542B27BD0A00F1BB36 /* ganeshastubdata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEA031382B27BD0900F1BB36 /* ganeshastubdata.cpp */; };
 		DEA031552B27BD0A00F1BB36 /* gcamera.h in Headers */ = {isa = PBXBuildFile; fileRef = DEA031392B27BD0900F1BB36 /* gcamera.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -54,10 +49,6 @@
 		DEA0316C2B27BD0A00F1BB36 /* gpoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEA031502B27BD0A00F1BB36 /* gpoint.cpp */; };
 		DEA0316D2B27BD0A00F1BB36 /* gvulkanapi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEA031512B27BD0A00F1BB36 /* gvulkanapi.cpp */; };
 		DEA031722B27C10400F1BB36 /* ggraphicsapi.h in Headers */ = {isa = PBXBuildFile; fileRef = DEA031712B27C03200F1BB36 /* ggraphicsapi.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		DEB4133D2B27B496003F1DFD /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEB4133C2B27B496003F1DFD /* Metal.framework */; };
-		DEB4133F2B27B52B003F1DFD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEB4133E2B27B52B003F1DFD /* CoreGraphics.framework */; };
-		DEB413402B27B612003F1DFD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEB4133E2B27B52B003F1DFD /* CoreGraphics.framework */; };
-		DEB413412B27B738003F1DFD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEB4133E2B27B52B003F1DFD /* CoreGraphics.framework */; };
 		DEEFDBD92B28420B0038E297 /* glog.h in Headers */ = {isa = PBXBuildFile; fileRef = DEEFDBD72B28420B0038E297 /* glog.h */; };
 		DEEFDBDA2B28420B0038E297 /* glog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEEFDBD82B28420B0038E297 /* glog.cpp */; };
 /* End PBXBuildFile section */
@@ -117,11 +108,6 @@
 		DE55F2312B2790ED0017E3E9 /* CPPBridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CPPBridge.mm; sourceTree = "<group>"; };
 		DE6729502B27B2C700894C75 /* libvulkan.1.3.268.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvulkan.1.3.268.dylib; path = "../ganesha/vulkansdk-macos-1.3.268.1/macOS/lib/libvulkan.1.3.268.dylib"; sourceTree = "<group>"; };
 		DE6729512B27B2C700894C75 /* libMoltenVK.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMoltenVK.dylib; path = "../ganesha/vulkansdk-macos-1.3.268.1/macOS/lib/libMoltenVK.dylib"; sourceTree = "<group>"; };
-		DE6729572B27B35600894C75 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		DE6729592B27B37C00894C75 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
-		DE67295D2B27B3D600894C75 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
-		DE67295F2B27B3FD00894C75 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
-		DE6729612B27B41B00894C75 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		DEA031372B27BD0900F1BB36 /* gganesha.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gganesha.cpp; path = ganesha/gganesha.cpp; sourceTree = "<group>"; };
 		DEA031382B27BD0900F1BB36 /* ganeshastubdata.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ganeshastubdata.cpp; path = ganesha/ganeshastubdata.cpp; sourceTree = "<group>"; };
 		DEA031392B27BD0900F1BB36 /* gcamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gcamera.h; path = ganesha/gcamera.h; sourceTree = "<group>"; };
@@ -149,8 +135,6 @@
 		DEA031502B27BD0A00F1BB36 /* gpoint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gpoint.cpp; path = ganesha/gpoint.cpp; sourceTree = "<group>"; };
 		DEA031512B27BD0A00F1BB36 /* gvulkanapi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gvulkanapi.cpp; path = ganesha/gvulkanapi.cpp; sourceTree = "<group>"; };
 		DEA031712B27C03200F1BB36 /* ggraphicsapi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ggraphicsapi.h; path = ganesha/ggraphicsapi.h; sourceTree = "<group>"; };
-		DEB4133C2B27B496003F1DFD /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
-		DEB4133E2B27B52B003F1DFD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		DEEFDBD72B28420B0038E297 /* glog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glog.h; path = ganesha/glog.h; sourceTree = "<group>"; };
 		DEEFDBD82B28420B0038E297 /* glog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glog.cpp; path = ganesha/glog.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -168,18 +152,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DE6729602B27B3FD00894C75 /* IOSurface.framework in Frameworks */,
 				DE6729542B27B2C700894C75 /* libMoltenVK.dylib in Frameworks */,
-				DE67295A2B27B37C00894C75 /* MetalKit.framework in Frameworks */,
-				DEB4133F2B27B52B003F1DFD /* CoreGraphics.framework in Frameworks */,
 				DE6729522B27B2C700894C75 /* libvulkan.1.3.268.dylib in Frameworks */,
-				DE6729582B27B35600894C75 /* Cocoa.framework in Frameworks */,
 				DE4690212B27BA1000006EAA /* libvulkan.1.dylib in Frameworks */,
-				DE67295E2B27B3D600894C75 /* IOKit.framework in Frameworks */,
-				DEB4133D2B27B496003F1DFD /* Metal.framework in Frameworks */,
-				DEB413402B27B612003F1DFD /* CoreGraphics.framework in Frameworks */,
-				DEB413412B27B738003F1DFD /* CoreGraphics.framework in Frameworks */,
-				DE6729622B27B41B00894C75 /* CoreMedia.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,13 +184,6 @@
 			isa = PBXGroup;
 			children = (
 				DE4690202B27BA1000006EAA /* libvulkan.1.dylib */,
-				DEB4133E2B27B52B003F1DFD /* CoreGraphics.framework */,
-				DEB4133C2B27B496003F1DFD /* Metal.framework */,
-				DE6729612B27B41B00894C75 /* CoreMedia.framework */,
-				DE67295F2B27B3FD00894C75 /* IOSurface.framework */,
-				DE67295D2B27B3D600894C75 /* IOKit.framework */,
-				DE6729592B27B37C00894C75 /* MetalKit.framework */,
-				DE6729572B27B35600894C75 /* Cocoa.framework */,
 				DE6729512B27B2C700894C75 /* libMoltenVK.dylib */,
 				DE6729502B27B2C700894C75 /* libvulkan.1.3.268.dylib */,
 			);
