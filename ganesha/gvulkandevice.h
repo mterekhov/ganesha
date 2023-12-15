@@ -10,12 +10,17 @@
 
 #include <vulkan/vulkan.h>
 
+#include "glog.h"
+
 namespace spcGaneshaEngine {
 
 class GVULKANInstance;
 
 class GVULKANDevice {
 public:
+    GVULKANDevice(GLog& log);
+    ~GVULKANDevice();
+
     void createPhysicalDevice(GVULKANInstance &vulkanInstance, VkSurfaceKHR &metalSurface);
     void createLogicalDevice();
     VkCommandPool createCommandPool();
@@ -23,15 +28,16 @@ public:
     
     VkPhysicalDevice& getPhysicalDevice();
     VkDevice& getLogicalDevice();
-
     VkQueue& getGraphicsQueue();
     VkQueue& getPresentQueue();
 
 private:
-    bool checkDeviceCapability(const VkPhysicalDevice& device);
+    bool checkPhysicalDeviceCapability(const VkPhysicalDevice& device);
     bool checkDeviceExtensionSupport(VkPhysicalDevice& device);
     void findQueuesIndeces(VkSurfaceKHR& metalSurface);
     void setupLogicalDevice();
+
+    GLog& log;
 
     VkPhysicalDevice physicalDevice;
     VkDevice logicalDevice;

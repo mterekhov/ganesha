@@ -22,7 +22,7 @@ struct UniformBufferObject {
     GMatrix proj;
 };
 
-GVULKANAPI::GVULKANAPI() : log("Ganesha"), vulkanInstance(log) {
+GVULKANAPI::GVULKANAPI() : log("Ganesha"), vulkanInstance(log), device(log) {
     
 }
 

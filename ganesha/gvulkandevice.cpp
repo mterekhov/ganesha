@@ -17,7 +17,31 @@ const TCharPointersArray deviceExtensions = {
     VK_KHR_SWAPCHAIN_EXTENSION_NAME
 };
 
+GVULKANDevice::GVULKANDevice(GLog& log) : log(log) {
+    
+}
+
+GVULKANDevice::~GVULKANDevice() {
+    
+}
+
 #pragma mark - Public -
+
+void GVULKANDevice::createPhysicalDevice(GVULKANInstance &vulkanInstance, VkSurfaceKHR &metalSurface) {
+    uint32_t count = 0;
+    vkEnumeratePhysicalDevices(vulkanInstance.getVulkanInstance(), &count, nullptr);
+    
+    std::vector<VkPhysicalDevice> physicalDevicesArray(count);
+    vkEnumeratePhysicalDevices(vulkanInstance.getVulkanInstance(), &count, physicalDevicesArray.data());
+    for (const auto& device : physicalDevicesArray) {
+        if (checkPhysicalDeviceCapability(physicalDevice)) {
+            physicalDevice = device;
+            break;
+        }
+    }
+    
+    findQueuesIndeces(metalSurface);
+}
 
 VkPhysicalDevice& GVULKANDevice::getPhysicalDevice() {
     return physicalDevice;
@@ -33,22 +57,6 @@ VkQueue& GVULKANDevice::getGraphicsQueue() {
 
 VkQueue& GVULKANDevice::getPresentQueue() {
     return presentQueue;
-}
-
-void GVULKANDevice::createPhysicalDevice(GVULKANInstance &vulkanInstance, VkSurfaceKHR &metalSurface) {
-    uint32_t devicesCount = 0;
-    vkEnumeratePhysicalDevices(vulkanInstance.getVulkanInstance(), &devicesCount, nullptr);
-    
-    std::vector<VkPhysicalDevice> devicesList(devicesCount);
-    vkEnumeratePhysicalDevices(vulkanInstance.getVulkanInstance(), &devicesCount, devicesList.data());
-    for (const auto& device : devicesList) {
-        if (checkDeviceCapability(device)) {
-            physicalDevice = device;
-            break;
-        }
-    }
-    
-    findQueuesIndeces(metalSurface);
 }
 
 void GVULKANDevice::createLogicalDevice() {
@@ -106,7 +114,7 @@ void GVULKANDevice::destroyDevice() {
 
 #pragma mark - Routine -
 
-bool GVULKANDevice::checkDeviceCapability(const VkPhysicalDevice& device) {
+bool GVULKANDevice::checkPhysicalDeviceCapability(const VkPhysicalDevice& device) {
     //  Find discrete GPU or integrated in case of Apple M1
     VkPhysicalDeviceProperties deviceProperties;
     vkGetPhysicalDeviceProperties(device, &deviceProperties);
@@ -133,10 +141,10 @@ bool GVULKANDevice::checkDeviceExtensionSupport(VkPhysicalDevice& device) {
 }
 
 void GVULKANDevice::findQueuesIndeces(VkSurfaceKHR& metalSurface) {
-    uint32_t queueFamilyCount = 0;
-    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, nullptr);
-    std::vector<VkQueueFamilyProperties> queueFamiliesList(queueFamilyCount);
-    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, queueFamiliesList.data());
+    uint32_t count = 0;
+    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &count, nullptr);
+    std::vector<VkQueueFamilyProperties> queueFamiliesList(count);
+    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &count, queueFamiliesList.data());
 
     for (uint32_t i = 0; i < queueFamiliesList.size(); i++) {
         const auto& queueFamily = queueFamiliesList[i];
