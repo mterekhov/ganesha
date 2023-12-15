@@ -664,33 +664,11 @@ VkShaderModule GVULKANAPI::createShaderModule(const std::vector<uint8_t>& code) 
 
 #pragma mark - Swap -
 
-void GVULKANAPI::createFramebuffers() {
-    swapChainFramebuffers.resize(swapChainImageViews.size());
-    for (size_t i = 0; i < swapChainImageViews.size(); i++) {
-        VkImageView attachments[] = {
-            swapChainImageViews[i]
-        };
-
-        VkFramebufferCreateInfo framebufferInfo{};
-        framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-        framebufferInfo.renderPass = renderPass;
-        framebufferInfo.attachmentCount = 1;
-        framebufferInfo.pAttachments = attachments;
-        framebufferInfo.width = swapChainExtent.width;
-        framebufferInfo.height = swapChainExtent.height;
-        framebufferInfo.layers = 1;
-
-        if (vkCreateFramebuffer(device.getLogicalDevice(), &framebufferInfo, nullptr, &swapChainFramebuffers[i]) != VK_SUCCESS) {
-            printf("GaneshaEngine: failed to create framebuffer with index %zu\n", i);
-        }
-    }
-}
-
 void GVULKANAPI::createSwapChain(const uint32_t frameWidth, const uint32_t frameHeight) {
     SwapChainSupportDetails swapChainSupport = device.querySwapChainSupport(metalSurface);
 
-    VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
-    VkExtent2D extent = chooseSwapExtent(swapChainSupport.surfaceCapabilities, frameWidth, frameHeight);
+    VkSurfaceFormatKHR surfaceFormat = selectSwapSurfaceFormat(swapChainSupport.formats);
+    VkExtent2D extent = selectSwapExtent(swapChainSupport.surfaceCapabilities, frameWidth, frameHeight);
     
     uint32_t count = swapChainSupport.surfaceCapabilities.minImageCount + 1;
     if (swapChainSupport.surfaceCapabilities.maxImageCount > 0 && count > swapChainSupport.surfaceCapabilities.maxImageCount) {
@@ -712,7 +690,7 @@ void GVULKANAPI::createSwapChain(const uint32_t frameWidth, const uint32_t frame
     swapChainInfo.imageSharingMode = device.presentEqualGraphics() ? VK_SHARING_MODE_CONCURRENT : VK_SHARING_MODE_EXCLUSIVE;
     swapChainInfo.preTransform = swapChainSupport.surfaceCapabilities.currentTransform;
     swapChainInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-    swapChainInfo.presentMode = chooseSwapPresentMode(swapChainSupport.presentModes);
+    swapChainInfo.presentMode = selectSwapPresentMode(swapChainSupport.presentModes);
     swapChainInfo.clipped = VK_TRUE;
     if (vkCreateSwapchainKHR(device.getLogicalDevice(), &swapChainInfo, nullptr, &swapChain) != VK_SUCCESS) {
         log.error("failed to create swap chain\n");
@@ -725,7 +703,7 @@ void GVULKANAPI::createSwapChain(const uint32_t frameWidth, const uint32_t frame
     vkGetSwapchainImagesKHR(device.getLogicalDevice(), swapChain, &count, swapChainImages.data());
 }
 
-VkExtent2D GVULKANAPI::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities, const uint32_t frameWidth, const uint32_t frameHeight) {
+VkExtent2D GVULKANAPI::selectSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities, const uint32_t frameWidth, const uint32_t frameHeight) {
     VkExtent2D actualExtent = {frameWidth, frameHeight};
     
     if (surfaceCapabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
@@ -738,7 +716,7 @@ VkExtent2D GVULKANAPI::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceC
     return actualExtent;
 }
 
-VkSurfaceFormatKHR GVULKANAPI::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) {
+VkSurfaceFormatKHR GVULKANAPI::selectSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) {
     for (const auto& availableFormat : availableFormats) {
         if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB &&
             availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
@@ -749,7 +727,7 @@ VkSurfaceFormatKHR GVULKANAPI::chooseSwapSurfaceFormat(const std::vector<VkSurfa
     return availableFormats[0];
 }
 
-VkPresentModeKHR GVULKANAPI::chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& presentModesArray) {
+VkPresentModeKHR GVULKANAPI::selectSwapPresentMode(const std::vector<VkPresentModeKHR>& presentModesArray) {
     for (const auto& mode : presentModesArray) {
         if (mode == VK_PRESENT_MODE_MAILBOX_KHR) {
             return mode;
@@ -780,6 +758,28 @@ void GVULKANAPI::createImageViews() {
         
         if (vkCreateImageView(device.getLogicalDevice(), &imageViewInfo, nullptr, &swapChainImageViews[i]) != VK_SUCCESS) {
             printf("GaneshaEngine: failed to create image view\n");
+        }
+    }
+}
+
+void GVULKANAPI::createFramebuffers() {
+    swapChainFramebuffers.resize(swapChainImageViews.size());
+    for (size_t i = 0; i < swapChainImageViews.size(); i++) {
+        VkImageView attachments[] = {
+            swapChainImageViews[i]
+        };
+
+        VkFramebufferCreateInfo framebufferInfo{};
+        framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+        framebufferInfo.renderPass = renderPass;
+        framebufferInfo.attachmentCount = 1;
+        framebufferInfo.pAttachments = attachments;
+        framebufferInfo.width = swapChainExtent.width;
+        framebufferInfo.height = swapChainExtent.height;
+        framebufferInfo.layers = 1;
+
+        if (vkCreateFramebuffer(device.getLogicalDevice(), &framebufferInfo, nullptr, &swapChainFramebuffers[i]) != VK_SUCCESS) {
+            printf("GaneshaEngine: failed to create framebuffer with index %zu\n", i);
         }
     }
 }

@@ -91,9 +91,9 @@ private:
     VkShaderModule createShaderModule(const std::vector<uint8_t>& code);
 
     void createSwapChain(const uint32_t frameWidth, const uint32_t frameHeight);
-    VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities, const uint32_t frameWidth, const uint32_t frameHeight);
-    VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& presentModesArray);
-    VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
+    VkExtent2D selectSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities, const uint32_t frameWidth, const uint32_t frameHeight);
+    VkPresentModeKHR selectSwapPresentMode(const std::vector<VkPresentModeKHR>& presentModesArray);
+    VkSurfaceFormatKHR selectSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
     void createFramebuffers();
     void createImageViews();
 
