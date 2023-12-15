@@ -34,11 +34,12 @@ void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint
     width = frameWidth;
     height = frameHeight;
     updateFrameSize = false;
-        
+
+    //  create VULKAN instance
     vulkanInstance.createInstance("DOOM", khronosValidationLayers);
     
-    //  creates metalSurface
-    setupSurface(metalLayer);
+    //  create surface
+    metalSurface = createSurface(metalLayer);
     
     //  creates physicalDevice
     device.createPhysicalDevice(vulkanInstance, metalSurface);
@@ -401,7 +402,7 @@ void GVULKANAPI::drawFrame() {
 
 #pragma mark - Surface -
 
-void GVULKANAPI::setupSurface(void *metalLayer) {
+VkSurfaceKHR GVULKANAPI::createSurface(void *metalLayer) {
     VkMetalSurfaceCreateInfoEXT metalSurfaceInfo = {};
     
     metalSurfaceInfo.sType = VK_STRUCTURE_TYPE_METAL_SURFACE_CREATE_INFO_EXT;
@@ -409,9 +410,12 @@ void GVULKANAPI::setupSurface(void *metalLayer) {
     metalSurfaceInfo.flags = 0;
     metalSurfaceInfo.pLayer = metalLayer;
 
-    if (vkCreateMetalSurfaceEXT(vulkanInstance.getVulkanInstance(), &metalSurfaceInfo, NULL, &metalSurface) != VK_SUCCESS) {
-        printf("GaneshaEngine: error creating metal surface\n");
+    VkSurfaceKHR newSurface;
+    if (vkCreateMetalSurfaceEXT(vulkanInstance.getVulkanInstance(), &metalSurfaceInfo, NULL, &newSurface) != VK_SUCCESS) {
+        log.error("error creating metal surface\n");
     }
+    
+    return newSurface;
 }
 
 #pragma mark - Commands -

@@ -106,7 +106,7 @@ private:
     SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
     void createImageViews();
 
-    void setupSurface(void *metalLayer);
+    VkSurfaceKHR createSurface(void *metalLayer);
 };
 
 }   //  namespace spcGaneshaEngine
