@@ -38,15 +38,18 @@ public:
     VkDevice& getLogicalDevice();
     VkQueue& getGraphicsQueue();
     VkQueue& getPresentQueue();
+    
+    bool presentEqualGraphics();
 
 private:
     SwapChainSupportDetails querySwapChainSupport(const VkPhysicalDevice& device, VkSurfaceKHR& surface);
     bool checkPhysicalDeviceCapability(const VkPhysicalDevice& device, VkSurfaceKHR &surface);
     bool checkPhysicalDeviceExtensionSupport(const VkPhysicalDevice& device, const TCharPointersArray& extensionsToSupport);
+    void setupLogicalDevice();
+    
     int32_t findGraphicsQueueIndex(const std::vector<VkQueueFamilyProperties>& queuePropertiesArray);
     int32_t findPresentQueueIndex(const std::vector<VkQueueFamilyProperties>& queuePropertiesArray, VkSurfaceKHR& metalSurface);
     void findQueuesIndeces(VkSurfaceKHR& metalSurface);
-    void setupLogicalDevice();
 
     GLog& log;
 

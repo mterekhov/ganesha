@@ -27,6 +27,10 @@ GVULKANDevice::~GVULKANDevice() {
 
 #pragma mark - Public -
 
+bool GVULKANDevice::presentEqualGraphics() {
+    return graphicQueueFamilyIndex == presentQueueFamilyIndex;
+}
+
 void GVULKANDevice::selectPhysicalDevice(GVULKANInstance &vulkanInstance, VkSurfaceKHR &surface) {
     uint32_t count = 0;
     vkEnumeratePhysicalDevices(vulkanInstance.getVulkanInstance(), &count, nullptr);

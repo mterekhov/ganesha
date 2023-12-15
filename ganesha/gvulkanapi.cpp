@@ -33,8 +33,6 @@ GVULKANAPI::~GVULKANAPI() {
 #pragma mark - GGraphicsAPIProtocol -
 
 void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint32_t frameHeight) {
-    width = frameWidth;
-    height = frameHeight;
     updateFrameSize = false;
 
     //  create VULKAN instance
@@ -49,7 +47,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint
     //  creates logicalDevice
     device.createLogicalDevice(metalSurface);
     
-    createSwapChain();
+    createSwapChain(frameWidth, frameHeight);
     createImageViews();
     createRenderPass();
     createDescriptorSetLayout();
@@ -688,55 +686,56 @@ void GVULKANAPI::createFramebuffers() {
     }
 }
 
-void GVULKANAPI::createSwapChain() {
+void GVULKANAPI::createSwapChain(const uint32_t frameWidth, const uint32_t frameHeight) {
     SwapChainSupportDetails swapChainSupport = device.querySwapChainSupport(metalSurface);
 
     VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
-    VkPresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupport.presentModes);
-    VkExtent2D extent = chooseSwapExtent(swapChainSupport.surfaceCapabilities);
+    VkExtent2D extent = chooseSwapExtent(swapChainSupport.surfaceCapabilities, frameWidth, frameHeight);
     
-    uint32_t imageCount = swapChainSupport.surfaceCapabilities.minImageCount + 1;
-    if (swapChainSupport.surfaceCapabilities.maxImageCount > 0 &&
-        imageCount > swapChainSupport.surfaceCapabilities.maxImageCount) {
-        imageCount = swapChainSupport.surfaceCapabilities.maxImageCount;
+    uint32_t count = swapChainSupport.surfaceCapabilities.minImageCount + 1;
+    if (swapChainSupport.surfaceCapabilities.maxImageCount > 0 && count > swapChainSupport.surfaceCapabilities.maxImageCount) {
+        count = swapChainSupport.surfaceCapabilities.maxImageCount;
     }
 
     VkSwapchainCreateInfoKHR swapChainInfo{};
     swapChainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     swapChainInfo.surface = metalSurface;
-    swapChainInfo.minImageCount = imageCount;
+    swapChainInfo.minImageCount = count;
     swapChainInfo.imageFormat = surfaceFormat.format;
     swapChainInfo.imageColorSpace = surfaceFormat.colorSpace;
     swapChainInfo.imageExtent = extent;
     swapChainInfo.imageArrayLayers = 1;
     swapChainInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-    swapChainInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+    if (!device.presentEqualGraphics()) {
+        swapChainInfo.queueFamilyIndexCount = 2;
+    }
+    swapChainInfo.imageSharingMode = device.presentEqualGraphics() ? VK_SHARING_MODE_CONCURRENT : VK_SHARING_MODE_EXCLUSIVE;
     swapChainInfo.preTransform = swapChainSupport.surfaceCapabilities.currentTransform;
     swapChainInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-    swapChainInfo.presentMode = presentMode;
+    swapChainInfo.presentMode = chooseSwapPresentMode(swapChainSupport.presentModes);
     swapChainInfo.clipped = VK_TRUE;
     if (vkCreateSwapchainKHR(device.getLogicalDevice(), &swapChainInfo, nullptr, &swapChain) != VK_SUCCESS) {
-        printf("GaneshaEngine: failed to create swap chain\n");
+        log.error("failed to create swap chain\n");
     }
     
     swapChainImageFormat = surfaceFormat.format;
     swapChainExtent = extent;
-    vkGetSwapchainImagesKHR(device.getLogicalDevice(), swapChain, &imageCount, nullptr);
-    swapChainImages.resize(imageCount);
-    vkGetSwapchainImagesKHR(device.getLogicalDevice(), swapChain, &imageCount, swapChainImages.data());
+    vkGetSwapchainImagesKHR(device.getLogicalDevice(), swapChain, &count, nullptr);
+    swapChainImages.resize(count);
+    vkGetSwapchainImagesKHR(device.getLogicalDevice(), swapChain, &count, swapChainImages.data());
 }
 
-VkExtent2D GVULKANAPI::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) {
-    if (capabilities.currentExtent.width != UINT32_MAX) {
-        return capabilities.currentExtent;
+VkExtent2D GVULKANAPI::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities, const uint32_t frameWidth, const uint32_t frameHeight) {
+    VkExtent2D actualExtent = {frameWidth, frameHeight};
+    
+    if (surfaceCapabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
+        return surfaceCapabilities.currentExtent;
     } else {
-        VkExtent2D actualExtent = {width, height};
-
-        actualExtent.width = std::max(capabilities.minImageExtent.width, std::min(capabilities.maxImageExtent.width, actualExtent.width));
-        actualExtent.height = std::max(capabilities.minImageExtent.height, std::min(capabilities.maxImageExtent.height, actualExtent.height));
-        
-        return actualExtent;
+        actualExtent.width = std::max(surfaceCapabilities.minImageExtent.width, std::min(surfaceCapabilities.maxImageExtent.width, actualExtent.width));
+        actualExtent.height = std::max(surfaceCapabilities.minImageExtent.height, std::min(surfaceCapabilities.maxImageExtent.height, actualExtent.height));
     }
+    
+    return actualExtent;
 }
 
 VkSurfaceFormatKHR GVULKANAPI::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) {
@@ -750,10 +749,10 @@ VkSurfaceFormatKHR GVULKANAPI::chooseSwapSurfaceFormat(const std::vector<VkSurfa
     return availableFormats[0];
 }
 
-VkPresentModeKHR GVULKANAPI::chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes) {
-    for (const auto& availablePresentMode : availablePresentModes) {
-        if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
-            return availablePresentMode;
+VkPresentModeKHR GVULKANAPI::chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& presentModesArray) {
+    for (const auto& mode : presentModesArray) {
+        if (mode == VK_PRESENT_MODE_MAILBOX_KHR) {
+            return mode;
         }
     }
 
