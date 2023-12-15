@@ -27,14 +27,14 @@ GVULKANDevice::~GVULKANDevice() {
 
 #pragma mark - Public -
 
-void GVULKANDevice::selectPhysicalDevice(GVULKANInstance &vulkanInstance) {
+void GVULKANDevice::selectPhysicalDevice(GVULKANInstance &vulkanInstance, VkSurfaceKHR &surface) {
     uint32_t count = 0;
     vkEnumeratePhysicalDevices(vulkanInstance.getVulkanInstance(), &count, nullptr);
     std::vector<VkPhysicalDevice> physicalDevicesArray(count);
     vkEnumeratePhysicalDevices(vulkanInstance.getVulkanInstance(), &count, physicalDevicesArray.data());
     
     for (const auto& device : physicalDevicesArray) {
-        if (checkPhysicalDeviceCapability(device)) {
+        if (checkPhysicalDeviceCapability(device, surface)) {
             physicalDevice = device;
             break;
         }
@@ -112,20 +112,54 @@ void GVULKANDevice::destroyLogicalDevice() {
     vkDestroyDevice(logicalDevice, nullptr);
 }
 
+SwapChainSupportDetails GVULKANDevice::querySwapChainSupport(VkSurfaceKHR& surface) {
+    return querySwapChainSupport(physicalDevice, surface);
+}
+
 #pragma mark - Routine -
 
-bool GVULKANDevice::checkPhysicalDeviceCapability(const VkPhysicalDevice& device) {
-    //  Find discrete GPU or integrated in case of Apple M1
+SwapChainSupportDetails GVULKANDevice::querySwapChainSupport(const VkPhysicalDevice& device, VkSurfaceKHR& surface) {
+    SwapChainSupportDetails details = {0};
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface, &details.surfaceCapabilities);
+    
+    uint32_t count;
+    vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &count, nullptr);
+    if (count != 0) {
+        details.formats.resize(count);
+        vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &count, details.formats.data());
+    }
+    
+    vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &count, nullptr);
+    if (count != 0) {
+        details.presentModes.resize(count);
+        vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &count, details.presentModes.data());
+    }
+    
+    return details;
+}
+
+bool GVULKANDevice::checkPhysicalDeviceCapability(const VkPhysicalDevice& device, VkSurfaceKHR &surface) {
     VkPhysicalDeviceProperties deviceProperties;
     vkGetPhysicalDeviceProperties(device, &deviceProperties);
     if (deviceProperties.deviceType != VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU) {
         return false;
     }
+
+    if (!checkPhysicalDeviceExtensionSupport(device, deviceExtensions)) {
+        return false;
+    }
+    else {
+        SwapChainSupportDetails swapChainSupport = querySwapChainSupport(device, surface);
+        if ((swapChainSupport.formats.empty() || swapChainSupport.presentModes.empty())) {
+            return false;
+        }
+
+    }
     
     return true;
 }
 
-bool GVULKANDevice::checkPhysicalDeviceExtensionSupport(VkPhysicalDevice& device, const TCharPointersArray& extensionsToSupport) {
+bool GVULKANDevice::checkPhysicalDeviceExtensionSupport(const VkPhysicalDevice& device, const TCharPointersArray& extensionsToSupport) {
     uint32_t count;
     vkEnumerateDeviceExtensionProperties(device, nullptr, &count, nullptr);
     std::vector<VkExtensionProperties> availableExtensions(count);

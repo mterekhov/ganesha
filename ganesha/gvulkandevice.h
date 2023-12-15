@@ -12,29 +12,37 @@
 
 #include "glog.h"
 #include "ganeshatypes.h"
+#include "gvulkaninstance.h"
 
 namespace spcGaneshaEngine {
 
-class GVULKANInstance;
+struct SwapChainSupportDetails {
+    VkSurfaceCapabilitiesKHR surfaceCapabilities;
+    std::vector<VkSurfaceFormatKHR> formats;
+    std::vector<VkPresentModeKHR> presentModes;
+};
 
 class GVULKANDevice {
 public:
     GVULKANDevice(GLog& log);
     ~GVULKANDevice();
 
-    void selectPhysicalDevice(GVULKANInstance &vulkanInstance);
+    void selectPhysicalDevice(GVULKANInstance &vulkanInstance, VkSurfaceKHR &surface);
     void createLogicalDevice(VkSurfaceKHR &metalSurface);
     VkCommandPool createCommandPool();
     void destroyLogicalDevice();
     
+    SwapChainSupportDetails querySwapChainSupport(VkSurfaceKHR& surface);
+
     VkPhysicalDevice& getPhysicalDevice();
     VkDevice& getLogicalDevice();
     VkQueue& getGraphicsQueue();
     VkQueue& getPresentQueue();
 
 private:
-    bool checkPhysicalDeviceCapability(const VkPhysicalDevice& device);
-    bool checkPhysicalDeviceExtensionSupport(VkPhysicalDevice& device, const TCharPointersArray& extensionsToSupport);
+    SwapChainSupportDetails querySwapChainSupport(const VkPhysicalDevice& device, VkSurfaceKHR& surface);
+    bool checkPhysicalDeviceCapability(const VkPhysicalDevice& device, VkSurfaceKHR &surface);
+    bool checkPhysicalDeviceExtensionSupport(const VkPhysicalDevice& device, const TCharPointersArray& extensionsToSupport);
     int32_t findGraphicsQueueIndex(const std::vector<VkQueueFamilyProperties>& queuePropertiesArray);
     int32_t findPresentQueueIndex(const std::vector<VkQueueFamilyProperties>& queuePropertiesArray, VkSurfaceKHR& metalSurface);
     void findQueuesIndeces(VkSurfaceKHR& metalSurface);

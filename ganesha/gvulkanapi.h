@@ -12,12 +12,6 @@
 
 namespace spcGaneshaEngine {
 
-struct SwapChainSupportDetails {
-    VkSurfaceCapabilitiesKHR capabilities;
-    std::vector<VkSurfaceFormatKHR> formats;
-    std::vector<VkPresentModeKHR> presentModes;
-};
-
 /// A LOT OF FUCKING SHIT
 class GVULKANAPI: public GGraphicsAPIProtocol {
 public:
@@ -103,7 +97,6 @@ private:
     VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
     VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
     VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
-    SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
     void createImageViews();
 
     VkSurfaceKHR createSurface(void *metalLayer);

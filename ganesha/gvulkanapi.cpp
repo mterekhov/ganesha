@@ -44,9 +44,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint
     metalSurface = createSurface(metalLayer);
     
     //  creates physicalDevice
-    device.selectPhysicalDevice(vulkanInstance);
-
-    querySwapChainSupport(device.getPhysicalDevice());
+    device.selectPhysicalDevice(vulkanInstance, metalSurface);
 
     //  creates logicalDevice
     device.createLogicalDevice(metalSurface);
@@ -174,6 +172,22 @@ void GVULKANAPI::installViewMatrix(const GMatrix& newViewMatrix) {
 }
 
 #pragma mark - Routine -
+
+VkSurfaceKHR GVULKANAPI::createSurface(void *metalLayer) {
+    VkMetalSurfaceCreateInfoEXT metalSurfaceInfo = {};
+    
+    metalSurfaceInfo.sType = VK_STRUCTURE_TYPE_METAL_SURFACE_CREATE_INFO_EXT;
+    metalSurfaceInfo.pNext = NULL;
+    metalSurfaceInfo.flags = 0;
+    metalSurfaceInfo.pLayer = metalLayer;
+
+    VkSurfaceKHR newSurface;
+    if (vkCreateMetalSurfaceEXT(vulkanInstance.getVulkanInstance(), &metalSurfaceInfo, NULL, &newSurface) != VK_SUCCESS) {
+        log.error("error creating metal surface\n");
+    }
+    
+    return newSurface;
+}
 
 uint32_t GVULKANAPI::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
     VkPhysicalDeviceMemoryProperties memoryProperties;
@@ -399,24 +413,6 @@ void GVULKANAPI::createSemaphores() {
             return;
         }
     }
-}
-
-#pragma mark - Surface -
-
-VkSurfaceKHR GVULKANAPI::createSurface(void *metalLayer) {
-    VkMetalSurfaceCreateInfoEXT metalSurfaceInfo = {};
-    
-    metalSurfaceInfo.sType = VK_STRUCTURE_TYPE_METAL_SURFACE_CREATE_INFO_EXT;
-    metalSurfaceInfo.pNext = NULL;
-    metalSurfaceInfo.flags = 0;
-    metalSurfaceInfo.pLayer = metalLayer;
-
-    VkSurfaceKHR newSurface;
-    if (vkCreateMetalSurfaceEXT(vulkanInstance.getVulkanInstance(), &metalSurfaceInfo, NULL, &newSurface) != VK_SUCCESS) {
-        log.error("error creating metal surface\n");
-    }
-    
-    return newSurface;
 }
 
 #pragma mark - Commands -
@@ -693,16 +689,16 @@ void GVULKANAPI::createFramebuffers() {
 }
 
 void GVULKANAPI::createSwapChain() {
-    SwapChainSupportDetails swapChainSupport = querySwapChainSupport(device.getPhysicalDevice());
+    SwapChainSupportDetails swapChainSupport = device.querySwapChainSupport(metalSurface);
 
     VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
     VkPresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupport.presentModes);
-    VkExtent2D extent = chooseSwapExtent(swapChainSupport.capabilities);
+    VkExtent2D extent = chooseSwapExtent(swapChainSupport.surfaceCapabilities);
     
-    uint32_t imageCount = swapChainSupport.capabilities.minImageCount + 1;
-    if (swapChainSupport.capabilities.maxImageCount > 0 &&
-        imageCount > swapChainSupport.capabilities.maxImageCount) {
-        imageCount = swapChainSupport.capabilities.maxImageCount;
+    uint32_t imageCount = swapChainSupport.surfaceCapabilities.minImageCount + 1;
+    if (swapChainSupport.surfaceCapabilities.maxImageCount > 0 &&
+        imageCount > swapChainSupport.surfaceCapabilities.maxImageCount) {
+        imageCount = swapChainSupport.surfaceCapabilities.maxImageCount;
     }
 
     VkSwapchainCreateInfoKHR swapChainInfo{};
@@ -715,7 +711,7 @@ void GVULKANAPI::createSwapChain() {
     swapChainInfo.imageArrayLayers = 1;
     swapChainInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
     swapChainInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-    swapChainInfo.preTransform = swapChainSupport.capabilities.currentTransform;
+    swapChainInfo.preTransform = swapChainSupport.surfaceCapabilities.currentTransform;
     swapChainInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
     swapChainInfo.presentMode = presentMode;
     swapChainInfo.clipped = VK_TRUE;
@@ -741,26 +737,6 @@ VkExtent2D GVULKANAPI::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabili
         
         return actualExtent;
     }
-}
-
-SwapChainSupportDetails GVULKANAPI::querySwapChainSupport(VkPhysicalDevice device) {
-    SwapChainSupportDetails details = {0};
-    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, metalSurface, &details.capabilities);
-    
-    uint32_t count;
-    vkGetPhysicalDeviceSurfaceFormatsKHR(device, metalSurface, &count, nullptr);
-    if (count != 0) {
-        details.formats.resize(count);
-        vkGetPhysicalDeviceSurfaceFormatsKHR(device, metalSurface, &count, details.formats.data());
-    }
-    
-    vkGetPhysicalDeviceSurfacePresentModesKHR(device, metalSurface, &count, nullptr);
-    if (count != 0) {
-        details.presentModes.resize(count);
-        vkGetPhysicalDeviceSurfacePresentModesKHR(device, metalSurface, &count, details.presentModes.data());
-    }
-    
-    return details;
 }
 
 VkSurfaceFormatKHR GVULKANAPI::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) {
