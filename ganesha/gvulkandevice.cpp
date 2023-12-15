@@ -30,9 +30,9 @@ GVULKANDevice::~GVULKANDevice() {
 void GVULKANDevice::createPhysicalDevice(GVULKANInstance &vulkanInstance) {
     uint32_t count = 0;
     vkEnumeratePhysicalDevices(vulkanInstance.getVulkanInstance(), &count, nullptr);
-    
     std::vector<VkPhysicalDevice> physicalDevicesArray(count);
     vkEnumeratePhysicalDevices(vulkanInstance.getVulkanInstance(), &count, physicalDevicesArray.data());
+    
     for (const auto& device : physicalDevicesArray) {
         if (checkPhysicalDeviceCapability(device)) {
             physicalDevice = device;
@@ -60,18 +60,18 @@ void GVULKANDevice::createLogicalDevice(VkSurfaceKHR &metalSurface) {
 
     VkPhysicalDeviceFeatures deviceFeatures = {};
 
-    VkDeviceCreateInfo deviceInfo = {};
-    deviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-    deviceInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfosList.size());
-    deviceInfo.pQueueCreateInfos = queueCreateInfosList.data();
-    deviceInfo.pEnabledFeatures = &deviceFeatures;
+    VkDeviceCreateInfo logicalDeviceInfo = {};
+    logicalDeviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+    logicalDeviceInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfosList.size());
+    logicalDeviceInfo.pQueueCreateInfos = queueCreateInfosList.data();
+    logicalDeviceInfo.pEnabledFeatures = &deviceFeatures;
     
-    if (checkDeviceExtensionSupport(physicalDevice)) {
-        deviceInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
-        deviceInfo.ppEnabledExtensionNames = deviceExtensions.data();
+    if (checkPhysicalDeviceExtensionSupport(physicalDevice, deviceExtensions)) {
+        logicalDeviceInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
+        logicalDeviceInfo.ppEnabledExtensionNames = deviceExtensions.data();
     }
     
-    if (vkCreateDevice(physicalDevice, &deviceInfo, nullptr, &logicalDevice) != VK_SUCCESS) {
+    if (vkCreateDevice(physicalDevice, &logicalDeviceInfo, nullptr, &logicalDevice) != VK_SUCCESS) {
         log.error("error creating logical device\n");
     }
 
@@ -125,14 +125,13 @@ bool GVULKANDevice::checkPhysicalDeviceCapability(const VkPhysicalDevice& device
     return true;
 }
 
-bool GVULKANDevice::checkDeviceExtensionSupport(VkPhysicalDevice& device) {
-    uint32_t extensionCount;
-    vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
+bool GVULKANDevice::checkPhysicalDeviceExtensionSupport(VkPhysicalDevice& device, const TCharPointersArray& extensionsToSupport) {
+    uint32_t count;
+    vkEnumerateDeviceExtensionProperties(device, nullptr, &count, nullptr);
+    std::vector<VkExtensionProperties> availableExtensions(count);
+    vkEnumerateDeviceExtensionProperties(device, nullptr, &count, availableExtensions.data());
     
-    std::vector<VkExtensionProperties> availableExtensions(extensionCount);
-    vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableExtensions.data());
-    
-    std::set<std::string> requiredExtensions(deviceExtensions.begin(), deviceExtensions.end());
+    std::set<std::string> requiredExtensions(extensionsToSupport.begin(), extensionsToSupport.end());
     for (const auto& extension : availableExtensions) {
         requiredExtensions.erase(extension.extensionName);
     }

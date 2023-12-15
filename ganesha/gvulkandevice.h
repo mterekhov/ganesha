@@ -11,6 +11,7 @@
 #include <vulkan/vulkan.h>
 
 #include "glog.h"
+#include "ganeshatypes.h"
 
 namespace spcGaneshaEngine {
 
@@ -33,7 +34,7 @@ public:
 
 private:
     bool checkPhysicalDeviceCapability(const VkPhysicalDevice& device);
-    bool checkDeviceExtensionSupport(VkPhysicalDevice& device);
+    bool checkPhysicalDeviceExtensionSupport(VkPhysicalDevice& device, const TCharPointersArray& extensionsToSupport);
     int32_t findGraphicsQueueIndex(const std::vector<VkQueueFamilyProperties>& queuePropertiesArray);
     int32_t findPresentQueueIndex(const std::vector<VkQueueFamilyProperties>& queuePropertiesArray, VkSurfaceKHR& metalSurface);
     void findQueuesIndeces(VkSurfaceKHR& metalSurface);
