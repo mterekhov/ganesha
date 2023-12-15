@@ -2,7 +2,7 @@
 #define SPCGANESHAENGINE_GGANESHA_H
 
 #include <stdio.h>
-#include "ggraphicsapi.h"
+#include "ggraphicsapiprotocol.h"
 #include "gcamera.h"
 
 namespace spcGaneshaEngine {
@@ -35,7 +35,7 @@ public:
     void processKeyboard(const uint32_t keyCode);
     
 private:
-    GGraphicsAPI *graphicsAPI;
+    GGraphicsAPIProtocol *graphicsAPI;
     GCamera camera;
 
 };

@@ -22,10 +22,10 @@ public:
     GVULKANDevice(GLog& log);
     ~GVULKANDevice();
 
-    void createPhysicalDevice(GVULKANInstance &vulkanInstance);
+    void selectPhysicalDevice(GVULKANInstance &vulkanInstance);
     void createLogicalDevice(VkSurfaceKHR &metalSurface);
     VkCommandPool createCommandPool();
-    void destroyDevice();
+    void destroyLogicalDevice();
     
     VkPhysicalDevice& getPhysicalDevice();
     VkDevice& getLogicalDevice();

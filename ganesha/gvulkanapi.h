@@ -8,7 +8,7 @@
 #include "gvulkaninstance.h"
 #include "gvulkandevice.h"
 #include "gmatrix.h"
-#include "ggraphicsapi.h"
+#include "ggraphicsapiprotocol.h"
 
 namespace spcGaneshaEngine {
 
@@ -19,7 +19,7 @@ struct SwapChainSupportDetails {
 };
 
 /// A LOT OF FUCKING SHIT
-class GVULKANAPI: public GGraphicsAPI {
+class GVULKANAPI: public GGraphicsAPIProtocol {
 public:
     GVULKANAPI();
     virtual ~GVULKANAPI();

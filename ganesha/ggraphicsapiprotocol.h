@@ -6,7 +6,7 @@
 
 namespace spcGaneshaEngine {
 
-class GGraphicsAPI {
+class GGraphicsAPIProtocol {
 public:
     virtual void initAPI(void *metalLayer, const uint32_t frameWidth, const uint32_t frameHeight) = 0;
     virtual void destroyAPI() = 0;

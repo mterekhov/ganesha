@@ -27,7 +27,7 @@ GVULKANDevice::~GVULKANDevice() {
 
 #pragma mark - Public -
 
-void GVULKANDevice::createPhysicalDevice(GVULKANInstance &vulkanInstance) {
+void GVULKANDevice::selectPhysicalDevice(GVULKANInstance &vulkanInstance) {
     uint32_t count = 0;
     vkEnumeratePhysicalDevices(vulkanInstance.getVulkanInstance(), &count, nullptr);
     std::vector<VkPhysicalDevice> physicalDevicesArray(count);
@@ -108,7 +108,7 @@ VkQueue& GVULKANDevice::getPresentQueue() {
     return presentQueue;
 }
 
-void GVULKANDevice::destroyDevice() {
+void GVULKANDevice::destroyLogicalDevice() {
     vkDestroyDevice(logicalDevice, nullptr);
 }
 

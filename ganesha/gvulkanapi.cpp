@@ -30,6 +30,8 @@ GVULKANAPI::~GVULKANAPI() {
     
 }
 
+#pragma mark - GGraphicsAPIProtocol -
+
 void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint32_t frameHeight) {
     width = frameWidth;
     height = frameHeight;
@@ -42,7 +44,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint
     metalSurface = createSurface(metalLayer);
     
     //  creates physicalDevice
-    device.createPhysicalDevice(vulkanInstance);
+    device.selectPhysicalDevice(vulkanInstance);
 
     querySwapChainSupport(device.getPhysicalDevice());
 
@@ -97,10 +99,81 @@ void GVULKANAPI::destroyAPI() {
     vkFreeMemory(device.getLogicalDevice(), vertexBufferMemory, nullptr);
     vkDestroyBuffer(device.getLogicalDevice(), indexBuffer, nullptr);
     vkFreeMemory(device.getLogicalDevice(), indexBufferMemory, nullptr);
-    device.destroyDevice();
+    device.destroyLogicalDevice();
     vkDestroySurfaceKHR(vulkanInstance.getVulkanInstance(), metalSurface, nullptr);
     vulkanInstance.destroyInstance();
 }
+
+void GVULKANAPI::frameResized(const float width, const float height) {
+    updateFrameSize = true;
+}
+
+void GVULKANAPI::drawFrame() {
+    VkResult result = vkWaitForFences(device.getLogicalDevice(), 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
+
+    uint32_t imageIndex;
+    result = vkAcquireNextImageKHR(device.getLogicalDevice(), swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
+    if (imagesInFlight[imageIndex] != VK_NULL_HANDLE) {
+        vkWaitForFences(device.getLogicalDevice(), 1, &imagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
+    }
+    imagesInFlight[imageIndex] = inFlightFences[currentFrame];
+    
+    updateUniformBuffer(imageIndex);
+    
+    VkSubmitInfo submitInfo{};
+    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+
+    VkSemaphore waitSemaphores[] = {imageAvailableSemaphores[currentFrame]};
+    submitInfo.waitSemaphoreCount = 1;
+    submitInfo.pWaitSemaphores = waitSemaphores;
+
+    VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
+    submitInfo.pWaitDstStageMask = waitStages;
+    
+    submitInfo.commandBufferCount = 1;
+    submitInfo.pCommandBuffers = &commandBuffers[imageIndex];
+
+    VkSemaphore signalSemaphores[] = {renderFinishedSemaphores[currentFrame]};
+    submitInfo.signalSemaphoreCount = 1;
+    submitInfo.pSignalSemaphores = signalSemaphores;
+    
+    vkResetFences(device.getLogicalDevice(), 1, &inFlightFences[currentFrame]);
+    
+    if (vkQueueSubmit(device.getGraphicsQueue(), 1, &submitInfo, inFlightFences[currentFrame]) != VK_SUCCESS) {
+        printf("GaneshaEngine: failed to submit draw command buffer\n");
+    }
+
+    VkPresentInfoKHR presentInfo{};
+    presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+    presentInfo.waitSemaphoreCount = 1;
+    presentInfo.pWaitSemaphores = signalSemaphores;
+    
+    VkSwapchainKHR swapChains[] = {swapChain};
+    presentInfo.swapchainCount = 1;
+    presentInfo.pSwapchains = swapChains;
+    presentInfo.pImageIndices = &imageIndex;
+    result = vkQueuePresentKHR(device.getPresentQueue(), &presentInfo);
+    if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || updateFrameSize) {
+        updateFrameSize = false;
+    } else if (result != VK_SUCCESS) {
+        printf("GaneshaEngine: failed to present frame\n");
+    }
+    
+    currentFrame = (currentFrame + 1) % maxFramesInFlight;
+}
+
+void GVULKANAPI::installIsometricView(const TFloat fieldOfView, const TFloat near, const TFloat far) {
+    TFloat aspect = static_cast<TFloat>(swapChainExtent.width) / static_cast<TFloat>(swapChainExtent.height);
+    TFloat size = near * tanf(fieldOfView / 2.0);
+    TFloat aspectHeight = aspect * size;
+    projectionMatrix = GMatrix::frustum(-aspectHeight, aspectHeight, -size, size, near, far);
+}
+
+void GVULKANAPI::installViewMatrix(const GMatrix& newViewMatrix) {
+    viewMatrix = newViewMatrix;
+}
+
+#pragma mark - Routine -
 
 uint32_t GVULKANAPI::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
     VkPhysicalDeviceMemoryProperties memoryProperties;
@@ -287,17 +360,6 @@ void GVULKANAPI::createUniformBuffers() {
     }
 }
     
-void GVULKANAPI::installIsometricView(const TFloat fieldOfView, const TFloat near, const TFloat far) {
-    TFloat aspect = static_cast<TFloat>(swapChainExtent.width) / static_cast<TFloat>(swapChainExtent.height);
-    TFloat size = near * tanf(fieldOfView / 2.0);
-    TFloat aspectHeight = aspect * size;
-    projectionMatrix = GMatrix::frustum(-aspectHeight, aspectHeight, -size, size, near, far);
-}
-
-void GVULKANAPI::installViewMatrix(const GMatrix& newViewMatrix) {
-    viewMatrix = newViewMatrix;
-}
-
 void GVULKANAPI::updateUniformBuffer(uint32_t currentImage) {
     static auto startTime = std::chrono::high_resolution_clock::now();
     
@@ -338,67 +400,6 @@ void GVULKANAPI::createSemaphores() {
         }
     }
 }
-
-#pragma mark - Render -
-
-void GVULKANAPI::frameResized(const float width, const float height) {
-    updateFrameSize = true;
-}
-
-void GVULKANAPI::drawFrame() {
-    VkResult result = vkWaitForFences(device.getLogicalDevice(), 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
-
-    uint32_t imageIndex;
-    result = vkAcquireNextImageKHR(device.getLogicalDevice(), swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
-    if (imagesInFlight[imageIndex] != VK_NULL_HANDLE) {
-        vkWaitForFences(device.getLogicalDevice(), 1, &imagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
-    }
-    imagesInFlight[imageIndex] = inFlightFences[currentFrame];
-    
-    updateUniformBuffer(imageIndex);
-    
-    VkSubmitInfo submitInfo{};
-    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-
-    VkSemaphore waitSemaphores[] = {imageAvailableSemaphores[currentFrame]};
-    submitInfo.waitSemaphoreCount = 1;
-    submitInfo.pWaitSemaphores = waitSemaphores;
-
-    VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
-    submitInfo.pWaitDstStageMask = waitStages;
-    
-    submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers = &commandBuffers[imageIndex];
-
-    VkSemaphore signalSemaphores[] = {renderFinishedSemaphores[currentFrame]};
-    submitInfo.signalSemaphoreCount = 1;
-    submitInfo.pSignalSemaphores = signalSemaphores;
-    
-    vkResetFences(device.getLogicalDevice(), 1, &inFlightFences[currentFrame]);
-    
-    if (vkQueueSubmit(device.getGraphicsQueue(), 1, &submitInfo, inFlightFences[currentFrame]) != VK_SUCCESS) {
-        printf("GaneshaEngine: failed to submit draw command buffer\n");
-    }
-
-    VkPresentInfoKHR presentInfo{};
-    presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-    presentInfo.waitSemaphoreCount = 1;
-    presentInfo.pWaitSemaphores = signalSemaphores;
-    
-    VkSwapchainKHR swapChains[] = {swapChain};
-    presentInfo.swapchainCount = 1;
-    presentInfo.pSwapchains = swapChains;
-    presentInfo.pImageIndices = &imageIndex;
-    result = vkQueuePresentKHR(device.getPresentQueue(), &presentInfo);
-    if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || updateFrameSize) {
-        updateFrameSize = false;
-    } else if (result != VK_SUCCESS) {
-        printf("GaneshaEngine: failed to present frame\n");
-    }
-    
-    currentFrame = (currentFrame + 1) % maxFramesInFlight;
-}
-
 
 #pragma mark - Surface -
 
@@ -742,22 +743,21 @@ VkExtent2D GVULKANAPI::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabili
     }
 }
 
-SwapChainSupportDetails GVULKANAPI::querySwapChainSupport(VkPhysicalDevice physicalDevice) {
+SwapChainSupportDetails GVULKANAPI::querySwapChainSupport(VkPhysicalDevice device) {
     SwapChainSupportDetails details = {0};
-    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, metalSurface, &details.capabilities);
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, metalSurface, &details.capabilities);
     
-    uint32_t formatCount;
-    vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, metalSurface, &formatCount, nullptr);
-    if (formatCount != 0) {
-        details.formats.resize(formatCount);
-        vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, metalSurface, &formatCount, details.formats.data());
+    uint32_t count;
+    vkGetPhysicalDeviceSurfaceFormatsKHR(device, metalSurface, &count, nullptr);
+    if (count != 0) {
+        details.formats.resize(count);
+        vkGetPhysicalDeviceSurfaceFormatsKHR(device, metalSurface, &count, details.formats.data());
     }
     
-    uint32_t presentModeCount;
-    vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, metalSurface, &presentModeCount, nullptr);
-    if (presentModeCount != 0) {
-        details.presentModes.resize(presentModeCount);
-        vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, metalSurface, &presentModeCount, details.presentModes.data());
+    vkGetPhysicalDeviceSurfacePresentModesKHR(device, metalSurface, &count, nullptr);
+    if (count != 0) {
+        details.presentModes.resize(count);
+        vkGetPhysicalDeviceSurfacePresentModesKHR(device, metalSurface, &count, details.presentModes.data());
     }
     
     return details;
