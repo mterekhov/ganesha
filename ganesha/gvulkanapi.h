@@ -5,10 +5,11 @@
 #include <vector>
 #include <vulkan/vulkan.h>
 
+#include "ggraphicsapiprotocol.h"
 #include "gvulkaninstance.h"
 #include "gvulkandevice.h"
+#include "gvulkanswapchain.h"
 #include "gmatrix.h"
-#include "ggraphicsapiprotocol.h"
 
 namespace spcGaneshaEngine {
 
@@ -29,6 +30,7 @@ private:
     GLog log;
     GVULKANDevice device;
     GVULKANInstance vulkanInstance;
+    GVULKANSwapChain vulkanSwapChain;
     VkSurfaceKHR metalSurface;
 
     GMatrix projectionMatrix;
@@ -55,11 +57,6 @@ private:
     VkDescriptorPool descriptorPool;
     std::vector<VkDescriptorSet> descriptorSets;
     
-    VkSwapchainKHR swapChain;
-    std::vector<VkImage> swapChainImages;
-    std::vector<VkImageView> swapChainImageViews;
-    VkFormat swapChainImageFormat;
-    VkExtent2D swapChainExtent;
     std::vector<VkFramebuffer> swapChainFramebuffers;
 
     VkDescriptorSetLayout descriptorSetLayout;
@@ -91,11 +88,7 @@ private:
     VkShaderModule createShaderModule(const std::vector<uint8_t>& code);
 
     void createSwapChain(const uint32_t frameWidth, const uint32_t frameHeight);
-    VkExtent2D selectSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities, const uint32_t frameWidth, const uint32_t frameHeight);
-    VkPresentModeKHR selectSwapPresentMode(const std::vector<VkPresentModeKHR>& presentModesArray);
-    VkSurfaceFormatKHR selectSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
     void createFramebuffers();
-    void createImageViews();
 
     VkSurfaceKHR createSurface(void *metalLayer);
 };

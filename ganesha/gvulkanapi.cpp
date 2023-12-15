@@ -22,7 +22,7 @@ struct UniformBufferObject {
     GMatrix proj;
 };
 
-GVULKANAPI::GVULKANAPI() : log("Ganesha"), vulkanInstance(log), device(log) {
+GVULKANAPI::GVULKANAPI() : log("Ganesha"), vulkanInstance(log), device(log), vulkanSwapChain(log) {
     
 }
 
@@ -47,8 +47,8 @@ void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint
     //  creates logicalDevice
     device.createLogicalDevice(metalSurface);
     
-    createSwapChain(frameWidth, frameHeight);
-    createImageViews();
+    vulkanSwapChain.createSwapChain(frameWidth, frameHeight, device, metalSurface);
+
     createRenderPass();
     createDescriptorSetLayout();
     createGraphicsPipeline();
@@ -79,12 +79,9 @@ void GVULKANAPI::destroyAPI() {
     vkDestroyPipeline(device.getLogicalDevice(), graphicsPipeline, nullptr);
     vkDestroyPipelineLayout(device.getLogicalDevice(), pipelineLayout, nullptr);
     vkDestroyRenderPass(device.getLogicalDevice(), renderPass, nullptr);
-    for (auto imageView : swapChainImageViews) {
-        vkDestroyImageView(device.getLogicalDevice(), imageView, nullptr);
-    }
-    vkDestroySwapchainKHR(device.getLogicalDevice(), swapChain, nullptr);
-
-    for (size_t i = 0; i < swapChainImages.size(); i++) {
+    vulkanSwapChain.destroySwapChain(device.getLogicalDevice());
+    
+    for (size_t i = 0; i < vulkanSwapChain.size(); i++) {
         vkDestroyBuffer(device.getLogicalDevice(), uniformBuffers[i], nullptr);
         vkFreeMemory(device.getLogicalDevice(), uniformBuffersMemory[i], nullptr);
     }
@@ -95,6 +92,7 @@ void GVULKANAPI::destroyAPI() {
     vkFreeMemory(device.getLogicalDevice(), vertexBufferMemory, nullptr);
     vkDestroyBuffer(device.getLogicalDevice(), indexBuffer, nullptr);
     vkFreeMemory(device.getLogicalDevice(), indexBufferMemory, nullptr);
+    
     device.destroyLogicalDevice();
     vkDestroySurfaceKHR(vulkanInstance.getVulkanInstance(), metalSurface, nullptr);
     vulkanInstance.destroyInstance();
@@ -108,7 +106,7 @@ void GVULKANAPI::drawFrame() {
     VkResult result = vkWaitForFences(device.getLogicalDevice(), 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
 
     uint32_t imageIndex;
-    result = vkAcquireNextImageKHR(device.getLogicalDevice(), swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
+    result = vkAcquireNextImageKHR(device.getLogicalDevice(), vulkanSwapChain.getVulkanSwapChain(), UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
     if (imagesInFlight[imageIndex] != VK_NULL_HANDLE) {
         vkWaitForFences(device.getLogicalDevice(), 1, &imagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
     }
@@ -144,7 +142,7 @@ void GVULKANAPI::drawFrame() {
     presentInfo.waitSemaphoreCount = 1;
     presentInfo.pWaitSemaphores = signalSemaphores;
     
-    VkSwapchainKHR swapChains[] = {swapChain};
+    VkSwapchainKHR swapChains[] = { vulkanSwapChain.getVulkanSwapChain() };
     presentInfo.swapchainCount = 1;
     presentInfo.pSwapchains = swapChains;
     presentInfo.pImageIndices = &imageIndex;
@@ -159,6 +157,7 @@ void GVULKANAPI::drawFrame() {
 }
 
 void GVULKANAPI::installIsometricView(const TFloat fieldOfView, const TFloat near, const TFloat far) {
+    VkExtent2D swapChainExtent = vulkanSwapChain.getExtent();
     TFloat aspect = static_cast<TFloat>(swapChainExtent.width) / static_cast<TFloat>(swapChainExtent.height);
     TFloat size = near * tanf(fieldOfView / 2.0);
     TFloat aspectHeight = aspect * size;
@@ -314,32 +313,32 @@ void GVULKANAPI::createVertexBuffer() {
 void GVULKANAPI::createDescriptorPool() {
     VkDescriptorPoolSize poolSize{};
     poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    poolSize.descriptorCount = static_cast<uint32_t>(swapChainImages.size());
+    poolSize.descriptorCount = static_cast<uint32_t>(vulkanSwapChain.size());
     
     VkDescriptorPoolCreateInfo poolInfo{};
     poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
     poolInfo.poolSizeCount = 1;
     poolInfo.pPoolSizes = &poolSize;
-    poolInfo.maxSets = static_cast<uint32_t>(swapChainImages.size());
+    poolInfo.maxSets = static_cast<uint32_t>(vulkanSwapChain.size());
     if (vkCreateDescriptorPool(device.getLogicalDevice(), &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
         printf("GaneshaEngine: failed to create descriptor pool\n");
     }
 }
 
 void GVULKANAPI::createDescriptorSets() {
-    std::vector<VkDescriptorSetLayout> layouts(swapChainImages.size(), descriptorSetLayout);
+    std::vector<VkDescriptorSetLayout> layouts(vulkanSwapChain.size(), descriptorSetLayout);
     VkDescriptorSetAllocateInfo allocInfo{};
     allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
     allocInfo.descriptorPool = descriptorPool;
-    allocInfo.descriptorSetCount = static_cast<uint32_t>(swapChainImages.size());
+    allocInfo.descriptorSetCount = static_cast<uint32_t>(vulkanSwapChain.size());
     allocInfo.pSetLayouts = layouts.data();
 
-    descriptorSets.resize(swapChainImages.size());
+    descriptorSets.resize(vulkanSwapChain.size());
     if (vkAllocateDescriptorSets(device.getLogicalDevice(), &allocInfo, descriptorSets.data()) != VK_SUCCESS) {
         printf("GaneshaEngine: failed to allocate descriptor sets\n");
     }
 
-    for (size_t i = 0; i < swapChainImages.size(); i++) {
+    for (size_t i = 0; i < vulkanSwapChain.size(); i++) {
         VkDescriptorBufferInfo bufferInfo{};
         bufferInfo.buffer = uniformBuffers[i];
         bufferInfo.offset = 0;
@@ -364,10 +363,10 @@ void GVULKANAPI::createDescriptorSets() {
 void GVULKANAPI::createUniformBuffers() {
     VkDeviceSize bufferSize = sizeof(UniformBufferObject);
     
-    uniformBuffers.resize(swapChainImages.size());
-    uniformBuffersMemory.resize(swapChainImages.size());
+    uniformBuffers.resize(vulkanSwapChain.size());
+    uniformBuffersMemory.resize(vulkanSwapChain.size());
     
-    for (size_t i = 0; i < swapChainImages.size(); i++) {
+    for (size_t i = 0; i < vulkanSwapChain.size(); i++) {
         createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, uniformBuffers[i], uniformBuffersMemory[i]);
     }
 }
@@ -394,7 +393,7 @@ void GVULKANAPI::createSemaphores() {
     imageAvailableSemaphores.resize(maxFramesInFlight);
     renderFinishedSemaphores.resize(maxFramesInFlight);
     inFlightFences.resize(maxFramesInFlight);
-    imagesInFlight.resize(swapChainImages.size(), VK_NULL_HANDLE);
+    imagesInFlight.resize(vulkanSwapChain.size(), VK_NULL_HANDLE);
     
     VkSemaphoreCreateInfo semaphoreInfo{};
     semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
@@ -441,7 +440,7 @@ void GVULKANAPI::createCommandBuffers() {
         renderPassInfo.renderPass = renderPass;
         renderPassInfo.framebuffer = swapChainFramebuffers[i];
         renderPassInfo.renderArea.offset = {0, 0};
-        renderPassInfo.renderArea.extent = swapChainExtent;
+        renderPassInfo.renderArea.extent = vulkanSwapChain.getExtent();
         
         VkClearValue clearColor = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
         renderPassInfo.clearValueCount = 1;
@@ -491,7 +490,7 @@ void GVULKANAPI::createDescriptorSetLayout() {
 
 void GVULKANAPI::createRenderPass() {
     VkAttachmentDescription colorAttachment{};
-    colorAttachment.format = swapChainImageFormat;
+    colorAttachment.format = vulkanSwapChain.getImagesFormat();
     colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
     colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -566,6 +565,7 @@ void GVULKANAPI::createGraphicsPipeline() {
     inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
     inputAssembly.primitiveRestartEnable = VK_FALSE;
 
+    VkExtent2D swapChainExtent = vulkanSwapChain.getExtent();
     VkViewport viewport{};
     viewport.x = 0.0f;
     viewport.y = 0.0f;
@@ -664,112 +664,17 @@ VkShaderModule GVULKANAPI::createShaderModule(const std::vector<uint8_t>& code) 
 
 #pragma mark - Swap -
 
-void GVULKANAPI::createSwapChain(const uint32_t frameWidth, const uint32_t frameHeight) {
-    SwapChainSupportDetails swapChainSupport = device.querySwapChainSupport(metalSurface);
-
-    VkSurfaceFormatKHR surfaceFormat = selectSwapSurfaceFormat(swapChainSupport.formats);
-    VkExtent2D extent = selectSwapExtent(swapChainSupport.surfaceCapabilities, frameWidth, frameHeight);
-    
-    uint32_t count = swapChainSupport.surfaceCapabilities.minImageCount + 1;
-    if (swapChainSupport.surfaceCapabilities.maxImageCount > 0 && count > swapChainSupport.surfaceCapabilities.maxImageCount) {
-        count = swapChainSupport.surfaceCapabilities.maxImageCount;
-    }
-
-    VkSwapchainCreateInfoKHR swapChainInfo{};
-    swapChainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-    swapChainInfo.surface = metalSurface;
-    swapChainInfo.minImageCount = count;
-    swapChainInfo.imageFormat = surfaceFormat.format;
-    swapChainInfo.imageColorSpace = surfaceFormat.colorSpace;
-    swapChainInfo.imageExtent = extent;
-    swapChainInfo.imageArrayLayers = 1;
-    swapChainInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-    if (!device.presentEqualGraphics()) {
-        swapChainInfo.queueFamilyIndexCount = 2;
-    }
-    swapChainInfo.imageSharingMode = device.presentEqualGraphics() ? VK_SHARING_MODE_CONCURRENT : VK_SHARING_MODE_EXCLUSIVE;
-    swapChainInfo.preTransform = swapChainSupport.surfaceCapabilities.currentTransform;
-    swapChainInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-    swapChainInfo.presentMode = selectSwapPresentMode(swapChainSupport.presentModes);
-    swapChainInfo.clipped = VK_TRUE;
-    if (vkCreateSwapchainKHR(device.getLogicalDevice(), &swapChainInfo, nullptr, &swapChain) != VK_SUCCESS) {
-        log.error("failed to create swap chain\n");
-    }
-    
-    swapChainImageFormat = surfaceFormat.format;
-    swapChainExtent = extent;
-    vkGetSwapchainImagesKHR(device.getLogicalDevice(), swapChain, &count, nullptr);
-    swapChainImages.resize(count);
-    vkGetSwapchainImagesKHR(device.getLogicalDevice(), swapChain, &count, swapChainImages.data());
-}
-
-VkExtent2D GVULKANAPI::selectSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities, const uint32_t frameWidth, const uint32_t frameHeight) {
-    VkExtent2D actualExtent = {frameWidth, frameHeight};
-    
-    if (surfaceCapabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
-        return surfaceCapabilities.currentExtent;
-    } else {
-        actualExtent.width = std::max(surfaceCapabilities.minImageExtent.width, std::min(surfaceCapabilities.maxImageExtent.width, actualExtent.width));
-        actualExtent.height = std::max(surfaceCapabilities.minImageExtent.height, std::min(surfaceCapabilities.maxImageExtent.height, actualExtent.height));
-    }
-    
-    return actualExtent;
-}
-
-VkSurfaceFormatKHR GVULKANAPI::selectSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) {
-    for (const auto& availableFormat : availableFormats) {
-        if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB &&
-            availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
-            return availableFormat;
-        }
-    }
-
-    return availableFormats[0];
-}
-
-VkPresentModeKHR GVULKANAPI::selectSwapPresentMode(const std::vector<VkPresentModeKHR>& presentModesArray) {
-    for (const auto& mode : presentModesArray) {
-        if (mode == VK_PRESENT_MODE_MAILBOX_KHR) {
-            return mode;
-        }
-    }
-
-    return VK_PRESENT_MODE_FIFO_KHR;
-}
-
-void GVULKANAPI::createImageViews() {
-    swapChainImageViews.resize(swapChainImages.size());
-    for (size_t i = 0; i < swapChainImages.size(); i++) {
-        VkImageViewCreateInfo imageViewInfo{};
-        
-        imageViewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-        imageViewInfo.image = swapChainImages[i];
-        imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-        imageViewInfo.format = swapChainImageFormat;
-        imageViewInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
-        imageViewInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
-        imageViewInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
-        imageViewInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
-        imageViewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        imageViewInfo.subresourceRange.baseMipLevel = 0;
-        imageViewInfo.subresourceRange.levelCount = 1;
-        imageViewInfo.subresourceRange.baseArrayLayer = 0;
-        imageViewInfo.subresourceRange.layerCount = 1;
-        
-        if (vkCreateImageView(device.getLogicalDevice(), &imageViewInfo, nullptr, &swapChainImageViews[i]) != VK_SUCCESS) {
-            printf("GaneshaEngine: failed to create image view\n");
-        }
-    }
-}
-
 void GVULKANAPI::createFramebuffers() {
+    auto swapChainImageViews = vulkanSwapChain.getImageViewsArray();
+    VkExtent2D swapChainExtent = vulkanSwapChain.getExtent();
+
     swapChainFramebuffers.resize(swapChainImageViews.size());
     for (size_t i = 0; i < swapChainImageViews.size(); i++) {
         VkImageView attachments[] = {
             swapChainImageViews[i]
         };
 
-        VkFramebufferCreateInfo framebufferInfo{};
+        VkFramebufferCreateInfo framebufferInfo = { };
         framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
         framebufferInfo.renderPass = renderPass;
         framebufferInfo.attachmentCount = 1;
