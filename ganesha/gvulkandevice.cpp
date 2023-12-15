@@ -114,7 +114,6 @@ bool GVULKANDevice::checkDeviceCapability(const VkPhysicalDevice& device) {
         return false;
     }
     
-    printf("GaneshaEngine: using this device %s\n", deviceProperties.deviceName);
     return true;
 }
 

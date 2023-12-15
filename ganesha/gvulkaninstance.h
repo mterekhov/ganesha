@@ -34,7 +34,7 @@ private:
     VkDebugUtilsMessengerEXT debugMessenger;
 
     VkInstanceCreateInfo createInstanceInfo(const VkApplicationInfo& applicationInfo,
-                                            const TCharPointersArray availableValidationLayersList,
+                                            const TCharPointersArray& availableValidationLayersList,
                                             const TCharPointersArray& extensionsNamesArray);
     VkApplicationInfo createApplicationInfo(const std::string& title);
     

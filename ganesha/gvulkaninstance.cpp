@@ -21,10 +21,11 @@ GVULKANInstance::~GVULKANInstance() {
 void GVULKANInstance::createInstance(const std::string& applicationName, const TCharPointersArray& khronosValidationLayers) {
     VkApplicationInfo applicationInfo = createApplicationInfo(applicationName);
     TCharPointersArray extensionsNamesArray = collectInstanceExtensionsNames();
-    TCharPointersArray availableValidationLayersList = collectValidationLayers(khronosValidationLayers);
+    TCharPointersArray availableValidationLayersArray = collectValidationLayers(khronosValidationLayers);
 
-    VkInstanceCreateInfo instanceInfo = createInstanceInfo(applicationInfo, availableValidationLayersList, extensionsNamesArray);
-    if (vkCreateInstance(&instanceInfo, nullptr, &vulkanInstance) != VK_SUCCESS) {
+    VkInstanceCreateInfo instanceInfo = createInstanceInfo(applicationInfo, availableValidationLayersArray, extensionsNamesArray);
+    auto result = vkCreateInstance(&instanceInfo, nullptr, &vulkanInstance);
+    if (result != VK_SUCCESS) {
         log.error("error creating VULKAN instance\n");
     }
     
@@ -34,7 +35,7 @@ void GVULKANInstance::createInstance(const std::string& applicationName, const T
         delete [] name;
     }
 
-    if (!availableValidationLayersList.empty()) {
+    if (!availableValidationLayersArray.empty()) {
         if (createDebugUtilsMessenger(vulkanInstance, &debugUtilsMessengerInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
             log.error("failed to set up debug messenger\n");
         }
@@ -64,8 +65,10 @@ TCharPointersArray GVULKANInstance::collectValidationLayers(const TCharPointersA
         return supportedValidationLayersArray;
     }
 
-    for (const auto layerName : layersNamesArray) {
-        for (const auto& layerProperties : availableLayersArray) {
+    log.info("validation layers:\n");
+    for (const auto& layerProperties : availableLayersArray) {
+        log.info("\t%s\n", layerProperties.layerName);
+        for (const auto layerName : layersNamesArray) {
             if (strcmp(layerName, layerProperties.layerName) == 0) {
                 supportedValidationLayersArray.push_back(layerName);
             }
@@ -90,18 +93,19 @@ TCharPointersArray GVULKANInstance::collectInstanceExtensionsNames() {
     for (const auto& extension : instanceExtensionsArray) {
         char *newString = new char[VK_MAX_EXTENSION_NAME_SIZE];
         memcpy(newString, extension.extensionName, VK_MAX_EXTENSION_NAME_SIZE);
-        namesList.insert(namesList.end(), newString);
+        namesList.emplace_back(newString);
     }
-    
+
     return namesList;
 }
 
 VkInstanceCreateInfo GVULKANInstance::createInstanceInfo(const VkApplicationInfo& applicationInfo,
-                                                         const TCharPointersArray availableValidationLayersList,
+                                                         const TCharPointersArray& availableValidationLayersList,
                                                          const TCharPointersArray& extensionsNamesArray) {
     VkInstanceCreateInfo instanceInfo = {};
     
     instanceInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+    instanceInfo.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
     instanceInfo.enabledExtensionCount = static_cast<uint32_t>(extensionsNamesArray.size());
     instanceInfo.ppEnabledExtensionNames = extensionsNamesArray.data();
     instanceInfo.pApplicationInfo = &applicationInfo;
