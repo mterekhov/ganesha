@@ -27,7 +27,7 @@ GVULKANDevice::~GVULKANDevice() {
 
 #pragma mark - Public -
 
-void GVULKANDevice::createPhysicalDevice(GVULKANInstance &vulkanInstance, VkSurfaceKHR &metalSurface) {
+void GVULKANDevice::createPhysicalDevice(GVULKANInstance &vulkanInstance) {
     uint32_t count = 0;
     vkEnumeratePhysicalDevices(vulkanInstance.getVulkanInstance(), &count, nullptr);
     
@@ -39,31 +39,15 @@ void GVULKANDevice::createPhysicalDevice(GVULKANInstance &vulkanInstance, VkSurf
             break;
         }
     }
-    
+}
+
+void GVULKANDevice::createLogicalDevice(VkSurfaceKHR &metalSurface) {
     findQueuesIndeces(metalSurface);
-}
-
-VkPhysicalDevice& GVULKANDevice::getPhysicalDevice() {
-    return physicalDevice;
-}
-
-VkDevice& GVULKANDevice::getLogicalDevice() {
-    return logicalDevice;
-}
-
-VkQueue& GVULKANDevice::getGraphicsQueue() {
-    return graphicsQueue;
-}
-
-VkQueue& GVULKANDevice::getPresentQueue() {
-    return presentQueue;
-}
-
-void GVULKANDevice::createLogicalDevice() {
-    std::vector<VkDeviceQueueCreateInfo> queueCreateInfosList;
     std::set<int32_t> uniqueQueueFamilies = {graphicQueueFamilyIndex, presentQueueFamilyIndex};
-    float queuePriority = 1.0f;
-    for (int queueIndex : uniqueQueueFamilies) {
+    TFloat queuePriority = 1.0f;
+
+    std::vector<VkDeviceQueueCreateInfo> queueCreateInfosList;
+    for (int32_t queueIndex : uniqueQueueFamilies) {
         VkDeviceQueueCreateInfo deviceQueueInfo = {};
         
         deviceQueueInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
@@ -88,7 +72,7 @@ void GVULKANDevice::createLogicalDevice() {
     }
     
     if (vkCreateDevice(physicalDevice, &deviceInfo, nullptr, &logicalDevice) != VK_SUCCESS) {
-        printf("GaneshaEngine: error creating logical device\n");
+        log.error("error creating logical device\n");
     }
 
     vkGetDeviceQueue(logicalDevice, graphicQueueFamilyIndex, 0, &graphicsQueue);
@@ -106,6 +90,22 @@ VkCommandPool GVULKANDevice::createCommandPool() {
     }
     
     return commandPool;
+}
+
+VkPhysicalDevice& GVULKANDevice::getPhysicalDevice() {
+    return physicalDevice;
+}
+
+VkDevice& GVULKANDevice::getLogicalDevice() {
+    return logicalDevice;
+}
+
+VkQueue& GVULKANDevice::getGraphicsQueue() {
+    return graphicsQueue;
+}
+
+VkQueue& GVULKANDevice::getPresentQueue() {
+    return presentQueue;
 }
 
 void GVULKANDevice::destroyDevice() {

@@ -42,12 +42,12 @@ void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint
     metalSurface = createSurface(metalLayer);
     
     //  creates physicalDevice
-    device.createPhysicalDevice(vulkanInstance, metalSurface);
+    device.createPhysicalDevice(vulkanInstance);
 
     querySwapChainSupport(device.getPhysicalDevice());
 
     //  creates logicalDevice
-    device.createLogicalDevice();
+    device.createLogicalDevice(metalSurface);
     
     createSwapChain();
     createImageViews();

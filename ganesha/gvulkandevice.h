@@ -21,8 +21,8 @@ public:
     GVULKANDevice(GLog& log);
     ~GVULKANDevice();
 
-    void createPhysicalDevice(GVULKANInstance &vulkanInstance, VkSurfaceKHR &metalSurface);
-    void createLogicalDevice();
+    void createPhysicalDevice(GVULKANInstance &vulkanInstance);
+    void createLogicalDevice(VkSurfaceKHR &metalSurface);
     VkCommandPool createCommandPool();
     void destroyDevice();
     
