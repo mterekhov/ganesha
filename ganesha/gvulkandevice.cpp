@@ -34,7 +34,7 @@ void GVULKANDevice::createPhysicalDevice(GVULKANInstance &vulkanInstance, VkSurf
     std::vector<VkPhysicalDevice> physicalDevicesArray(count);
     vkEnumeratePhysicalDevices(vulkanInstance.getVulkanInstance(), &count, physicalDevicesArray.data());
     for (const auto& device : physicalDevicesArray) {
-        if (checkPhysicalDeviceCapability(physicalDevice)) {
+        if (checkPhysicalDeviceCapability(device)) {
             physicalDevice = device;
             break;
         }
@@ -143,25 +143,34 @@ bool GVULKANDevice::checkDeviceExtensionSupport(VkPhysicalDevice& device) {
 void GVULKANDevice::findQueuesIndeces(VkSurfaceKHR& metalSurface) {
     uint32_t count = 0;
     vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &count, nullptr);
-    std::vector<VkQueueFamilyProperties> queueFamiliesList(count);
-    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &count, queueFamiliesList.data());
+    std::vector<VkQueueFamilyProperties> queueFamiliesArray(count);
+    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &count, queueFamiliesArray.data());
 
-    for (uint32_t i = 0; i < queueFamiliesList.size(); i++) {
-        const auto& queueFamily = queueFamiliesList[i];
-        if ((queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)) {
-            graphicQueueFamilyIndex = i;
-        }
-        
-        VkBool32 presentSupport = false;
-        vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, i, metalSurface, &presentSupport);
-        if (presentSupport) {
-            presentQueueFamilyIndex = i;
-        }
+    graphicQueueFamilyIndex = findGraphicsQueueIndex(queueFamiliesArray);
+    presentQueueFamilyIndex = findPresentQueueIndex(queueFamiliesArray, metalSurface);
+}
 
-        if (presentQueueFamilyIndex > 0 && graphicQueueFamilyIndex > 0) {
-            return;
+int32_t GVULKANDevice::findGraphicsQueueIndex(const std::vector<VkQueueFamilyProperties>& queueFamiliesArray) {
+    for (uint32_t i = 0; i < queueFamiliesArray.size(); i++) {
+        const auto& properties = queueFamiliesArray[i];
+        if ((properties.queueFlags & VK_QUEUE_GRAPHICS_BIT)) {
+            return i;
         }
     }
+    
+    return -1;
+}
+
+int32_t GVULKANDevice::findPresentQueueIndex(const std::vector<VkQueueFamilyProperties>& queueFamiliesArray, VkSurfaceKHR& metalSurface) {
+    for (int32_t familyIndex = 0; familyIndex < queueFamiliesArray.size(); familyIndex++) {
+        VkBool32 presentSupport = false;
+        vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, familyIndex, metalSurface, &presentSupport);
+        if (presentSupport) {
+            return familyIndex;
+        }
+    }
+    
+    return -1;
 }
 
 }   //  namespace spcGaneshaEngine

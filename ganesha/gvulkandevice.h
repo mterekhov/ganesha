@@ -34,6 +34,8 @@ public:
 private:
     bool checkPhysicalDeviceCapability(const VkPhysicalDevice& device);
     bool checkDeviceExtensionSupport(VkPhysicalDevice& device);
+    int32_t findGraphicsQueueIndex(const std::vector<VkQueueFamilyProperties>& queuePropertiesArray);
+    int32_t findPresentQueueIndex(const std::vector<VkQueueFamilyProperties>& queuePropertiesArray, VkSurfaceKHR& metalSurface);
     void findQueuesIndeces(VkSurfaceKHR& metalSurface);
     void setupLogicalDevice();
 
