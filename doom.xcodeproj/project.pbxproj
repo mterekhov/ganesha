@@ -45,6 +45,8 @@
 		DEC767A32B2B9B0C00E97CE2 /* vulkan.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEC767A22B2B9B0C00E97CE2 /* vulkan.framework */; };
 		DEC767A42B2B9B0C00E97CE2 /* vulkan.framework in Embed Libraries */ = {isa = PBXBuildFile; fileRef = DEC767A22B2B9B0C00E97CE2 /* vulkan.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DEC767AF2B2BBD6000E97CE2 /* gvulkaninstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEC767AE2B2BBD6000E97CE2 /* gvulkaninstance.cpp */; };
+		DEC767B42B2CB2E100E97CE2 /* gvulkanimageview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEC767B22B2CB2E100E97CE2 /* gvulkanimageview.cpp */; };
+		DEC767B52B2CB2E100E97CE2 /* gvulkanimageview.h in Headers */ = {isa = PBXBuildFile; fileRef = DEC767B32B2CB2E100E97CE2 /* gvulkanimageview.h */; };
 		DEEFDBD92B28420B0038E297 /* glog.h in Headers */ = {isa = PBXBuildFile; fileRef = DEEFDBD72B28420B0038E297 /* glog.h */; };
 		DEEFDBDA2B28420B0038E297 /* glog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEEFDBD82B28420B0038E297 /* glog.cpp */; };
 /* End PBXBuildFile section */
@@ -128,6 +130,8 @@
 		DEC767A22B2B9B0C00E97CE2 /* vulkan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vulkan.framework; path = "vulkansdk-macos-1.3.268.1/macOS/Frameworks/vulkan.framework"; sourceTree = "<group>"; };
 		DEC767AE2B2BBD6000E97CE2 /* gvulkaninstance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gvulkaninstance.cpp; path = ganesha/gvulkaninstance.cpp; sourceTree = "<group>"; };
 		DEC767B02B2C635500E97CE2 /* temp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = temp.cpp; path = ganesha/temp.cpp; sourceTree = "<group>"; };
+		DEC767B22B2CB2E100E97CE2 /* gvulkanimageview.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gvulkanimageview.cpp; path = ganesha/gvulkanimageview.cpp; sourceTree = "<group>"; };
+		DEC767B32B2CB2E100E97CE2 /* gvulkanimageview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvulkanimageview.h; path = ganesha/gvulkanimageview.h; sourceTree = "<group>"; };
 		DEEFDBD72B28420B0038E297 /* glog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glog.h; path = ganesha/glog.h; sourceTree = "<group>"; };
 		DEEFDBD82B28420B0038E297 /* glog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glog.cpp; path = ganesha/glog.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -265,6 +269,8 @@
 		DEA031702B27BDD500F1BB36 /* VULKAN */ = {
 			isa = PBXGroup;
 			children = (
+				DEC767B32B2CB2E100E97CE2 /* gvulkanimageview.h */,
+				DEC767B22B2CB2E100E97CE2 /* gvulkanimageview.cpp */,
 				DEA031462B27BD0900F1BB36 /* gvulkaninstance.h */,
 				DEC767AE2B2BBD6000E97CE2 /* gvulkaninstance.cpp */,
 				DEA0314C2B27BD0A00F1BB36 /* gvulkanapi.h */,
@@ -291,6 +297,7 @@
 				DEA031722B27C10400F1BB36 /* ggraphicsapiprotocol.h in Headers */,
 				DEEFDBD92B28420B0038E297 /* glog.h in Headers */,
 				DEA0315B2B27BD0A00F1BB36 /* gvector.h in Headers */,
+				DEC767B52B2CB2E100E97CE2 /* gvulkanimageview.h in Headers */,
 				DEA031582B27BD0A00F1BB36 /* gpoint.h in Headers */,
 				DEA031662B27BD0A00F1BB36 /* gpoint2d.h in Headers */,
 				DEA031682B27BD0A00F1BB36 /* gvulkanapi.h in Headers */,
@@ -423,6 +430,7 @@
 				DEC767AF2B2BBD6000E97CE2 /* gvulkaninstance.cpp in Sources */,
 				DEA0315F2B27BD0A00F1BB36 /* gcolor.cpp in Sources */,
 				DEA031672B27BD0A00F1BB36 /* gvulkandevice.cpp in Sources */,
+				DEC767B42B2CB2E100E97CE2 /* gvulkanimageview.cpp in Sources */,
 				DEA031602B27BD0A00F1BB36 /* gpoint2d.cpp in Sources */,
 				DEEFDBDA2B28420B0038E297 /* glog.cpp in Sources */,
 				DEA0316C2B27BD0A00F1BB36 /* gpoint.cpp in Sources */,
