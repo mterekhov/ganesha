@@ -47,11 +47,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint
     metalSurface = createSurface(metalLayer);
         
     //  creates physicalDevice
-    vulkanDevice.selectPhysicalDevice(vulkanInstance, metalSurface);
-
-    //  creates logicalDevice
-    vulkanDevice.createLogicalDevice(metalSurface);
-    
+    vulkanDevice.createDevice(vulkanInstance, metalSurface);
     vulkanSwapChain.createSwapChain(frameWidth, frameHeight, vulkanDevice, metalSurface);
 
     createDescriptorSetLayout();
@@ -91,7 +87,7 @@ void GVULKANAPI::destroyAPI() {
     vkDestroyBuffer(vulkanDevice.getLogicalDevice(), indexBuffer, nullptr);
     vkFreeMemory(vulkanDevice.getLogicalDevice(), indexBufferMemory, nullptr);
     
-    vulkanDevice.destroyLogicalDevice();
+    vulkanDevice.destroyDevice();
     vkDestroySurfaceKHR(vulkanInstance.getVulkanInstance(), metalSurface, nullptr);
     vulkanInstance.destroyInstance();
 }

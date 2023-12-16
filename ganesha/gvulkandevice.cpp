@@ -25,13 +25,15 @@ GVULKANDevice::~GVULKANDevice() {
     
 }
 
-#pragma mark - Public -
-
-bool GVULKANDevice::presentationIsEqualToGraphics() {
-    return graphicQueueFamilyIndex == presentQueueFamilyIndex;
+void GVULKANDevice::createDevice(GVULKANInstance &vulkanInstance, VkSurfaceKHR &surface) {
+    physicalDevice = selectPhysicalDevice(vulkanInstance, surface);
+    logicalDevice = createLogicalDevice(physicalDevice, surface);
+    
+    vkGetDeviceQueue(logicalDevice, graphicQueueFamilyIndex, 0, &graphicsQueue);
+    vkGetDeviceQueue(logicalDevice, presentQueueFamilyIndex, 0, &presentQueue);
 }
 
-void GVULKANDevice::selectPhysicalDevice(GVULKANInstance &vulkanInstance, VkSurfaceKHR &surface) {
+VkPhysicalDevice GVULKANDevice::selectPhysicalDevice(GVULKANInstance &vulkanInstance, VkSurfaceKHR &surface) {
     uint32_t count = 0;
     vkEnumeratePhysicalDevices(vulkanInstance.getVulkanInstance(), &count, nullptr);
     std::vector<VkPhysicalDevice> physicalDevicesArray(count);
@@ -39,13 +41,14 @@ void GVULKANDevice::selectPhysicalDevice(GVULKANInstance &vulkanInstance, VkSurf
     
     for (const auto& device : physicalDevicesArray) {
         if (checkPhysicalDeviceCapability(device, surface)) {
-            physicalDevice = device;
-            break;
+            return device;
         }
     }
+    
+    return physicalDevicesArray[0];
 }
 
-void GVULKANDevice::createLogicalDevice(VkSurfaceKHR &metalSurface) {
+VkDevice GVULKANDevice::createLogicalDevice(VkPhysicalDevice& device, VkSurfaceKHR &metalSurface) {
     findQueuesIndeces(metalSurface);
     std::set<int32_t> uniqueQueueFamilies = { graphicQueueFamilyIndex, presentQueueFamilyIndex };
     TFloat queuePriority = 1.0f;
@@ -75,12 +78,16 @@ void GVULKANDevice::createLogicalDevice(VkSurfaceKHR &metalSurface) {
         logicalDeviceInfo.ppEnabledExtensionNames = deviceExtensions.data();
     }
     
-    if (vkCreateDevice(physicalDevice, &logicalDeviceInfo, nullptr, &logicalDevice) != VK_SUCCESS) {
+    VkDevice newDevice;
+    if (vkCreateDevice(physicalDevice, &logicalDeviceInfo, nullptr, &newDevice) != VK_SUCCESS) {
         log.error("error creating logical device\n");
     }
 
-    vkGetDeviceQueue(logicalDevice, graphicQueueFamilyIndex, 0, &graphicsQueue);
-    vkGetDeviceQueue(logicalDevice, presentQueueFamilyIndex, 0, &presentQueue);
+    return newDevice;
+}
+
+void GVULKANDevice::destroyDevice() {
+    vkDestroyDevice(logicalDevice, nullptr);
 }
 
 VkCommandPool GVULKANDevice::createCommandPool() {
@@ -94,6 +101,10 @@ VkCommandPool GVULKANDevice::createCommandPool() {
     }
     
     return commandPool;
+}
+
+bool GVULKANDevice::presentationIsEqualToGraphics() {
+    return graphicQueueFamilyIndex == presentQueueFamilyIndex;
 }
 
 VkPhysicalDevice& GVULKANDevice::getPhysicalDevice() {
@@ -114,10 +125,6 @@ VkQueue& GVULKANDevice::getPresentQueue() {
 
 std::vector<uint32_t> GVULKANDevice::getQueuesIndecesArray() {
     return { static_cast<uint32_t>(graphicQueueFamilyIndex), static_cast<uint32_t>(presentQueueFamilyIndex) };
-}
-
-void GVULKANDevice::destroyLogicalDevice() {
-    vkDestroyDevice(logicalDevice, nullptr);
 }
 
 SwapChainSupportDetails GVULKANDevice::querySwapChainSupport(VkSurfaceKHR& surface) {
