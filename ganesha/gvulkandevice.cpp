@@ -27,7 +27,7 @@ GVULKANDevice::~GVULKANDevice() {
 
 #pragma mark - Public -
 
-bool GVULKANDevice::presentEqualGraphics() {
+bool GVULKANDevice::presentationIsEqualToGraphics() {
     return graphicQueueFamilyIndex == presentQueueFamilyIndex;
 }
 
@@ -47,7 +47,7 @@ void GVULKANDevice::selectPhysicalDevice(GVULKANInstance &vulkanInstance, VkSurf
 
 void GVULKANDevice::createLogicalDevice(VkSurfaceKHR &metalSurface) {
     findQueuesIndeces(metalSurface);
-    std::set<int32_t> uniqueQueueFamilies = {graphicQueueFamilyIndex, presentQueueFamilyIndex};
+    std::set<int32_t> uniqueQueueFamilies = { graphicQueueFamilyIndex, presentQueueFamilyIndex };
     TFloat queuePriority = 1.0f;
 
     std::vector<VkDeviceQueueCreateInfo> queueCreateInfosList;
@@ -110,6 +110,10 @@ VkQueue& GVULKANDevice::getGraphicsQueue() {
 
 VkQueue& GVULKANDevice::getPresentQueue() {
     return presentQueue;
+}
+
+std::vector<uint32_t> GVULKANDevice::getQueuesIndecesArray() {
+    return { static_cast<uint32_t>(graphicQueueFamilyIndex), static_cast<uint32_t>(presentQueueFamilyIndex) };
 }
 
 void GVULKANDevice::destroyLogicalDevice() {

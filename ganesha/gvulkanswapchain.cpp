@@ -35,10 +35,19 @@ void GVULKANSwapChain::createSwapChain(const uint32_t frameWidth, const uint32_t
     swapChainInfo.imageExtent = extent;
     swapChainInfo.imageArrayLayers = 1;
     swapChainInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-    if (!vulkanDevice.presentEqualGraphics()) {
-        swapChainInfo.queueFamilyIndexCount = 2;
+    
+    std::vector<uint32_t> queueFamilyIndexArray;
+    if (vulkanDevice.presentationIsEqualToGraphics()) {
+        swapChainInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+        swapChainInfo.queueFamilyIndexCount = 0;
+        swapChainInfo.pQueueFamilyIndices = nullptr;
     }
-    swapChainInfo.imageSharingMode = vulkanDevice.presentEqualGraphics() ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT;
+    else {
+        queueFamilyIndexArray = vulkanDevice.getQueuesIndecesArray();
+        swapChainInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+        swapChainInfo.queueFamilyIndexCount = static_cast<uint32_t>(queueFamilyIndexArray.size());
+        swapChainInfo.pQueueFamilyIndices = queueFamilyIndexArray.data();
+    }
     swapChainInfo.preTransform = supportDetails.surfaceCapabilities.currentTransform;
     swapChainInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
     swapChainInfo.presentMode = selectSwapPresentMode(supportDetails.presentModes);

@@ -39,7 +39,9 @@ public:
     VkQueue& getGraphicsQueue();
     VkQueue& getPresentQueue();
     
-    bool presentEqualGraphics();
+    std::vector<uint32_t> getQueuesIndecesArray();
+    
+    bool presentationIsEqualToGraphics();
 
 private:
     SwapChainSupportDetails querySwapChainSupport(const VkPhysicalDevice& device, VkSurfaceKHR& surface);
