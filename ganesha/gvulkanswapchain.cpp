@@ -83,7 +83,6 @@ VkFormat& GVULKANSwapChain::getImagesFormat() {
     return imageFormat;
 }
 
-
 #pragma mark - Routine -
 
 std::vector<VkImageView> GVULKANSwapChain::createImageViews(VkDevice& logicalDevice, std::vector<VkImage>& swapChainImagesArray) {
