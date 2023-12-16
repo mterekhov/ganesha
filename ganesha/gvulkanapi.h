@@ -9,6 +9,7 @@
 #include "gvulkaninstance.h"
 #include "gvulkandevice.h"
 #include "gvulkanswapchain.h"
+#include "gvulkanpipeline.h"
 #include "gmatrix.h"
 
 namespace spcGaneshaEngine {
@@ -31,6 +32,8 @@ private:
     GVULKANDevice device;
     GVULKANInstance vulkanInstance;
     GVULKANSwapChain vulkanSwapChain;
+    GVULKANPipeline vulkanPipeline;
+    
     VkSurfaceKHR metalSurface;
 
     GMatrix projectionMatrix;
@@ -51,18 +54,19 @@ private:
     VkDeviceMemory vertexBufferMemory;
     VkBuffer indexBuffer;
     VkDeviceMemory indexBufferMemory;
+    
     std::vector<VkBuffer> uniformBuffers;
     std::vector<VkDeviceMemory> uniformBuffersMemory;
     
     VkDescriptorPool descriptorPool;
     std::vector<VkDescriptorSet> descriptorSets;
-    
+    VkDescriptorSetLayout descriptorSetLayout;
+
     std::vector<VkFramebuffer> swapChainFramebuffers;
 
-    VkDescriptorSetLayout descriptorSetLayout;
     VkPipelineLayout pipelineLayout;
-    VkRenderPass renderPass;
     VkPipeline graphicsPipeline;
+    VkRenderPass renderPass;
     
     uint32_t maxFramesInFlight = 2;
 
