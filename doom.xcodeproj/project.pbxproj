@@ -271,10 +271,10 @@
 		DEA031702B27BDD500F1BB36 /* VULKAN */ = {
 			isa = PBXGroup;
 			children = (
-				DEC767BA2B2CF29400E97CE2 /* gvulkanpipeline.h */,
-				DEC767BB2B2CF29400E97CE2 /* gvulkanpipeline.cpp */,
 				DEA0314C2B27BD0A00F1BB36 /* gvulkanapi.h */,
 				DEA031512B27BD0A00F1BB36 /* gvulkanapi.cpp */,
+				DEC767BA2B2CF29400E97CE2 /* gvulkanpipeline.h */,
+				DEC767BB2B2CF29400E97CE2 /* gvulkanpipeline.cpp */,
 				DEC767B62B2CB93100E97CE2 /* gvulkanswapchain.h */,
 				DEC767B72B2CB93100E97CE2 /* gvulkanswapchain.cpp */,
 				DEA031462B27BD0900F1BB36 /* gvulkaninstance.h */,

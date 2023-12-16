@@ -26,12 +26,14 @@ public:
 
     /// returns reference to created VULKAN instance object
     VkInstance& getVulkanInstance();
+    void addInstanceExtensionsToAvoid(const TStringsArray& extensions);
     
 private:
     GLog& log;
     VkInstance vulkanInstance;
     VkDebugUtilsMessengerCreateInfoEXT debugUtilsMessengerInfo;
     VkDebugUtilsMessengerEXT debugMessenger;
+    TStringsArray removeExtensions;
 
     VkInstanceCreateInfo createInstanceInfo(const VkApplicationInfo& applicationInfo,
                                             const TCharPointersArray& availableValidationLayersList,
@@ -40,7 +42,8 @@ private:
     
     TCharPointersArray collectValidationLayers(const TCharPointersArray& layersNamesArray);
     TCharPointersArray collectInstanceExtensionsNames();
-
+    bool shouldUseInstanceExtension(const char *instanceExtensionName);
+    
     VkDebugUtilsMessengerCreateInfoEXT createDebugUtilsMessengerInfo();
     VkResult createDebugUtilsMessenger(VkInstance instance,
                                        const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,

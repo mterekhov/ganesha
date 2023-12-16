@@ -50,6 +50,10 @@ VkInstance& GVULKANInstance::getVulkanInstance() {
     return vulkanInstance;
 }
 
+void GVULKANInstance::addInstanceExtensionsToAvoid(const TStringsArray& extensions) {
+    removeExtensions.insert(removeExtensions.end(), extensions.begin(), extensions.end());
+}
+
 #pragma mark - Routine -
 
 TCharPointersArray GVULKANInstance::collectValidationLayers(const TCharPointersArray& layersNamesArray) {
@@ -90,12 +94,25 @@ TCharPointersArray GVULKANInstance::collectInstanceExtensionsNames() {
 
     //  Collect names
     for (const auto& extension : instanceExtensionsArray) {
+        if (!shouldUseInstanceExtension(extension.extensionName)) {
+            continue;
+        }
         char *newString = new char[VK_MAX_EXTENSION_NAME_SIZE];
         memcpy(newString, extension.extensionName, VK_MAX_EXTENSION_NAME_SIZE);
         namesList.emplace_back(newString);
     }
 
     return namesList;
+}
+
+bool GVULKANInstance::shouldUseInstanceExtension(const char *instanceExtensionName) {
+    for (std::string avoidExtension : removeExtensions) {
+        if (strcmp(instanceExtensionName, avoidExtension.c_str()) == 0) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 VkInstanceCreateInfo GVULKANInstance::createInstanceInfo(const VkApplicationInfo& applicationInfo,
