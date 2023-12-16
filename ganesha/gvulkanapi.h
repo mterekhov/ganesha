@@ -29,7 +29,7 @@ public:
 
 private:
     GLog log;
-    GVULKANDevice device;
+    GVULKANDevice vulkanDevice;
     GVULKANInstance vulkanInstance;
     GVULKANSwapChain vulkanSwapChain;
     GVULKANPipeline vulkanPipeline;
@@ -62,12 +62,6 @@ private:
     std::vector<VkDescriptorSet> descriptorSets;
     VkDescriptorSetLayout descriptorSetLayout;
 
-    std::vector<VkFramebuffer> swapChainFramebuffers;
-
-    VkPipelineLayout pipelineLayout;
-    VkPipeline graphicsPipeline;
-    VkRenderPass renderPass;
-    
     uint32_t maxFramesInFlight = 2;
 
     void createDescriptorSetLayout();
@@ -87,9 +81,7 @@ private:
     void createCommandBuffers();
     uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
 
-    void createRenderPass();
     void createGraphicsPipeline();
-    VkShaderModule createShaderModule(const std::vector<uint8_t>& code);
 
     void createSwapChain(const uint32_t frameWidth, const uint32_t frameHeight);
     void createFramebuffers();

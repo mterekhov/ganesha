@@ -16,16 +16,6 @@ GVULKANPipeline::GVULKANPipeline(GLog& log) : log(log) {
 GVULKANPipeline::~GVULKANPipeline() {
 }
 
-VkPipeline GVULKANPipeline::getGraphicsPipeline() {
-    return graphicsPipeline;
-}
-
-void GVULKANPipeline::destroyPipeline(const VkDevice& device) {
-    vkDestroyPipeline(device, graphicsPipeline, nullptr);
-    vkDestroyRenderPass(device, renderPass, nullptr);
-    vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
-}
-
 void GVULKANPipeline::createPipeline(GVULKANDevice& device, GVULKANSwapChain& swapChain) {
     VkPipelineShaderStageCreateInfo vertShaderStageInfo = createShader("vert.spv", VK_SHADER_STAGE_VERTEX_BIT, device.getLogicalDevice());
     VkPipelineShaderStageCreateInfo fragShaderStageInfo = createShader("frag.spv", VK_SHADER_STAGE_FRAGMENT_BIT, device.getLogicalDevice());
@@ -37,11 +27,11 @@ void GVULKANPipeline::createPipeline(GVULKANDevice& device, GVULKANSwapChain& sw
     inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
     inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
     inputAssembly.primitiveRestartEnable = VK_FALSE;
-
+    
     VkPipelineViewportStateCreateInfo viewportState = createViewport(swapChain.getExtent());
     
     VkPipelineRasterizationStateCreateInfo rasterizer = createRasterizer();
-
+    
     VkPipelineMultisampleStateCreateInfo multisampling = { };
     multisampling.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
     multisampling.sampleShadingEnable = VK_FALSE;
@@ -61,7 +51,7 @@ void GVULKANPipeline::createPipeline(GVULKANDevice& device, GVULKANSwapChain& sw
     pipelineInfo.pMultisampleState = &multisampling;
     pipelineInfo.pColorBlendState = &colorBlending;
     pipelineInfo.layout = pipelineLayout;
-    pipelineInfo.renderPass = renderPass;
+    pipelineInfo.renderPass = swapChain.getRenderPass();
     pipelineInfo.subpass = 0;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
     
@@ -74,48 +64,22 @@ void GVULKANPipeline::createPipeline(GVULKANDevice& device, GVULKANSwapChain& sw
     vkDestroyShaderModule(device.getLogicalDevice(), vertShaderStageInfo.module, nullptr);
 }
 
-#pragma mark - Routine -
-
-void GVULKANPipeline::createRenderPass(const VkDevice& device, GVULKANSwapChain& swapChain) {
-    VkAttachmentDescription colorAttachment = { };
-    colorAttachment.format = swapChain.getImagesFormat();
-    colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-    colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+void GVULKANPipeline::destroyPipeline(GVULKANDevice& device) {
+    VkDevice& logicalDevice = device.getLogicalDevice();
     
-    VkAttachmentReference colorAttachmentRef = { };
-    colorAttachmentRef.attachment = 0;
-    colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-    VkSubpassDescription subpass = { };
-    subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-    subpass.colorAttachmentCount = 1;
-    subpass.pColorAttachments = &colorAttachmentRef;
-    
-    VkSubpassDependency dependency = { };
-    dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
-    dependency.dstSubpass = 0;
-    dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-    dependency.srcAccessMask = 0;
-    dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-    dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-
-    VkRenderPassCreateInfo renderPassInfo = { };
-    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-    renderPassInfo.attachmentCount = 1;
-    renderPassInfo.pAttachments = &colorAttachment;
-    renderPassInfo.subpassCount = 1;
-    renderPassInfo.pSubpasses = &subpass;
-    renderPassInfo.dependencyCount =  1;
-    renderPassInfo.pDependencies = &dependency;
-
-    if (vkCreateRenderPass(device, &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS) {
-        log.error("failed to create render pass\n");
-    }
+    vkDestroyPipeline(logicalDevice, graphicsPipeline, nullptr);
+    vkDestroyPipelineLayout(logicalDevice, pipelineLayout, nullptr);
 }
+
+VkPipeline& GVULKANPipeline::getGraphicsPipeline() {
+    return graphicsPipeline;
+}
+
+VkPipelineLayout& GVULKANPipeline::getPipelineLayout() {
+    return pipelineLayout;
+}
+
+#pragma mark - Routine -
 
 VkPipelineVertexInputStateCreateInfo GVULKANPipeline::createVertexInput() {
     VkPipelineVertexInputStateCreateInfo vertexInput = { };
@@ -133,7 +97,7 @@ VkPipelineViewportStateCreateInfo GVULKANPipeline::createViewport(const VkExtent
     VkRect2D scissor = { };
     scissor.offset = {0, 0};
     scissor.extent = extent;
-
+    
     VkViewport viewport = { };
     viewport.x = 0.0f;
     viewport.y = 0.0f;
@@ -190,14 +154,14 @@ VkPipelineLayout GVULKANPipeline::createPipelineLayout(const VkDevice& device) {
     VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
     pipelineLayoutInfo.setLayoutCount = 1; // Optional
-//    pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
+    //    pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
     pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
     
     VkPipelineLayout newPipelineLayout;
     if (vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &newPipelineLayout) != VK_SUCCESS) {
         log.error("error while creating pipeline layout\n");
     }
-
+    
     return newPipelineLayout;
 }
 
@@ -215,13 +179,12 @@ VkPipelineShaderStageCreateInfo GVULKANPipeline::createShader(const std::string 
         log.error("No chance to create shader module\n");
     }
     
-
     VkPipelineShaderStageCreateInfo shaderStageInfo{};
     shaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
     shaderStageInfo.stage = stage;
     shaderStageInfo.module = shaderModule;
     shaderStageInfo.pName = "main";
-
+    
     return shaderStageInfo;
 }
 

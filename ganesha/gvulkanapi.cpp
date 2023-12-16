@@ -16,13 +16,17 @@ static const TCharPointersArray khronosValidationLayers = {
     "VK_LAYER_KHRONOS_validation"
 };
 
+static const TStringsArray avoidInstanceExtensions = {
+    VK_LUNARG_DIRECT_DRIVER_LOADING_EXTENSION_NAME
+};
+
 struct UniformBufferObject {
     GMatrix model;
     GMatrix view;
     GMatrix proj;
 };
 
-GVULKANAPI::GVULKANAPI() : log("Ganesha"), vulkanInstance(log), device(log), vulkanSwapChain(log), vulkanPipeline(log) {
+GVULKANAPI::GVULKANAPI() : log("Ganesha"), vulkanInstance(log), vulkanDevice(log), vulkanSwapChain(log), vulkanPipeline(log) {
     
 }
 
@@ -36,28 +40,27 @@ void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint
     updateFrameSize = false;
 
     //  create VULKAN instance
+    vulkanInstance.addInstanceExtensionsToAvoid(avoidInstanceExtensions);
     vulkanInstance.createInstance("DOOM", khronosValidationLayers);
     
     //  create surface
     metalSurface = createSurface(metalLayer);
-    
+        
     //  creates physicalDevice
-    device.selectPhysicalDevice(vulkanInstance, metalSurface);
+    vulkanDevice.selectPhysicalDevice(vulkanInstance, metalSurface);
 
     //  creates logicalDevice
-    device.createLogicalDevice(metalSurface);
+    vulkanDevice.createLogicalDevice(metalSurface);
     
-    vulkanSwapChain.createSwapChain(frameWidth, frameHeight, device, metalSurface);
+    vulkanSwapChain.createSwapChain(frameWidth, frameHeight, vulkanDevice, metalSurface);
 
-    createRenderPass();
     createDescriptorSetLayout();
-    createGraphicsPipeline();
-    createFramebuffers();
+    vulkanPipeline.createPipeline(vulkanDevice, vulkanSwapChain);
     createUniformBuffers();
     createDescriptorPool();
     createDescriptorSets();
     
-    commandPool = device.createCommandPool();
+    commandPool = vulkanDevice.createCommandPool();
     
     createVertexBuffer();
     createIndicesBuffer();
@@ -67,33 +70,28 @@ void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint
 
 void GVULKANAPI::destroyAPI() {
     for (size_t i = 0; i < maxFramesInFlight; i++) {
-        vkDestroySemaphore(device.getLogicalDevice(), renderFinishedSemaphores[i], nullptr);
-        vkDestroySemaphore(device.getLogicalDevice(), imageAvailableSemaphores[i], nullptr);
-        vkDestroyFence(device.getLogicalDevice(), inFlightFences[i], nullptr);
+        vkDestroySemaphore(vulkanDevice.getLogicalDevice(), renderFinishedSemaphores[i], nullptr);
+        vkDestroySemaphore(vulkanDevice.getLogicalDevice(), imageAvailableSemaphores[i], nullptr);
+        vkDestroyFence(vulkanDevice.getLogicalDevice(), inFlightFences[i], nullptr);
     }
     
-    vkDestroyCommandPool(device.getLogicalDevice(), commandPool, nullptr);
-    for (auto framebuffer : swapChainFramebuffers) {
-        vkDestroyFramebuffer(device.getLogicalDevice(), framebuffer, nullptr);
-    }
-    vkDestroyPipeline(device.getLogicalDevice(), graphicsPipeline, nullptr);
-    vkDestroyPipelineLayout(device.getLogicalDevice(), pipelineLayout, nullptr);
-    vkDestroyRenderPass(device.getLogicalDevice(), renderPass, nullptr);
-    vulkanSwapChain.destroySwapChain(device.getLogicalDevice());
+    vkDestroyCommandPool(vulkanDevice.getLogicalDevice(), commandPool, nullptr);
+    vulkanPipeline.destroyPipeline(vulkanDevice);
+    vulkanSwapChain.destroySwapChain(vulkanDevice);
     
     for (size_t i = 0; i < vulkanSwapChain.size(); i++) {
-        vkDestroyBuffer(device.getLogicalDevice(), uniformBuffers[i], nullptr);
-        vkFreeMemory(device.getLogicalDevice(), uniformBuffersMemory[i], nullptr);
+        vkDestroyBuffer(vulkanDevice.getLogicalDevice(), uniformBuffers[i], nullptr);
+        vkFreeMemory(vulkanDevice.getLogicalDevice(), uniformBuffersMemory[i], nullptr);
     }
-    vkDestroyDescriptorPool(device.getLogicalDevice(), descriptorPool, nullptr);
+    vkDestroyDescriptorPool(vulkanDevice.getLogicalDevice(), descriptorPool, nullptr);
     
-    vkDestroyDescriptorSetLayout(device.getLogicalDevice(), descriptorSetLayout, nullptr);
-    vkDestroyBuffer(device.getLogicalDevice(), vertexBuffer, nullptr);
-    vkFreeMemory(device.getLogicalDevice(), vertexBufferMemory, nullptr);
-    vkDestroyBuffer(device.getLogicalDevice(), indexBuffer, nullptr);
-    vkFreeMemory(device.getLogicalDevice(), indexBufferMemory, nullptr);
+    vkDestroyDescriptorSetLayout(vulkanDevice.getLogicalDevice(), descriptorSetLayout, nullptr);
+    vkDestroyBuffer(vulkanDevice.getLogicalDevice(), vertexBuffer, nullptr);
+    vkFreeMemory(vulkanDevice.getLogicalDevice(), vertexBufferMemory, nullptr);
+    vkDestroyBuffer(vulkanDevice.getLogicalDevice(), indexBuffer, nullptr);
+    vkFreeMemory(vulkanDevice.getLogicalDevice(), indexBufferMemory, nullptr);
     
-    device.destroyLogicalDevice();
+    vulkanDevice.destroyLogicalDevice();
     vkDestroySurfaceKHR(vulkanInstance.getVulkanInstance(), metalSurface, nullptr);
     vulkanInstance.destroyInstance();
 }
@@ -103,12 +101,12 @@ void GVULKANAPI::frameResized(const float width, const float height) {
 }
 
 void GVULKANAPI::drawFrame() {
-    VkResult result = vkWaitForFences(device.getLogicalDevice(), 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
+    VkResult result = vkWaitForFences(vulkanDevice.getLogicalDevice(), 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
 
     uint32_t imageIndex;
-    result = vkAcquireNextImageKHR(device.getLogicalDevice(), vulkanSwapChain.getVulkanSwapChain(), UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
+    result = vkAcquireNextImageKHR(vulkanDevice.getLogicalDevice(), vulkanSwapChain.getVulkanSwapChain(), UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
     if (imagesInFlight[imageIndex] != VK_NULL_HANDLE) {
-        vkWaitForFences(device.getLogicalDevice(), 1, &imagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
+        vkWaitForFences(vulkanDevice.getLogicalDevice(), 1, &imagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
     }
     imagesInFlight[imageIndex] = inFlightFences[currentFrame];
     
@@ -131,9 +129,9 @@ void GVULKANAPI::drawFrame() {
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores = signalSemaphores;
     
-    vkResetFences(device.getLogicalDevice(), 1, &inFlightFences[currentFrame]);
+    vkResetFences(vulkanDevice.getLogicalDevice(), 1, &inFlightFences[currentFrame]);
     
-    if (vkQueueSubmit(device.getGraphicsQueue(), 1, &submitInfo, inFlightFences[currentFrame]) != VK_SUCCESS) {
+    if (vkQueueSubmit(vulkanDevice.getGraphicsQueue(), 1, &submitInfo, inFlightFences[currentFrame]) != VK_SUCCESS) {
         printf("GaneshaEngine: failed to submit draw command buffer\n");
     }
 
@@ -146,7 +144,7 @@ void GVULKANAPI::drawFrame() {
     presentInfo.swapchainCount = 1;
     presentInfo.pSwapchains = swapChains;
     presentInfo.pImageIndices = &imageIndex;
-    result = vkQueuePresentKHR(device.getPresentQueue(), &presentInfo);
+    result = vkQueuePresentKHR(vulkanDevice.getPresentQueue(), &presentInfo);
     if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || updateFrameSize) {
         updateFrameSize = false;
     } else if (result != VK_SUCCESS) {
@@ -188,7 +186,7 @@ VkSurfaceKHR GVULKANAPI::createSurface(void *metalLayer) {
 
 uint32_t GVULKANAPI::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
     VkPhysicalDeviceMemoryProperties memoryProperties;
-    vkGetPhysicalDeviceMemoryProperties(device.getPhysicalDevice(), &memoryProperties);
+    vkGetPhysicalDeviceMemoryProperties(vulkanDevice.getPhysicalDevice(), &memoryProperties);
     
     for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; i++) {
         if ((typeFilter & (1 << i)) &&
@@ -208,7 +206,7 @@ void GVULKANAPI::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize
     commandBufferAllocateInfo.commandBufferCount = 1;
     
     VkCommandBuffer commandBuffer;
-    vkAllocateCommandBuffers(device.getLogicalDevice(), &commandBufferAllocateInfo, &commandBuffer);
+    vkAllocateCommandBuffers(vulkanDevice.getLogicalDevice(), &commandBufferAllocateInfo, &commandBuffer);
 
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -226,10 +224,10 @@ void GVULKANAPI::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     submitInfo.commandBufferCount = 1;
     submitInfo.pCommandBuffers = &commandBuffer;
-    vkQueueSubmit(device.getGraphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE);
-    vkQueueWaitIdle(device.getGraphicsQueue());
+    vkQueueSubmit(vulkanDevice.getGraphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE);
+    vkQueueWaitIdle(vulkanDevice.getGraphicsQueue());
     
-    vkFreeCommandBuffers(device.getLogicalDevice(), commandPool, 1, &commandBuffer);
+    vkFreeCommandBuffers(vulkanDevice.getLogicalDevice(), commandPool, 1, &commandBuffer);
 }
 
 void GVULKANAPI::createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory) {
@@ -238,22 +236,22 @@ void GVULKANAPI::createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMem
     bufferInfo.size = size;
     bufferInfo.usage = usage;
     bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-    if (vkCreateBuffer(device.getLogicalDevice(), &bufferInfo, nullptr, &buffer) != VK_SUCCESS) {
+    if (vkCreateBuffer(vulkanDevice.getLogicalDevice(), &bufferInfo, nullptr, &buffer) != VK_SUCCESS) {
         printf("GaneshaEngine: failed to create vertex buffer\n");
     }
 
     VkMemoryRequirements memoryRequirements;
-    vkGetBufferMemoryRequirements(device.getLogicalDevice(), buffer, &memoryRequirements);
+    vkGetBufferMemoryRequirements(vulkanDevice.getLogicalDevice(), buffer, &memoryRequirements);
     
     VkMemoryAllocateInfo memoryAllocateInfo{};
     memoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     memoryAllocateInfo.allocationSize = memoryRequirements.size;
     memoryAllocateInfo.memoryTypeIndex = findMemoryType(memoryRequirements.memoryTypeBits, properties);
-    if (vkAllocateMemory(device.getLogicalDevice(), &memoryAllocateInfo, nullptr, &bufferMemory) != VK_SUCCESS) {
+    if (vkAllocateMemory(vulkanDevice.getLogicalDevice(), &memoryAllocateInfo, nullptr, &bufferMemory) != VK_SUCCESS) {
         printf("GaneshaEngine: failed to allocate vertex buffer memory\n");
         return;
     }
-    vkBindBufferMemory(device.getLogicalDevice(), buffer, bufferMemory, 0);
+    vkBindBufferMemory(vulkanDevice.getLogicalDevice(), buffer, bufferMemory, 0);
 }
 
 void GVULKANAPI::createIndicesBuffer() {
@@ -267,9 +265,9 @@ void GVULKANAPI::createIndicesBuffer() {
                  stagingBufferMemory);
     
     void *data;
-    vkMapMemory(device.getLogicalDevice(), stagingBufferMemory, 0, bufferSize, 0, &data);
+    vkMapMemory(vulkanDevice.getLogicalDevice(), stagingBufferMemory, 0, bufferSize, 0, &data);
     memcpy(data, indices.data(), (size_t) bufferSize);
-    vkUnmapMemory(device.getLogicalDevice(), stagingBufferMemory);
+    vkUnmapMemory(vulkanDevice.getLogicalDevice(), stagingBufferMemory);
 
     createBuffer(bufferSize,
                  VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
@@ -279,8 +277,8 @@ void GVULKANAPI::createIndicesBuffer() {
     
     copyBuffer(stagingBuffer, indexBuffer, bufferSize);
 
-    vkDestroyBuffer(device.getLogicalDevice(), stagingBuffer, nullptr);
-    vkFreeMemory(device.getLogicalDevice(), stagingBufferMemory, nullptr);
+    vkDestroyBuffer(vulkanDevice.getLogicalDevice(), stagingBuffer, nullptr);
+    vkFreeMemory(vulkanDevice.getLogicalDevice(), stagingBufferMemory, nullptr);
 }
 
 void GVULKANAPI::createVertexBuffer() {
@@ -294,9 +292,9 @@ void GVULKANAPI::createVertexBuffer() {
                  stagingBufferMemory);
     
     void *data;
-    vkMapMemory(device.getLogicalDevice(), stagingBufferMemory, 0, bufferSize, 0, &data);
+    vkMapMemory(vulkanDevice.getLogicalDevice(), stagingBufferMemory, 0, bufferSize, 0, &data);
     memcpy(data, vertices.data(), (size_t) bufferSize);
-    vkUnmapMemory(device.getLogicalDevice(), stagingBufferMemory);
+    vkUnmapMemory(vulkanDevice.getLogicalDevice(), stagingBufferMemory);
 
     createBuffer(bufferSize,
                  VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
@@ -306,8 +304,8 @@ void GVULKANAPI::createVertexBuffer() {
     
     copyBuffer(stagingBuffer, vertexBuffer, bufferSize);
 
-    vkDestroyBuffer(device.getLogicalDevice(), stagingBuffer, nullptr);
-    vkFreeMemory(device.getLogicalDevice(), stagingBufferMemory, nullptr);
+    vkDestroyBuffer(vulkanDevice.getLogicalDevice(), stagingBuffer, nullptr);
+    vkFreeMemory(vulkanDevice.getLogicalDevice(), stagingBufferMemory, nullptr);
 }
 
 void GVULKANAPI::createDescriptorPool() {
@@ -320,7 +318,7 @@ void GVULKANAPI::createDescriptorPool() {
     poolInfo.poolSizeCount = 1;
     poolInfo.pPoolSizes = &poolSize;
     poolInfo.maxSets = static_cast<uint32_t>(vulkanSwapChain.size());
-    if (vkCreateDescriptorPool(device.getLogicalDevice(), &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
+    if (vkCreateDescriptorPool(vulkanDevice.getLogicalDevice(), &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
         printf("GaneshaEngine: failed to create descriptor pool\n");
     }
 }
@@ -334,7 +332,7 @@ void GVULKANAPI::createDescriptorSets() {
     allocInfo.pSetLayouts = layouts.data();
 
     descriptorSets.resize(vulkanSwapChain.size());
-    if (vkAllocateDescriptorSets(device.getLogicalDevice(), &allocInfo, descriptorSets.data()) != VK_SUCCESS) {
+    if (vkAllocateDescriptorSets(vulkanDevice.getLogicalDevice(), &allocInfo, descriptorSets.data()) != VK_SUCCESS) {
         printf("GaneshaEngine: failed to allocate descriptor sets\n");
     }
 
@@ -355,7 +353,7 @@ void GVULKANAPI::createDescriptorSets() {
         descriptorWrite.pImageInfo = nullptr; // Optional
         descriptorWrite.pTexelBufferView = nullptr; // Optional
         
-        vkUpdateDescriptorSets(device.getLogicalDevice(), 1, &descriptorWrite, 0, nullptr);
+        vkUpdateDescriptorSets(vulkanDevice.getLogicalDevice(), 1, &descriptorWrite, 0, nullptr);
     }
     
 }
@@ -384,9 +382,9 @@ void GVULKANAPI::updateUniformBuffer(uint32_t currentImage) {
     ubo.proj = projectionMatrix;
 
     void* data;
-    vkMapMemory(device.getLogicalDevice(), uniformBuffersMemory[currentImage], 0, sizeof(ubo), 0, &data);
+    vkMapMemory(vulkanDevice.getLogicalDevice(), uniformBuffersMemory[currentImage], 0, sizeof(ubo), 0, &data);
     memcpy(data, &ubo, sizeof(ubo));
-    vkUnmapMemory(device.getLogicalDevice(), uniformBuffersMemory[currentImage]);
+    vkUnmapMemory(vulkanDevice.getLogicalDevice(), uniformBuffersMemory[currentImage]);
 }
 
 void GVULKANAPI::createSemaphores() {
@@ -403,9 +401,9 @@ void GVULKANAPI::createSemaphores() {
     fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
     
     for (size_t i = 0; i < maxFramesInFlight; i++) {
-        if (vkCreateSemaphore(device.getLogicalDevice(), &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
-            vkCreateSemaphore(device.getLogicalDevice(), &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS ||
-            vkCreateFence(device.getLogicalDevice(), &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
+        if (vkCreateSemaphore(vulkanDevice.getLogicalDevice(), &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
+            vkCreateSemaphore(vulkanDevice.getLogicalDevice(), &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS ||
+            vkCreateFence(vulkanDevice.getLogicalDevice(), &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
             printf("GaneshaEngine: failed to create semaphores\n");
             return;
         }
@@ -415,7 +413,7 @@ void GVULKANAPI::createSemaphores() {
 #pragma mark - Commands -
     
 void GVULKANAPI::createCommandBuffers() {
-    commandBuffers.resize(swapChainFramebuffers.size());
+    commandBuffers.resize(vulkanSwapChain.getFramebuffers().size());
 
     VkCommandBufferAllocateInfo allocInfo{};
     allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -423,7 +421,7 @@ void GVULKANAPI::createCommandBuffers() {
     allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
     allocInfo.commandBufferCount = static_cast<uint32_t>(commandBuffers.size());
 
-    if (vkAllocateCommandBuffers(device.getLogicalDevice(), &allocInfo, commandBuffers.data()) != VK_SUCCESS) {
+    if (vkAllocateCommandBuffers(vulkanDevice.getLogicalDevice(), &allocInfo, commandBuffers.data()) != VK_SUCCESS) {
         printf("GaneshaEngine: failed to create command buffer\n");
     }
     
@@ -437,8 +435,8 @@ void GVULKANAPI::createCommandBuffers() {
         
         VkRenderPassBeginInfo renderPassInfo{};
         renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-        renderPassInfo.renderPass = renderPass;
-        renderPassInfo.framebuffer = swapChainFramebuffers[i];
+        renderPassInfo.renderPass = vulkanSwapChain.getRenderPass();
+        renderPassInfo.framebuffer = vulkanSwapChain.getFramebuffers()[i];
         renderPassInfo.renderArea.offset = {0, 0};
         renderPassInfo.renderArea.extent = vulkanSwapChain.getExtent();
         
@@ -448,7 +446,7 @@ void GVULKANAPI::createCommandBuffers() {
         
         vkCmdBeginRenderPass(commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
         
-        vkCmdBindPipeline(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
+        vkCmdBindPipeline(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanPipeline.getGraphicsPipeline());
         
         VkBuffer vertexBuffers[] = {vertexBuffer};
         VkDeviceSize offsets[] = {0};
@@ -456,7 +454,7 @@ void GVULKANAPI::createCommandBuffers() {
         
         vkCmdBindIndexBuffer(commandBuffers[i], indexBuffer, 0, VK_INDEX_TYPE_UINT16);
 
-        vkCmdBindDescriptorSets(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSets[i], 0, nullptr);
+        vkCmdBindDescriptorSets(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanPipeline.getPipelineLayout(), 0, 1, &descriptorSets[i], 0, nullptr);
         vkCmdDrawIndexed(commandBuffers[i], static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
         
         vkCmdEndRenderPass(commandBuffers[i]);
@@ -482,211 +480,10 @@ void GVULKANAPI::createDescriptorSetLayout() {
     layoutInfo.bindingCount = 1;
     layoutInfo.pBindings = &uboLayoutBinding;
 
-    if (vkCreateDescriptorSetLayout(device.getLogicalDevice(), &layoutInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
+    if (vkCreateDescriptorSetLayout(vulkanDevice.getLogicalDevice(), &layoutInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
         printf("GaneshaEngine: failed to create descriptor set layout\n");
     }
     
-}
-
-void GVULKANAPI::createRenderPass() {
-    VkAttachmentDescription colorAttachment{};
-    colorAttachment.format = vulkanSwapChain.getImagesFormat();
-    colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-    colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-    
-    VkAttachmentReference colorAttachmentRef{};
-    colorAttachmentRef.attachment = 0;
-    colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-    
-    VkSubpassDescription subpass{};
-    subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-    subpass.colorAttachmentCount = 1;
-    subpass.pColorAttachments = &colorAttachmentRef;
-    
-    VkSubpassDependency dependency{};
-    dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
-    dependency.dstSubpass = 0;
-    dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-    dependency.srcAccessMask = 0;
-    dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-    dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-
-    VkRenderPassCreateInfo renderPassInfo{};
-    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-    renderPassInfo.attachmentCount = 1;
-    renderPassInfo.pAttachments = &colorAttachment;
-    renderPassInfo.subpassCount = 1;
-    renderPassInfo.pSubpasses = &subpass;
-    renderPassInfo.dependencyCount =  1;
-    renderPassInfo.pDependencies = &dependency;
-
-    if (vkCreateRenderPass(device.getLogicalDevice(), &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS) {
-        printf("GaneshaEngine: failed to create render pass\n");
-    }
-}
-
-void GVULKANAPI::createGraphicsPipeline() {
-    GBundle bundle;
-    
-    auto vertShaderCode = bundle.readFile(bundle.resourceFullPath("vert.spv"));
-    auto fragShaderCode = bundle.readFile(bundle.resourceFullPath("frag.spv"));
-    VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
-    VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
-    VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
-    vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-    vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
-    vertShaderStageInfo.module = vertShaderModule;
-    vertShaderStageInfo.pName = "main";
-    VkPipelineShaderStageCreateInfo fragShaderStageInfo{};
-    fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-    fragShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-    fragShaderStageInfo.module = fragShaderModule;
-    fragShaderStageInfo.pName = "main";
-    VkPipelineShaderStageCreateInfo pipelineShaderStageInfosList[] = {vertShaderStageInfo, fragShaderStageInfo};
-
-    VkPipelineVertexInputStateCreateInfo vertexInputInfo = {};
-    vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-
-    auto bindingDescription = Vertex::getBindingDescription();
-    auto attributeDescriptions = Vertex::getAttributeDescriptions();
-
-    vertexInputInfo.vertexBindingDescriptionCount = 1;
-    vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
-    vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
-    vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
-
-    VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
-    inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-    inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-    inputAssembly.primitiveRestartEnable = VK_FALSE;
-
-    VkExtent2D swapChainExtent = vulkanSwapChain.getExtent();
-    VkViewport viewport{};
-    viewport.x = 0.0f;
-    viewport.y = 0.0f;
-    viewport.width = static_cast<TFloat>(swapChainExtent.width);
-    viewport.height = static_cast<TFloat>(swapChainExtent.height);
-    viewport.minDepth = 0.0f;
-    viewport.maxDepth = 1.0f;
-    VkRect2D scissor{};
-    scissor.offset = {0, 0};
-    scissor.extent = swapChainExtent;
-    VkPipelineViewportStateCreateInfo viewportState{};
-    viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-    viewportState.viewportCount = 1;
-    viewportState.pViewports = &viewport;
-    viewportState.scissorCount = 1;
-    viewportState.pScissors = &scissor;
-    
-    VkPipelineRasterizationStateCreateInfo rasterizer{};
-    rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-    rasterizer.depthClampEnable = VK_FALSE;
-    rasterizer.rasterizerDiscardEnable = VK_FALSE;
-    rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
-    rasterizer.lineWidth = 1.0f;
-    rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
-    rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
-    rasterizer.depthBiasEnable = VK_FALSE;
-
-    VkPipelineMultisampleStateCreateInfo multisampling{};
-    multisampling.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
-    multisampling.sampleShadingEnable = VK_FALSE;
-    multisampling.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-
-    VkPipelineColorBlendAttachmentState colorBlendAttachment{};
-    colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-    colorBlendAttachment.blendEnable = VK_FALSE;
-
-    VkPipelineColorBlendStateCreateInfo colorBlending{};
-    colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-    colorBlending.logicOpEnable = VK_FALSE;
-    colorBlending.logicOp = VK_LOGIC_OP_COPY; // Optional
-    colorBlending.attachmentCount = 1;
-    colorBlending.pAttachments = &colorBlendAttachment;
-    colorBlending.blendConstants[0] = 0.0f; // Optional
-    colorBlending.blendConstants[1] = 0.0f; // Optional
-    colorBlending.blendConstants[2] = 0.0f; // Optional
-    colorBlending.blendConstants[3] = 0.0f; // Optional
-    
-    VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
-    pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-    pipelineLayoutInfo.setLayoutCount = 1; // Optional
-    pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
-    pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
-
-    if (vkCreatePipelineLayout(device.getLogicalDevice(), &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
-        printf("GaneshaEngine: error while creating pipeline layout\n");
-    }
-
-    VkGraphicsPipelineCreateInfo pipelineInfo{};
-    pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-    pipelineInfo.stageCount = 2;
-    pipelineInfo.pStages = pipelineShaderStageInfosList;
-    pipelineInfo.pVertexInputState = &vertexInputInfo;
-    pipelineInfo.pInputAssemblyState = &inputAssembly;
-    pipelineInfo.pViewportState = &viewportState;
-    pipelineInfo.pRasterizationState = &rasterizer;
-    pipelineInfo.pMultisampleState = &multisampling;
-    pipelineInfo.pColorBlendState = &colorBlending;
-    pipelineInfo.layout = pipelineLayout;
-    pipelineInfo.renderPass = renderPass;
-    pipelineInfo.subpass = 0;
-    pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
-    
-    VkResult result = vkCreateGraphicsPipelines(device.getLogicalDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline);
-    if (result != VK_SUCCESS) {
-        printf("GaneshaEngine: error while creating pipeline itself\n");
-    }
-    
-    vkDestroyShaderModule(device.getLogicalDevice(), fragShaderModule, nullptr);
-    vkDestroyShaderModule(device.getLogicalDevice(), vertShaderModule, nullptr);
-}
-
-VkShaderModule GVULKANAPI::createShaderModule(const std::vector<uint8_t>& code) {
-    VkShaderModuleCreateInfo createInfo{};
-    
-    createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-    createInfo.codeSize = code.size();
-    createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
-
-    VkShaderModule shaderModule;
-    if (vkCreateShaderModule(device.getLogicalDevice(), &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
-        printf("GaneshaEngine: No chance to create shader module\n");
-    }
-    
-    return shaderModule;
-}
-
-#pragma mark - Swap -
-
-void GVULKANAPI::createFramebuffers() {
-    auto swapChainImageViews = vulkanSwapChain.getImageViewsArray();
-    VkExtent2D swapChainExtent = vulkanSwapChain.getExtent();
-
-    swapChainFramebuffers.resize(swapChainImageViews.size());
-    for (size_t i = 0; i < swapChainImageViews.size(); i++) {
-        VkImageView attachments[] = {
-            swapChainImageViews[i]
-        };
-
-        VkFramebufferCreateInfo framebufferInfo = { };
-        framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-        framebufferInfo.renderPass = renderPass;
-        framebufferInfo.attachmentCount = 1;
-        framebufferInfo.pAttachments = attachments;
-        framebufferInfo.width = swapChainExtent.width;
-        framebufferInfo.height = swapChainExtent.height;
-        framebufferInfo.layers = 1;
-
-        if (vkCreateFramebuffer(device.getLogicalDevice(), &framebufferInfo, nullptr, &swapChainFramebuffers[i]) != VK_SUCCESS) {
-            printf("GaneshaEngine: failed to create framebuffer with index %zu\n", i);
-        }
-    }
 }
 
 }

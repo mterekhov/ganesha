@@ -16,6 +16,8 @@ GVULKANSwapChain::~GVULKANSwapChain() {
 }
 
 void GVULKANSwapChain::createSwapChain(const uint32_t frameWidth, const uint32_t frameHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
+    VkDevice& logicalDevice = vulkanDevice.getLogicalDevice();
+    
     SwapChainSupportDetails supportDetails = vulkanDevice.querySwapChainSupport(surface);
     
     VkSurfaceFormatKHR surfaceFormat = selectSwapSurfaceFormat(supportDetails.formats);
@@ -52,23 +54,33 @@ void GVULKANSwapChain::createSwapChain(const uint32_t frameWidth, const uint32_t
     swapChainInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
     swapChainInfo.presentMode = selectSwapPresentMode(supportDetails.presentModes);
     swapChainInfo.clipped = VK_TRUE;
-    if (vkCreateSwapchainKHR(vulkanDevice.getLogicalDevice(), &swapChainInfo, nullptr, &swapChain) != VK_SUCCESS) {
+    if (vkCreateSwapchainKHR(logicalDevice, &swapChainInfo, nullptr, &swapChain) != VK_SUCCESS) {
         log.error("failed to create swap chain\n");
     }
     
     imageFormat = surfaceFormat.format;
-    vkGetSwapchainImagesKHR(vulkanDevice.getLogicalDevice(), swapChain, &count, nullptr);
+    vkGetSwapchainImagesKHR(logicalDevice, swapChain, &count, nullptr);
     imagesArray.resize(count);
-    vkGetSwapchainImagesKHR(vulkanDevice.getLogicalDevice(), swapChain, &count, imagesArray.data());
+    vkGetSwapchainImagesKHR(logicalDevice, swapChain, &count, imagesArray.data());
     
-    imageViewsArray = createImageViews(vulkanDevice.getLogicalDevice(), imagesArray);
+    imageViewsArray = createImageViews(logicalDevice, imagesArray);
+    
+    createRenderPass(logicalDevice);
 }
 
-void GVULKANSwapChain::destroySwapChain(VkDevice& logicalDevice) {
+void GVULKANSwapChain::destroySwapChain(GVULKANDevice& device) {
+    VkDevice& logicalDevice = device.getLogicalDevice();
+    
+    for (auto framebuffer : framebuffersArray) {
+        vkDestroyFramebuffer(logicalDevice, framebuffer, nullptr);
+    }
+
     for (auto imageView : imageViewsArray) {
         vkDestroyImageView(logicalDevice, imageView, nullptr);
     }
     
+    vkDestroyRenderPass(logicalDevice, renderPass, nullptr);
+
     vkDestroySwapchainKHR(logicalDevice, swapChain, nullptr);
 }
 
@@ -92,7 +104,78 @@ VkFormat& GVULKANSwapChain::getImagesFormat() {
     return imageFormat;
 }
 
+VkRenderPass& GVULKANSwapChain::getRenderPass() {
+    return renderPass;
+}
+
+std::vector<VkFramebuffer>& GVULKANSwapChain::getFramebuffers() {
+    return framebuffersArray;
+}
+
 #pragma mark - Routine -
+
+void GVULKANSwapChain::createRenderPass(const VkDevice& device) {
+    VkAttachmentDescription colorAttachment = { };
+    colorAttachment.format = imageFormat;
+    colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+    colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+    
+    VkAttachmentReference colorAttachmentRef = { };
+    colorAttachmentRef.attachment = 0;
+    colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    VkSubpassDescription subpass = { };
+    subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+    subpass.colorAttachmentCount = 1;
+    subpass.pColorAttachments = &colorAttachmentRef;
+    
+    VkSubpassDependency dependency = { };
+    dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+    dependency.dstSubpass = 0;
+    dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    dependency.srcAccessMask = 0;
+    dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    
+    VkRenderPassCreateInfo renderPassInfo = { };
+    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+    renderPassInfo.attachmentCount = 1;
+    renderPassInfo.pAttachments = &colorAttachment;
+    renderPassInfo.subpassCount = 1;
+    renderPassInfo.pSubpasses = &subpass;
+    renderPassInfo.dependencyCount =  1;
+    renderPassInfo.pDependencies = &dependency;
+    
+    if (vkCreateRenderPass(device, &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS) {
+        log.error("failed to create render pass\n");
+    }
+}
+
+void GVULKANSwapChain::createFramebuffers(GVULKANDevice& device) {
+    framebuffersArray.resize(imageViewsArray.size());
+    for (size_t i = 0; i < imageViewsArray.size(); i++) {
+        VkImageView attachments[] = {
+            imageViewsArray[i]
+        };
+        
+        VkFramebufferCreateInfo framebufferInfo = { };
+        framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+        framebufferInfo.renderPass = renderPass;
+        framebufferInfo.attachmentCount = 1;
+        framebufferInfo.pAttachments = attachments;
+        framebufferInfo.width = extent.width;
+        framebufferInfo.height = extent.height;
+        framebufferInfo.layers = 1;
+        
+        if (vkCreateFramebuffer(device.getLogicalDevice(), &framebufferInfo, nullptr, &framebuffersArray[i]) != VK_SUCCESS) {
+            printf("GaneshaEngine: failed to create framebuffer with index %zu\n", i);
+        }
+    }
+}
 
 std::vector<VkImageView> GVULKANSwapChain::createImageViews(VkDevice& logicalDevice, std::vector<VkImage>& swapChainImagesArray) {
     std::vector<VkImageView> newImageViewsArray;

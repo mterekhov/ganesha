@@ -24,18 +24,17 @@ public:
     ~GVULKANPipeline();
     
     void createPipeline(GVULKANDevice& device, GVULKANSwapChain& swapChain);
-    void destroyPipeline(const VkDevice& device);
-    VkPipeline getGraphicsPipeline();
-    
+    void destroyPipeline(GVULKANDevice& device);
+    VkPipeline& getGraphicsPipeline();
+    VkPipelineLayout& getPipelineLayout();
+
 private:
     GLog& log;
     VkVertexInputBindingDescription bindingDescription = Vertex::getBindingDescription();
     std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions = Vertex::getAttributeDescriptions();
     VkPipeline graphicsPipeline;
     VkPipelineLayout pipelineLayout;
-    VkRenderPass renderPass;
 
-    void createRenderPass(const VkDevice& device, GVULKANSwapChain& swapChain);
     VkPipelineShaderStageCreateInfo createShader(const std::string shaderFile,  const VkShaderStageFlagBits stage, VkDevice& device);
     VkPipelineVertexInputStateCreateInfo createVertexInput();
     VkPipelineViewportStateCreateInfo createViewport(const VkExtent2D& extent);
