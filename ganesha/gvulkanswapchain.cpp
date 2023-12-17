@@ -15,14 +15,19 @@ GVULKANSwapChain::GVULKANSwapChain(GLog& log) : log(log) {
 GVULKANSwapChain::~GVULKANSwapChain() {
 }
 
-void GVULKANSwapChain::createSwapChain(const uint32_t frameWidth, const uint32_t frameHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
-    recreateSwapChain(frameWidth, frameHeight, vulkanDevice, surface);
+void GVULKANSwapChain::createSwapChain(const uint32_t screenWidth, const uint32_t screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
+    recreateSwapChain(screenWidth, screenHeight, vulkanDevice, surface);
     renderPass = createRenderPass(vulkanDevice.getLogicalDevice(), imageFormat);
 }
 
 void GVULKANSwapChain::destroySwapChain(GVULKANDevice& device) {
     destroyExtentDependency(device.getLogicalDevice());
     destroyRenderPass(device.getLogicalDevice());
+}
+
+void GVULKANSwapChain::updateScreenSize(const uint32_t screenWidth, const uint32_t screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
+    destroyExtentDependency(vulkanDevice.getLogicalDevice());
+    recreateSwapChain(screenWidth, screenHeight, vulkanDevice, surface);
 }
 
 std::vector<VkImageView>& GVULKANSwapChain::getImageViewsArray() {
@@ -55,21 +60,21 @@ std::vector<VkFramebuffer>& GVULKANSwapChain::getFramebuffers() {
 
 #pragma mark - Routine -
 
-void GVULKANSwapChain::recreateSwapChain(const uint32_t frameWidth, const uint32_t frameHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
+void GVULKANSwapChain::recreateSwapChain(const uint32_t screenWidth, const uint32_t screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
     SwapChainSupportDetails supportDetails = vulkanDevice.querySwapChainSupport(surface);
     
-    swapChain = createNewSwapChain(frameWidth, frameHeight, supportDetails, vulkanDevice, surface);
+    swapChain = createNewSwapChain(screenWidth, screenHeight, supportDetails, vulkanDevice, surface);
     imageFormat = selectSwapSurfaceFormat(supportDetails.formats).format;
-    extent = selectSwapExtent(supportDetails.surfaceCapabilities, frameWidth, frameHeight);
+    extent = selectSwapExtent(supportDetails.surfaceCapabilities, screenWidth, screenHeight);
     
     imagesArray = ejectImagesArray(vulkanDevice.getLogicalDevice(), swapChain);
     imageViewsArray = createImageViews(vulkanDevice.getLogicalDevice(), imagesArray);
     framebuffersArray = createFramebuffers(vulkanDevice.getLogicalDevice(), imageViewsArray, renderPass, extent);
 }
 
-VkSwapchainKHR GVULKANSwapChain::createNewSwapChain(const uint32_t frameWidth, const uint32_t frameHeight, const SwapChainSupportDetails& supportDetails, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
+VkSwapchainKHR GVULKANSwapChain::createNewSwapChain(const uint32_t screenWidth, const uint32_t screenHeight, const SwapChainSupportDetails& supportDetails, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
     VkSurfaceFormatKHR surfaceFormat = selectSwapSurfaceFormat(supportDetails.formats);
-    VkExtent2D newExtent = selectSwapExtent(supportDetails.surfaceCapabilities, frameWidth, frameHeight);
+    VkExtent2D newExtent = selectSwapExtent(supportDetails.surfaceCapabilities, screenWidth, screenHeight);
     
     uint32_t count = supportDetails.surfaceCapabilities.minImageCount + 1;
     if (supportDetails.surfaceCapabilities.maxImageCount > 0 && count > supportDetails.surfaceCapabilities.maxImageCount) {
@@ -237,8 +242,8 @@ std::vector<VkImageView> GVULKANSwapChain::createImageViews(VkDevice& logicalDev
     return newImageViewsArray;
 }
 
-VkExtent2D GVULKANSwapChain::selectSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities, const uint32_t frameWidth, const uint32_t frameHeight) {
-    VkExtent2D actualExtent = {frameWidth, frameHeight};
+VkExtent2D GVULKANSwapChain::selectSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities, const uint32_t screenWidth, const uint32_t screenHeight) {
+    VkExtent2D actualExtent = {screenWidth, screenHeight};
     
     if (surfaceCapabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
         return surfaceCapabilities.currentExtent;
