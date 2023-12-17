@@ -41,12 +41,17 @@ private:
     VkExtent2D extent;
     VkRenderPass renderPass;
 
+    VkSwapchainKHR createNewSwapChain(const uint32_t frameWidth, const uint32_t frameHeight, const SwapChainSupportDetails& supportDetails, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface);
+    void recreateSwapChain(const uint32_t frameWidth, const uint32_t frameHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface);
+    std::vector<VkImage> ejectImagesArray(const VkDevice& device, const VkSwapchainKHR& swapChainSource);
     std::vector<VkImageView> createImageViews(VkDevice& logicalDevice, std::vector<VkImage>& swapChainImagesArray);
+    std::vector<VkFramebuffer> createFramebuffers(VkDevice& device, const std::vector<VkImageView>& useImagesViewArray, const VkRenderPass& useRenderPass, const VkExtent2D& useExtent);
+   VkRenderPass createRenderPass(const VkDevice& device, VkFormat format);
     VkExtent2D selectSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities, const uint32_t frameWidth, const uint32_t frameHeight);
     VkSurfaceFormatKHR selectSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
     VkPresentModeKHR selectSwapPresentMode(const std::vector<VkPresentModeKHR>& presentModesArray);
-    void createRenderPass(const VkDevice& device);
-    void createFramebuffers(GVULKANDevice& device);
+    void destroyExtentDependency(const VkDevice& device);
+    void destroyRenderPass(const VkDevice& device);
 };
 
 }   //  namespace spcGaneshaEngine

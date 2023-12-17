@@ -16,72 +16,13 @@ GVULKANSwapChain::~GVULKANSwapChain() {
 }
 
 void GVULKANSwapChain::createSwapChain(const uint32_t frameWidth, const uint32_t frameHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
-    VkDevice& logicalDevice = vulkanDevice.getLogicalDevice();
-    
-    SwapChainSupportDetails supportDetails = vulkanDevice.querySwapChainSupport(surface);
-    
-    VkSurfaceFormatKHR surfaceFormat = selectSwapSurfaceFormat(supportDetails.formats);
-    extent = selectSwapExtent(supportDetails.surfaceCapabilities, frameWidth, frameHeight);
-    
-    uint32_t count = supportDetails.surfaceCapabilities.minImageCount + 1;
-    if (supportDetails.surfaceCapabilities.maxImageCount > 0 && count > supportDetails.surfaceCapabilities.maxImageCount) {
-        count = supportDetails.surfaceCapabilities.maxImageCount;
-    }
-    
-    VkSwapchainCreateInfoKHR swapChainInfo = { };
-    swapChainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-    swapChainInfo.surface = surface;
-    swapChainInfo.minImageCount = count;
-    swapChainInfo.imageFormat = surfaceFormat.format;
-    swapChainInfo.imageColorSpace = surfaceFormat.colorSpace;
-    swapChainInfo.imageExtent = extent;
-    swapChainInfo.imageArrayLayers = 1;
-    swapChainInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-    
-    std::vector<uint32_t> queueFamilyIndexArray;
-    if (vulkanDevice.presentationIsEqualToGraphics()) {
-        swapChainInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-        swapChainInfo.queueFamilyIndexCount = 0;
-        swapChainInfo.pQueueFamilyIndices = nullptr;
-    }
-    else {
-        queueFamilyIndexArray = vulkanDevice.getQueuesIndecesArray();
-        swapChainInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
-        swapChainInfo.queueFamilyIndexCount = static_cast<uint32_t>(queueFamilyIndexArray.size());
-        swapChainInfo.pQueueFamilyIndices = queueFamilyIndexArray.data();
-    }
-    swapChainInfo.preTransform = supportDetails.surfaceCapabilities.currentTransform;
-    swapChainInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-    swapChainInfo.presentMode = selectSwapPresentMode(supportDetails.presentModes);
-    swapChainInfo.clipped = VK_TRUE;
-    if (vkCreateSwapchainKHR(logicalDevice, &swapChainInfo, nullptr, &swapChain) != VK_SUCCESS) {
-        log.error("failed to create swap chain\n");
-    }
-    
-    imageFormat = surfaceFormat.format;
-    vkGetSwapchainImagesKHR(logicalDevice, swapChain, &count, nullptr);
-    imagesArray.resize(count);
-    vkGetSwapchainImagesKHR(logicalDevice, swapChain, &count, imagesArray.data());
-    
-    imageViewsArray = createImageViews(logicalDevice, imagesArray);
-    
-    createRenderPass(logicalDevice);
+    recreateSwapChain(frameWidth, frameHeight, vulkanDevice, surface);
+    renderPass = createRenderPass(vulkanDevice.getLogicalDevice(), imageFormat);
 }
 
 void GVULKANSwapChain::destroySwapChain(GVULKANDevice& device) {
-    VkDevice& logicalDevice = device.getLogicalDevice();
-    
-    for (auto framebuffer : framebuffersArray) {
-        vkDestroyFramebuffer(logicalDevice, framebuffer, nullptr);
-    }
-
-    for (auto imageView : imageViewsArray) {
-        vkDestroyImageView(logicalDevice, imageView, nullptr);
-    }
-    
-    vkDestroyRenderPass(logicalDevice, renderPass, nullptr);
-
-    vkDestroySwapchainKHR(logicalDevice, swapChain, nullptr);
+    destroyExtentDependency(device.getLogicalDevice());
+    destroyRenderPass(device.getLogicalDevice());
 }
 
 std::vector<VkImageView>& GVULKANSwapChain::getImageViewsArray() {
@@ -114,9 +55,92 @@ std::vector<VkFramebuffer>& GVULKANSwapChain::getFramebuffers() {
 
 #pragma mark - Routine -
 
-void GVULKANSwapChain::createRenderPass(const VkDevice& device) {
+void GVULKANSwapChain::recreateSwapChain(const uint32_t frameWidth, const uint32_t frameHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
+    SwapChainSupportDetails supportDetails = vulkanDevice.querySwapChainSupport(surface);
+    
+    swapChain = createNewSwapChain(frameWidth, frameHeight, supportDetails, vulkanDevice, surface);
+    imageFormat = selectSwapSurfaceFormat(supportDetails.formats).format;
+    extent = selectSwapExtent(supportDetails.surfaceCapabilities, frameWidth, frameHeight);
+    
+    imagesArray = ejectImagesArray(vulkanDevice.getLogicalDevice(), swapChain);
+    imageViewsArray = createImageViews(vulkanDevice.getLogicalDevice(), imagesArray);
+    framebuffersArray = createFramebuffers(vulkanDevice.getLogicalDevice(), imageViewsArray, renderPass, extent);
+}
+
+VkSwapchainKHR GVULKANSwapChain::createNewSwapChain(const uint32_t frameWidth, const uint32_t frameHeight, const SwapChainSupportDetails& supportDetails, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
+    VkSurfaceFormatKHR surfaceFormat = selectSwapSurfaceFormat(supportDetails.formats);
+    VkExtent2D newExtent = selectSwapExtent(supportDetails.surfaceCapabilities, frameWidth, frameHeight);
+    
+    uint32_t count = supportDetails.surfaceCapabilities.minImageCount + 1;
+    if (supportDetails.surfaceCapabilities.maxImageCount > 0 && count > supportDetails.surfaceCapabilities.maxImageCount) {
+        count = supportDetails.surfaceCapabilities.maxImageCount;
+    }
+    
+    VkSwapchainCreateInfoKHR swapChainInfo = { };
+    swapChainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+    swapChainInfo.surface = surface;
+    swapChainInfo.minImageCount = count;
+    swapChainInfo.imageFormat = surfaceFormat.format;
+    swapChainInfo.imageColorSpace = surfaceFormat.colorSpace;
+    swapChainInfo.imageExtent = newExtent;
+    swapChainInfo.imageArrayLayers = 1;
+    swapChainInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    
+    std::vector<uint32_t> queueFamilyIndexArray;
+    if (vulkanDevice.presentationIsEqualToGraphics()) {
+        swapChainInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+        swapChainInfo.queueFamilyIndexCount = 0;
+        swapChainInfo.pQueueFamilyIndices = nullptr;
+    }
+    else {
+        queueFamilyIndexArray = vulkanDevice.getQueuesIndecesArray();
+        swapChainInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+        swapChainInfo.queueFamilyIndexCount = static_cast<uint32_t>(queueFamilyIndexArray.size());
+        swapChainInfo.pQueueFamilyIndices = queueFamilyIndexArray.data();
+    }
+    swapChainInfo.preTransform = supportDetails.surfaceCapabilities.currentTransform;
+    swapChainInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+    swapChainInfo.presentMode = selectSwapPresentMode(supportDetails.presentModes);
+    swapChainInfo.clipped = VK_TRUE;
+    
+    VkSwapchainKHR newSwapChain;
+    if (vkCreateSwapchainKHR(vulkanDevice.getLogicalDevice(), &swapChainInfo, nullptr, &newSwapChain) != VK_SUCCESS) {
+        log.error("failed to create swap chain\n");
+    }
+    
+    return newSwapChain;
+}
+
+std::vector<VkImage> GVULKANSwapChain::ejectImagesArray(const VkDevice& device, const VkSwapchainKHR& swapChainSource) {
+    std::vector<VkImage> newImagesArray;
+    
+    uint32_t count;
+    vkGetSwapchainImagesKHR(device, swapChainSource, &count, nullptr);
+    newImagesArray.resize(count);
+    vkGetSwapchainImagesKHR(device, swapChainSource, &count, newImagesArray.data());
+
+    return newImagesArray;
+}
+
+void GVULKANSwapChain::destroyExtentDependency(const VkDevice& device) {
+    for (auto framebuffer : framebuffersArray) {
+        vkDestroyFramebuffer(device, framebuffer, nullptr);
+    }
+
+    for (auto imageView : imageViewsArray) {
+        vkDestroyImageView(device, imageView, nullptr);
+    }
+    
+    vkDestroySwapchainKHR(device, swapChain, nullptr);
+}
+
+void GVULKANSwapChain::destroyRenderPass(const VkDevice& device) {
+    vkDestroyRenderPass(device, renderPass, nullptr);
+}
+
+VkRenderPass GVULKANSwapChain::createRenderPass(const VkDevice& device, VkFormat format) {
     VkAttachmentDescription colorAttachment = { };
-    colorAttachment.format = imageFormat;
+    colorAttachment.format = format;
     colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
     colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -150,31 +174,38 @@ void GVULKANSwapChain::createRenderPass(const VkDevice& device) {
     renderPassInfo.dependencyCount =  1;
     renderPassInfo.pDependencies = &dependency;
     
-    if (vkCreateRenderPass(device, &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS) {
+    VkRenderPass newRenderPass;
+    if (vkCreateRenderPass(device, &renderPassInfo, nullptr, &newRenderPass) != VK_SUCCESS) {
         log.error("failed to create render pass\n");
     }
+    
+    return newRenderPass;
 }
 
-void GVULKANSwapChain::createFramebuffers(GVULKANDevice& device) {
-    framebuffersArray.resize(imageViewsArray.size());
-    for (size_t i = 0; i < imageViewsArray.size(); i++) {
+std::vector<VkFramebuffer> GVULKANSwapChain::createFramebuffers(VkDevice& device, const std::vector<VkImageView>& useImagesViewArray, const VkRenderPass& useRenderPass, const VkExtent2D& useExtent) {
+    std::vector<VkFramebuffer> newFramebuffersArray;
+    
+    newFramebuffersArray.resize(useImagesViewArray.size());
+    for (size_t i = 0; i < useImagesViewArray.size(); i++) {
         VkImageView attachments[] = {
-            imageViewsArray[i]
+            useImagesViewArray[i]
         };
         
         VkFramebufferCreateInfo framebufferInfo = { };
         framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-        framebufferInfo.renderPass = renderPass;
+        framebufferInfo.renderPass = useRenderPass;
         framebufferInfo.attachmentCount = 1;
         framebufferInfo.pAttachments = attachments;
-        framebufferInfo.width = extent.width;
-        framebufferInfo.height = extent.height;
+        framebufferInfo.width = useExtent.width;
+        framebufferInfo.height = useExtent.height;
         framebufferInfo.layers = 1;
         
-        if (vkCreateFramebuffer(device.getLogicalDevice(), &framebufferInfo, nullptr, &framebuffersArray[i]) != VK_SUCCESS) {
+        if (vkCreateFramebuffer(device, &framebufferInfo, nullptr, &newFramebuffersArray[i]) != VK_SUCCESS) {
             printf("GaneshaEngine: failed to create framebuffer with index %zu\n", i);
         }
     }
+    
+    return newFramebuffersArray;
 }
 
 std::vector<VkImageView> GVULKANSwapChain::createImageViews(VkDevice& logicalDevice, std::vector<VkImage>& swapChainImagesArray) {
