@@ -12,6 +12,7 @@
 #include "gvulkanpipeline.h"
 #include "gvulkancommands.h"
 #include "gmatrix.h"
+#include "gvulkanbuffer.h"
 
 namespace spcGaneshaEngine {
 
@@ -23,7 +24,7 @@ public:
 
     virtual void initAPI(void *metalLayer, const uint32_t frameWidth, const uint32_t frameHeight, const GRenderGraph& renderGraph);
     virtual void destroyAPI();
-    virtual void drawFrame();
+    virtual void drawFrame(GRenderGraph& renderGraph);
     virtual void frameResized(const float width, const float height);
     virtual void installIsometricView(const TFloat fieldOfView, const TFloat near, const TFloat far);
     virtual void installViewMatrix(const GMatrix& newViewMatrix);
@@ -36,6 +37,9 @@ private:
     GVULKANPipeline vulkanPipeline;
     GVULKANCommands vulkanCommands;
     
+    GVULKANBuffer vertecesBuffer;
+    GVULKANBuffer indecesBuffer;
+
     VkSurfaceKHR metalSurface;
 
     GMatrix projectionMatrix;
@@ -49,6 +53,8 @@ private:
     std::vector<VkFence> imagesInFlight;
     size_t currentFrame = 0;
 
+    std::vector<VkCommandBuffer> renderCommands;
+    
     std::vector<VkBuffer> uniformBuffers;
     std::vector<VkDeviceMemory> uniformBuffersMemory;
     

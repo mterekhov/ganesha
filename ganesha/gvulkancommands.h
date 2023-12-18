@@ -25,29 +25,43 @@ public:
     
     void createCommands(GVULKANDevice& device, GVULKANSwapChain& swapChain, GVULKANPipeline& pipline, const GRenderGraph& renderGraph);
     void destroyCommands(GVULKANDevice& device);
+//    std::vector<VkCommandBuffer>& getCommandBuffersArray();
+
     VkCommandPool& getCommandPool();
-    std::vector<VkCommandBuffer>& getCommandBuffersArray();
+
+    VkCommandBuffer emptyCommand(const VkDevice& device);
+    VkCommandBuffer copyBufferCommand(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size, const VkDevice& device);
+    void recordRenderCommand(VkCommandBuffer& renderCommand,
+                             VkBuffer& vertecesBuffer,
+                             VkBuffer& indicesBuffer,
+                             uint32_t indicesNumber,
+                             VkFramebuffer& framebuffer,
+                             GVULKANSwapChain& swapChain,
+                             GVULKANPipeline& pipeline);
+    void destroyCommandBuffer(VkCommandBuffer& commandBuffer, const VkDevice& device);
 
 private:
     GLog& log;
     VkCommandPool commandPool;
-    std::vector<VkCommandBuffer> commandBuffersArray;
-    VkBuffer vertexBuffer;
-    VkDeviceMemory vertexBufferMemory;
-    VkBuffer indexBuffer;
-    VkDeviceMemory indexBufferMemory;
-
     VkCommandPool createCommandPool(GVULKANDevice& device);
-    std::vector<VkCommandBuffer> createCommandBuffers(GVULKANDevice& device, 
-                                                      GVULKANSwapChain& swapChain,
-                                                      GVULKANPipeline& pipeline,
-                                                      VkCommandPool& currentCommandPool,
-                                                      const GRenderGraph& renderGraph);
-    VkBuffer createIndicesBuffer(GVULKANDevice& vulkanDevice, const std::vector<uint32_t>& indices);
-    VkBuffer createVertexBuffer(GVULKANDevice& vulkanDevice, const std::vector<uint32_t>& vertices);
-    void createBuffer(GVULKANDevice& vulkanDevice, VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
-    uint32_t findMemoryType(const VkPhysicalDevice& device, uint32_t typeFilter, VkMemoryPropertyFlags properties);
-    void copyBuffer(GVULKANDevice& vulkanDevice, VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
+
+    //    std::vector<VkCommandBuffer> commandBuffersArray;
+    
+//    VkBuffer vertexBuffer;
+//    VkDeviceMemory vertexBufferMemory;
+//    VkBuffer indexBuffer;
+//    VkDeviceMemory indexBufferMemory;
+
+//    std::vector<VkCommandBuffer> createCommandBuffers(GVULKANDevice& device,
+//                                                      GVULKANSwapChain& swapChain,
+//                                                      GVULKANPipeline& pipeline,
+//                                                      VkCommandPool& currentCommandPool,
+//                                                      const GRenderGraph& renderGraph);
+//    VkBuffer createIndicesBuffer(GVULKANDevice& vulkanDevice, const std::vector<uint32_t>& indices);
+//    VkBuffer createVertexBuffer(GVULKANDevice& vulkanDevice, const std::vector<uint32_t>& vertices);
+//    void createBuffer(GVULKANDevice& vulkanDevice, VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
+//    uint32_t findMemoryType(const VkPhysicalDevice& device, uint32_t typeFilter, VkMemoryPropertyFlags properties);
+//    void copyBuffer(GVULKANDevice& vulkanDevice, VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 };
 
 }   //  namespace spcGaneshaEngine

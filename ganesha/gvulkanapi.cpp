@@ -8,6 +8,7 @@
 #include "gpoint2d.h"
 #include "gcolor.h"
 #include "gmatrix.h"
+#include "gvulkanbuffer.h"
 
 namespace spcGaneshaEngine {
 
@@ -57,6 +58,27 @@ void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint
 
     vulkanCommands.createCommands(vulkanDevice, vulkanSwapChain, vulkanPipeline, renderGraph);
 
+    std::vector<Vertex> vertecesArray = renderGraph.getVertecesArray();
+    vertecesBuffer.createBuffer(vertecesArray.data(), vertecesArray.size(),
+                                VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+                                true,
+                                vulkanDevice,
+                                vulkanCommands);
+
+    std::vector<uint32_t> indecesArray = renderGraph.getIndecesArray();
+    indecesBuffer.createBuffer(indecesArray.data(), indecesArray.size(),
+                               VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
+                               VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+                                true,
+                                vulkanDevice,
+                                vulkanCommands);
+    
+    renderCommands.resize(vulkanSwapChain.framebuffersNumber());
+    for (uint32_t i = 0; i < vulkanSwapChain.framebuffersNumber(); i++) {
+        renderCommands[i] = vulkanCommands.emptyCommand(vulkanDevice.getLogicalDevice());
+    }
+
     createSemaphores();
 }
 
@@ -71,7 +93,7 @@ void GVULKANAPI::destroyAPI() {
     vulkanPipeline.destroyPipeline(vulkanDevice);
     vulkanSwapChain.destroySwapChain(vulkanDevice);
     
-    for (size_t i = 0; i < vulkanSwapChain.size(); i++) {
+    for (size_t i = 0; i < vulkanSwapChain.framebuffersNumber(); i++) {
         vkDestroyBuffer(vulkanDevice.getLogicalDevice(), uniformBuffers[i], nullptr);
         vkFreeMemory(vulkanDevice.getLogicalDevice(), uniformBuffersMemory[i], nullptr);
     }
@@ -89,7 +111,7 @@ void GVULKANAPI::frameResized(const float width, const float height) {
     vulkanSwapChain.updateScreenSize(width, height, vulkanDevice, metalSurface);
 }
 
-void GVULKANAPI::drawFrame() {
+void GVULKANAPI::drawFrame(GRenderGraph& renderGraph) {
     VkResult result = vkWaitForFences(vulkanDevice.getLogicalDevice(), 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
 
     uint32_t imageIndex;
@@ -101,6 +123,14 @@ void GVULKANAPI::drawFrame() {
     
     updateUniformBuffer(imageIndex);
     
+    vkResetCommandBuffer(renderCommands[imageIndex], 0);
+    vulkanCommands.recordRenderCommand(renderCommands[imageIndex],
+                                       vertecesBuffer.getBuffer(),
+                                       indecesBuffer.getBuffer(),
+                                       static_cast<uint32_t>(renderGraph.getIndecesArray().size()),
+                                       vulkanSwapChain.getFramebuffers()[imageIndex],
+                                       vulkanSwapChain,
+                                       vulkanPipeline);
     VkSubmitInfo submitInfo{};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
@@ -112,7 +142,7 @@ void GVULKANAPI::drawFrame() {
     submitInfo.pWaitDstStageMask = waitStages;
     
     submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers = &vulkanCommands.getCommandBuffersArray()[imageIndex];
+    submitInfo.pCommandBuffers = &renderCommands[imageIndex];
 
     VkSemaphore signalSemaphores[] = {renderFinishedSemaphores[currentFrame]};
     submitInfo.signalSemaphoreCount = 1;
@@ -121,7 +151,7 @@ void GVULKANAPI::drawFrame() {
     vkResetFences(vulkanDevice.getLogicalDevice(), 1, &inFlightFences[currentFrame]);
     
     if (vkQueueSubmit(vulkanDevice.getGraphicsQueue(), 1, &submitInfo, inFlightFences[currentFrame]) != VK_SUCCESS) {
-        printf("GaneshaEngine: failed to submit draw command buffer\n");
+        log.error("failed to submit draw command buffer\n");
     }
 
     VkPresentInfoKHR presentInfo{};
@@ -137,7 +167,7 @@ void GVULKANAPI::drawFrame() {
     if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || updateFrameSize) {
         updateFrameSize = false;
     } else if (result != VK_SUCCESS) {
-        printf("GaneshaEngine: failed to present frame\n");
+        log.error("failed to present frame\n");
     }
     
     currentFrame = (currentFrame + 1) % maxFramesInFlight;
@@ -174,34 +204,38 @@ VkSurfaceKHR GVULKANAPI::createSurface(void *metalLayer) {
 }
 
 void GVULKANAPI::createDescriptorPool() {
+    uint32_t framebuffersNumber = static_cast<uint32_t>(vulkanSwapChain.framebuffersNumber());
+
     VkDescriptorPoolSize poolSize{};
     poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    poolSize.descriptorCount = static_cast<uint32_t>(vulkanSwapChain.size());
+    poolSize.descriptorCount = framebuffersNumber;
     
     VkDescriptorPoolCreateInfo poolInfo{};
     poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
     poolInfo.poolSizeCount = 1;
     poolInfo.pPoolSizes = &poolSize;
-    poolInfo.maxSets = static_cast<uint32_t>(vulkanSwapChain.size());
+    poolInfo.maxSets = framebuffersNumber;
     if (vkCreateDescriptorPool(vulkanDevice.getLogicalDevice(), &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
         printf("GaneshaEngine: failed to create descriptor pool\n");
     }
 }
 
 void GVULKANAPI::createDescriptorSets() {
-    std::vector<VkDescriptorSetLayout> layouts(vulkanSwapChain.size(), descriptorSetLayout);
+    uint32_t framebuffersNumber = static_cast<uint32_t>(vulkanSwapChain.framebuffersNumber());
+
+    std::vector<VkDescriptorSetLayout> layouts(framebuffersNumber, descriptorSetLayout);
     VkDescriptorSetAllocateInfo allocInfo{};
     allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
     allocInfo.descriptorPool = descriptorPool;
-    allocInfo.descriptorSetCount = static_cast<uint32_t>(vulkanSwapChain.size());
+    allocInfo.descriptorSetCount = framebuffersNumber;
     allocInfo.pSetLayouts = layouts.data();
 
-    descriptorSets.resize(vulkanSwapChain.size());
+    descriptorSets.resize(framebuffersNumber);
     if (vkAllocateDescriptorSets(vulkanDevice.getLogicalDevice(), &allocInfo, descriptorSets.data()) != VK_SUCCESS) {
         printf("GaneshaEngine: failed to allocate descriptor sets\n");
     }
 
-    for (size_t i = 0; i < vulkanSwapChain.size(); i++) {
+    for (size_t i = 0; i < framebuffersNumber; i++) {
         VkDescriptorBufferInfo bufferInfo{};
         bufferInfo.buffer = uniformBuffers[i];
         bufferInfo.offset = 0;
@@ -226,11 +260,15 @@ void GVULKANAPI::createDescriptorSets() {
 void GVULKANAPI::createUniformBuffers() {
     VkDeviceSize bufferSize = sizeof(UniformBufferObject);
     
-    uniformBuffers.resize(vulkanSwapChain.size());
-    uniformBuffersMemory.resize(vulkanSwapChain.size());
+    uniformBuffers.resize(vulkanSwapChain.framebuffersNumber());
+    uniformBuffersMemory.resize(vulkanSwapChain.framebuffersNumber());
     
-    for (size_t i = 0; i < vulkanSwapChain.size(); i++) {
-        createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, uniformBuffers[i], uniformBuffersMemory[i]);
+    for (size_t i = 0; i < vulkanSwapChain.framebuffersNumber(); i++) {
+        createBuffer(bufferSize, 
+                     VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+                     VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                     uniformBuffers[i],
+                     uniformBuffersMemory[i]);
     }
 }
     
@@ -256,7 +294,7 @@ void GVULKANAPI::createSemaphores() {
     imageAvailableSemaphores.resize(maxFramesInFlight);
     renderFinishedSemaphores.resize(maxFramesInFlight);
     inFlightFences.resize(maxFramesInFlight);
-    imagesInFlight.resize(vulkanSwapChain.size(), VK_NULL_HANDLE);
+    imagesInFlight.resize(vulkanSwapChain.framebuffersNumber(), VK_NULL_HANDLE);
     
     VkSemaphoreCreateInfo semaphoreInfo{};
     semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
