@@ -22,6 +22,7 @@ public:
                       GVULKANDevice& vulkanDevice,
                       GVULKANCommands& vulkanCommands);
     void destroyBuffer(GVULKANDevice& vulkanDevice);
+    void refreshBuffer(const void *data, const VkDeviceSize size, GVULKANDevice& vulkanDevice);
     VkBuffer& getBuffer();
     
 private:

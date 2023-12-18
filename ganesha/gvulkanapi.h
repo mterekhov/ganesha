@@ -16,7 +16,12 @@
 
 namespace spcGaneshaEngine {
 
-/// A LOT OF FUCKING SHIT
+struct UniformBufferObject {
+    GMatrix model;
+    GMatrix view;
+    GMatrix proj;
+};
+
 class GVULKANAPI: public GGraphicsAPIProtocol {
 public:
     GVULKANAPI();
@@ -55,9 +60,8 @@ private:
 
     std::vector<VkCommandBuffer> renderCommands;
     
-    std::vector<VkBuffer> uniformBuffers;
-    std::vector<VkDeviceMemory> uniformBuffersMemory;
-    
+    std::vector<GVULKANBuffer> vulkanUniformBuffers;
+
     VkDescriptorPool descriptorPool;
     std::vector<VkDescriptorSet> descriptorSets;
     VkDescriptorSetLayout descriptorSetLayout;
@@ -66,8 +70,8 @@ private:
 
     void createSemaphores();
     
-    void createUniformBuffers();
-    void updateUniformBuffer(uint32_t currentImage);
+    UniformBufferObject currentUBO();
+
     void createDescriptorPool();
     void createDescriptorSets();
     void createDescriptorSetLayout();

@@ -35,6 +35,11 @@ void GVULKANBuffer::createBuffer(const void *data, const VkDeviceSize size, VkBu
     else {
         buffer = createBuffer(vulkanDevice.getLogicalDevice(), size, usage);
         bufferMemory = allocateBufferMemory(buffer, properties, vulkanDevice);
+
+        void *mappedData;
+        vkMapMemory(vulkanDevice.getLogicalDevice(), bufferMemory, 0, size, 0, &mappedData);
+        memcpy(mappedData, data, static_cast<size_t>(size));
+        vkUnmapMemory(vulkanDevice.getLogicalDevice(), bufferMemory);
     }
 }
 
@@ -42,6 +47,13 @@ void GVULKANBuffer::destroyBuffer(GVULKANDevice& vulkanDevice) {
     vkDestroyBuffer(vulkanDevice.getLogicalDevice(), buffer, nullptr);
     vkFreeMemory(vulkanDevice.getLogicalDevice(), bufferMemory, nullptr);
 
+}
+
+void GVULKANBuffer::refreshBuffer(const void *data, const VkDeviceSize size, GVULKANDevice& vulkanDevice) {
+    void *mappedData;
+    vkMapMemory(vulkanDevice.getLogicalDevice(), bufferMemory, 0, size, 0, &mappedData);
+    memcpy(mappedData, data, static_cast<size_t>(size));
+    vkUnmapMemory(vulkanDevice.getLogicalDevice(), bufferMemory);
 }
 
 #pragma mark - Routine -
