@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "ggraphicsapiprotocol.h"
 #include "gcamera.h"
+#include "grendergraph.h"
 
 namespace spcGaneshaEngine {
 
@@ -37,6 +38,7 @@ public:
 private:
     GGraphicsAPIProtocol *graphicsAPI;
     GCamera camera;
+    GRenderGraph renderGraph;
 
 };
 

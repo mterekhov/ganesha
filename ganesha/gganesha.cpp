@@ -13,7 +13,21 @@ GGanesha::~GGanesha() {
 }
 
 bool GGanesha::initEngine(void *metalLayer, const uint32_t width, const uint32_t height) {
-    graphicsAPI->initAPI(metalLayer, width, height);
+    
+    const std::vector<Vertex> vertices = {
+        {GPoint2D(-0.5f, -0.5f), GColor::blueColor()},
+        {GPoint2D(0.5f, -0.5f), GColor::redColor()},
+        {GPoint2D(0.5f, 0.5f), GColor::greenColor()},
+        {GPoint2D(-0.5f, 0.5f), GColor::redColor()}
+    };
+    renderGraph.defineVertecesArray(vertices);
+
+    const std::vector<uint32_t> indices = {
+        0, 1, 2, 2, 3, 0
+    };
+    renderGraph.defineIndecesArray(indices);
+    
+    graphicsAPI->initAPI(metalLayer, width, height, renderGraph);
     graphicsAPI->installIsometricView(M_PI_4, 0.1f, 100.0f);
     graphicsAPI->installViewMatrix(camera.viewMatrix());
 
@@ -33,7 +47,7 @@ void GGanesha::processKeyboard(const uint32_t keyCode) {
 }
 
 void GGanesha::mainLoop() {
-    graphicsAPI->drawFrame();
+    graphicsAPI->drawFrame(renderGraph);
 }
 
 }
