@@ -35,8 +35,9 @@ public:
     SwapChainSupportDetails querySwapChainSupport(VkSurfaceKHR& surface);
     VkPhysicalDevice& getPhysicalDevice();
     VkDevice& getLogicalDevice();
-    VkQueue& getGraphicsQueue();
     VkQueue& getPresentQueue();
+    VkQueue& getGraphicsQueue();
+    uint32_t getGraphicsQueueIndex();
     std::vector<uint32_t> getQueuesIndecesArray();
     
     bool presentationIsEqualToGraphics();

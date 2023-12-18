@@ -42,8 +42,8 @@ VkSwapchainKHR& GVULKANSwapChain::getVulkanSwapChain() {
     return swapChain;
 }
 
-size_t GVULKANSwapChain::size() {
-    return imagesArray.size();
+size_t GVULKANSwapChain::framebuffersNumber() {
+    return framebuffersArray.size();
 }
 
 VkFormat& GVULKANSwapChain::getImagesFormat() {

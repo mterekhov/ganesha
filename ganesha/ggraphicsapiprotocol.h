@@ -3,12 +3,13 @@
 
 #include "ganeshatypes.h"
 #include "gmatrix.h"
+#include "grendergraph.h"
 
 namespace spcGaneshaEngine {
 
 class GGraphicsAPIProtocol {
 public:
-    virtual void initAPI(void *metalLayer, const uint32_t frameWidth, const uint32_t frameHeight) = 0;
+    virtual void initAPI(void *metalLayer, const uint32_t frameWidth, const uint32_t frameHeight, const GRenderGraph& renderGraph) = 0;
     virtual void destroyAPI() = 0;
     virtual void drawFrame() = 0;
     virtual void frameResized(const TFloat width, const TFloat height) = 0;

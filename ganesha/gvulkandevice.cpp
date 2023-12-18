@@ -90,19 +90,6 @@ void GVULKANDevice::destroyDevice() {
     vkDestroyDevice(logicalDevice, nullptr);
 }
 
-VkCommandPool GVULKANDevice::createCommandPool() {
-    VkCommandPoolCreateInfo poolInfo{};
-    poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-    poolInfo.queueFamilyIndex = graphicQueueFamilyIndex;
-
-    VkCommandPool commandPool;
-    if (vkCreateCommandPool(logicalDevice, &poolInfo, nullptr, &commandPool) != VK_SUCCESS) {
-        printf("GaneshaEngine: failed to create command pool\n");
-    }
-    
-    return commandPool;
-}
-
 bool GVULKANDevice::presentationIsEqualToGraphics() {
     return graphicQueueFamilyIndex == presentQueueFamilyIndex;
 }
@@ -113,6 +100,10 @@ VkPhysicalDevice& GVULKANDevice::getPhysicalDevice() {
 
 VkDevice& GVULKANDevice::getLogicalDevice() {
     return logicalDevice;
+}
+
+uint32_t GVULKANDevice::getGraphicsQueueIndex() {
+    return graphicQueueFamilyIndex;
 }
 
 VkQueue& GVULKANDevice::getGraphicsQueue() {

@@ -30,7 +30,7 @@ public:
     VkFormat& getImagesFormat();
     VkRenderPass& getRenderPass();
     std::vector<VkFramebuffer>& getFramebuffers();
-    size_t size();
+    size_t framebuffersNumber();
 
 private:
     GLog& log;

@@ -10,6 +10,7 @@
 #include "gvulkandevice.h"
 #include "gvulkanswapchain.h"
 #include "gvulkanpipeline.h"
+#include "gvulkancommands.h"
 #include "gmatrix.h"
 
 namespace spcGaneshaEngine {
@@ -20,7 +21,7 @@ public:
     GVULKANAPI();
     virtual ~GVULKANAPI();
 
-    virtual void initAPI(void *metalLayer, const uint32_t frameWidth, const uint32_t frameHeight);
+    virtual void initAPI(void *metalLayer, const uint32_t frameWidth, const uint32_t frameHeight, const GRenderGraph& renderGraph);
     virtual void destroyAPI();
     virtual void drawFrame();
     virtual void frameResized(const float width, const float height);
@@ -33,6 +34,7 @@ private:
     GVULKANInstance vulkanInstance;
     GVULKANSwapChain vulkanSwapChain;
     GVULKANPipeline vulkanPipeline;
+    GVULKANCommands vulkanCommands;
     
     VkSurfaceKHR metalSurface;
 
@@ -46,15 +48,7 @@ private:
     std::vector<VkFence> inFlightFences;
     std::vector<VkFence> imagesInFlight;
     size_t currentFrame = 0;
-    
-    std::vector<VkCommandBuffer> commandBuffers;
-    VkCommandPool commandPool;
-    
-    VkBuffer vertexBuffer;
-    VkDeviceMemory vertexBufferMemory;
-    VkBuffer indexBuffer;
-    VkDeviceMemory indexBufferMemory;
-    
+
     std::vector<VkBuffer> uniformBuffers;
     std::vector<VkDeviceMemory> uniformBuffersMemory;
     
@@ -62,29 +56,15 @@ private:
     std::vector<VkDescriptorSet> descriptorSets;
     VkDescriptorSetLayout descriptorSetLayout;
 
-    uint32_t maxFramesInFlight = 2;
-
-    void createDescriptorSetLayout();
+    const uint32_t maxFramesInFlight = 2;
 
     void createSemaphores();
     
-    void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
-    void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
-    void createVertexBuffer();
-    void createIndicesBuffer();
     void createUniformBuffers();
     void updateUniformBuffer(uint32_t currentImage);
     void createDescriptorPool();
     void createDescriptorSets();
-
-    void createCommandPool();
-    void createCommandBuffers();
-    uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
-
-    void createGraphicsPipeline();
-
-    void createSwapChain(const uint32_t frameWidth, const uint32_t frameHeight);
-    void createFramebuffers();
+    void createDescriptorSetLayout();
 
     VkSurfaceKHR createSurface(void *metalLayer);
 };

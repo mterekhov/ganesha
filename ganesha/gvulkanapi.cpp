@@ -8,7 +8,6 @@
 #include "gpoint2d.h"
 #include "gcolor.h"
 #include "gmatrix.h"
-#include "ganeshastubdata.h"
 
 namespace spcGaneshaEngine {
 
@@ -26,7 +25,7 @@ struct UniformBufferObject {
     GMatrix proj;
 };
 
-GVULKANAPI::GVULKANAPI() : log("Ganesha"), vulkanInstance(log), vulkanDevice(log), vulkanSwapChain(log), vulkanPipeline(log) {
+GVULKANAPI::GVULKANAPI() : log("Ganesha"), vulkanInstance(log), vulkanDevice(log), vulkanSwapChain(log), vulkanPipeline(log), vulkanCommands(log) {
     
 }
 
@@ -36,7 +35,7 @@ GVULKANAPI::~GVULKANAPI() {
 
 #pragma mark - GGraphicsAPIProtocol -
 
-void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint32_t frameHeight) {
+void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint32_t frameHeight, const GRenderGraph& renderGraph) {
     updateFrameSize = false;
 
     //  create VULKAN instance
@@ -55,12 +54,9 @@ void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint
     createUniformBuffers();
     createDescriptorPool();
     createDescriptorSets();
-    
-    commandPool = vulkanDevice.createCommandPool();
-    
-    createVertexBuffer();
-    createIndicesBuffer();
-    createCommandBuffers();
+
+    vulkanCommands.createCommands(vulkanDevice, vulkanSwapChain, vulkanPipeline, renderGraph);
+
     createSemaphores();
 }
 
@@ -71,7 +67,7 @@ void GVULKANAPI::destroyAPI() {
         vkDestroyFence(vulkanDevice.getLogicalDevice(), inFlightFences[i], nullptr);
     }
     
-    vkDestroyCommandPool(vulkanDevice.getLogicalDevice(), commandPool, nullptr);
+    vkDestroyCommandPool(vulkanDevice.getLogicalDevice(), vulkanCommands.getCommandPool(), nullptr);
     vulkanPipeline.destroyPipeline(vulkanDevice);
     vulkanSwapChain.destroySwapChain(vulkanDevice);
     
@@ -80,13 +76,9 @@ void GVULKANAPI::destroyAPI() {
         vkFreeMemory(vulkanDevice.getLogicalDevice(), uniformBuffersMemory[i], nullptr);
     }
     vkDestroyDescriptorPool(vulkanDevice.getLogicalDevice(), descriptorPool, nullptr);
-    
     vkDestroyDescriptorSetLayout(vulkanDevice.getLogicalDevice(), descriptorSetLayout, nullptr);
-    vkDestroyBuffer(vulkanDevice.getLogicalDevice(), vertexBuffer, nullptr);
-    vkFreeMemory(vulkanDevice.getLogicalDevice(), vertexBufferMemory, nullptr);
-    vkDestroyBuffer(vulkanDevice.getLogicalDevice(), indexBuffer, nullptr);
-    vkFreeMemory(vulkanDevice.getLogicalDevice(), indexBufferMemory, nullptr);
     
+    vulkanCommands.destroyCommands(vulkanDevice);    
     vulkanDevice.destroyDevice();
     vkDestroySurfaceKHR(vulkanInstance.getVulkanInstance(), metalSurface, nullptr);
     vulkanInstance.destroyInstance();
@@ -94,6 +86,7 @@ void GVULKANAPI::destroyAPI() {
 
 void GVULKANAPI::frameResized(const float width, const float height) {
     updateFrameSize = true;
+    vulkanSwapChain.updateScreenSize(width, height, vulkanDevice, metalSurface);
 }
 
 void GVULKANAPI::drawFrame() {
@@ -119,7 +112,7 @@ void GVULKANAPI::drawFrame() {
     submitInfo.pWaitDstStageMask = waitStages;
     
     submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers = &commandBuffers[imageIndex];
+    submitInfo.pCommandBuffers = &vulkanCommands.getCommandBuffersArray()[imageIndex];
 
     VkSemaphore signalSemaphores[] = {renderFinishedSemaphores[currentFrame]};
     submitInfo.signalSemaphoreCount = 1;
@@ -178,130 +171,6 @@ VkSurfaceKHR GVULKANAPI::createSurface(void *metalLayer) {
     }
     
     return newSurface;
-}
-
-uint32_t GVULKANAPI::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
-    VkPhysicalDeviceMemoryProperties memoryProperties;
-    vkGetPhysicalDeviceMemoryProperties(vulkanDevice.getPhysicalDevice(), &memoryProperties);
-    
-    for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; i++) {
-        if ((typeFilter & (1 << i)) &&
-            (memoryProperties.memoryTypes[i].propertyFlags & properties) == properties) {
-            return i;
-        }
-    }
-    
-    return 0;
-}
-
-void GVULKANAPI::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size) {
-    VkCommandBufferAllocateInfo commandBufferAllocateInfo{};
-    commandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    commandBufferAllocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-    commandBufferAllocateInfo.commandPool = commandPool;
-    commandBufferAllocateInfo.commandBufferCount = 1;
-    
-    VkCommandBuffer commandBuffer;
-    vkAllocateCommandBuffers(vulkanDevice.getLogicalDevice(), &commandBufferAllocateInfo, &commandBuffer);
-
-    VkCommandBufferBeginInfo beginInfo{};
-    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-
-    vkBeginCommandBuffer(commandBuffer, &beginInfo);
-    VkBufferCopy copyRegion{};
-    copyRegion.srcOffset = 0; // Optional
-    copyRegion.dstOffset = 0; // Optional
-    copyRegion.size = size;
-    vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion);
-    vkEndCommandBuffer(commandBuffer);
-
-    VkSubmitInfo submitInfo{};
-    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers = &commandBuffer;
-    vkQueueSubmit(vulkanDevice.getGraphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE);
-    vkQueueWaitIdle(vulkanDevice.getGraphicsQueue());
-    
-    vkFreeCommandBuffers(vulkanDevice.getLogicalDevice(), commandPool, 1, &commandBuffer);
-}
-
-void GVULKANAPI::createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory) {
-    VkBufferCreateInfo bufferInfo{};
-    bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-    bufferInfo.size = size;
-    bufferInfo.usage = usage;
-    bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-    if (vkCreateBuffer(vulkanDevice.getLogicalDevice(), &bufferInfo, nullptr, &buffer) != VK_SUCCESS) {
-        printf("GaneshaEngine: failed to create vertex buffer\n");
-    }
-
-    VkMemoryRequirements memoryRequirements;
-    vkGetBufferMemoryRequirements(vulkanDevice.getLogicalDevice(), buffer, &memoryRequirements);
-    
-    VkMemoryAllocateInfo memoryAllocateInfo{};
-    memoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    memoryAllocateInfo.allocationSize = memoryRequirements.size;
-    memoryAllocateInfo.memoryTypeIndex = findMemoryType(memoryRequirements.memoryTypeBits, properties);
-    if (vkAllocateMemory(vulkanDevice.getLogicalDevice(), &memoryAllocateInfo, nullptr, &bufferMemory) != VK_SUCCESS) {
-        printf("GaneshaEngine: failed to allocate vertex buffer memory\n");
-        return;
-    }
-    vkBindBufferMemory(vulkanDevice.getLogicalDevice(), buffer, bufferMemory, 0);
-}
-
-void GVULKANAPI::createIndicesBuffer() {
-    VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
-    VkBuffer stagingBuffer;
-    VkDeviceMemory stagingBufferMemory;
-    createBuffer(bufferSize,
-                 VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-                 stagingBuffer,
-                 stagingBufferMemory);
-    
-    void *data;
-    vkMapMemory(vulkanDevice.getLogicalDevice(), stagingBufferMemory, 0, bufferSize, 0, &data);
-    memcpy(data, indices.data(), (size_t) bufferSize);
-    vkUnmapMemory(vulkanDevice.getLogicalDevice(), stagingBufferMemory);
-
-    createBuffer(bufferSize,
-                 VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
-                 VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-                 indexBuffer,
-                 indexBufferMemory);
-    
-    copyBuffer(stagingBuffer, indexBuffer, bufferSize);
-
-    vkDestroyBuffer(vulkanDevice.getLogicalDevice(), stagingBuffer, nullptr);
-    vkFreeMemory(vulkanDevice.getLogicalDevice(), stagingBufferMemory, nullptr);
-}
-
-void GVULKANAPI::createVertexBuffer() {
-    VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
-    VkBuffer stagingBuffer;
-    VkDeviceMemory stagingBufferMemory;
-    createBuffer(bufferSize,
-                 VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-                 stagingBuffer,
-                 stagingBufferMemory);
-    
-    void *data;
-    vkMapMemory(vulkanDevice.getLogicalDevice(), stagingBufferMemory, 0, bufferSize, 0, &data);
-    memcpy(data, vertices.data(), (size_t) bufferSize);
-    vkUnmapMemory(vulkanDevice.getLogicalDevice(), stagingBufferMemory);
-
-    createBuffer(bufferSize,
-                 VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
-                 VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-                 vertexBuffer,
-                 vertexBufferMemory);
-    
-    copyBuffer(stagingBuffer, vertexBuffer, bufferSize);
-
-    vkDestroyBuffer(vulkanDevice.getLogicalDevice(), stagingBuffer, nullptr);
-    vkFreeMemory(vulkanDevice.getLogicalDevice(), stagingBufferMemory, nullptr);
 }
 
 void GVULKANAPI::createDescriptorPool() {
@@ -402,61 +271,6 @@ void GVULKANAPI::createSemaphores() {
             vkCreateFence(vulkanDevice.getLogicalDevice(), &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
             printf("GaneshaEngine: failed to create semaphores\n");
             return;
-        }
-    }
-}
-
-#pragma mark - Commands -
-    
-void GVULKANAPI::createCommandBuffers() {
-    commandBuffers.resize(vulkanSwapChain.getFramebuffers().size());
-
-    VkCommandBufferAllocateInfo allocInfo{};
-    allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    allocInfo.commandPool = commandPool;
-    allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-    allocInfo.commandBufferCount = static_cast<uint32_t>(commandBuffers.size());
-
-    if (vkAllocateCommandBuffers(vulkanDevice.getLogicalDevice(), &allocInfo, commandBuffers.data()) != VK_SUCCESS) {
-        printf("GaneshaEngine: failed to create command buffer\n");
-    }
-    
-    for (size_t i = 0; i < commandBuffers.size(); i++) {
-        VkCommandBufferBeginInfo beginInfo{};
-        beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-        
-        if (vkBeginCommandBuffer(commandBuffers[i], &beginInfo) != VK_SUCCESS) {
-            printf("GaneshaEngine: failed to begin recording command buffer\n");
-        }
-        
-        VkRenderPassBeginInfo renderPassInfo{};
-        renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-        renderPassInfo.renderPass = vulkanSwapChain.getRenderPass();
-        renderPassInfo.framebuffer = vulkanSwapChain.getFramebuffers()[i];
-        renderPassInfo.renderArea.offset = {0, 0};
-        renderPassInfo.renderArea.extent = vulkanSwapChain.getExtent();
-        
-        VkClearValue clearColor = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
-        renderPassInfo.clearValueCount = 1;
-        renderPassInfo.pClearValues = &clearColor;
-        
-        vkCmdBeginRenderPass(commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-        
-        vkCmdBindPipeline(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanPipeline.getGraphicsPipeline());
-        
-        VkBuffer vertexBuffers[] = {vertexBuffer};
-        VkDeviceSize offsets[] = {0};
-        vkCmdBindVertexBuffers(commandBuffers[i], 0, 1, vertexBuffers, offsets);
-        
-        vkCmdBindIndexBuffer(commandBuffers[i], indexBuffer, 0, VK_INDEX_TYPE_UINT16);
-
-        vkCmdBindDescriptorSets(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanPipeline.getPipelineLayout(), 0, 1, &descriptorSets[i], 0, nullptr);
-        vkCmdDrawIndexed(commandBuffers[i], static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
-        
-        vkCmdEndRenderPass(commandBuffers[i]);
-        
-        if (vkEndCommandBuffer(commandBuffers[i]) != VK_SUCCESS) {
-            printf("GaneshaEngine: failed to record command buffer\n");
         }
     }
 }
