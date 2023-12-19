@@ -69,16 +69,16 @@ void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint
     
     std::vector<Vertex> vertecesArray = renderGraph.getVertecesArray();
     vertecesBuffer.createBuffer(vertecesArray.data(),
-                                vertecesArray.size(),
+                                sizeof(Vertex) * vertecesArray.size(),
                                 VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
                                 VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
                                 true,
                                 vulkanDevice,
                                 vulkanCommands);
     
-    std::vector<uint32_t> indecesArray = renderGraph.getIndecesArray();
+    std::vector<uint16_t> indecesArray = renderGraph.getIndecesArray();
     indecesBuffer.createBuffer(indecesArray.data(),
-                               indecesArray.size(),
+                               sizeof(uint16_t) * indecesArray.size(),
                                VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
                                true,
