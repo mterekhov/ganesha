@@ -37,9 +37,7 @@ private:
 
     VkPipelineShaderStageCreateInfo createShader(const std::string shaderFile,  const VkShaderStageFlagBits stage, VkDevice& device);
     VkPipelineVertexInputStateCreateInfo createVertexInput();
-    VkPipelineViewportStateCreateInfo createViewport(const VkExtent2D& extent);
     VkPipelineRasterizationStateCreateInfo createRasterizer();
-    VkPipelineColorBlendStateCreateInfo createColorBlending();
     VkPipelineLayout createPipelineLayout(const VkDevice& device, VkDescriptorSetLayout& descriptorsetLayout);
 };
 

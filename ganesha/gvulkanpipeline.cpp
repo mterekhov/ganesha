@@ -28,8 +28,24 @@ void GVULKANPipeline::createPipeline(GVULKANDevice& device, GVULKANSwapChain& sw
     inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
     inputAssembly.primitiveRestartEnable = VK_FALSE;
     
-    VkPipelineViewportStateCreateInfo viewportState = createViewport(swapChain.getExtent());
-    
+    VkExtent2D extent = swapChain.getExtent();
+    VkRect2D scissor = { };
+    scissor.offset = {0, 0};
+    scissor.extent = extent;
+    VkViewport viewport = { };
+    viewport.x = 0.0f;
+    viewport.y = 0.0f;
+    viewport.width = static_cast<TFloat>(extent.width);
+    viewport.height = static_cast<TFloat>(extent.height);
+    viewport.minDepth = 0.0f;
+    viewport.maxDepth = 1.0f;
+    VkPipelineViewportStateCreateInfo viewportState = { };
+    viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+    viewportState.viewportCount = 1;
+    viewportState.pViewports = &viewport;
+    viewportState.scissorCount = 1;
+    viewportState.pScissors = &scissor;
+
     VkPipelineRasterizationStateCreateInfo rasterizer = createRasterizer();
     
     VkPipelineMultisampleStateCreateInfo multisampling = { };
@@ -37,7 +53,19 @@ void GVULKANPipeline::createPipeline(GVULKANDevice& device, GVULKANSwapChain& sw
     multisampling.sampleShadingEnable = VK_FALSE;
     multisampling.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
     
-    VkPipelineColorBlendStateCreateInfo colorBlending = createColorBlending();
+    VkPipelineColorBlendAttachmentState colorBlendAttachment = { };
+    colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+    colorBlendAttachment.blendEnable = VK_FALSE;
+    VkPipelineColorBlendStateCreateInfo colorBlending = { };
+    colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+    colorBlending.logicOpEnable = VK_FALSE;
+    colorBlending.logicOp = VK_LOGIC_OP_COPY; // Optional
+    colorBlending.attachmentCount = 1;
+    colorBlending.pAttachments = &colorBlendAttachment;
+    colorBlending.blendConstants[0] = 0.0f; // Optional
+    colorBlending.blendConstants[1] = 0.0f; // Optional
+    colorBlending.blendConstants[2] = 0.0f; // Optional
+    colorBlending.blendConstants[3] = 0.0f; // Optional
     
     std::vector<VkDynamicState> dynamicStates = {
         VK_DYNAMIC_STATE_VIEWPORT,
@@ -104,29 +132,6 @@ VkPipelineVertexInputStateCreateInfo GVULKANPipeline::createVertexInput() {
     return vertexInput;
 }
 
-VkPipelineViewportStateCreateInfo GVULKANPipeline::createViewport(const VkExtent2D& extent) {
-    VkRect2D scissor = { };
-    scissor.offset = {0, 0};
-    scissor.extent = extent;
-    
-    VkViewport viewport = { };
-    viewport.x = 0.0f;
-    viewport.y = 0.0f;
-    viewport.width = static_cast<TFloat>(extent.width);
-    viewport.height = static_cast<TFloat>(extent.height);
-    viewport.minDepth = 0.0f;
-    viewport.maxDepth = 1.0f;
-    
-    VkPipelineViewportStateCreateInfo viewportState = { };
-    viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-    viewportState.viewportCount = 1;
-    viewportState.pViewports = &viewport;
-    viewportState.scissorCount = 1;
-    viewportState.pScissors = &scissor;
-    
-    return viewportState;
-}
-
 VkPipelineRasterizationStateCreateInfo GVULKANPipeline::createRasterizer() {
     VkPipelineRasterizationStateCreateInfo rasterizer = { };
     
@@ -140,25 +145,6 @@ VkPipelineRasterizationStateCreateInfo GVULKANPipeline::createRasterizer() {
     rasterizer.depthBiasEnable = VK_FALSE;
     
     return rasterizer;
-}
-
-VkPipelineColorBlendStateCreateInfo GVULKANPipeline::createColorBlending() {
-    VkPipelineColorBlendAttachmentState colorBlendAttachment = { };
-    colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-    colorBlendAttachment.blendEnable = VK_FALSE;
-    
-    VkPipelineColorBlendStateCreateInfo colorBlending = { };
-    colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-    colorBlending.logicOpEnable = VK_FALSE;
-    colorBlending.logicOp = VK_LOGIC_OP_COPY; // Optional
-    colorBlending.attachmentCount = 1;
-    colorBlending.pAttachments = &colorBlendAttachment;
-    colorBlending.blendConstants[0] = 0.0f; // Optional
-    colorBlending.blendConstants[1] = 0.0f; // Optional
-    colorBlending.blendConstants[2] = 0.0f; // Optional
-    colorBlending.blendConstants[3] = 0.0f; // Optional
-    
-    return colorBlending;
 }
 
 VkPipelineLayout GVULKANPipeline::createPipelineLayout(const VkDevice& device, VkDescriptorSetLayout& descriptorsetLayout) {
