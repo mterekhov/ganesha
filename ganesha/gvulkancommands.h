@@ -23,7 +23,7 @@ public:
     GVULKANCommands(GLog& log);
     ~GVULKANCommands();
     
-    void createCommands(GVULKANDevice& device, GVULKANSwapChain& swapChain, GVULKANPipeline& pipline, const GRenderGraph& renderGraph);
+    void createCommands(GVULKANDevice& device);
     void destroyCommands(GVULKANDevice& device);
 //    std::vector<VkCommandBuffer>& getCommandBuffersArray();
 
@@ -37,7 +37,8 @@ public:
                              uint32_t indicesNumber,
                              VkFramebuffer& framebuffer,
                              GVULKANSwapChain& swapChain,
-                             GVULKANPipeline& pipeline);
+                             GVULKANPipeline& pipeline,
+                             VkDescriptorSet& descriptorset);
     void destroyCommandBuffer(VkCommandBuffer& commandBuffer, const VkDevice& device);
 
 private:

@@ -17,7 +17,7 @@ GVULKANCommands::~GVULKANCommands() {
     
 }
 
-void GVULKANCommands::createCommands(GVULKANDevice& device, GVULKANSwapChain& swapChain, GVULKANPipeline& pipline, const GRenderGraph& renderGraph) {
+void GVULKANCommands::createCommands(GVULKANDevice& device) {
     commandPool = createCommandPool(device);
 }
 
@@ -27,7 +27,8 @@ void GVULKANCommands::recordRenderCommand(VkCommandBuffer& renderCommand,
                                           uint32_t indicesNumber,
                                           VkFramebuffer& framebuffer,
                                           GVULKANSwapChain& swapChain,
-                                          GVULKANPipeline& pipeline) {
+                                          GVULKANPipeline& pipeline,
+                                          VkDescriptorSet& descriptorset) {
     VkCommandBufferBeginInfo beginInfo = { };
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     
@@ -56,7 +57,7 @@ void GVULKANCommands::recordRenderCommand(VkCommandBuffer& renderCommand,
     
     vkCmdBindIndexBuffer(renderCommand, indicesBuffer, 0, VK_INDEX_TYPE_UINT16);
     
-    vkCmdBindDescriptorSets(renderCommand, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.getPipelineLayout(), 0, 1, &descriptorSets[i], 0, nullptr);
+    vkCmdBindDescriptorSets(renderCommand, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.getPipelineLayout(), 0, 1, &descriptorset, 0, nullptr);
     vkCmdDrawIndexed(renderCommand, indicesNumber, 1, 0, 0, 0);
     
     vkCmdEndRenderPass(renderCommand);

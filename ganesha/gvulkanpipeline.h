@@ -23,7 +23,7 @@ public:
     GVULKANPipeline(GLog& log);
     ~GVULKANPipeline();
     
-    void createPipeline(GVULKANDevice& device, GVULKANSwapChain& swapChain);
+    void createPipeline(GVULKANDevice& device, GVULKANSwapChain& swapChain, VkDescriptorSetLayout& descriptorsetLayout);
     void destroyPipeline(GVULKANDevice& device);
     VkPipeline& getGraphicsPipeline();
     VkPipelineLayout& getPipelineLayout();
@@ -40,7 +40,7 @@ private:
     VkPipelineViewportStateCreateInfo createViewport(const VkExtent2D& extent);
     VkPipelineRasterizationStateCreateInfo createRasterizer();
     VkPipelineColorBlendStateCreateInfo createColorBlending();
-    VkPipelineLayout createPipelineLayout(const VkDevice& device);
+    VkPipelineLayout createPipelineLayout(const VkDevice& device, VkDescriptorSetLayout& descriptorsetLayout);
 };
 
 }   //  namespace spcGaneshaEngine

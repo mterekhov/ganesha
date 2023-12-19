@@ -13,6 +13,7 @@
 #include "gvulkancommands.h"
 #include "gmatrix.h"
 #include "gvulkanbuffer.h"
+#include "gvulkandescriptorsets.h"
 
 namespace spcGaneshaEngine {
 
@@ -41,6 +42,7 @@ private:
     GVULKANSwapChain vulkanSwapChain;
     GVULKANPipeline vulkanPipeline;
     GVULKANCommands vulkanCommands;
+    GVULKANDescriptorsets vulkanDescriptorset;
     
     GVULKANBuffer vertecesBuffer;
     GVULKANBuffer indecesBuffer;
@@ -62,20 +64,11 @@ private:
     
     std::vector<GVULKANBuffer> vulkanUniformBuffers;
 
-    VkDescriptorPool descriptorPool;
-    std::vector<VkDescriptorSet> descriptorSets;
-    VkDescriptorSetLayout descriptorSetLayout;
-
     const uint32_t maxFramesInFlight = 2;
 
     void createSemaphores();
     
     UniformBufferObject currentUBO();
-
-    void createDescriptorPool();
-    void createDescriptorSets();
-    void createDescriptorSetLayout();
-
     VkSurfaceKHR createSurface(void *metalLayer);
 };
 

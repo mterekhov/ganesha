@@ -1,6 +1,8 @@
 #ifndef SPCGANESHAENGINE_GRENDERGRAPH_H
 #define SPCGANESHAENGINE_GRENDERGRAPH_H
 
+#include <vector>
+
 #include "ganeshastubdata.h"
 
 namespace spcGaneshaEngine {

@@ -10,10 +10,6 @@ GVULKANBuffer::~GVULKANBuffer() {
     
 }
 
-VkBuffer& GVULKANBuffer::getBuffer() {
-    return buffer;
-}
-
 void GVULKANBuffer::createBuffer(const void *data, const VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, bool protectAccess, GVULKANDevice& vulkanDevice, GVULKANCommands& vulkanCommands) {
     if (protectAccess) {
         VkBuffer stagingBuffer = createBuffer(vulkanDevice.getLogicalDevice(), size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT);
@@ -41,6 +37,8 @@ void GVULKANBuffer::createBuffer(const void *data, const VkDeviceSize size, VkBu
         memcpy(mappedData, data, static_cast<size_t>(size));
         vkUnmapMemory(vulkanDevice.getLogicalDevice(), bufferMemory);
     }
+    
+    bufferSize = static_cast<uint32_t>(size);
 }
 
 void GVULKANBuffer::destroyBuffer(GVULKANDevice& vulkanDevice) {
@@ -49,11 +47,19 @@ void GVULKANBuffer::destroyBuffer(GVULKANDevice& vulkanDevice) {
 
 }
 
-void GVULKANBuffer::refreshBuffer(const void *data, const VkDeviceSize size, GVULKANDevice& vulkanDevice) {
+void GVULKANBuffer::refreshBuffer(const void *data, GVULKANDevice& vulkanDevice) {
     void *mappedData;
-    vkMapMemory(vulkanDevice.getLogicalDevice(), bufferMemory, 0, size, 0, &mappedData);
-    memcpy(mappedData, data, static_cast<size_t>(size));
+    vkMapMemory(vulkanDevice.getLogicalDevice(), bufferMemory, 0, bufferSize, 0, &mappedData);
+    memcpy(mappedData, data, static_cast<size_t>(bufferSize));
     vkUnmapMemory(vulkanDevice.getLogicalDevice(), bufferMemory);
+}
+
+uint32_t GVULKANBuffer::getBufferSize() {
+    return bufferSize;
+}
+
+VkBuffer& GVULKANBuffer::getBuffer() {
+    return buffer;
 }
 
 #pragma mark - Routine -

@@ -16,7 +16,7 @@ GVULKANPipeline::GVULKANPipeline(GLog& log) : log(log) {
 GVULKANPipeline::~GVULKANPipeline() {
 }
 
-void GVULKANPipeline::createPipeline(GVULKANDevice& device, GVULKANSwapChain& swapChain) {
+void GVULKANPipeline::createPipeline(GVULKANDevice& device, GVULKANSwapChain& swapChain, VkDescriptorSetLayout& descriptorsetLayout) {
     VkPipelineShaderStageCreateInfo vertShaderStageInfo = createShader("vert.spv", VK_SHADER_STAGE_VERTEX_BIT, device.getLogicalDevice());
     VkPipelineShaderStageCreateInfo fragShaderStageInfo = createShader("frag.spv", VK_SHADER_STAGE_FRAGMENT_BIT, device.getLogicalDevice());
     VkPipelineShaderStageCreateInfo pipelineShaderStageInfosList[] = {vertShaderStageInfo, fragShaderStageInfo};
@@ -48,7 +48,7 @@ void GVULKANPipeline::createPipeline(GVULKANDevice& device, GVULKANSwapChain& sw
     dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
     dynamicState.pDynamicStates = dynamicStates.data();
     
-    pipelineLayout = createPipelineLayout(device.getLogicalDevice());
+    pipelineLayout = createPipelineLayout(device.getLogicalDevice(), descriptorsetLayout);
     
     VkGraphicsPipelineCreateInfo pipelineInfo{};
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -161,11 +161,11 @@ VkPipelineColorBlendStateCreateInfo GVULKANPipeline::createColorBlending() {
     return colorBlending;
 }
 
-VkPipelineLayout GVULKANPipeline::createPipelineLayout(const VkDevice& device) {
+VkPipelineLayout GVULKANPipeline::createPipelineLayout(const VkDevice& device, VkDescriptorSetLayout& descriptorsetLayout) {
     VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
     pipelineLayoutInfo.setLayoutCount = 1; // Optional
-    //    pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
+    pipelineLayoutInfo.pSetLayouts = &descriptorsetLayout;
     pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
     
     VkPipelineLayout newPipelineLayout;

@@ -20,7 +20,7 @@ static const TStringsArray avoidInstanceExtensions = {
     VK_LUNARG_DIRECT_DRIVER_LOADING_EXTENSION_NAME
 };
 
-GVULKANAPI::GVULKANAPI() : log("Ganesha"), vulkanInstance(log), vulkanDevice(log), vulkanSwapChain(log), vulkanPipeline(log), vulkanCommands(log), vertecesBuffer(log), indecesBuffer(log) {
+GVULKANAPI::GVULKANAPI() : log("Ganesha"), vulkanInstance(log), vulkanDevice(log), vulkanSwapChain(log), vulkanPipeline(log), vulkanCommands(log), vertecesBuffer(log), indecesBuffer(log), vulkanDescriptorset(log) {
     
 }
 
@@ -43,32 +43,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint
     //  creates physicalDevice
     vulkanDevice.createDevice(vulkanInstance, metalSurface);
     vulkanSwapChain.createSwapChain(frameWidth, frameHeight, vulkanDevice, metalSurface);
-    
-    createDescriptorSetLayout();
-    vulkanPipeline.createPipeline(vulkanDevice, vulkanSwapChain);
-
-    createDescriptorPool();
-    createDescriptorSets();
-    
-    vulkanCommands.createCommands(vulkanDevice, vulkanSwapChain, vulkanPipeline, renderGraph);
-    
-    std::vector<Vertex> vertecesArray = renderGraph.getVertecesArray();
-    vertecesBuffer.createBuffer(vertecesArray.data(),
-                                vertecesArray.size(),
-                                VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
-                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-                                true,
-                                vulkanDevice,
-                                vulkanCommands);
-    
-    std::vector<uint32_t> indecesArray = renderGraph.getIndecesArray();
-    indecesBuffer.createBuffer(indecesArray.data(), 
-                               indecesArray.size(),
-                               VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
-                               VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-                               true,
-                               vulkanDevice,
-                               vulkanCommands);
+    vulkanCommands.createCommands(vulkanDevice);
     
     uint32_t framebuffersNumber = static_cast<uint32_t>(vulkanSwapChain.framebuffersNumber());
     VkDeviceSize bufferSize = sizeof(UniformBufferObject);
@@ -84,6 +59,27 @@ void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint
                                vulkanCommands);
         vulkanUniformBuffers.push_back(newBuffer);
     }
+    vulkanDescriptorset.createDescriptorsets(vulkanDevice, vulkanUniformBuffers);
+    vulkanPipeline.createPipeline(vulkanDevice, vulkanSwapChain, vulkanDescriptorset.getDescriptorsetLayout());
+    
+    std::vector<Vertex> vertecesArray = renderGraph.getVertecesArray();
+    vertecesBuffer.createBuffer(vertecesArray.data(),
+                                vertecesArray.size(),
+                                VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+                                true,
+                                vulkanDevice,
+                                vulkanCommands);
+    
+    std::vector<uint32_t> indecesArray = renderGraph.getIndecesArray();
+    indecesBuffer.createBuffer(indecesArray.data(),
+                               indecesArray.size(),
+                               VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
+                               VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+                               true,
+                               vulkanDevice,
+                               vulkanCommands);
+    
     
     for (uint32_t i = 0; i < framebuffersNumber; i++) {
         renderCommands.push_back(vulkanCommands.emptyCommand(vulkanDevice.getLogicalDevice()));
@@ -91,22 +87,6 @@ void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint
     
     createSemaphores();
 }
-
-UniformBufferObject GVULKANAPI::currentUBO() {
-    static auto startTime = std::chrono::high_resolution_clock::now();
-    
-    auto currentTime = std::chrono::high_resolution_clock::now();
-    float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
-    
-    UniformBufferObject ubo = {};
-    
-    ubo.model = GMatrix::rotationZ(time * M_PI_2);
-    ubo.view = viewMatrix;
-    ubo.proj = projectionMatrix;
-    
-    return ubo;
-}
-
 
 void GVULKANAPI::destroyAPI() {
     for (size_t i = 0; i < maxFramesInFlight; i++) {
@@ -124,8 +104,7 @@ void GVULKANAPI::destroyAPI() {
     for (size_t i = 0; i < vulkanSwapChain.framebuffersNumber(); i++) {
         vulkanUniformBuffers[i].destroyBuffer(vulkanDevice);
     }
-    vkDestroyDescriptorPool(vulkanDevice.getLogicalDevice(), descriptorPool, nullptr);
-    vkDestroyDescriptorSetLayout(vulkanDevice.getLogicalDevice(), descriptorSetLayout, nullptr);
+    vulkanDescriptorset.destroyDescriptorsets(vulkanDevice);
     
     vulkanCommands.destroyCommands(vulkanDevice);
     vulkanDevice.destroyDevice();
@@ -149,7 +128,7 @@ void GVULKANAPI::drawFrame(GRenderGraph& renderGraph) {
     imagesInFlight[imageIndex] = inFlightFences[currentFrame];
     
     UniformBufferObject ubo = currentUBO();
-    vulkanUniformBuffers[imageIndex].refreshBuffer(&ubo, sizeof(UniformBufferObject), vulkanDevice);
+    vulkanUniformBuffers[imageIndex].refreshBuffer(&ubo, vulkanDevice);
     
     vkResetCommandBuffer(renderCommands[imageIndex], 0);
     vulkanCommands.recordRenderCommand(renderCommands[imageIndex],
@@ -158,7 +137,8 @@ void GVULKANAPI::drawFrame(GRenderGraph& renderGraph) {
                                        static_cast<uint32_t>(renderGraph.getIndecesArray().size()),
                                        vulkanSwapChain.getFramebuffers()[imageIndex],
                                        vulkanSwapChain,
-                                       vulkanPipeline);
+                                       vulkanPipeline,
+                                       vulkanDescriptorset.getDescriptorsetArray()[imageIndex]);
     VkSubmitInfo submitInfo{};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     
@@ -215,79 +195,6 @@ void GVULKANAPI::installViewMatrix(const GMatrix& newViewMatrix) {
 
 #pragma mark - Routine -
 
-void GVULKANAPI::createDescriptorPool() {
-    uint32_t framebuffersNumber = static_cast<uint32_t>(vulkanSwapChain.framebuffersNumber());
-    
-    VkDescriptorPoolSize poolSize{};
-    poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    poolSize.descriptorCount = framebuffersNumber;
-    
-    VkDescriptorPoolCreateInfo poolInfo{};
-    poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-    poolInfo.poolSizeCount = 1;
-    poolInfo.pPoolSizes = &poolSize;
-    poolInfo.maxSets = framebuffersNumber;
-    if (vkCreateDescriptorPool(vulkanDevice.getLogicalDevice(), &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
-        printf("GaneshaEngine: failed to create descriptor pool\n");
-    }
-}
-
-void GVULKANAPI::createDescriptorSets() {
-    uint32_t framebuffersNumber = static_cast<uint32_t>(vulkanSwapChain.framebuffersNumber());
-    
-    std::vector<VkDescriptorSetLayout> layouts(framebuffersNumber, descriptorSetLayout);
-    VkDescriptorSetAllocateInfo allocInfo{};
-    allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-    allocInfo.descriptorPool = descriptorPool;
-    allocInfo.descriptorSetCount = framebuffersNumber;
-    allocInfo.pSetLayouts = layouts.data();
-    
-    descriptorSets.resize(framebuffersNumber);
-    if (vkAllocateDescriptorSets(vulkanDevice.getLogicalDevice(), &allocInfo, descriptorSets.data()) != VK_SUCCESS) {
-        printf("GaneshaEngine: failed to allocate descriptor sets\n");
-    }
-    
-    for (size_t i = 0; i < framebuffersNumber; i++) {
-        VkDescriptorBufferInfo bufferInfo{};
-        bufferInfo.buffer = uniformBuffers[i];
-        bufferInfo.offset = 0;
-        bufferInfo.range = sizeof(UniformBufferObject);
-        
-        VkWriteDescriptorSet descriptorWrite{};
-        descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        descriptorWrite.dstSet = descriptorSets[i];
-        descriptorWrite.dstBinding = 0;
-        descriptorWrite.dstArrayElement = 0;
-        descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        descriptorWrite.descriptorCount = 1;
-        descriptorWrite.pBufferInfo = &bufferInfo;
-        descriptorWrite.pImageInfo = nullptr; // Optional
-        descriptorWrite.pTexelBufferView = nullptr; // Optional
-        
-        vkUpdateDescriptorSets(vulkanDevice.getLogicalDevice(), 1, &descriptorWrite, 0, nullptr);
-    }
-    
-}
-
-void GVULKANAPI::createDescriptorSetLayout() {
-    VkDescriptorSetLayoutBinding uboLayoutBinding{};
-    
-    uboLayoutBinding.binding = 0;
-    uboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    uboLayoutBinding.descriptorCount = 1;
-    uboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-    
-    VkDescriptorSetLayoutCreateInfo layoutInfo{};
-    layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-    layoutInfo.bindingCount = 1;
-    layoutInfo.pBindings = &uboLayoutBinding;
-    
-    if (vkCreateDescriptorSetLayout(vulkanDevice.getLogicalDevice(), &layoutInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
-        printf("GaneshaEngine: failed to create descriptor set layout\n");
-    }
-    
-}
-
 void GVULKANAPI::createSemaphores() {
     imageAvailableSemaphores.resize(maxFramesInFlight);
     renderFinishedSemaphores.resize(maxFramesInFlight);
@@ -325,6 +232,21 @@ VkSurfaceKHR GVULKANAPI::createSurface(void *metalLayer) {
     }
     
     return newSurface;
+}
+
+UniformBufferObject GVULKANAPI::currentUBO() {
+    static auto startTime = std::chrono::high_resolution_clock::now();
+    
+    auto currentTime = std::chrono::high_resolution_clock::now();
+    float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+    
+    UniformBufferObject ubo = {};
+    
+    ubo.model = GMatrix::rotationZ(time * M_PI_2);
+    ubo.view = viewMatrix;
+    ubo.proj = projectionMatrix;
+    
+    return ubo;
 }
 
 }

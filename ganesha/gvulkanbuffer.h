@@ -22,12 +22,14 @@ public:
                       GVULKANDevice& vulkanDevice,
                       GVULKANCommands& vulkanCommands);
     void destroyBuffer(GVULKANDevice& vulkanDevice);
-    void refreshBuffer(const void *data, const VkDeviceSize size, GVULKANDevice& vulkanDevice);
+    void refreshBuffer(const void *data, GVULKANDevice& vulkanDevice);
     VkBuffer& getBuffer();
-    
+    uint32_t getBufferSize();
+
 private:
     GLog& log;
     VkBuffer buffer;
+    uint32_t bufferSize;
     VkDeviceMemory bufferMemory;
     
     VkBuffer createBuffer(VkDevice& device, VkDeviceSize size, VkBufferUsageFlags usage);
