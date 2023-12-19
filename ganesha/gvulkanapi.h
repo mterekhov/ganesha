@@ -44,6 +44,7 @@ private:
     GVULKANCommands vulkanCommands;
     GVULKANDescriptorsets vulkanDescriptorset;
     
+    std::vector<GVULKANBuffer> vulkanUniformBuffers;
     GVULKANBuffer vertecesBuffer;
     GVULKANBuffer indecesBuffer;
 
@@ -61,8 +62,6 @@ private:
     size_t currentFrame = 0;
 
     std::vector<VkCommandBuffer> renderCommands;
-    
-    std::vector<GVULKANBuffer> vulkanUniformBuffers;
 
     const uint32_t maxFramesInFlight = 2;
 

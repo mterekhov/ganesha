@@ -94,23 +94,26 @@ void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint
 }
 
 void GVULKANAPI::destroyAPI() {
+    vkDeviceWaitIdle(vulkanDevice.getLogicalDevice());
+
+    vulkanSwapChain.destroySwapChain(vulkanDevice);
+    vulkanPipeline.destroyPipeline(vulkanDevice);
+
+    for (size_t i = 0; i < vulkanUniformBuffers.size(); i++) {
+        vulkanUniformBuffers[i].destroyBuffer(vulkanDevice);
+    }
+    
+    vulkanDescriptorset.destroyDescriptorsets(vulkanDevice);
+    
+    indecesBuffer.destroyBuffer(vulkanDevice);
+    vertecesBuffer.destroyBuffer(vulkanDevice);
+
     for (size_t i = 0; i < maxFramesInFlight; i++) {
         vkDestroySemaphore(vulkanDevice.getLogicalDevice(), renderFinishedSemaphores[i], nullptr);
         vkDestroySemaphore(vulkanDevice.getLogicalDevice(), imageAvailableSemaphores[i], nullptr);
         vkDestroyFence(vulkanDevice.getLogicalDevice(), inFlightFences[i], nullptr);
     }
-    
-    vkDestroyCommandPool(vulkanDevice.getLogicalDevice(), vulkanCommands.getCommandPool(), nullptr);
-    vulkanPipeline.destroyPipeline(vulkanDevice);
-    vulkanSwapChain.destroySwapChain(vulkanDevice);
-    indecesBuffer.destroyBuffer(vulkanDevice);
-    vertecesBuffer.destroyBuffer(vulkanDevice);
-    
-    for (size_t i = 0; i < vulkanSwapChain.framebuffersNumber(); i++) {
-        vulkanUniformBuffers[i].destroyBuffer(vulkanDevice);
-    }
-    vulkanDescriptorset.destroyDescriptorsets(vulkanDevice);
-    
+
     vulkanCommands.destroyCommands(vulkanDevice);
     vulkanDevice.destroyDevice();
     vkDestroySurfaceKHR(vulkanInstance.getVulkanInstance(), metalSurface, nullptr);
