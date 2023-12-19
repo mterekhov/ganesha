@@ -1,10 +1,3 @@
-//
-//  gvulkandevice.cpp
-//  game
-//
-//  Created by cipher on 20.05.2022.
-//
-
 #include <set>
 #include <string>
 #include <iostream>

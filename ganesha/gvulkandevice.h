@@ -1,10 +1,3 @@
-//
-//  gvulkandevice.hpp
-//  game
-//
-//  Created by cipher on 20.05.2022.
-//
-
 #ifndef SPCGANESHAENGINE_GVULKANDEVICE_H
 #define SPCGANESHAENGINE_GVULKANDEVICE_H
 

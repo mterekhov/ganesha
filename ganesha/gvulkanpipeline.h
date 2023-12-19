@@ -1,10 +1,3 @@
-//
-//  gvulkaninstance.hpp
-//  ganesha
-//
-//  Created by Mihail Terekhov on 23.07.2021.
-//
-
 #ifndef SPCGANESHAENGINE_GVULKANPIPELINE_H
 #define SPCGANESHAENGINE_GVULKANPIPELINE_H
 

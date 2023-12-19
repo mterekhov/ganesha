@@ -1,10 +1,3 @@
-//
-//  gvulkaninstance.cpp
-//  ganesha
-//
-//  Created by Mihail Terekhov on 23.07.2021.
-//
-
 #include "gvulkaninstance.h"
 
 namespace spcGaneshaEngine {
