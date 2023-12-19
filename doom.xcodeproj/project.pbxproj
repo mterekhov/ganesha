@@ -289,22 +289,22 @@
 		DEA031702B27BDD500F1BB36 /* VULKAN */ = {
 			isa = PBXGroup;
 			children = (
-				DEC767D22B31DD8800E97CE2 /* gvulkandescriptorsets.h */,
-				DEC767D12B31DD8800E97CE2 /* gvulkandescriptorsets.cpp */,
 				DEA0314C2B27BD0A00F1BB36 /* gvulkanapi.h */,
 				DEA031512B27BD0A00F1BB36 /* gvulkanapi.cpp */,
-				DEC767BA2B2CF29400E97CE2 /* gvulkanpipeline.h */,
-				DEC767BB2B2CF29400E97CE2 /* gvulkanpipeline.cpp */,
-				DEC767B62B2CB93100E97CE2 /* gvulkanswapchain.h */,
-				DEC767B72B2CB93100E97CE2 /* gvulkanswapchain.cpp */,
 				DEA031462B27BD0900F1BB36 /* gvulkaninstance.h */,
 				DEC767AE2B2BBD6000E97CE2 /* gvulkaninstance.cpp */,
 				DEA0313D2B27BD0900F1BB36 /* gvulkandevice.h */,
 				DEA0314B2B27BD0A00F1BB36 /* gvulkandevice.cpp */,
+				DEC767BA2B2CF29400E97CE2 /* gvulkanpipeline.h */,
+				DEC767BB2B2CF29400E97CE2 /* gvulkanpipeline.cpp */,
+				DEC767B62B2CB93100E97CE2 /* gvulkanswapchain.h */,
+				DEC767B72B2CB93100E97CE2 /* gvulkanswapchain.cpp */,
 				DEC767C02B2EFC6A00E97CE2 /* gvulkancommands.h */,
 				DEC767BF2B2EFC6A00E97CE2 /* gvulkancommands.cpp */,
 				DEC767CA2B30A2DC00E97CE2 /* gvulkanbuffer.h */,
 				DEC767C92B30A2DC00E97CE2 /* gvulkanbuffer.cpp */,
+				DEC767D22B31DD8800E97CE2 /* gvulkandescriptorsets.h */,
+				DEC767D12B31DD8800E97CE2 /* gvulkandescriptorsets.cpp */,
 			);
 			name = VULKAN;
 			sourceTree = "<group>";
@@ -619,6 +619,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include;
 				INFOPLIST_KEY_CFBundleDisplayName = DOOM;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -627,6 +628,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.icgsmartcosmetics.doom;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -652,6 +654,7 @@
 				DEVELOPMENT_TEAM = UAVM255T7W;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include;
 				INFOPLIST_KEY_CFBundleDisplayName = DOOM;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -660,6 +663,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.icgsmartcosmetics.doom;
 				PRODUCT_NAME = "$(TARGET_NAME)";

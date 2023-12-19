@@ -20,6 +20,11 @@ static const TStringsArray avoidInstanceExtensions = {
     VK_LUNARG_DIRECT_DRIVER_LOADING_EXTENSION_NAME
 };
 
+const TStringsArray useDeviceExtensions = {
+    VK_KHR_SWAPCHAIN_EXTENSION_NAME,
+    "VK_KHR_portability_subset"
+};
+
 GVULKANAPI::GVULKANAPI() : log("Ganesha"), vulkanInstance(log), vulkanDevice(log), vulkanSwapChain(log), vulkanPipeline(log), vulkanCommands(log), vertecesBuffer(log), indecesBuffer(log), vulkanDescriptorset(log) {
     
 }
@@ -41,7 +46,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint
     metalSurface = createSurface(metalLayer);
     
     //  creates physicalDevice
-    vulkanDevice.createDevice(vulkanInstance, metalSurface);
+    vulkanDevice.createDevice(vulkanInstance, useDeviceExtensions, metalSurface);
     vulkanSwapChain.createSwapChain(frameWidth, frameHeight, vulkanDevice, metalSurface);
     vulkanCommands.createCommands(vulkanDevice);
     

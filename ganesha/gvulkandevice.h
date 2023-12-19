@@ -27,7 +27,7 @@ public:
     GVULKANDevice(GLog& log);
     ~GVULKANDevice();
 
-    void createDevice(GVULKANInstance &vulkanInstance, VkSurfaceKHR &surface);
+    void createDevice(GVULKANInstance &vulkanInstance, const TStringsArray& useDeviceExtensions, VkSurfaceKHR &surface);
     void destroyDevice();
 
     VkCommandPool createCommandPool();
@@ -43,16 +43,19 @@ public:
     bool presentationIsEqualToGraphics();
 
 private:
-    VkPhysicalDevice selectPhysicalDevice(GVULKANInstance &vulkanInstance, VkSurfaceKHR &surface);
-    VkDevice createLogicalDevice(VkPhysicalDevice& device, VkSurfaceKHR &metalSurface);
+    VkPhysicalDevice selectPhysicalDevice(GVULKANInstance &vulkanInstance, const TStringsArray& useDeviceExtensions, VkSurfaceKHR &surface);
+    VkDevice createLogicalDevice(VkPhysicalDevice& device, const TStringsArray& useDeviceExtensions, VkSurfaceKHR &metalSurface);
 
-    SwapChainSupportDetails querySwapChainSupport(const VkPhysicalDevice& device, VkSurfaceKHR& surface);
-    bool checkPhysicalDeviceCapability(const VkPhysicalDevice& device, VkSurfaceKHR &surface);
-    bool checkPhysicalDeviceExtensionSupport(const VkPhysicalDevice& device, const TCharPointersArray& extensionsToSupport);
-    
+    std::vector<VkExtensionProperties> collectAvailableExtensions(const VkPhysicalDevice& device);
+    TCharPointersArray collectAvailableExtensionsNames(const std::vector<VkExtensionProperties>& extensionArray, const TStringsArray& useDeviceExtensions);
+
+    bool checkPhysicalDeviceCapability(const VkPhysicalDevice& device, const TStringsArray& useDeviceExtensions, VkSurfaceKHR &surface);
+    bool checkPhysicalDeviceExtensionSupport(const VkPhysicalDevice& device, const TStringsArray& useDeviceExtensions, const std::vector<VkExtensionProperties>& availableExtensions);
+
     int32_t findGraphicsQueueIndex(const std::vector<VkQueueFamilyProperties>& queuePropertiesArray);
     int32_t findPresentQueueIndex(const std::vector<VkQueueFamilyProperties>& queuePropertiesArray, VkSurfaceKHR& metalSurface);
     void findQueuesIndeces(VkSurfaceKHR& metalSurface);
+    SwapChainSupportDetails querySwapChainSupport(const VkPhysicalDevice& device, VkSurfaceKHR& surface);
 
     GLog& log;
 
