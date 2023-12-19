@@ -36,12 +36,13 @@ void GVULKANCommands::recordRenderCommand(VkCommandBuffer& renderCommand,
         log.error("failed to begin recording command buffer\n");
     }
     
+    VkExtent2D swapChainExtent = swapChain.getExtent();
     VkRenderPassBeginInfo renderPassInfo{};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
     renderPassInfo.renderPass = swapChain.getRenderPass();
     renderPassInfo.framebuffer = framebuffer;
     renderPassInfo.renderArea.offset = {0, 0};
-    renderPassInfo.renderArea.extent = swapChain.getExtent();
+    renderPassInfo.renderArea.extent = swapChainExtent;
     
     VkClearValue clearColor = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
     renderPassInfo.clearValueCount = 1;
@@ -50,6 +51,20 @@ void GVULKANCommands::recordRenderCommand(VkCommandBuffer& renderCommand,
     vkCmdBeginRenderPass(renderCommand, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     
     vkCmdBindPipeline(renderCommand, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.getGraphicsPipeline());
+    
+    VkViewport viewport{};
+    viewport.x = 0.0f;
+    viewport.y = 0.0f;
+    viewport.width = static_cast<TFloat>(swapChainExtent.width);
+    viewport.height = static_cast<TFloat>(swapChainExtent.height);
+    viewport.minDepth = 0.0f;
+    viewport.maxDepth = 1.0f;
+    vkCmdSetViewport(renderCommand, 0, 1, &viewport);
+    
+    VkRect2D scissor{};
+    scissor.offset = {0, 0};
+    scissor.extent = swapChainExtent;
+    vkCmdSetScissor(renderCommand, 0, 1, &scissor);
     
     VkBuffer vertexBuffers[] = { vertecesBuffer };
     VkDeviceSize offsets[] = {0};
@@ -80,6 +95,7 @@ VkCommandPool& GVULKANCommands::getCommandPool() {
 VkCommandPool GVULKANCommands::createCommandPool(GVULKANDevice& device) {
     VkCommandPoolCreateInfo poolInfo{};
     poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+    poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
     poolInfo.queueFamilyIndex = device.getGraphicsQueueIndex();
     
     VkCommandPool newCommandPool;
