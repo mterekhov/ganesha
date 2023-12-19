@@ -16,8 +16,7 @@ GVULKANSwapChain::~GVULKANSwapChain() {
 }
 
 void GVULKANSwapChain::createSwapChain(const uint32_t screenWidth, const uint32_t screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
-    recreateSwapChain(screenWidth, screenHeight, vulkanDevice, surface);
-    renderPass = createRenderPass(vulkanDevice.getLogicalDevice(), imageFormat);
+    createSwapChain(screenWidth, screenHeight, vulkanDevice, surface, false);
 }
 
 void GVULKANSwapChain::destroySwapChain(GVULKANDevice& device) {
@@ -27,7 +26,7 @@ void GVULKANSwapChain::destroySwapChain(GVULKANDevice& device) {
 
 void GVULKANSwapChain::updateScreenSize(const uint32_t screenWidth, const uint32_t screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
     destroyExtentDependency(vulkanDevice.getLogicalDevice());
-    recreateSwapChain(screenWidth, screenHeight, vulkanDevice, surface);
+    createSwapChain(screenWidth, screenHeight, vulkanDevice, surface, true);
 }
 
 std::vector<VkImageView>& GVULKANSwapChain::getImageViewsArray() {
@@ -60,13 +59,16 @@ std::vector<VkFramebuffer>& GVULKANSwapChain::getFramebuffers() {
 
 #pragma mark - Routine -
 
-void GVULKANSwapChain::recreateSwapChain(const uint32_t screenWidth, const uint32_t screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
+void GVULKANSwapChain::createSwapChain(const uint32_t screenWidth, const uint32_t screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface, const bool recreateSwapChain) {
     SwapChainSupportDetails supportDetails = vulkanDevice.querySwapChainSupport(surface);
     
     swapChain = createNewSwapChain(screenWidth, screenHeight, supportDetails, vulkanDevice, surface);
     imageFormat = selectSwapSurfaceFormat(supportDetails.formats).format;
     extent = selectSwapExtent(supportDetails.surfaceCapabilities, screenWidth, screenHeight);
-    
+
+    if (!recreateSwapChain) {
+        renderPass = createRenderPass(vulkanDevice.getLogicalDevice(), imageFormat);
+    }
     imagesArray = ejectImagesArray(vulkanDevice.getLogicalDevice(), swapChain);
     imageViewsArray = createImageViews(vulkanDevice.getLogicalDevice(), imagesArray);
     framebuffersArray = createFramebuffers(vulkanDevice.getLogicalDevice(), imageViewsArray, renderPass, extent);
