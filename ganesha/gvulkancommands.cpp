@@ -63,7 +63,7 @@ void GVULKANCommands::recordRenderCommand(VkCommandBuffer& renderCommand,
     VkDeviceSize offsets[] = {0};
     vkCmdBindVertexBuffers(renderCommand, 0, 1, vertexBuffers, offsets);
     
-    vkCmdBindIndexBuffer(renderCommand, indicesBuffer, 0, VK_INDEX_TYPE_UINT16);
+    vkCmdBindIndexBuffer(renderCommand, indicesBuffer, 0, VK_INDEX_TYPE_UINT32);
     
     vkCmdBindDescriptorSets(renderCommand, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.getPipelineLayout(), 0, 1, &descriptorset, 0, nullptr);
     vkCmdDrawIndexed(renderCommand, indicesNumber, 1, 0, 0, 0);

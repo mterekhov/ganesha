@@ -76,9 +76,9 @@ void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint
                                 vulkanDevice,
                                 vulkanCommands);
     
-    std::vector<uint16_t> indecesArray = renderGraph.getIndecesArray();
+    TIndexArray indecesArray = renderGraph.getIndecesArray();
     indecesBuffer.createBuffer(indecesArray.data(),
-                               sizeof(uint16_t) * indecesArray.size(),
+                               sizeof(TIndex) * indecesArray.size(),
                                VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
                                true,

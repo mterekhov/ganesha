@@ -8,7 +8,6 @@
 
 namespace spcGaneshaEngine {
 
-/// Instance of VULKAN render machine
 class GVULKANInstance {
 public:
     GVULKANInstance(GLog& log);
@@ -17,7 +16,6 @@ public:
     void createInstance(const std::string& applicationName, const TCharPointersArray& khronosValidationLayers);
     void destroyInstance();
 
-    /// returns reference to created VULKAN instance object
     VkInstance& getVulkanInstance();
     void addInstanceExtensionsToAvoid(const TStringsArray& extensions);
     

@@ -22,11 +22,13 @@ namespace spcGaneshaEngine {
 /// converts radians into degrees
 #define RAD_TO_DEG(rad) ((rad) * 180.0f / M_PI)
 
-typedef std::vector<const char *> TCharPointersArray;
-typedef std::vector<std::string> TStringsArray;
 typedef float TFloat;
 typedef bool TBool;
-
+typedef uint32_t TUint;
+typedef TUint TIndex;
+typedef std::vector<TIndex> TIndexArray;
+typedef std::vector<const char *> TCharPointersArray;
+typedef std::vector<std::string> TStringsArray;
 }   //  namespace spcGaneshaEngine
 
 #endif  //  SPCGANESHAENGINE_GANESHATYPES_H

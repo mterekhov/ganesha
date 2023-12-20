@@ -22,7 +22,7 @@ bool GGanesha::initEngine(void *metalLayer, const uint32_t width, const uint32_t
     };
     renderGraph.defineVertecesArray(vertices);
 
-    const std::vector<uint16_t> indices = {
+    const TIndexArray indices = {
         0, 1, 2, 2, 3, 0
     };
     renderGraph.defineIndecesArray(indices);

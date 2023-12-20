@@ -25,11 +25,11 @@ const std::vector<Vertex>& GRenderGraph::getVertecesArray() const {
     return verticesArray;
 }
 
-void GRenderGraph::defineIndecesArray(const std::vector<uint16_t>& newIndicesArray) {
+void GRenderGraph::defineIndecesArray(const TIndexArray& newIndicesArray) {
     indicesArray = newIndicesArray;
 }
 
-const std::vector<uint16_t>& GRenderGraph::getIndecesArray() const {
+const TIndexArray& GRenderGraph::getIndecesArray() const {
     return indicesArray;
 }
 
