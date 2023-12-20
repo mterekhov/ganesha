@@ -17,12 +17,12 @@ public:
     void updateScreenSize(const TUInt screenWidth, const TUInt screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface);
     void destroySwapChain(GVULKANDevice& device);
 
+    VkSwapchainKHR getVulkanSwapChain();
+    VkRenderPass getRenderPass();
+    std::vector<VkFramebuffer>& getFramebuffers();
     std::vector<VkImageView>& getImageViewsArray();
     VkExtent2D getExtent();
-    VkSwapchainKHR& getVulkanSwapChain();
-    VkFormat& getImagesFormat();
-    VkRenderPass& getRenderPass();
-    std::vector<VkFramebuffer>& getFramebuffers();
+    VkFormat getImagesFormat();
     size_t framebuffersNumber();
 
 private:
@@ -39,7 +39,7 @@ private:
     void createSwapChain(const TUInt screenWidth, const TUInt screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface, const TBool recreateSwapChain);
     std::vector<VkImage> ejectImagesArray(VkDevice device, const VkSwapchainKHR& swapChainSource);
     std::vector<VkImageView> createImageViews(VkDevice logicalDevice, std::vector<VkImage>& swapChainImagesArray);
-    std::vector<VkFramebuffer> createFramebuffers(VkDevice device, const std::vector<VkImageView>& useImagesViewArray, const VkRenderPass& useRenderPass, const VkExtent2D& useExtent);
+    std::vector<VkFramebuffer> createFramebuffers(VkDevice device, const std::vector<VkImageView>& useImagesViewArray, VkRenderPass useRenderPass, const VkExtent2D& useExtent);
    VkRenderPass createRenderPass(VkDevice device, VkFormat format);
     VkExtent2D selectSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities, const TUInt screenWidth, const TUInt screenHeight);
     VkSurfaceFormatKHR selectSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);

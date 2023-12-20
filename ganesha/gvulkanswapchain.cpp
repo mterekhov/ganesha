@@ -30,7 +30,7 @@ VkExtent2D GVULKANSwapChain::getExtent() {
     return extent;
 }
 
-VkSwapchainKHR& GVULKANSwapChain::getVulkanSwapChain() {
+VkSwapchainKHR GVULKANSwapChain::getVulkanSwapChain() {
     return swapChain;
 }
 
@@ -38,11 +38,11 @@ size_t GVULKANSwapChain::framebuffersNumber() {
     return framebuffersArray.size();
 }
 
-VkFormat& GVULKANSwapChain::getImagesFormat() {
+VkFormat GVULKANSwapChain::getImagesFormat() {
     return imageFormat;
 }
 
-VkRenderPass& GVULKANSwapChain::getRenderPass() {
+VkRenderPass GVULKANSwapChain::getRenderPass() {
     return renderPass;
 }
 
@@ -182,7 +182,7 @@ VkRenderPass GVULKANSwapChain::createRenderPass(VkDevice device, VkFormat format
     return newRenderPass;
 }
 
-std::vector<VkFramebuffer> GVULKANSwapChain::createFramebuffers(VkDevice device, const std::vector<VkImageView>& useImagesViewArray, const VkRenderPass& useRenderPass, const VkExtent2D& useExtent) {
+std::vector<VkFramebuffer> GVULKANSwapChain::createFramebuffers(VkDevice device, const std::vector<VkImageView>& useImagesViewArray, VkRenderPass useRenderPass, const VkExtent2D& useExtent) {
     std::vector<VkFramebuffer> newFramebuffersArray;
     
     newFramebuffersArray.resize(useImagesViewArray.size());

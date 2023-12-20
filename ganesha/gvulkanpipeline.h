@@ -16,10 +16,10 @@ public:
     GVULKANPipeline(GLog& log);
     ~GVULKANPipeline();
     
-    void createPipeline(GVULKANDevice& device, GVULKANSwapChain& swapChain, VkDescriptorSetLayout& descriptorsetLayout);
-    void destroyPipeline(GVULKANDevice& device);
-    VkPipeline& getGraphicsPipeline();
-    VkPipelineLayout& getPipelineLayout();
+    void createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapChain& swapChain, VkDescriptorSetLayout& descriptorsetLayout);
+    void destroyPipeline(GVULKANDevice& vulkanDevice);
+    VkPipeline getGraphicsPipeline();
+    VkPipelineLayout getPipelineLayout();
 
 private:
     GLog& log;
@@ -28,7 +28,7 @@ private:
     VkPipeline graphicsPipeline;
     VkPipelineLayout pipelineLayout;
 
-    VkPipelineShaderStageCreateInfo createShader(const std::string shaderFile,  const VkShaderStageFlagBits stage, VkDevice device);
+    VkPipelineShaderStageCreateInfo createShader(const std::string& shaderFile,  const VkShaderStageFlagBits stage, VkDevice device);
     VkPipelineVertexInputStateCreateInfo createVertexInput();
     VkPipelineRasterizationStateCreateInfo createRasterizer();
     VkPipelineLayout createPipelineLayout(VkDevice device, VkDescriptorSetLayout& descriptorsetLayout);
