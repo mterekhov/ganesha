@@ -25,7 +25,16 @@ const TStringsArray useDeviceExtensions = {
     "VK_KHR_portability_subset"
 };
 
-GVULKANAPI::GVULKANAPI() : log("Ganesha"), vulkanInstance(log), vulkanDevice(log), vulkanSwapChain(log), vulkanPipeline(log), vulkanCommands(log), vertexesBuffer(log), indexesBuffer(log), vulkanDescriptorset(log) {
+GVULKANAPI::GVULKANAPI() : log("Ganesha"),
+vulkanInstance(log),
+vulkanDevice(log),
+vulkanSwapChain(log),
+vulkanPipeline(log),
+vulkanCommands(log),
+vertexesBuffer(log),
+indexesBuffer(log),
+vulkanDescriptorset(log),
+texture(log) {
     
 }
 
@@ -90,14 +99,18 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
     }
     
     createSemaphores();
+    
+    createTextures();
 }
 
 void GVULKANAPI::destroyAPI() {
     vkDeviceWaitIdle(vulkanDevice.getLogicalDevice());
-
+    
+    texture.destroyImage(vulkanDevice);
+    
     vulkanSwapChain.destroySwapChain(vulkanDevice);
     vulkanPipeline.destroyPipeline(vulkanDevice);
-
+    
     for (size_t i = 0; i < vulkanUniformBuffers.size(); i++) {
         vulkanUniformBuffers[i].destroyBuffer(vulkanDevice);
     }
@@ -106,13 +119,13 @@ void GVULKANAPI::destroyAPI() {
     
     indexesBuffer.destroyBuffer(vulkanDevice);
     vertexesBuffer.destroyBuffer(vulkanDevice);
-
+    
     for (size_t i = 0; i < maxFramesInFlight; i++) {
         vkDestroySemaphore(vulkanDevice.getLogicalDevice(), renderFinishedSemaphores[i], nullptr);
         vkDestroySemaphore(vulkanDevice.getLogicalDevice(), imageAvailableSemaphores[i], nullptr);
         vkDestroyFence(vulkanDevice.getLogicalDevice(), inFlightFences[i], nullptr);
     }
-
+    
     vulkanCommands.destroyCommands(vulkanDevice);
     vulkanDevice.destroyDevice();
     vkDestroySurfaceKHR(vulkanInstance.getVulkanInstance(), metalSurface, nullptr);
@@ -259,6 +272,15 @@ UniformBufferObject GVULKANAPI::currentUBO() {
     ubo.proj = projectionMatrix;
     
     return ubo;
+}
+
+void GVULKANAPI::createTextures() {
+    texture.createImage("/Users/cipher/Development/ganesha/resources/MWALL4_2.tga",
+                        VK_FORMAT_R8G8B8A8_SRGB,
+                        VK_IMAGE_TILING_OPTIMAL,
+                        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+                        vulkanDevice,
+                        vulkanCommands);
 }
 
 }

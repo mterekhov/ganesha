@@ -14,6 +14,7 @@
 #include "gmatrix.h"
 #include "gvulkanbuffer.h"
 #include "gvulkandescriptorsets.h"
+#include "gvulkanimage.h"
 
 namespace spcGaneshaEngine {
 
@@ -43,7 +44,9 @@ private:
     GVULKANPipeline vulkanPipeline;
     GVULKANCommands vulkanCommands;
     GVULKANDescriptorsets vulkanDescriptorset;
-    
+
+    GVULKANImage texture;
+
     std::vector<GVULKANBuffer> vulkanUniformBuffers;
     GVULKANBuffer vertexesBuffer;
     GVULKANBuffer indexesBuffer;
@@ -68,6 +71,7 @@ private:
 
     const TUInt maxFramesInFlight = 2;
 
+    void createTextures();
     void createSemaphores();
     
     UniformBufferObject currentUBO();
