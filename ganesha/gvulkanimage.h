@@ -28,6 +28,9 @@ private:
     VkImage image;
     VkDeviceMemory imageMemory;
     VkImageView imageView;
+    VkSampler sampler;
+    
+    VkSampler createTextureSampler(GVULKANDevice& device);
 };
 
 }   //  namespace spcGaneshaEngine

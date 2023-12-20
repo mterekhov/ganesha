@@ -59,6 +59,18 @@ SwapChainSupportDetails GVULKANDevice::querySwapChainSupport(VkSurfaceKHR& surfa
     return querySwapChainSupport(physicalDevice, surface);
 }
 
+VkPhysicalDeviceProperties GVULKANDevice::getPhysicalDeviceProperties() {
+    return getPhysicalDeviceProperties(physicalDevice);
+}
+
+VkPhysicalDeviceProperties GVULKANDevice::getPhysicalDeviceProperties(VkPhysicalDevice device) {
+    VkPhysicalDeviceProperties deviceProperties;
+    vkGetPhysicalDeviceProperties(device, &deviceProperties);
+    
+    return deviceProperties;
+
+}
+
 #pragma mark - Routine -
 
 VkPhysicalDevice GVULKANDevice::selectPhysicalDevice(GVULKANInstance &vulkanInstance, const TStringsArray& useDeviceExtensions, VkSurfaceKHR &surface) {
@@ -94,6 +106,7 @@ VkDevice GVULKANDevice::createLogicalDevice(VkPhysicalDevice device, const TStri
     }
 
     VkPhysicalDeviceFeatures deviceFeatures = {};
+    deviceFeatures.samplerAnisotropy = VK_TRUE;
 
     VkDeviceCreateInfo logicalDeviceInfo = {};
     logicalDeviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
@@ -147,8 +160,7 @@ std::vector<VkExtensionProperties> GVULKANDevice::collectAvailableExtensions(VkP
 }
 
 TBool GVULKANDevice::checkPhysicalDeviceCapability(VkPhysicalDevice device, const TStringsArray& useDeviceExtensions, VkSurfaceKHR &surface) {
-    VkPhysicalDeviceProperties deviceProperties;
-    vkGetPhysicalDeviceProperties(device, &deviceProperties);
+    VkPhysicalDeviceProperties deviceProperties = getPhysicalDeviceProperties(device);
     if (deviceProperties.deviceType != VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU) {
         return false;
     }

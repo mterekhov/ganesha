@@ -72,9 +72,37 @@ void GVULKANImage::createImage(const std::string filePath,
     stagingBuffer.destroyBuffer(vulkanDevice);
     
     imageView = tools.createImageView(image, VK_FORMAT_R8G8B8A8_SRGB, vulkanDevice.getLogicalDevice());
+    sampler = createTextureSampler(vulkanDevice);
+}
+
+VkSampler GVULKANImage::createTextureSampler(GVULKANDevice& device) {
+    VkPhysicalDeviceProperties properties = device.getPhysicalDeviceProperties();
+
+    VkSamplerCreateInfo samplerInfo{};
+    samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+    samplerInfo.magFilter = VK_FILTER_LINEAR;
+    samplerInfo.minFilter = VK_FILTER_LINEAR;
+    samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+    samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+    samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+    samplerInfo.anisotropyEnable = VK_TRUE;
+    samplerInfo.maxAnisotropy = properties.limits.maxSamplerAnisotropy;
+    samplerInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
+    samplerInfo.unnormalizedCoordinates = VK_FALSE;
+    samplerInfo.compareEnable = VK_FALSE;
+    samplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
+    samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+
+    VkSampler newSampler;
+    if (vkCreateSampler(device.getLogicalDevice(), &samplerInfo, nullptr, &newSampler) != VK_SUCCESS) {
+        log.error("can not create sampler for image\n");
+    }
+    
+    return newSampler;
 }
 
 void GVULKANImage::destroyImage(GVULKANDevice& vulkanDevice) {
+    vkDestroySampler(vulkanDevice.getLogicalDevice(), sampler, nullptr);
     vkDestroyImageView(vulkanDevice.getLogicalDevice(), imageView, nullptr);
     vkDestroyImage(vulkanDevice.getLogicalDevice(), image, nullptr);
     vkFreeMemory(vulkanDevice.getLogicalDevice(), imageMemory, nullptr);

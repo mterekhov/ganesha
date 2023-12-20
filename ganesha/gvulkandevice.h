@@ -32,10 +32,12 @@ public:
     VkQueue& getGraphicsQueue();
     TUInt getGraphicsQueueIndex();
     std::vector<TUInt> getQueuesIndexesArray();
-    
+    VkPhysicalDeviceProperties getPhysicalDeviceProperties();
+
     TBool presentationIsEqualToGraphics();
 
 private:
+    VkPhysicalDeviceProperties getPhysicalDeviceProperties(VkPhysicalDevice device);
     VkPhysicalDevice selectPhysicalDevice(GVULKANInstance &vulkanInstance, const TStringsArray& useDeviceExtensions, VkSurfaceKHR &surface);
     VkDevice createLogicalDevice(VkPhysicalDevice device, const TStringsArray& useDeviceExtensions, VkSurfaceKHR &metalSurface);
 
