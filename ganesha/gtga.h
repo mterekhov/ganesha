@@ -130,7 +130,7 @@ public:
     uint32_t getBytepp();
 
 private:
-    STGAHeader header;
+    STGAHeader header = {0};
 
     /// Comments in tga file. Usually it is absent
     uint8_t* identity;

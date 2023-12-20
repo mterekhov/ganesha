@@ -20,7 +20,7 @@ void GVULKANImage::createImage(const std::string filePath,
                                GVULKANDevice& vulkanDevice,
                                GVULKANCommands& vulkanCommands) {
     GTGA tgaFile(filePath);
-
+    
     VkImageCreateInfo imageInfo = {};
     imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
     imageInfo.imageType = VK_IMAGE_TYPE_2D;
@@ -58,11 +58,22 @@ void GVULKANImage::createImage(const std::string filePath,
                                false,
                                vulkanDevice,
                                vulkanCommands);
+
+    VkCommandBuffer tmpCommand = vulkanCommands.transitionImageLayout(image, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, vulkanDevice.getLogicalDevice());
+    vulkanCommands.submitCommand(tmpCommand, vulkanDevice);
+
+    tmpCommand = vulkanCommands.copyBufferToImage(stagingBuffer.getBuffer(), image, tgaFile.getWidth(), tgaFile.getHeight(), vulkanDevice.getLogicalDevice());
+    vulkanCommands.submitCommand(tmpCommand, vulkanDevice);
+    
+    tmpCommand = vulkanCommands.transitionImageLayout(image, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, vulkanDevice.getLogicalDevice());
+    vulkanCommands.submitCommand(tmpCommand, vulkanDevice);
+    
+    stagingBuffer.destroyBuffer(vulkanDevice);
 }
 
 void GVULKANImage::destroyImage(GVULKANDevice& vulkanDevice) {
     vkDestroyImage(vulkanDevice.getLogicalDevice(), image, nullptr);
+    vkFreeMemory(vulkanDevice.getLogicalDevice(), imageMemory, nullptr);
 }
-
 
 }

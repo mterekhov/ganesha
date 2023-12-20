@@ -19,6 +19,8 @@ public:
     void createCommands(GVULKANDevice& device);
     void destroyCommands(GVULKANDevice& device);
 
+    VkCommandBuffer copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, VkDevice device);
+    VkCommandBuffer transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout, VkDevice device);
     VkCommandBuffer emptyCommand(VkDevice device);
     VkCommandBuffer copyBufferCommand(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size, VkDevice device);
     void recordRenderCommand(VkCommandBuffer renderCommand,
@@ -30,11 +32,14 @@ public:
                              GVULKANPipeline& pipeline,
                              VkDescriptorSet& descriptorset);
     void destroyCommandBuffer(VkCommandBuffer commandBuffer, VkDevice device);
+    void submitCommand(VkCommandBuffer command, GVULKANDevice& vulkanDevice);
 
 private:
     GLog& log;
     VkCommandPool commandPool;
     VkCommandPool createCommandPool(GVULKANDevice& device);
+    VkCommandBuffer beginSingleCommand(VkDevice device);
+    void endSingleCommand(VkCommandBuffer command);
 };
 
 }   //  namespace spcGaneshaEngine
