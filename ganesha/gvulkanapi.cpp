@@ -72,7 +72,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
                                vulkanCommands);
         vulkanUniformBuffers.push_back(newBuffer);
     }
-    vulkanDescriptorset.createDescriptorsets(vulkanDevice, vulkanUniformBuffers);
+    vulkanDescriptorset.createDescriptorsets(vulkanDevice, vulkanUniformBuffers, texture);
     vulkanPipeline.createPipeline(vulkanDevice, vulkanSwapChain, vulkanDescriptorset.getDescriptorsetLayout());
     
     std::vector<Vertex> vertexesArray = renderGraph.getVertexesArray();
