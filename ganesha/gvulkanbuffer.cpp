@@ -1,4 +1,5 @@
 #include "gvulkanbuffer.h"
+#include "gvulkantools.h"
 
 namespace spcGaneshaEngine {
 
@@ -86,7 +87,7 @@ VkDeviceMemory GVULKANBuffer::allocateBufferMemory(VkBuffer originalBuffer, cons
     VkMemoryAllocateInfo memoryAllocateInfo = { };
     memoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     memoryAllocateInfo.allocationSize = memoryRequirements.size;
-    memoryAllocateInfo.memoryTypeIndex = findMemoryType(vulkanDevice.getPhysicalDevice(), memoryRequirements.memoryTypeBits, properties);
+    memoryAllocateInfo.memoryTypeIndex = GVULKANTools().findMemoryType(vulkanDevice.getPhysicalDevice(), memoryRequirements.memoryTypeBits, properties);
     
     VkDeviceMemory newBufferMemory;
     if (vkAllocateMemory(vulkanDevice.getLogicalDevice(), &memoryAllocateInfo, nullptr, &newBufferMemory) != VK_SUCCESS) {
@@ -108,20 +109,6 @@ void GVULKANBuffer::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, const VkD
     vkQueueWaitIdle(vulkanDevice.getGraphicsQueue());
     
     vulkanCommands.destroyCommandBuffer(commandBuffer, vulkanDevice.getLogicalDevice());
-}
-
-TUInt GVULKANBuffer::findMemoryType(VkPhysicalDevice device, const TUInt typeFilter, const VkMemoryPropertyFlags properties) {
-    VkPhysicalDeviceMemoryProperties memoryProperties;
-    vkGetPhysicalDeviceMemoryProperties(device, &memoryProperties);
-    
-    for (TUInt i = 0; i < memoryProperties.memoryTypeCount; i++) {
-        if ((typeFilter & (1 << i)) &&
-            (memoryProperties.memoryTypes[i].propertyFlags & properties) == properties) {
-            return i;
-        }
-    }
-    
-    return 0;
 }
 
 }
