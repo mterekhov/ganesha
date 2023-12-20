@@ -18,19 +18,19 @@ GRenderGraph::~GRenderGraph() {
 }
 
 void GRenderGraph::defineVertexesArray(const std::vector<Vertex>& newVertexesArray) {
-    verticesArray = newVertexesArray;
+    vertexesArray = newVertexesArray;
 }
 
 const std::vector<Vertex>& GRenderGraph::getVertexesArray() const {
-    return verticesArray;
+    return vertexesArray;
 }
 
-void GRenderGraph::defineIndexesArray(const TIndexArray& newIndicesArray) {
-    indicesArray = newIndicesArray;
+void GRenderGraph::defineIndexesArray(const TIndexArray& newIndexesArray) {
+    indexesArray = newIndexesArray;
 }
 
 const TIndexArray& GRenderGraph::getIndexesArray() const {
-    return indicesArray;
+    return indexesArray;
 }
 
 };  //  spcGaneshaEngine

@@ -14,18 +14,18 @@ GGanesha::~GGanesha() {
 
 TBool GGanesha::initEngine(void *metalLayer, const TUInt width, const TUInt height) {
     
-    const std::vector<Vertex> vertices = {
+    const std::vector<Vertex> vertexes = {
         {GPoint2D(-0.5f, -0.5f), GColor::blueColor()},
         {GPoint2D(0.5f, -0.5f), GColor::redColor()},
         {GPoint2D(0.5f, 0.5f), GColor::greenColor()},
         {GPoint2D(-0.5f, 0.5f), GColor::redColor()}
     };
-    renderGraph.defineVertexesArray(vertices);
+    renderGraph.defineVertexesArray(vertexes);
 
-    const TIndexArray indices = {
+    const TIndexArray indexes = {
         0, 1, 2, 2, 3, 0
     };
-    renderGraph.defineIndexesArray(indices);
+    renderGraph.defineIndexesArray(indexes);
     
     graphicsAPI->initAPI(metalLayer, width, height, renderGraph);
     graphicsAPI->installIsometricView(M_PI_4, 0.1f, 100.0f);

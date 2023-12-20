@@ -16,14 +16,14 @@ public:
 
     void createBuffer(const void *data,
                       const VkDeviceSize size,
-                      VkBufferUsageFlags usage,
-                      VkMemoryPropertyFlags properties,
-                      TBool protectAccess,
+                      const VkBufferUsageFlags usage,
+                      const VkMemoryPropertyFlags properties,
+                      const TBool protectAccess,
                       GVULKANDevice& vulkanDevice,
                       GVULKANCommands& vulkanCommands);
     void destroyBuffer(GVULKANDevice& vulkanDevice);
     void refreshBuffer(const void *data, GVULKANDevice& vulkanDevice);
-    VkBuffer& getBuffer();
+    VkBuffer getBuffer();
     TUInt getBufferSize();
 
 private:
@@ -32,10 +32,10 @@ private:
     TUInt bufferSize;
     VkDeviceMemory bufferMemory;
     
-    VkBuffer createBuffer(VkDevice device, VkDeviceSize size, VkBufferUsageFlags usage);
-    VkDeviceMemory allocateBufferMemory(VkBuffer& originalBuffer, VkMemoryPropertyFlags properties, GVULKANDevice& vulkanDevice);
-    void copyBuffer(VkBuffer& srcBuffer, VkBuffer& dstBuffer, const VkDeviceSize size, GVULKANDevice& vulkanDevice, GVULKANCommands& vulkanCommands);
-    TUInt findMemoryType(VkPhysicalDevice device, TUInt typeFilter, VkMemoryPropertyFlags properties);
+    VkBuffer createBuffer(VkDevice device, const VkDeviceSize size, const VkBufferUsageFlags usage);
+    VkDeviceMemory allocateBufferMemory(VkBuffer originalBuffer, const VkMemoryPropertyFlags properties, GVULKANDevice& vulkanDevice);
+    void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, const VkDeviceSize size, GVULKANDevice& vulkanDevice, GVULKANCommands& vulkanCommands);
+    TUInt findMemoryType(VkPhysicalDevice device, const TUInt typeFilter, const VkMemoryPropertyFlags properties);
 };
 
 }   //  namespace spcGaneshaEngine

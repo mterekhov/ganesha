@@ -16,12 +16,12 @@ public:
     void defineVertexesArray(const std::vector<Vertex>& newVertexesArray);
     const std::vector<Vertex>& getVertexesArray() const;
     
-    void defineIndexesArray(const TIndexArray& newIndicesArray);
+    void defineIndexesArray(const TIndexArray& newIndexesArray);
     const TIndexArray& getIndexesArray() const;
     
 private:
-    std::vector<Vertex> verticesArray;
-    TIndexArray indicesArray;
+    std::vector<Vertex> vertexesArray;
+    TIndexArray indexesArray;
 };
 
 };  //  spcGaneshaEngine

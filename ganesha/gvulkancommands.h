@@ -19,14 +19,12 @@ public:
     void createCommands(GVULKANDevice& device);
     void destroyCommands(GVULKANDevice& device);
 
-    VkCommandPool& getCommandPool();
-
     VkCommandBuffer emptyCommand(VkDevice device);
     VkCommandBuffer copyBufferCommand(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size, VkDevice device);
     void recordRenderCommand(VkCommandBuffer& renderCommand,
-                             VkBuffer& vertexesBuffer,
-                             VkBuffer& indicesBuffer,
-                             TUInt indicesNumber,
+                             VkBuffer vertexesBuffer,
+                             VkBuffer indexesBuffer,
+                             TUInt indexesNumber,
                              VkFramebuffer& framebuffer,
                              GVULKANSwapChain& swapChain,
                              GVULKANPipeline& pipeline,

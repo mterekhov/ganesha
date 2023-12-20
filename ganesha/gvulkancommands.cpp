@@ -14,10 +14,43 @@ void GVULKANCommands::createCommands(GVULKANDevice& device) {
     commandPool = createCommandPool(device);
 }
 
+VkCommandBuffer GVULKANCommands::emptyCommand(VkDevice device) {
+    VkCommandBufferAllocateInfo allocInfo = { };
+    allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    allocInfo.commandPool = commandPool;
+    allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+    allocInfo.commandBufferCount = 1;
+    
+    VkCommandBuffer newCommandBuffer;
+    if (vkAllocateCommandBuffers(device, &allocInfo, &newCommandBuffer) != VK_SUCCESS) {
+        log.error("failed to create command buffer\n");
+    }
+
+    return newCommandBuffer;
+}
+
+VkCommandBuffer GVULKANCommands::copyBufferCommand(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size, VkDevice device) {
+    VkCommandBuffer commandBuffer = emptyCommand(device);
+
+    VkCommandBufferBeginInfo beginInfo = { };
+    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+    vkBeginCommandBuffer(commandBuffer, &beginInfo);
+        VkBufferCopy copyRegion{};
+        copyRegion.srcOffset = 0; // Optional
+        copyRegion.dstOffset = 0; // Optional
+        copyRegion.size = size;
+        vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion);
+    vkEndCommandBuffer(commandBuffer);
+
+    return commandBuffer;
+}
+
 void GVULKANCommands::recordRenderCommand(VkCommandBuffer& renderCommand,
-                                          VkBuffer& vertexesBuffer,
-                                          VkBuffer& indicesBuffer,
-                                          TUInt indicesNumber,
+                                          VkBuffer vertexesBuffer,
+                                          VkBuffer indexesBuffer,
+                                          TUInt indexesNumber,
                                           VkFramebuffer& framebuffer,
                                           GVULKANSwapChain& swapChain,
                                           GVULKANPipeline& pipeline,
@@ -63,10 +96,10 @@ void GVULKANCommands::recordRenderCommand(VkCommandBuffer& renderCommand,
     VkDeviceSize offsets[] = {0};
     vkCmdBindVertexBuffers(renderCommand, 0, 1, vertexBuffers, offsets);
     
-    vkCmdBindIndexBuffer(renderCommand, indicesBuffer, 0, VK_INDEX_TYPE_UINT32);
+    vkCmdBindIndexBuffer(renderCommand, indexesBuffer, 0, VK_INDEX_TYPE_UINT32);
     
     vkCmdBindDescriptorSets(renderCommand, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.getPipelineLayout(), 0, 1, &descriptorset, 0, nullptr);
-    vkCmdDrawIndexed(renderCommand, indicesNumber, 1, 0, 0, 0);
+    vkCmdDrawIndexed(renderCommand, indexesNumber, 1, 0, 0, 0);
     
     vkCmdEndRenderPass(renderCommand);
     
@@ -77,10 +110,6 @@ void GVULKANCommands::recordRenderCommand(VkCommandBuffer& renderCommand,
 
 void GVULKANCommands::destroyCommands(GVULKANDevice& device) {
     vkDestroyCommandPool(device.getLogicalDevice(), commandPool, nullptr);
-}
-
-VkCommandPool& GVULKANCommands::getCommandPool() {
-    return commandPool;
 }
 
 #pragma mark - Routine -
@@ -97,39 +126,6 @@ VkCommandPool GVULKANCommands::createCommandPool(GVULKANDevice& device) {
     }
     
     return newCommandPool;
-}
-
-VkCommandBuffer GVULKANCommands::emptyCommand(VkDevice device) {
-    VkCommandBufferAllocateInfo allocInfo = { };
-    allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    allocInfo.commandPool = commandPool;
-    allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-    allocInfo.commandBufferCount = 1;
-    
-    VkCommandBuffer newCommandBuffer;
-    if (vkAllocateCommandBuffers(device, &allocInfo, &newCommandBuffer) != VK_SUCCESS) {
-        log.error("failed to create command buffer\n");
-    }
-
-    return newCommandBuffer;
-}
-
-VkCommandBuffer GVULKANCommands::copyBufferCommand(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size, VkDevice device) {
-    VkCommandBuffer commandBuffer = emptyCommand(device);
-
-    VkCommandBufferBeginInfo beginInfo = { };
-    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-
-    vkBeginCommandBuffer(commandBuffer, &beginInfo);
-        VkBufferCopy copyRegion{};
-        copyRegion.srcOffset = 0; // Optional
-        copyRegion.dstOffset = 0; // Optional
-        copyRegion.size = size;
-        vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion);
-    vkEndCommandBuffer(commandBuffer);
-
-    return commandBuffer;
 }
 
 void GVULKANCommands::destroyCommandBuffer(VkCommandBuffer& commandBuffer, VkDevice device) {

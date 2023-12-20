@@ -10,7 +10,7 @@ GVULKANBuffer::~GVULKANBuffer() {
     
 }
 
-void GVULKANBuffer::createBuffer(const void *data, const VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, TBool protectAccess, GVULKANDevice& vulkanDevice, GVULKANCommands& vulkanCommands) {
+void GVULKANBuffer::createBuffer(const void *data, const VkDeviceSize size, const VkBufferUsageFlags usage, const VkMemoryPropertyFlags properties, const TBool protectAccess, GVULKANDevice& vulkanDevice, GVULKANCommands& vulkanCommands) {
     if (protectAccess) {
         VkBuffer stagingBuffer = createBuffer(vulkanDevice.getLogicalDevice(), size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT);
         VkDeviceMemory stagingBufferMemory = allocateBufferMemory(stagingBuffer, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, vulkanDevice);
@@ -58,13 +58,13 @@ TUInt GVULKANBuffer::getBufferSize() {
     return bufferSize;
 }
 
-VkBuffer& GVULKANBuffer::getBuffer() {
+VkBuffer GVULKANBuffer::getBuffer() {
     return buffer;
 }
 
 #pragma mark - Routine -
 
-VkBuffer GVULKANBuffer::createBuffer(VkDevice device, VkDeviceSize size, VkBufferUsageFlags usage) {
+VkBuffer GVULKANBuffer::createBuffer(VkDevice device, const VkDeviceSize size, const VkBufferUsageFlags usage) {
     VkBufferCreateInfo bufferInfo = { };
     bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
     bufferInfo.size = size;
@@ -79,7 +79,7 @@ VkBuffer GVULKANBuffer::createBuffer(VkDevice device, VkDeviceSize size, VkBuffe
     return newBuffer;
 }
 
-VkDeviceMemory GVULKANBuffer::allocateBufferMemory(VkBuffer& originalBuffer, VkMemoryPropertyFlags properties, GVULKANDevice& vulkanDevice) {
+VkDeviceMemory GVULKANBuffer::allocateBufferMemory(VkBuffer originalBuffer, const VkMemoryPropertyFlags properties, GVULKANDevice& vulkanDevice) {
     VkMemoryRequirements memoryRequirements;
     vkGetBufferMemoryRequirements(vulkanDevice.getLogicalDevice(), originalBuffer, &memoryRequirements);
     
@@ -97,7 +97,7 @@ VkDeviceMemory GVULKANBuffer::allocateBufferMemory(VkBuffer& originalBuffer, VkM
     return newBufferMemory;
 }
 
-void GVULKANBuffer::copyBuffer(VkBuffer& srcBuffer, VkBuffer& dstBuffer, const VkDeviceSize size, GVULKANDevice& vulkanDevice, GVULKANCommands& vulkanCommands) {
+void GVULKANBuffer::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, const VkDeviceSize size, GVULKANDevice& vulkanDevice, GVULKANCommands& vulkanCommands) {
     VkCommandBuffer commandBuffer = vulkanCommands.copyBufferCommand(srcBuffer, dstBuffer, size, vulkanDevice.getLogicalDevice());
     
     VkSubmitInfo submitInfo{};
@@ -110,7 +110,7 @@ void GVULKANBuffer::copyBuffer(VkBuffer& srcBuffer, VkBuffer& dstBuffer, const V
     vulkanCommands.destroyCommandBuffer(commandBuffer, vulkanDevice.getLogicalDevice());
 }
 
-TUInt GVULKANBuffer::findMemoryType(VkPhysicalDevice device, TUInt typeFilter, VkMemoryPropertyFlags properties) {
+TUInt GVULKANBuffer::findMemoryType(VkPhysicalDevice device, const TUInt typeFilter, const VkMemoryPropertyFlags properties) {
     VkPhysicalDeviceMemoryProperties memoryProperties;
     vkGetPhysicalDeviceMemoryProperties(device, &memoryProperties);
     
