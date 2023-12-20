@@ -122,6 +122,7 @@ void GVULKANAPI::destroyAPI() {
 void GVULKANAPI::frameResized(const float width, const float height) {
     updateFrameSize = true;
     vulkanSwapChain.updateScreenSize(width, height, vulkanDevice, metalSurface);
+    installIsometricView(fov, nearPlane, farPlane);
 }
 
 void GVULKANAPI::drawFrame(GRenderGraph& renderGraph) {
@@ -193,6 +194,10 @@ void GVULKANAPI::installIsometricView(const TFloat fieldOfView, const TFloat nea
     TFloat aspect = static_cast<TFloat>(swapChainExtent.width) / static_cast<TFloat>(swapChainExtent.height);
     TFloat size = near * tanf(fieldOfView / 2.0);
     TFloat aspectHeight = aspect * size;
+    
+    nearPlane = near;
+    farPlane = far;
+    fov = fieldOfView;
     projectionMatrix = GMatrix::frustum(-aspectHeight, aspectHeight, -size, size, near, far);
 }
 

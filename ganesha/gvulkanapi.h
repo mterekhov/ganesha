@@ -50,6 +50,9 @@ private:
 
     VkSurfaceKHR metalSurface;
 
+    TFloat nearPlane;
+    TFloat farPlane;
+    TFloat fov;
     GMatrix projectionMatrix;
     GMatrix viewMatrix;
 
