@@ -24,7 +24,7 @@ void GVULKANDevice::createDevice(GVULKANInstance &vulkanInstance, const TStrings
 }
 
 VkPhysicalDevice GVULKANDevice::selectPhysicalDevice(GVULKANInstance &vulkanInstance, const TStringsArray& useDeviceExtensions, VkSurfaceKHR &surface) {
-    uint32_t count = 0;
+    TUInt count = 0;
     vkEnumeratePhysicalDevices(vulkanInstance.getVulkanInstance(), &count, nullptr);
     std::vector<VkPhysicalDevice> physicalDevicesArray(count);
     vkEnumeratePhysicalDevices(vulkanInstance.getVulkanInstance(), &count, physicalDevicesArray.data());
@@ -59,13 +59,13 @@ VkDevice GVULKANDevice::createLogicalDevice(VkPhysicalDevice& device, const TStr
 
     VkDeviceCreateInfo logicalDeviceInfo = {};
     logicalDeviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-    logicalDeviceInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfosList.size());
+    logicalDeviceInfo.queueCreateInfoCount = static_cast<TUInt>(queueCreateInfosList.size());
     logicalDeviceInfo.pQueueCreateInfos = queueCreateInfosList.data();
     logicalDeviceInfo.pEnabledFeatures = &deviceFeatures;
     
     std::vector<VkExtensionProperties> availableExtensions = collectAvailableExtensions(device);
     TCharPointersArray deviceExtensionsNamesArray = collectAvailableExtensionsNames(availableExtensions, useDeviceExtensions);
-    logicalDeviceInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensionsNamesArray.size());
+    logicalDeviceInfo.enabledExtensionCount = static_cast<TUInt>(deviceExtensionsNamesArray.size());
     logicalDeviceInfo.ppEnabledExtensionNames = deviceExtensionsNamesArray.data();
 
     VkDevice newDevice;
@@ -97,7 +97,7 @@ VkDevice& GVULKANDevice::getLogicalDevice() {
     return logicalDevice;
 }
 
-uint32_t GVULKANDevice::getGraphicsQueueIndex() {
+TUInt GVULKANDevice::getGraphicsQueueIndex() {
     return graphicQueueFamilyIndex;
 }
 
@@ -109,8 +109,8 @@ VkQueue& GVULKANDevice::getPresentQueue() {
     return presentQueue;
 }
 
-std::vector<uint32_t> GVULKANDevice::getQueuesIndecesArray() {
-    return { static_cast<uint32_t>(graphicQueueFamilyIndex), static_cast<uint32_t>(presentQueueFamilyIndex) };
+std::vector<TUInt> GVULKANDevice::getQueuesIndecesArray() {
+    return { static_cast<TUInt>(graphicQueueFamilyIndex), static_cast<TUInt>(presentQueueFamilyIndex) };
 }
 
 SwapChainSupportDetails GVULKANDevice::querySwapChainSupport(VkSurfaceKHR& surface) {
@@ -137,7 +137,7 @@ TCharPointersArray GVULKANDevice::collectAvailableExtensionsNames(const std::vec
 }
 
 std::vector<VkExtensionProperties> GVULKANDevice::collectAvailableExtensions(const VkPhysicalDevice& device) {
-    uint32_t count;
+    TUInt count;
     vkEnumerateDeviceExtensionProperties(device, nullptr, &count, nullptr);
     
     std::vector<VkExtensionProperties> availableExtensions(count);
@@ -183,7 +183,7 @@ SwapChainSupportDetails GVULKANDevice::querySwapChainSupport(const VkPhysicalDev
     SwapChainSupportDetails details = {0};
     vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface, &details.surfaceCapabilities);
     
-    uint32_t count;
+    TUInt count;
     vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &count, nullptr);
     if (count != 0) {
         details.formats.resize(count);
@@ -200,7 +200,7 @@ SwapChainSupportDetails GVULKANDevice::querySwapChainSupport(const VkPhysicalDev
 }
 
 void GVULKANDevice::findQueuesIndeces(VkSurfaceKHR& metalSurface) {
-    uint32_t count = 0;
+    TUInt count = 0;
     vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &count, nullptr);
     std::vector<VkQueueFamilyProperties> queueFamiliesArray(count);
     vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &count, queueFamiliesArray.data());
@@ -210,7 +210,7 @@ void GVULKANDevice::findQueuesIndeces(VkSurfaceKHR& metalSurface) {
 }
 
 int32_t GVULKANDevice::findGraphicsQueueIndex(const std::vector<VkQueueFamilyProperties>& queueFamiliesArray) {
-    for (uint32_t i = 0; i < queueFamiliesArray.size(); i++) {
+    for (TUInt i = 0; i < queueFamiliesArray.size(); i++) {
         const auto& properties = queueFamiliesArray[i];
         if ((properties.queueFlags & VK_QUEUE_GRAPHICS_BIT)) {
             return i;

@@ -18,7 +18,7 @@ public:
     /// @param metalLayer  layer of MTKView
     /// @param width window width
     /// @param height window height
-    TBool initEngine(void *metalLayer, const uint32_t width, const uint32_t height);
+    TBool initEngine(void *metalLayer, const TUInt width, const TUInt height);
     
     /// Destroys all engine objects
     void destroyVulkan();
@@ -26,14 +26,14 @@ public:
     /// In case window size changes you can use this method to update rendering
     /// @param width new width
     /// @param height new height
-    void setViewSize(const uint32_t width, const uint32_t height);
+    void setViewSize(const TUInt width, const TUInt height);
     
     /// Main engine loop which launches every time new frame should be generated
     void mainLoop();
     
     /// Any keyboard events should be proxied using this method
     /// @param keyCode keyboard event code
-    void processKeyboard(const uint32_t keyCode);
+    void processKeyboard(const TUInt keyCode);
     
 private:
     GGraphicsAPIProtocol *graphicsAPI;

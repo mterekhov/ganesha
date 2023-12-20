@@ -11,5 +11,6 @@
 //  This is umbrella header of Ganesha engine
 
 #include "gganesha.h"
+#include "ganeshatypes.h"
 
 #endif  //  GANESHA_H

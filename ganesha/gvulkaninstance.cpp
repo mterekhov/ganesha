@@ -52,7 +52,7 @@ void GVULKANInstance::addInstanceExtensionsToAvoid(const TStringsArray& extensio
 TCharPointersArray GVULKANInstance::collectValidationLayers(const TCharPointersArray& layersNamesArray) {
     TCharPointersArray supportedValidationLayersArray;
 
-    uint32_t count;
+    TUInt count;
     if (vkEnumerateInstanceLayerProperties(&count, nullptr) != VK_SUCCESS) {
         return supportedValidationLayersArray;
     }
@@ -76,7 +76,7 @@ TCharPointersArray GVULKANInstance::collectValidationLayers(const TCharPointersA
 
 TCharPointersArray GVULKANInstance::collectInstanceExtensionsNames() {
     TCharPointersArray namesList = TCharPointersArray();
-    uint32_t count = 0;
+    TUInt count = 0;
     if (vkEnumerateInstanceExtensionProperties(nullptr, &count, nullptr) != VK_SUCCESS) {
         return namesList;
     }
@@ -115,12 +115,12 @@ VkInstanceCreateInfo GVULKANInstance::createInstanceInfo(const VkApplicationInfo
     
     instanceInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
     instanceInfo.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
-    instanceInfo.enabledExtensionCount = static_cast<uint32_t>(extensionsNamesArray.size());
+    instanceInfo.enabledExtensionCount = static_cast<TUInt>(extensionsNamesArray.size());
     instanceInfo.ppEnabledExtensionNames = extensionsNamesArray.data();
     instanceInfo.pApplicationInfo = &applicationInfo;
     
     if (!availableValidationLayersList.empty()) {
-        instanceInfo.enabledLayerCount = static_cast<uint32_t>(availableValidationLayersList.size());
+        instanceInfo.enabledLayerCount = static_cast<TUInt>(availableValidationLayersList.size());
         instanceInfo.ppEnabledLayerNames = availableValidationLayersList.data();
         debugUtilsMessengerInfo = createDebugUtilsMessengerInfo();
         instanceInfo.pNext = &debugUtilsMessengerInfo;
@@ -132,7 +132,7 @@ VkInstanceCreateInfo GVULKANInstance::createInstanceInfo(const VkApplicationInfo
 VkApplicationInfo GVULKANInstance::createApplicationInfo(const std::string& title) {
     VkApplicationInfo newApplicationInfo = {};
     
-    uint32_t pApiVersion = 0;
+    TUInt pApiVersion = 0;
     vkEnumerateInstanceVersion(&pApiVersion);
     
     newApplicationInfo.apiVersion = pApiVersion;

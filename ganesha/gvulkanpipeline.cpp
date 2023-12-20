@@ -66,7 +66,7 @@ void GVULKANPipeline::createPipeline(GVULKANDevice& device, GVULKANSwapChain& sw
     };
     VkPipelineDynamicStateCreateInfo dynamicState = { };
     dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-    dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
+    dynamicState.dynamicStateCount = static_cast<TUInt>(dynamicStates.size());
     dynamicState.pDynamicStates = dynamicStates.data();
     
     pipelineLayout = createPipelineLayout(device.getLogicalDevice(), descriptorsetLayout);
@@ -118,7 +118,7 @@ VkPipelineVertexInputStateCreateInfo GVULKANPipeline::createVertexInput() {
     
     vertexInput.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     vertexInput.vertexBindingDescriptionCount = 1;
-    vertexInput.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
+    vertexInput.vertexAttributeDescriptionCount = static_cast<TUInt>(attributeDescriptions.size());
     vertexInput.pVertexBindingDescriptions = &bindingDescription;
     vertexInput.pVertexAttributeDescriptions = attributeDescriptions.data();
     
@@ -162,7 +162,7 @@ VkPipelineShaderStageCreateInfo GVULKANPipeline::createShader(const std::string 
     
     createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
     createInfo.codeSize = code.size();
-    createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
+    createInfo.pCode = reinterpret_cast<const TUInt*>(code.data());
     
     VkShaderModule shaderModule;
     if (vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {

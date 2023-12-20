@@ -24,8 +24,8 @@ namespace spcGaneshaEngine {
 
 typedef float TFloat;
 typedef bool TBool;
-typedef uint32_t TUint;
-typedef TUint TIndex;
+typedef uint32_t TUInt;
+typedef TUInt TIndex;
 typedef std::vector<TIndex> TIndexArray;
 typedef std::vector<const char *> TCharPointersArray;
 typedef std::vector<std::string> TStringsArray;

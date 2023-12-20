@@ -13,8 +13,8 @@ public:
     GVULKANSwapChain(GLog& log);
     ~GVULKANSwapChain();
     
-    void createSwapChain(const uint32_t screenWidth, const uint32_t screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface);
-    void updateScreenSize(const uint32_t screenWidth, const uint32_t screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface);
+    void createSwapChain(const TUInt screenWidth, const TUInt screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface);
+    void updateScreenSize(const TUInt screenWidth, const TUInt screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface);
     void destroySwapChain(GVULKANDevice& device);
 
     std::vector<VkImageView>& getImageViewsArray();
@@ -35,13 +35,13 @@ private:
     VkExtent2D extent;
     VkRenderPass renderPass;
 
-    VkSwapchainKHR createNewSwapChain(const uint32_t screenWidth, const uint32_t screenHeight, const SwapChainSupportDetails& supportDetails, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface);
-    void createSwapChain(const uint32_t screenWidth, const uint32_t screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface, const TBool recreateSwapChain);
+    VkSwapchainKHR createNewSwapChain(const TUInt screenWidth, const TUInt screenHeight, const SwapChainSupportDetails& supportDetails, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface);
+    void createSwapChain(const TUInt screenWidth, const TUInt screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface, const TBool recreateSwapChain);
     std::vector<VkImage> ejectImagesArray(const VkDevice& device, const VkSwapchainKHR& swapChainSource);
     std::vector<VkImageView> createImageViews(VkDevice& logicalDevice, std::vector<VkImage>& swapChainImagesArray);
     std::vector<VkFramebuffer> createFramebuffers(VkDevice& device, const std::vector<VkImageView>& useImagesViewArray, const VkRenderPass& useRenderPass, const VkExtent2D& useExtent);
    VkRenderPass createRenderPass(const VkDevice& device, VkFormat format);
-    VkExtent2D selectSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities, const uint32_t screenWidth, const uint32_t screenHeight);
+    VkExtent2D selectSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities, const TUInt screenWidth, const TUInt screenHeight);
     VkSurfaceFormatKHR selectSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
     VkPresentModeKHR selectSwapPresentMode(const std::vector<VkPresentModeKHR>& presentModesArray);
     void destroyExtentDependency(const VkDevice& device);

@@ -38,7 +38,7 @@ void GVULKANBuffer::createBuffer(const void *data, const VkDeviceSize size, VkBu
         vkUnmapMemory(vulkanDevice.getLogicalDevice(), bufferMemory);
     }
     
-    bufferSize = static_cast<uint32_t>(size);
+    bufferSize = static_cast<TUInt>(size);
 }
 
 void GVULKANBuffer::destroyBuffer(GVULKANDevice& vulkanDevice) {
@@ -54,7 +54,7 @@ void GVULKANBuffer::refreshBuffer(const void *data, GVULKANDevice& vulkanDevice)
     vkUnmapMemory(vulkanDevice.getLogicalDevice(), bufferMemory);
 }
 
-uint32_t GVULKANBuffer::getBufferSize() {
+TUInt GVULKANBuffer::getBufferSize() {
     return bufferSize;
 }
 
@@ -110,11 +110,11 @@ void GVULKANBuffer::copyBuffer(VkBuffer& srcBuffer, VkBuffer& dstBuffer, const V
     vulkanCommands.destroyCommandBuffer(commandBuffer, vulkanDevice.getLogicalDevice());
 }
 
-uint32_t GVULKANBuffer::findMemoryType(const VkPhysicalDevice& device, uint32_t typeFilter, VkMemoryPropertyFlags properties) {
+TUInt GVULKANBuffer::findMemoryType(const VkPhysicalDevice& device, TUInt typeFilter, VkMemoryPropertyFlags properties) {
     VkPhysicalDeviceMemoryProperties memoryProperties;
     vkGetPhysicalDeviceMemoryProperties(device, &memoryProperties);
     
-    for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; i++) {
+    for (TUInt i = 0; i < memoryProperties.memoryTypeCount; i++) {
         if ((typeFilter & (1 << i)) &&
             (memoryProperties.memoryTypes[i].propertyFlags & properties) == properties) {
             return i;

@@ -5,8 +5,9 @@
 //  Created by Mihail Terekhov on 22.07.2021.
 //
 
-#import "CPPBridge.h"
 #import <ganesha/ganesha.h>
+
+#import "CPPBridge.h"
 
 @interface CPPBridge ()
 
@@ -29,8 +30,8 @@
     
     self.ganeshaEngine = new spcGaneshaEngine::GGanesha();
     if (!self.ganeshaEngine->initEngine((__bridge void *)layer,
-                                       static_cast<uint32_t>(CGRectGetWidth(layer.bounds)),
-                                       static_cast<uint32_t>(CGRectGetHeight(layer.bounds)))) {
+                                       static_cast<spcGaneshaEngine::TUInt>(CGRectGetWidth(layer.bounds)),
+                                       static_cast<spcGaneshaEngine::TUInt>(CGRectGetHeight(layer.bounds)))) {
         NSLog(@"ACHTUNG: no chance to create VULKAN instance");
         return;
     }

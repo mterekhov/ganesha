@@ -11,7 +11,7 @@ GVULKANDescriptorsets::~GVULKANDescriptorsets() {
 
 void GVULKANDescriptorsets::createDescriptorsets(GVULKANDevice& vulkanDevice, std::vector<GVULKANBuffer>& buffersArray) {
     layout = createLayout(vulkanDevice.getLogicalDevice());
-    pool = createDescriptorPool(static_cast<uint32_t>(buffersArray.size()), vulkanDevice.getLogicalDevice());
+    pool = createDescriptorPool(static_cast<TUInt>(buffersArray.size()), vulkanDevice.getLogicalDevice());
     descriptorsetArray = createNewDescriptorsets(buffersArray, layout, vulkanDevice.getLogicalDevice());
 }
 
@@ -30,7 +30,7 @@ VkDescriptorSetLayout& GVULKANDescriptorsets::getDescriptorsetLayout() {
 
 #pragma mark - Routine -
 
-VkDescriptorPool GVULKANDescriptorsets::createDescriptorPool(const uint32_t descriptorsPoolSize, const VkDevice& device) {
+VkDescriptorPool GVULKANDescriptorsets::createDescriptorPool(const TUInt descriptorsPoolSize, const VkDevice& device) {
     poolSize = descriptorsPoolSize;
     
     VkDescriptorPoolSize newPoolSize = { };

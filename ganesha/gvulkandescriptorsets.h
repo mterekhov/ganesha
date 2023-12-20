@@ -22,14 +22,14 @@ public:
 
 private:
     VkDescriptorSetLayout createLayout(const VkDevice& device);
-    VkDescriptorPool createDescriptorPool(const uint32_t descriptorsPoolSize, const VkDevice& device);
+    VkDescriptorPool createDescriptorPool(const TUInt descriptorsPoolSize, const VkDevice& device);
     std::vector<VkDescriptorSet> createNewDescriptorsets(std::vector<GVULKANBuffer>& buffersArray, VkDescriptorSetLayout& descriptorsetLayout, const VkDevice& device);
 
     GLog& log;
     std::vector<VkDescriptorSet> descriptorsetArray;
     VkDescriptorSetLayout layout;
     VkDescriptorPool pool;
-    uint32_t poolSize;
+    TUInt poolSize;
 };
 
 }   //  namespace spcGaneshaEngine

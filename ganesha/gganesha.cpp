@@ -12,7 +12,7 @@ GGanesha::~GGanesha() {
     delete graphicsAPI;
 }
 
-TBool GGanesha::initEngine(void *metalLayer, const uint32_t width, const uint32_t height) {
+TBool GGanesha::initEngine(void *metalLayer, const TUInt width, const TUInt height) {
     
     const std::vector<Vertex> vertices = {
         {GPoint2D(-0.5f, -0.5f), GColor::blueColor()},
@@ -38,11 +38,11 @@ void GGanesha::destroyVulkan() {
     graphicsAPI->destroyAPI();
 }
 
-void GGanesha::setViewSize(const uint32_t width, const uint32_t height) {
+void GGanesha::setViewSize(const TUInt width, const TUInt height) {
     
 }
 
-void GGanesha::processKeyboard(const uint32_t keyCode) {
+void GGanesha::processKeyboard(const TUInt keyCode) {
     graphicsAPI->installViewMatrix(camera.viewMatrix());
 }
 

@@ -28,7 +28,7 @@ public:
     GVULKANAPI();
     virtual ~GVULKANAPI();
 
-    virtual void initAPI(void *metalLayer, const uint32_t frameWidth, const uint32_t frameHeight, const GRenderGraph& renderGraph);
+    virtual void initAPI(void *metalLayer, const TUInt frameWidth, const TUInt frameHeight, const GRenderGraph& renderGraph);
     virtual void destroyAPI();
     virtual void drawFrame(GRenderGraph& renderGraph);
     virtual void frameResized(const float width, const float height);
@@ -63,7 +63,7 @@ private:
 
     std::vector<VkCommandBuffer> renderCommands;
 
-    const uint32_t maxFramesInFlight = 2;
+    const TUInt maxFramesInFlight = 2;
 
     void createSemaphores();
     

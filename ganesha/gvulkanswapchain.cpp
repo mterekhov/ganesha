@@ -8,7 +8,7 @@ GVULKANSwapChain::GVULKANSwapChain(GLog& log) : log(log) {
 GVULKANSwapChain::~GVULKANSwapChain() {
 }
 
-void GVULKANSwapChain::createSwapChain(const uint32_t screenWidth, const uint32_t screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
+void GVULKANSwapChain::createSwapChain(const TUInt screenWidth, const TUInt screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
     createSwapChain(screenWidth, screenHeight, vulkanDevice, surface, false);
 }
 
@@ -17,7 +17,7 @@ void GVULKANSwapChain::destroySwapChain(GVULKANDevice& device) {
     destroyRenderPass(device.getLogicalDevice());
 }
 
-void GVULKANSwapChain::updateScreenSize(const uint32_t screenWidth, const uint32_t screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
+void GVULKANSwapChain::updateScreenSize(const TUInt screenWidth, const TUInt screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
     destroyExtentDependency(vulkanDevice.getLogicalDevice());
     createSwapChain(screenWidth, screenHeight, vulkanDevice, surface, true);
 }
@@ -52,7 +52,7 @@ std::vector<VkFramebuffer>& GVULKANSwapChain::getFramebuffers() {
 
 #pragma mark - Routine -
 
-void GVULKANSwapChain::createSwapChain(const uint32_t screenWidth, const uint32_t screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface, const TBool recreateSwapChain) {
+void GVULKANSwapChain::createSwapChain(const TUInt screenWidth, const TUInt screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface, const TBool recreateSwapChain) {
     SwapChainSupportDetails supportDetails = vulkanDevice.querySwapChainSupport(surface);
     
     swapChain = createNewSwapChain(screenWidth, screenHeight, supportDetails, vulkanDevice, surface);
@@ -67,11 +67,11 @@ void GVULKANSwapChain::createSwapChain(const uint32_t screenWidth, const uint32_
     framebuffersArray = createFramebuffers(vulkanDevice.getLogicalDevice(), imageViewsArray, renderPass, extent);
 }
 
-VkSwapchainKHR GVULKANSwapChain::createNewSwapChain(const uint32_t screenWidth, const uint32_t screenHeight, const SwapChainSupportDetails& supportDetails, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
+VkSwapchainKHR GVULKANSwapChain::createNewSwapChain(const TUInt screenWidth, const TUInt screenHeight, const SwapChainSupportDetails& supportDetails, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
     VkSurfaceFormatKHR surfaceFormat = selectSwapSurfaceFormat(supportDetails.formats);
     VkExtent2D newExtent = selectSwapExtent(supportDetails.surfaceCapabilities, screenWidth, screenHeight);
     
-    uint32_t count = supportDetails.surfaceCapabilities.minImageCount + 1;
+    TUInt count = supportDetails.surfaceCapabilities.minImageCount + 1;
     if (supportDetails.surfaceCapabilities.maxImageCount > 0 && count > supportDetails.surfaceCapabilities.maxImageCount) {
         count = supportDetails.surfaceCapabilities.maxImageCount;
     }
@@ -86,7 +86,7 @@ VkSwapchainKHR GVULKANSwapChain::createNewSwapChain(const uint32_t screenWidth, 
     swapChainInfo.imageArrayLayers = 1;
     swapChainInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
     
-    std::vector<uint32_t> queueFamilyIndexArray;
+    std::vector<TUInt> queueFamilyIndexArray;
     if (vulkanDevice.presentationIsEqualToGraphics()) {
         swapChainInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
         swapChainInfo.queueFamilyIndexCount = 0;
@@ -95,7 +95,7 @@ VkSwapchainKHR GVULKANSwapChain::createNewSwapChain(const uint32_t screenWidth, 
     else {
         queueFamilyIndexArray = vulkanDevice.getQueuesIndecesArray();
         swapChainInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
-        swapChainInfo.queueFamilyIndexCount = static_cast<uint32_t>(queueFamilyIndexArray.size());
+        swapChainInfo.queueFamilyIndexCount = static_cast<TUInt>(queueFamilyIndexArray.size());
         swapChainInfo.pQueueFamilyIndices = queueFamilyIndexArray.data();
     }
     swapChainInfo.preTransform = supportDetails.surfaceCapabilities.currentTransform;
@@ -114,7 +114,7 @@ VkSwapchainKHR GVULKANSwapChain::createNewSwapChain(const uint32_t screenWidth, 
 std::vector<VkImage> GVULKANSwapChain::ejectImagesArray(const VkDevice& device, const VkSwapchainKHR& swapChainSource) {
     std::vector<VkImage> newImagesArray;
     
-    uint32_t count;
+    TUInt count;
     vkGetSwapchainImagesKHR(device, swapChainSource, &count, nullptr);
     newImagesArray.resize(count);
     vkGetSwapchainImagesKHR(device, swapChainSource, &count, newImagesArray.data());
@@ -237,10 +237,10 @@ std::vector<VkImageView> GVULKANSwapChain::createImageViews(VkDevice& logicalDev
     return newImageViewsArray;
 }
 
-VkExtent2D GVULKANSwapChain::selectSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities, const uint32_t screenWidth, const uint32_t screenHeight) {
+VkExtent2D GVULKANSwapChain::selectSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities, const TUInt screenWidth, const TUInt screenHeight) {
     VkExtent2D actualExtent = {screenWidth, screenHeight};
     
-    if (surfaceCapabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
+    if (surfaceCapabilities.currentExtent.width != std::numeric_limits<TUInt>::max()) {
         return surfaceCapabilities.currentExtent;
     } else {
         actualExtent.width = std::max(surfaceCapabilities.minImageExtent.width, std::min(surfaceCapabilities.maxImageExtent.width, actualExtent.width));

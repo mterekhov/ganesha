@@ -24,18 +24,18 @@ public:
     void destroyBuffer(GVULKANDevice& vulkanDevice);
     void refreshBuffer(const void *data, GVULKANDevice& vulkanDevice);
     VkBuffer& getBuffer();
-    uint32_t getBufferSize();
+    TUInt getBufferSize();
 
 private:
     GLog& log;
     VkBuffer buffer;
-    uint32_t bufferSize;
+    TUInt bufferSize;
     VkDeviceMemory bufferMemory;
     
     VkBuffer createBuffer(VkDevice& device, VkDeviceSize size, VkBufferUsageFlags usage);
     VkDeviceMemory allocateBufferMemory(VkBuffer& originalBuffer, VkMemoryPropertyFlags properties, GVULKANDevice& vulkanDevice);
     void copyBuffer(VkBuffer& srcBuffer, VkBuffer& dstBuffer, const VkDeviceSize size, GVULKANDevice& vulkanDevice, GVULKANCommands& vulkanCommands);
-    uint32_t findMemoryType(const VkPhysicalDevice& device, uint32_t typeFilter, VkMemoryPropertyFlags properties);
+    TUInt findMemoryType(const VkPhysicalDevice& device, TUInt typeFilter, VkMemoryPropertyFlags properties);
 };
 
 }   //  namespace spcGaneshaEngine

@@ -35,7 +35,7 @@ GVULKANAPI::~GVULKANAPI() {
 
 #pragma mark - GGraphicsAPIProtocol -
 
-void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint32_t frameHeight, const GRenderGraph& renderGraph) {
+void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt frameHeight, const GRenderGraph& renderGraph) {
     updateFrameSize = false;
     
     //  create VULKAN instance
@@ -50,9 +50,9 @@ void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint
     vulkanSwapChain.createSwapChain(frameWidth, frameHeight, vulkanDevice, metalSurface);
     vulkanCommands.createCommands(vulkanDevice);
     
-    uint32_t framebuffersNumber = static_cast<uint32_t>(vulkanSwapChain.framebuffersNumber());
+    TUInt framebuffersNumber = static_cast<TUInt>(vulkanSwapChain.framebuffersNumber());
     VkDeviceSize bufferSize = sizeof(UniformBufferObject);
-    for (uint32_t i = 0; i < framebuffersNumber; i++) {
+    for (TUInt i = 0; i < framebuffersNumber; i++) {
         GVULKANBuffer newBuffer(log);
         UniformBufferObject ubo = currentUBO();
         newBuffer.createBuffer(&ubo,
@@ -86,7 +86,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const uint32_t frameWidth, const uint
                                vulkanCommands);
     
     
-    for (uint32_t i = 0; i < framebuffersNumber; i++) {
+    for (TUInt i = 0; i < framebuffersNumber; i++) {
         renderCommands.push_back(vulkanCommands.emptyCommand(vulkanDevice.getLogicalDevice()));
     }
     
@@ -128,7 +128,7 @@ void GVULKANAPI::frameResized(const float width, const float height) {
 void GVULKANAPI::drawFrame(GRenderGraph& renderGraph) {
     VkResult result = vkWaitForFences(vulkanDevice.getLogicalDevice(), 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
     
-    uint32_t imageIndex;
+    TUInt imageIndex;
     result = vkAcquireNextImageKHR(vulkanDevice.getLogicalDevice(), vulkanSwapChain.getVulkanSwapChain(), UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
     if (imagesInFlight[imageIndex] != VK_NULL_HANDLE) {
         vkWaitForFences(vulkanDevice.getLogicalDevice(), 1, &imagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
@@ -142,7 +142,7 @@ void GVULKANAPI::drawFrame(GRenderGraph& renderGraph) {
     vulkanCommands.recordRenderCommand(renderCommands[imageIndex],
                                        vertecesBuffer.getBuffer(),
                                        indecesBuffer.getBuffer(),
-                                       static_cast<uint32_t>(renderGraph.getIndecesArray().size()),
+                                       static_cast<TUInt>(renderGraph.getIndecesArray().size()),
                                        vulkanSwapChain.getFramebuffers()[imageIndex],
                                        vulkanSwapChain,
                                        vulkanPipeline,

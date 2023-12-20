@@ -30,8 +30,8 @@ public:
     VkDevice& getLogicalDevice();
     VkQueue& getPresentQueue();
     VkQueue& getGraphicsQueue();
-    uint32_t getGraphicsQueueIndex();
-    std::vector<uint32_t> getQueuesIndecesArray();
+    TUInt getGraphicsQueueIndex();
+    std::vector<TUInt> getQueuesIndecesArray();
     
     TBool presentationIsEqualToGraphics();
 

@@ -18,7 +18,6 @@ public:
     
     void createCommands(GVULKANDevice& device);
     void destroyCommands(GVULKANDevice& device);
-//    std::vector<VkCommandBuffer>& getCommandBuffersArray();
 
     VkCommandPool& getCommandPool();
 
@@ -27,7 +26,7 @@ public:
     void recordRenderCommand(VkCommandBuffer& renderCommand,
                              VkBuffer& vertecesBuffer,
                              VkBuffer& indicesBuffer,
-                             uint32_t indicesNumber,
+                             TUInt indicesNumber,
                              VkFramebuffer& framebuffer,
                              GVULKANSwapChain& swapChain,
                              GVULKANPipeline& pipeline,
@@ -38,24 +37,6 @@ private:
     GLog& log;
     VkCommandPool commandPool;
     VkCommandPool createCommandPool(GVULKANDevice& device);
-
-    //    std::vector<VkCommandBuffer> commandBuffersArray;
-    
-//    VkBuffer vertexBuffer;
-//    VkDeviceMemory vertexBufferMemory;
-//    VkBuffer indexBuffer;
-//    VkDeviceMemory indexBufferMemory;
-
-//    std::vector<VkCommandBuffer> createCommandBuffers(GVULKANDevice& device,
-//                                                      GVULKANSwapChain& swapChain,
-//                                                      GVULKANPipeline& pipeline,
-//                                                      VkCommandPool& currentCommandPool,
-//                                                      const GRenderGraph& renderGraph);
-//    VkBuffer createIndicesBuffer(GVULKANDevice& vulkanDevice, const std::vector<uint32_t>& indices);
-//    VkBuffer createVertexBuffer(GVULKANDevice& vulkanDevice, const std::vector<uint32_t>& vertices);
-//    void createBuffer(GVULKANDevice& vulkanDevice, VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
-//    uint32_t findMemoryType(const VkPhysicalDevice& device, uint32_t typeFilter, VkMemoryPropertyFlags properties);
-//    void copyBuffer(GVULKANDevice& vulkanDevice, VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 };
 
 }   //  namespace spcGaneshaEngine

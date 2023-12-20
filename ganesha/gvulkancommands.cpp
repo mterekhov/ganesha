@@ -17,7 +17,7 @@ void GVULKANCommands::createCommands(GVULKANDevice& device) {
 void GVULKANCommands::recordRenderCommand(VkCommandBuffer& renderCommand,
                                           VkBuffer& vertecesBuffer,
                                           VkBuffer& indicesBuffer,
-                                          uint32_t indicesNumber,
+                                          TUInt indicesNumber,
                                           VkFramebuffer& framebuffer,
                                           GVULKANSwapChain& swapChain,
                                           GVULKANPipeline& pipeline,
