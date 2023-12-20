@@ -6,6 +6,7 @@
 #include "gvulkandevice.h"
 #include "glob.h"
 #include "gvulkanbuffer.h"
+#include "gvulkanimage.h"
 
 namespace spcGaneshaEngine {
 
@@ -14,7 +15,7 @@ public:
     GVULKANDescriptorsets(GLog& log);
     ~GVULKANDescriptorsets();
     
-    void createDescriptorsets(GVULKANDevice& vulkanDevice, std::vector<GVULKANBuffer>& buffersArray);
+    void createDescriptorsets(GVULKANDevice& vulkanDevice, std::vector<GVULKANBuffer>& buffersArray, GVULKANImage& image);
     void destroyDescriptorsets(GVULKANDevice& vulkanDevice);
     
     std::vector<VkDescriptorSet>& getDescriptorsetArray();
@@ -23,7 +24,7 @@ public:
 private:
     VkDescriptorSetLayout createLayout(VkDevice device);
     VkDescriptorPool createDescriptorPool(const TUInt descriptorsPoolSize, VkDevice device);
-    std::vector<VkDescriptorSet> createNewDescriptorsets(std::vector<GVULKANBuffer>& buffersArray, VkDescriptorSetLayout descriptorsetLayout, VkDevice device);
+    std::vector<VkDescriptorSet> createNewDescriptorsets(std::vector<GVULKANBuffer>& buffersArray, GVULKANImage& image, VkDescriptorSetLayout descriptorsetLayout, VkDevice device);
 
     GLog& log;
     std::vector<VkDescriptorSet> descriptorsetArray;

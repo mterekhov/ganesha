@@ -75,6 +75,21 @@ void GVULKANImage::createImage(const std::string filePath,
     sampler = createTextureSampler(vulkanDevice);
 }
 
+void GVULKANImage::destroyImage(GVULKANDevice& vulkanDevice) {
+    vkDestroySampler(vulkanDevice.getLogicalDevice(), sampler, nullptr);
+    vkDestroyImageView(vulkanDevice.getLogicalDevice(), imageView, nullptr);
+    vkDestroyImage(vulkanDevice.getLogicalDevice(), image, nullptr);
+    vkFreeMemory(vulkanDevice.getLogicalDevice(), imageMemory, nullptr);
+}
+
+VkImageView GVULKANImage::getImageView() {
+    return imageView;
+}
+
+VkSampler GVULKANImage::getSampler() {
+    return sampler;
+}
+
 VkSampler GVULKANImage::createTextureSampler(GVULKANDevice& device) {
     VkPhysicalDeviceProperties properties = device.getPhysicalDeviceProperties();
 
@@ -99,13 +114,6 @@ VkSampler GVULKANImage::createTextureSampler(GVULKANDevice& device) {
     }
     
     return newSampler;
-}
-
-void GVULKANImage::destroyImage(GVULKANDevice& vulkanDevice) {
-    vkDestroySampler(vulkanDevice.getLogicalDevice(), sampler, nullptr);
-    vkDestroyImageView(vulkanDevice.getLogicalDevice(), imageView, nullptr);
-    vkDestroyImage(vulkanDevice.getLogicalDevice(), image, nullptr);
-    vkFreeMemory(vulkanDevice.getLogicalDevice(), imageMemory, nullptr);
 }
 
 }

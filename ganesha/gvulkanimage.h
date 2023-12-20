@@ -22,6 +22,9 @@ public:
                      GVULKANDevice& vulkanDevice,
                      GVULKANCommands& vulkanCommands);
     void destroyImage(GVULKANDevice& vulkanDevice);
+    
+    VkImageView getImageView();
+    VkSampler getSampler();
 
 private:
     GLog& log;

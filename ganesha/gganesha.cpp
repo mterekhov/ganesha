@@ -15,10 +15,10 @@ GGanesha::~GGanesha() {
 TBool GGanesha::initEngine(void *metalLayer, const TUInt width, const TUInt height) {
     
     const std::vector<Vertex> vertexes = {
-        {GPoint2D(-0.5f, -0.5f), GColor::blueColor()},
-        {GPoint2D(0.5f, -0.5f), GColor::redColor()},
-        {GPoint2D(0.5f, 0.5f), GColor::greenColor()},
-        {GPoint2D(-0.5f, 0.5f), GColor::redColor()}
+        { GPoint2D(-0.5f, -0.5f), GColor::blueColor(), GPoint2D{1.0f, 0.0f} },
+        { GPoint2D(0.5f, -0.5f), GColor::redColor(), GPoint2D{0.0f, 0.0f} },
+        { GPoint2D(0.5f, 0.5f), GColor::greenColor(), GPoint2D{0.0f, 1.0f} },
+        { GPoint2D(-0.5f, 0.5f), GColor::redColor(), GPoint2D{1.0f, 1.0f} }
     };
     renderGraph.defineVertexesArray(vertexes);
 
