@@ -18,12 +18,12 @@ public:
     void destroyDescriptorsets(GVULKANDevice& vulkanDevice);
     
     std::vector<VkDescriptorSet>& getDescriptorsetArray();
-    VkDescriptorSetLayout& getDescriptorsetLayout();
+    VkDescriptorSetLayout getDescriptorsetLayout();
 
 private:
     VkDescriptorSetLayout createLayout(VkDevice device);
     VkDescriptorPool createDescriptorPool(const TUInt descriptorsPoolSize, VkDevice device);
-    std::vector<VkDescriptorSet> createNewDescriptorsets(std::vector<GVULKANBuffer>& buffersArray, VkDescriptorSetLayout& descriptorsetLayout, VkDevice device);
+    std::vector<VkDescriptorSet> createNewDescriptorsets(std::vector<GVULKANBuffer>& buffersArray, VkDescriptorSetLayout descriptorsetLayout, VkDevice device);
 
     GLog& log;
     std::vector<VkDescriptorSet> descriptorsetArray;

@@ -47,10 +47,10 @@ VkCommandBuffer GVULKANCommands::copyBufferCommand(VkBuffer srcBuffer, VkBuffer 
     return commandBuffer;
 }
 
-void GVULKANCommands::recordRenderCommand(VkCommandBuffer& renderCommand,
+void GVULKANCommands::recordRenderCommand(VkCommandBuffer renderCommand,
                                           VkBuffer vertexesBuffer,
                                           VkBuffer indexesBuffer,
-                                          TUInt indexesNumber,
+                                          const TUInt indexesNumber,
                                           VkFramebuffer& framebuffer,
                                           GVULKANSwapChain& swapChain,
                                           GVULKANPipeline& pipeline,
@@ -128,7 +128,7 @@ VkCommandPool GVULKANCommands::createCommandPool(GVULKANDevice& device) {
     return newCommandPool;
 }
 
-void GVULKANCommands::destroyCommandBuffer(VkCommandBuffer& commandBuffer, VkDevice device) {
+void GVULKANCommands::destroyCommandBuffer(VkCommandBuffer commandBuffer, VkDevice device) {
     vkFreeCommandBuffers(device, commandPool, 1, &commandBuffer);
 }
 

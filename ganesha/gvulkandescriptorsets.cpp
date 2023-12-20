@@ -24,7 +24,7 @@ std::vector<VkDescriptorSet>& GVULKANDescriptorsets::getDescriptorsetArray() {
     return descriptorsetArray;
 }
 
-VkDescriptorSetLayout& GVULKANDescriptorsets::getDescriptorsetLayout() {
+VkDescriptorSetLayout GVULKANDescriptorsets::getDescriptorsetLayout() {
     return layout;
 }
 
@@ -71,7 +71,7 @@ VkDescriptorSetLayout GVULKANDescriptorsets::createLayout(VkDevice device) {
     return newLayout;
 }
 
-std::vector<VkDescriptorSet> GVULKANDescriptorsets::createNewDescriptorsets(std::vector<GVULKANBuffer>& buffersArray, VkDescriptorSetLayout& descriptorsetLayout, VkDevice device) {
+std::vector<VkDescriptorSet> GVULKANDescriptorsets::createNewDescriptorsets(std::vector<GVULKANBuffer>& buffersArray, VkDescriptorSetLayout descriptorsetLayout, VkDevice device) {
     std::vector<VkDescriptorSetLayout> layoutsArray(poolSize, descriptorsetLayout);
     
     VkDescriptorSetAllocateInfo allocInfo = { };

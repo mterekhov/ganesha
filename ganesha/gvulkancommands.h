@@ -21,15 +21,15 @@ public:
 
     VkCommandBuffer emptyCommand(VkDevice device);
     VkCommandBuffer copyBufferCommand(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size, VkDevice device);
-    void recordRenderCommand(VkCommandBuffer& renderCommand,
+    void recordRenderCommand(VkCommandBuffer renderCommand,
                              VkBuffer vertexesBuffer,
                              VkBuffer indexesBuffer,
-                             TUInt indexesNumber,
+                             const TUInt indexesNumber,
                              VkFramebuffer& framebuffer,
                              GVULKANSwapChain& swapChain,
                              GVULKANPipeline& pipeline,
                              VkDescriptorSet& descriptorset);
-    void destroyCommandBuffer(VkCommandBuffer& commandBuffer, VkDevice device);
+    void destroyCommandBuffer(VkCommandBuffer commandBuffer, VkDevice device);
 
 private:
     GLog& log;
