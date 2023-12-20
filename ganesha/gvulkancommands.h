@@ -24,7 +24,7 @@ public:
     VkCommandBuffer emptyCommand(const VkDevice& device);
     VkCommandBuffer copyBufferCommand(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size, const VkDevice& device);
     void recordRenderCommand(VkCommandBuffer& renderCommand,
-                             VkBuffer& vertecesBuffer,
+                             VkBuffer& vertexesBuffer,
                              VkBuffer& indicesBuffer,
                              TUInt indicesNumber,
                              VkFramebuffer& framebuffer,

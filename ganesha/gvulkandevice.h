@@ -31,7 +31,7 @@ public:
     VkQueue& getPresentQueue();
     VkQueue& getGraphicsQueue();
     TUInt getGraphicsQueueIndex();
-    std::vector<TUInt> getQueuesIndecesArray();
+    std::vector<TUInt> getQueuesIndexesArray();
     
     TBool presentationIsEqualToGraphics();
 
@@ -47,7 +47,7 @@ private:
 
     int32_t findGraphicsQueueIndex(const std::vector<VkQueueFamilyProperties>& queuePropertiesArray);
     int32_t findPresentQueueIndex(const std::vector<VkQueueFamilyProperties>& queuePropertiesArray, VkSurfaceKHR& metalSurface);
-    void findQueuesIndeces(VkSurfaceKHR& metalSurface);
+    void findQueuesIndexes(VkSurfaceKHR& metalSurface);
     SwapChainSupportDetails querySwapChainSupport(const VkPhysicalDevice& device, VkSurfaceKHR& surface);
 
     GLog& log;

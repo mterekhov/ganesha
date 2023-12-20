@@ -93,7 +93,7 @@ VkSwapchainKHR GVULKANSwapChain::createNewSwapChain(const TUInt screenWidth, con
         swapChainInfo.pQueueFamilyIndices = nullptr;
     }
     else {
-        queueFamilyIndexArray = vulkanDevice.getQueuesIndecesArray();
+        queueFamilyIndexArray = vulkanDevice.getQueuesIndexesArray();
         swapChainInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
         swapChainInfo.queueFamilyIndexCount = static_cast<TUInt>(queueFamilyIndexArray.size());
         swapChainInfo.pQueueFamilyIndices = queueFamilyIndexArray.data();

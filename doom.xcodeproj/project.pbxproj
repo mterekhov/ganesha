@@ -240,6 +240,8 @@
 		DE55F2222B27903F0017E3E9 /* ganesha */ = {
 			isa = PBXGroup;
 			children = (
+				DEA031492B27BD0A00F1BB36 /* ganeshastubdata.h */,
+				DEA031382B27BD0900F1BB36 /* ganeshastubdata.cpp */,
 				DEA0316E2B27BD2200F1BB36 /* Basics */,
 				DEA0316F2B27BDB600F1BB36 /* Tools */,
 				DEA031712B27C03200F1BB36 /* ggraphicsapiprotocol.h */,
@@ -280,8 +282,6 @@
 				DEEFDBD82B28420B0038E297 /* glog.cpp */,
 				DEA031472B27BD0900F1BB36 /* gbundle.h */,
 				DEA031412B27BD0900F1BB36 /* gbundle.mm */,
-				DEA031492B27BD0A00F1BB36 /* ganeshastubdata.h */,
-				DEA031382B27BD0900F1BB36 /* ganeshastubdata.cpp */,
 			);
 			name = Tools;
 			sourceTree = "<group>";

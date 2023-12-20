@@ -17,19 +17,19 @@ GRenderGraph::~GRenderGraph() {
     
 }
 
-void GRenderGraph::defineVertecesArray(const std::vector<Vertex>& newVertecesArray) {
-    verticesArray = newVertecesArray;
+void GRenderGraph::defineVertexesArray(const std::vector<Vertex>& newVertexesArray) {
+    verticesArray = newVertexesArray;
 }
 
-const std::vector<Vertex>& GRenderGraph::getVertecesArray() const {
+const std::vector<Vertex>& GRenderGraph::getVertexesArray() const {
     return verticesArray;
 }
 
-void GRenderGraph::defineIndecesArray(const TIndexArray& newIndicesArray) {
+void GRenderGraph::defineIndexesArray(const TIndexArray& newIndicesArray) {
     indicesArray = newIndicesArray;
 }
 
-const TIndexArray& GRenderGraph::getIndecesArray() const {
+const TIndexArray& GRenderGraph::getIndexesArray() const {
     return indicesArray;
 }
 

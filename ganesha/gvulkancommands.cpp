@@ -15,7 +15,7 @@ void GVULKANCommands::createCommands(GVULKANDevice& device) {
 }
 
 void GVULKANCommands::recordRenderCommand(VkCommandBuffer& renderCommand,
-                                          VkBuffer& vertecesBuffer,
+                                          VkBuffer& vertexesBuffer,
                                           VkBuffer& indicesBuffer,
                                           TUInt indicesNumber,
                                           VkFramebuffer& framebuffer,
@@ -59,7 +59,7 @@ void GVULKANCommands::recordRenderCommand(VkCommandBuffer& renderCommand,
     scissor.extent = swapChainExtent;
     vkCmdSetScissor(renderCommand, 0, 1, &scissor);
     
-    VkBuffer vertexBuffers[] = { vertecesBuffer };
+    VkBuffer vertexBuffers[] = { vertexesBuffer };
     VkDeviceSize offsets[] = {0};
     vkCmdBindVertexBuffers(renderCommand, 0, 1, vertexBuffers, offsets);
     

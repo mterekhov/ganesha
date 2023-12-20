@@ -39,7 +39,7 @@ VkPhysicalDevice GVULKANDevice::selectPhysicalDevice(GVULKANInstance &vulkanInst
 }
 
 VkDevice GVULKANDevice::createLogicalDevice(VkPhysicalDevice& device, const TStringsArray& useDeviceExtensions, VkSurfaceKHR &metalSurface) {
-    findQueuesIndeces(metalSurface);
+    findQueuesIndexes(metalSurface);
     std::set<int32_t> uniqueQueueFamilies = { graphicQueueFamilyIndex, presentQueueFamilyIndex };
     TFloat queuePriority = 1.0f;
 
@@ -109,7 +109,7 @@ VkQueue& GVULKANDevice::getPresentQueue() {
     return presentQueue;
 }
 
-std::vector<TUInt> GVULKANDevice::getQueuesIndecesArray() {
+std::vector<TUInt> GVULKANDevice::getQueuesIndexesArray() {
     return { static_cast<TUInt>(graphicQueueFamilyIndex), static_cast<TUInt>(presentQueueFamilyIndex) };
 }
 
@@ -199,7 +199,7 @@ SwapChainSupportDetails GVULKANDevice::querySwapChainSupport(const VkPhysicalDev
     return details;
 }
 
-void GVULKANDevice::findQueuesIndeces(VkSurfaceKHR& metalSurface) {
+void GVULKANDevice::findQueuesIndexes(VkSurfaceKHR& metalSurface) {
     TUInt count = 0;
     vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &count, nullptr);
     std::vector<VkQueueFamilyProperties> queueFamiliesArray(count);

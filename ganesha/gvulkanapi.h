@@ -45,8 +45,8 @@ private:
     GVULKANDescriptorsets vulkanDescriptorset;
     
     std::vector<GVULKANBuffer> vulkanUniformBuffers;
-    GVULKANBuffer vertecesBuffer;
-    GVULKANBuffer indecesBuffer;
+    GVULKANBuffer vertexesBuffer;
+    GVULKANBuffer indexesBuffer;
 
     VkSurfaceKHR metalSurface;
 

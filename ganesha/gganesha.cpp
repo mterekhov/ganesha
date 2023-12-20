@@ -20,12 +20,12 @@ TBool GGanesha::initEngine(void *metalLayer, const TUInt width, const TUInt heig
         {GPoint2D(0.5f, 0.5f), GColor::greenColor()},
         {GPoint2D(-0.5f, 0.5f), GColor::redColor()}
     };
-    renderGraph.defineVertecesArray(vertices);
+    renderGraph.defineVertexesArray(vertices);
 
     const TIndexArray indices = {
         0, 1, 2, 2, 3, 0
     };
-    renderGraph.defineIndecesArray(indices);
+    renderGraph.defineIndexesArray(indices);
     
     graphicsAPI->initAPI(metalLayer, width, height, renderGraph);
     graphicsAPI->installIsometricView(M_PI_4, 0.1f, 100.0f);

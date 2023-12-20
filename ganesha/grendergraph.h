@@ -13,11 +13,11 @@ public:
     GRenderGraph();
     ~GRenderGraph();
 
-    void defineVertecesArray(const std::vector<Vertex>& newVertecesArray);
-    const std::vector<Vertex>& getVertecesArray() const;
+    void defineVertexesArray(const std::vector<Vertex>& newVertexesArray);
+    const std::vector<Vertex>& getVertexesArray() const;
     
-    void defineIndecesArray(const TIndexArray& newIndicesArray);
-    const TIndexArray& getIndecesArray() const;
+    void defineIndexesArray(const TIndexArray& newIndicesArray);
+    const TIndexArray& getIndexesArray() const;
     
 private:
     std::vector<Vertex> verticesArray;

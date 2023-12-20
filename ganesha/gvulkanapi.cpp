@@ -25,7 +25,7 @@ const TStringsArray useDeviceExtensions = {
     "VK_KHR_portability_subset"
 };
 
-GVULKANAPI::GVULKANAPI() : log("Ganesha"), vulkanInstance(log), vulkanDevice(log), vulkanSwapChain(log), vulkanPipeline(log), vulkanCommands(log), vertecesBuffer(log), indecesBuffer(log), vulkanDescriptorset(log) {
+GVULKANAPI::GVULKANAPI() : log("Ganesha"), vulkanInstance(log), vulkanDevice(log), vulkanSwapChain(log), vulkanPipeline(log), vulkanCommands(log), vertexesBuffer(log), indexesBuffer(log), vulkanDescriptorset(log) {
     
 }
 
@@ -67,18 +67,18 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
     vulkanDescriptorset.createDescriptorsets(vulkanDevice, vulkanUniformBuffers);
     vulkanPipeline.createPipeline(vulkanDevice, vulkanSwapChain, vulkanDescriptorset.getDescriptorsetLayout());
     
-    std::vector<Vertex> vertecesArray = renderGraph.getVertecesArray();
-    vertecesBuffer.createBuffer(vertecesArray.data(),
-                                sizeof(Vertex) * vertecesArray.size(),
+    std::vector<Vertex> vertexesArray = renderGraph.getVertexesArray();
+    vertexesBuffer.createBuffer(vertexesArray.data(),
+                                sizeof(Vertex) * vertexesArray.size(),
                                 VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
                                 VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
                                 true,
                                 vulkanDevice,
                                 vulkanCommands);
     
-    TIndexArray indecesArray = renderGraph.getIndecesArray();
-    indecesBuffer.createBuffer(indecesArray.data(),
-                               sizeof(TIndex) * indecesArray.size(),
+    TIndexArray indexesArray = renderGraph.getIndexesArray();
+    indexesBuffer.createBuffer(indexesArray.data(),
+                               sizeof(TIndex) * indexesArray.size(),
                                VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
                                true,
@@ -105,8 +105,8 @@ void GVULKANAPI::destroyAPI() {
     
     vulkanDescriptorset.destroyDescriptorsets(vulkanDevice);
     
-    indecesBuffer.destroyBuffer(vulkanDevice);
-    vertecesBuffer.destroyBuffer(vulkanDevice);
+    indexesBuffer.destroyBuffer(vulkanDevice);
+    vertexesBuffer.destroyBuffer(vulkanDevice);
 
     for (size_t i = 0; i < maxFramesInFlight; i++) {
         vkDestroySemaphore(vulkanDevice.getLogicalDevice(), renderFinishedSemaphores[i], nullptr);
@@ -140,9 +140,9 @@ void GVULKANAPI::drawFrame(GRenderGraph& renderGraph) {
     
     vkResetCommandBuffer(renderCommands[imageIndex], 0);
     vulkanCommands.recordRenderCommand(renderCommands[imageIndex],
-                                       vertecesBuffer.getBuffer(),
-                                       indecesBuffer.getBuffer(),
-                                       static_cast<TUInt>(renderGraph.getIndecesArray().size()),
+                                       vertexesBuffer.getBuffer(),
+                                       indexesBuffer.getBuffer(),
+                                       static_cast<TUInt>(renderGraph.getIndexesArray().size()),
                                        vulkanSwapChain.getFramebuffers()[imageIndex],
                                        vulkanSwapChain,
                                        vulkanPipeline,
