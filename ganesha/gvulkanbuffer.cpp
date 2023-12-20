@@ -110,7 +110,7 @@ void GVULKANBuffer::copyBuffer(VkBuffer& srcBuffer, VkBuffer& dstBuffer, const V
     vulkanCommands.destroyCommandBuffer(commandBuffer, vulkanDevice.getLogicalDevice());
 }
 
-TUInt GVULKANBuffer::findMemoryType(const VkPhysicalDevice& device, TUInt typeFilter, VkMemoryPropertyFlags properties) {
+TUInt GVULKANBuffer::findMemoryType(VkPhysicalDevice device, TUInt typeFilter, VkMemoryPropertyFlags properties) {
     VkPhysicalDeviceMemoryProperties memoryProperties;
     vkGetPhysicalDeviceMemoryProperties(device, &memoryProperties);
     

@@ -38,7 +38,7 @@ VkPhysicalDevice GVULKANDevice::selectPhysicalDevice(GVULKANInstance &vulkanInst
     return physicalDevicesArray[0];
 }
 
-VkDevice GVULKANDevice::createLogicalDevice(VkPhysicalDevice& device, const TStringsArray& useDeviceExtensions, VkSurfaceKHR &metalSurface) {
+VkDevice GVULKANDevice::createLogicalDevice(VkPhysicalDevice device, const TStringsArray& useDeviceExtensions, VkSurfaceKHR &metalSurface) {
     findQueuesIndexes(metalSurface);
     std::set<int32_t> uniqueQueueFamilies = { graphicQueueFamilyIndex, presentQueueFamilyIndex };
     TFloat queuePriority = 1.0f;
@@ -89,7 +89,7 @@ TBool GVULKANDevice::presentationIsEqualToGraphics() {
     return graphicQueueFamilyIndex == presentQueueFamilyIndex;
 }
 
-VkPhysicalDevice& GVULKANDevice::getPhysicalDevice() {
+VkPhysicalDevice GVULKANDevice::getPhysicalDevice() {
     return physicalDevice;
 }
 
@@ -136,7 +136,7 @@ TCharPointersArray GVULKANDevice::collectAvailableExtensionsNames(const std::vec
     return namesArray;
 }
 
-std::vector<VkExtensionProperties> GVULKANDevice::collectAvailableExtensions(const VkPhysicalDevice& device) {
+std::vector<VkExtensionProperties> GVULKANDevice::collectAvailableExtensions(VkPhysicalDevice device) {
     TUInt count;
     vkEnumerateDeviceExtensionProperties(device, nullptr, &count, nullptr);
     
@@ -146,7 +146,7 @@ std::vector<VkExtensionProperties> GVULKANDevice::collectAvailableExtensions(con
     return availableExtensions;
 }
 
-TBool GVULKANDevice::checkPhysicalDeviceCapability(const VkPhysicalDevice& device, const TStringsArray& useDeviceExtensions, VkSurfaceKHR &surface) {
+TBool GVULKANDevice::checkPhysicalDeviceCapability(VkPhysicalDevice device, const TStringsArray& useDeviceExtensions, VkSurfaceKHR &surface) {
     VkPhysicalDeviceProperties deviceProperties;
     vkGetPhysicalDeviceProperties(device, &deviceProperties);
     if (deviceProperties.deviceType != VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU) {
@@ -168,7 +168,7 @@ TBool GVULKANDevice::checkPhysicalDeviceCapability(const VkPhysicalDevice& devic
     return true;
 }
 
-TBool GVULKANDevice::checkPhysicalDeviceExtensionSupport(const VkPhysicalDevice& device, const TStringsArray& useDeviceExtensions, const std::vector<VkExtensionProperties>& availableExtensions) {
+TBool GVULKANDevice::checkPhysicalDeviceExtensionSupport(VkPhysicalDevice device, const TStringsArray& useDeviceExtensions, const std::vector<VkExtensionProperties>& availableExtensions) {
     std::set<std::string> requiredExtensions(useDeviceExtensions.begin(), useDeviceExtensions.end());
     log.info("physical device extensions:\n");
     for (const auto& extension : availableExtensions) {
@@ -179,7 +179,7 @@ TBool GVULKANDevice::checkPhysicalDeviceExtensionSupport(const VkPhysicalDevice&
     return requiredExtensions.empty();
 }
 
-SwapChainSupportDetails GVULKANDevice::querySwapChainSupport(const VkPhysicalDevice& device, VkSurfaceKHR& surface) {
+SwapChainSupportDetails GVULKANDevice::querySwapChainSupport(VkPhysicalDevice device, VkSurfaceKHR& surface) {
     SwapChainSupportDetails details = {0};
     vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface, &details.surfaceCapabilities);
     

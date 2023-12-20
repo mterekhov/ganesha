@@ -35,7 +35,7 @@ private:
     VkBuffer createBuffer(VkDevice& device, VkDeviceSize size, VkBufferUsageFlags usage);
     VkDeviceMemory allocateBufferMemory(VkBuffer& originalBuffer, VkMemoryPropertyFlags properties, GVULKANDevice& vulkanDevice);
     void copyBuffer(VkBuffer& srcBuffer, VkBuffer& dstBuffer, const VkDeviceSize size, GVULKANDevice& vulkanDevice, GVULKANCommands& vulkanCommands);
-    TUInt findMemoryType(const VkPhysicalDevice& device, TUInt typeFilter, VkMemoryPropertyFlags properties);
+    TUInt findMemoryType(VkPhysicalDevice device, TUInt typeFilter, VkMemoryPropertyFlags properties);
 };
 
 }   //  namespace spcGaneshaEngine
