@@ -156,7 +156,7 @@ VkPipelineLayout GVULKANPipeline::createPipelineLayout(const VkDevice& device, V
 }
 
 VkPipelineShaderStageCreateInfo GVULKANPipeline::createShader(const std::string shaderFile, const VkShaderStageFlagBits stage, VkDevice& device) {
-    GBundle bundle;
+    GBundle bundle(log);
     const std::vector<uint8_t>& code = bundle.readFile(bundle.resourceFullPath(shaderFile));
     VkShaderModuleCreateInfo createInfo = { };
     

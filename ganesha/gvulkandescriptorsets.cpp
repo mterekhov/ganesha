@@ -45,7 +45,7 @@ VkDescriptorPool GVULKANDescriptorsets::createDescriptorPool(const TUInt descrip
     
     VkDescriptorPool newPool;
     if (vkCreateDescriptorPool(device, &poolInfo, nullptr, &newPool) != VK_SUCCESS) {
-        printf("GaneshaEngine: failed to create descriptor pool\n");
+        log.error("failed to create descriptor pool\n");
     }
     
     return newPool;

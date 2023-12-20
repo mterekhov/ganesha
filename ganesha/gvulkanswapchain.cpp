@@ -201,7 +201,7 @@ std::vector<VkFramebuffer> GVULKANSwapChain::createFramebuffers(VkDevice& device
         framebufferInfo.layers = 1;
         
         if (vkCreateFramebuffer(device, &framebufferInfo, nullptr, &newFramebuffersArray[i]) != VK_SUCCESS) {
-            printf("GaneshaEngine: failed to create framebuffer with index %zu\n", i);
+            log.error("failed to create framebuffer with index %zu\n", i);
         }
     }
     

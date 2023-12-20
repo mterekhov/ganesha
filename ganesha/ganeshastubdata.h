@@ -1,10 +1,3 @@
-//
-//  ganeshastubdata.hpp
-//  game
-//
-//  Created by cipher on 21.05.2022.
-//
-
 #ifndef SPCGANESHAENGINE_GANESHASTUBDATA_H
 #define SPCGANESHAENGINE_GANESHASTUBDATA_H
 

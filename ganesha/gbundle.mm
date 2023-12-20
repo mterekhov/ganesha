@@ -4,6 +4,14 @@
 
 namespace spcGaneshaEngine {
 
+GBundle::GBundle(GLog& log) : log(log) {
+    
+}
+
+GBundle::~GBundle() {
+    
+}
+
 std::string GBundle::resourceFullPath(const std::string& resourceName) {
     NSString *resourcePath = [NSString stringWithCString:resourceName.c_str()
                                                 encoding:NSUTF8StringEncoding];
@@ -14,7 +22,7 @@ std::string GBundle::resourceFullPath(const std::string& resourceName) {
 std::vector<uint8_t> GBundle::readFile(const std::string& filename) {
     FILE *file = fopen(filename.c_str(), "rb");
     if (file == 0) {
-        printf("GaneshaEngine: no chance to read file %s\n", filename.c_str());
+        log.error("no chance to read file %s\n", filename.c_str());
         return std::vector<uint8_t>();
     }
     
