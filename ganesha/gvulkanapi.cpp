@@ -39,8 +39,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
     updateFrameSize = false;
     
     //  create VULKAN instance
-    vulkanInstance.addInstanceExtensionsToAvoid(avoidInstanceExtensions);
-    vulkanInstance.createInstance("DOOM", khronosValidationLayers);
+    vulkanInstance.createInstance("DOOM", khronosValidationLayers, avoidInstanceExtensions);
     
     //  create surface
     metalSurface = createSurface(metalLayer);

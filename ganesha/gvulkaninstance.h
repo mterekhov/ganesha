@@ -13,18 +13,16 @@ public:
     GVULKANInstance(GLog& log);
     ~GVULKANInstance();
     
-    void createInstance(const std::string& applicationName, const TCharPointersArray& khronosValidationLayers);
+    void createInstance(const std::string& applicationName, const TCharPointersArray& khronosValidationLayers, const TStringsArray& shouldNotUseExtensionsArray);
     void destroyInstance();
 
-    VkInstance& getVulkanInstance();
-    void addInstanceExtensionsToAvoid(const TStringsArray& extensions);
+    VkInstance getVulkanInstance();
     
 private:
     GLog& log;
     VkInstance vulkanInstance;
     VkDebugUtilsMessengerCreateInfoEXT debugUtilsMessengerInfo;
     VkDebugUtilsMessengerEXT debugMessenger;
-    TStringsArray removeExtensions;
 
     VkInstanceCreateInfo createInstanceInfo(const VkApplicationInfo& applicationInfo,
                                             const TCharPointersArray& availableValidationLayersList,
@@ -32,8 +30,8 @@ private:
     VkApplicationInfo createApplicationInfo(const std::string& title);
     
     TCharPointersArray collectValidationLayers(const TCharPointersArray& layersNamesArray);
-    TCharPointersArray collectInstanceExtensionsNames();
-    TBool shouldUseInstanceExtension(const char *instanceExtensionName);
+    TCharPointersArray collectInstanceExtensionsNames(const TStringsArray& shouldNotUseExtensionsArray);
+    TBool shouldUseInstanceExtension(const char *instanceExtensionName, const TStringsArray& shouldNotUseExtensionsArray);
     
     VkDebugUtilsMessengerCreateInfoEXT createDebugUtilsMessengerInfo();
     VkResult createDebugUtilsMessenger(VkInstance instance,

@@ -10,9 +10,9 @@ GVULKANInstance::~GVULKANInstance() {
     
 }
 
-void GVULKANInstance::createInstance(const std::string& applicationName, const TCharPointersArray& khronosValidationLayers) {
+void GVULKANInstance::createInstance(const std::string& applicationName, const TCharPointersArray& khronosValidationLayers, const TStringsArray& shouldNotUseExtensionsArray) {
     VkApplicationInfo applicationInfo = createApplicationInfo(applicationName);
-    TCharPointersArray extensionsNamesArray = collectInstanceExtensionsNames();
+    TCharPointersArray extensionsNamesArray = collectInstanceExtensionsNames(shouldNotUseExtensionsArray);
     TCharPointersArray availableValidationLayersArray = collectValidationLayers(khronosValidationLayers);
 
     VkInstanceCreateInfo instanceInfo = createInstanceInfo(applicationInfo, availableValidationLayersArray, extensionsNamesArray);
@@ -39,12 +39,8 @@ void GVULKANInstance::destroyInstance() {
     vkDestroyInstance(vulkanInstance, nullptr);
 }
 
-VkInstance& GVULKANInstance::getVulkanInstance() {
+VkInstance GVULKANInstance::getVulkanInstance() {
     return vulkanInstance;
-}
-
-void GVULKANInstance::addInstanceExtensionsToAvoid(const TStringsArray& extensions) {
-    removeExtensions.insert(removeExtensions.end(), extensions.begin(), extensions.end());
 }
 
 #pragma mark - Routine -
@@ -74,20 +70,15 @@ TCharPointersArray GVULKANInstance::collectValidationLayers(const TCharPointersA
     return supportedValidationLayersArray;
 }
 
-TCharPointersArray GVULKANInstance::collectInstanceExtensionsNames() {
-    TCharPointersArray namesList = TCharPointersArray();
+TCharPointersArray GVULKANInstance::collectInstanceExtensionsNames(const TStringsArray& shouldNotUseExtensionsArray) {
     TUInt count = 0;
-    if (vkEnumerateInstanceExtensionProperties(nullptr, &count, nullptr) != VK_SUCCESS) {
-        return namesList;
-    }
+    vkEnumerateInstanceExtensionProperties(nullptr, &count, nullptr);
     std::vector<VkExtensionProperties> instanceExtensionsArray(count);
-    if (vkEnumerateInstanceExtensionProperties(nullptr, &count, instanceExtensionsArray.data()) != VK_SUCCESS) {
-        return namesList;
-    }
+    vkEnumerateInstanceExtensionProperties(nullptr, &count, instanceExtensionsArray.data());
 
-    //  Collect names
+    TCharPointersArray namesList = TCharPointersArray();
     for (const auto& extension : instanceExtensionsArray) {
-        if (!shouldUseInstanceExtension(extension.extensionName)) {
+        if (!shouldUseInstanceExtension(extension.extensionName, shouldNotUseExtensionsArray)) {
             continue;
         }
         char *newString = new char[VK_MAX_EXTENSION_NAME_SIZE];
@@ -98,8 +89,8 @@ TCharPointersArray GVULKANInstance::collectInstanceExtensionsNames() {
     return namesList;
 }
 
-TBool GVULKANInstance::shouldUseInstanceExtension(const char *instanceExtensionName) {
-    for (std::string avoidExtension : removeExtensions) {
+TBool GVULKANInstance::shouldUseInstanceExtension(const char *instanceExtensionName, const TStringsArray& shouldNotUseExtensionsArray) {
+    for (std::string avoidExtension : shouldNotUseExtensionsArray) {
         if (strcmp(instanceExtensionName, avoidExtension.c_str()) == 0) {
             return false;
         }
