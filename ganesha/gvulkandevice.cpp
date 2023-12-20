@@ -23,6 +23,44 @@ void GVULKANDevice::createDevice(GVULKANInstance &vulkanInstance, const TStrings
     vkGetDeviceQueue(logicalDevice, presentQueueFamilyIndex, 0, &presentQueue);
 }
 
+void GVULKANDevice::destroyDevice() {
+    vkDestroyDevice(logicalDevice, nullptr);
+}
+
+TBool GVULKANDevice::presentationIsEqualToGraphics() {
+    return graphicQueueFamilyIndex == presentQueueFamilyIndex;
+}
+
+VkPhysicalDevice GVULKANDevice::getPhysicalDevice() {
+    return physicalDevice;
+}
+
+VkDevice GVULKANDevice::getLogicalDevice() {
+    return logicalDevice;
+}
+
+TUInt GVULKANDevice::getGraphicsQueueIndex() {
+    return graphicQueueFamilyIndex;
+}
+
+VkQueue& GVULKANDevice::getGraphicsQueue() {
+    return graphicsQueue;
+}
+
+VkQueue& GVULKANDevice::getPresentQueue() {
+    return presentQueue;
+}
+
+std::vector<TUInt> GVULKANDevice::getQueuesIndexesArray() {
+    return { static_cast<TUInt>(graphicQueueFamilyIndex), static_cast<TUInt>(presentQueueFamilyIndex) };
+}
+
+SwapChainSupportDetails GVULKANDevice::querySwapChainSupport(VkSurfaceKHR& surface) {
+    return querySwapChainSupport(physicalDevice, surface);
+}
+
+#pragma mark - Routine -
+
 VkPhysicalDevice GVULKANDevice::selectPhysicalDevice(GVULKANInstance &vulkanInstance, const TStringsArray& useDeviceExtensions, VkSurfaceKHR &surface) {
     TUInt count = 0;
     vkEnumeratePhysicalDevices(vulkanInstance.getVulkanInstance(), &count, nullptr);
@@ -80,44 +118,6 @@ VkDevice GVULKANDevice::createLogicalDevice(VkPhysicalDevice device, const TStri
 
     return newDevice;
 }
-
-void GVULKANDevice::destroyDevice() {
-    vkDestroyDevice(logicalDevice, nullptr);
-}
-
-TBool GVULKANDevice::presentationIsEqualToGraphics() {
-    return graphicQueueFamilyIndex == presentQueueFamilyIndex;
-}
-
-VkPhysicalDevice GVULKANDevice::getPhysicalDevice() {
-    return physicalDevice;
-}
-
-VkDevice GVULKANDevice::getLogicalDevice() {
-    return logicalDevice;
-}
-
-TUInt GVULKANDevice::getGraphicsQueueIndex() {
-    return graphicQueueFamilyIndex;
-}
-
-VkQueue& GVULKANDevice::getGraphicsQueue() {
-    return graphicsQueue;
-}
-
-VkQueue& GVULKANDevice::getPresentQueue() {
-    return presentQueue;
-}
-
-std::vector<TUInt> GVULKANDevice::getQueuesIndexesArray() {
-    return { static_cast<TUInt>(graphicQueueFamilyIndex), static_cast<TUInt>(presentQueueFamilyIndex) };
-}
-
-SwapChainSupportDetails GVULKANDevice::querySwapChainSupport(VkSurfaceKHR& surface) {
-    return querySwapChainSupport(physicalDevice, surface);
-}
-
-#pragma mark - Routine -
 
 TCharPointersArray GVULKANDevice::collectAvailableExtensionsNames(const std::vector<VkExtensionProperties>& extensionArray, const TStringsArray& useDeviceExtensions) {
     TCharPointersArray namesArray;
