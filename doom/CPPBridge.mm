@@ -42,7 +42,7 @@
 }
 
 - (void)drawableSizeWillChange: (CGSize)size {
-    
+    self.ganeshaEngine->setViewSize(size.width, size.height);
 }
 
 - (void)drawFrame {

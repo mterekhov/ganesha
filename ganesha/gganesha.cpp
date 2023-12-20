@@ -39,7 +39,7 @@ void GGanesha::destroyVulkan() {
 }
 
 void GGanesha::setViewSize(const TUInt width, const TUInt height) {
-    
+    graphicsAPI->frameResized(width, height);
 }
 
 void GGanesha::processKeyboard(const TUInt keyCode) {
