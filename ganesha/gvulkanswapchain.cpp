@@ -1,4 +1,5 @@
 #include "gvulkanswapchain.h"
+#include "gvulkantools.h"
 
 namespace spcGaneshaEngine {
 
@@ -211,28 +212,11 @@ std::vector<VkFramebuffer> GVULKANSwapChain::createFramebuffers(VkDevice device,
 
 std::vector<VkImageView> GVULKANSwapChain::createImageViews(VkDevice logicalDevice, std::vector<VkImage>& swapChainImagesArray) {
     std::vector<VkImageView> newImageViewsArray;
-    
+
+    GVULKANTools tools;
     newImageViewsArray.resize(swapChainImagesArray.size());
     for (size_t i = 0; i < swapChainImagesArray.size(); i++) {
-        VkImageViewCreateInfo imageViewInfo = { };
-        
-        imageViewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-        imageViewInfo.image = swapChainImagesArray[i];
-        imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-        imageViewInfo.format = imageFormat;
-        imageViewInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
-        imageViewInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
-        imageViewInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
-        imageViewInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
-        imageViewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        imageViewInfo.subresourceRange.baseMipLevel = 0;
-        imageViewInfo.subresourceRange.levelCount = 1;
-        imageViewInfo.subresourceRange.baseArrayLayer = 0;
-        imageViewInfo.subresourceRange.layerCount = 1;
-        
-        if (vkCreateImageView(logicalDevice, &imageViewInfo, nullptr, &newImageViewsArray[i]) != VK_SUCCESS) {
-            log.error("failed to create image view\n");
-        }
+        newImageViewsArray[i] = tools.createImageView(swapChainImagesArray[i], imageFormat, logicalDevice);
     }
     
     return newImageViewsArray;

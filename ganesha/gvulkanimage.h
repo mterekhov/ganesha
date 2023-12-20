@@ -27,6 +27,7 @@ private:
     GLog& log;
     VkImage image;
     VkDeviceMemory imageMemory;
+    VkImageView imageView;
 };
 
 }   //  namespace spcGaneshaEngine

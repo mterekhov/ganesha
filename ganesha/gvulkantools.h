@@ -10,7 +10,7 @@ namespace spcGaneshaEngine {
 class GVULKANTools {
 public:
     TUInt findMemoryType(VkPhysicalDevice device, const TUInt typeFilter, const VkMemoryPropertyFlags properties);
-
+    VkImageView createImageView(VkImage image, VkFormat format,  VkDevice device);
 };
 
 };

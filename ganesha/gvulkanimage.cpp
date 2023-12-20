@@ -20,6 +20,7 @@ void GVULKANImage::createImage(const std::string filePath,
                                GVULKANDevice& vulkanDevice,
                                GVULKANCommands& vulkanCommands) {
     GTGA tgaFile(filePath);
+    GVULKANTools tools;
     
     VkImageCreateInfo imageInfo = {};
     imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -44,7 +45,7 @@ void GVULKANImage::createImage(const std::string filePath,
     VkMemoryAllocateInfo allocInfo = { };
     allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     allocInfo.allocationSize = memoryRequirements.size;
-    allocInfo.memoryTypeIndex = GVULKANTools().findMemoryType(vulkanDevice.getPhysicalDevice(), memoryRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+    allocInfo.memoryTypeIndex = tools.findMemoryType(vulkanDevice.getPhysicalDevice(), memoryRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
     if (vkAllocateMemory(vulkanDevice.getLogicalDevice(), &allocInfo, nullptr, &imageMemory) != VK_SUCCESS) {
         log.error("failed to allocate image memory!");
     }
@@ -69,9 +70,12 @@ void GVULKANImage::createImage(const std::string filePath,
     vulkanCommands.submitCommand(tmpCommand, vulkanDevice);
     
     stagingBuffer.destroyBuffer(vulkanDevice);
+    
+    imageView = tools.createImageView(image, VK_FORMAT_R8G8B8A8_SRGB, vulkanDevice.getLogicalDevice());
 }
 
 void GVULKANImage::destroyImage(GVULKANDevice& vulkanDevice) {
+    vkDestroyImageView(vulkanDevice.getLogicalDevice(), imageView, nullptr);
     vkDestroyImage(vulkanDevice.getLogicalDevice(), image, nullptr);
     vkFreeMemory(vulkanDevice.getLogicalDevice(), imageMemory, nullptr);
 }
