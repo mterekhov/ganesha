@@ -154,6 +154,7 @@ VkDebugUtilsMessengerCreateInfoEXT GVULKANInstance::createDebugUtilsMessengerInf
     newDebugUtilsMessengerInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
     newDebugUtilsMessengerInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
     newDebugUtilsMessengerInfo.pfnUserCallback = debugCallback;
+    newDebugUtilsMessengerInfo.pUserData = &log;
     
     return newDebugUtilsMessengerInfo;
 }
@@ -183,7 +184,10 @@ VKAPI_ATTR VkBool32 VKAPI_CALL GVULKANInstance::debugCallback(VkDebugUtilsMessag
                                                         VkDebugUtilsMessageTypeFlagsEXT messageType,
                                                         const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
                                                         void* pUserData) {
-    printf("GaneshaEngineLayer: %s\n", pCallbackData->pMessage);
+    GLog *currentLog = static_cast<GLog *>(pUserData);
+    if (currentLog) {
+        currentLog->error("%s\n", pCallbackData->pMessage);
+    }
     
     return VK_FALSE;
 }
