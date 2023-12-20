@@ -64,7 +64,7 @@ VkBuffer& GVULKANBuffer::getBuffer() {
 
 #pragma mark - Routine -
 
-VkBuffer GVULKANBuffer::createBuffer(VkDevice& device, VkDeviceSize size, VkBufferUsageFlags usage) {
+VkBuffer GVULKANBuffer::createBuffer(VkDevice device, VkDeviceSize size, VkBufferUsageFlags usage) {
     VkBufferCreateInfo bufferInfo = { };
     bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
     bufferInfo.size = size;

@@ -99,7 +99,7 @@ VkCommandPool GVULKANCommands::createCommandPool(GVULKANDevice& device) {
     return newCommandPool;
 }
 
-VkCommandBuffer GVULKANCommands::emptyCommand(const VkDevice& device) {
+VkCommandBuffer GVULKANCommands::emptyCommand(VkDevice device) {
     VkCommandBufferAllocateInfo allocInfo = { };
     allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
     allocInfo.commandPool = commandPool;
@@ -114,7 +114,7 @@ VkCommandBuffer GVULKANCommands::emptyCommand(const VkDevice& device) {
     return newCommandBuffer;
 }
 
-VkCommandBuffer GVULKANCommands::copyBufferCommand(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size, const VkDevice& device) {
+VkCommandBuffer GVULKANCommands::copyBufferCommand(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size, VkDevice device) {
     VkCommandBuffer commandBuffer = emptyCommand(device);
 
     VkCommandBufferBeginInfo beginInfo = { };
@@ -132,7 +132,7 @@ VkCommandBuffer GVULKANCommands::copyBufferCommand(VkBuffer srcBuffer, VkBuffer 
     return commandBuffer;
 }
 
-void GVULKANCommands::destroyCommandBuffer(VkCommandBuffer& commandBuffer, const VkDevice& device) {
+void GVULKANCommands::destroyCommandBuffer(VkCommandBuffer& commandBuffer, VkDevice device) {
     vkFreeCommandBuffers(device, commandPool, 1, &commandBuffer);
 }
 

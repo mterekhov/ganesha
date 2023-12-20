@@ -37,15 +37,15 @@ private:
 
     VkSwapchainKHR createNewSwapChain(const TUInt screenWidth, const TUInt screenHeight, const SwapChainSupportDetails& supportDetails, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface);
     void createSwapChain(const TUInt screenWidth, const TUInt screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface, const TBool recreateSwapChain);
-    std::vector<VkImage> ejectImagesArray(const VkDevice& device, const VkSwapchainKHR& swapChainSource);
-    std::vector<VkImageView> createImageViews(VkDevice& logicalDevice, std::vector<VkImage>& swapChainImagesArray);
-    std::vector<VkFramebuffer> createFramebuffers(VkDevice& device, const std::vector<VkImageView>& useImagesViewArray, const VkRenderPass& useRenderPass, const VkExtent2D& useExtent);
-   VkRenderPass createRenderPass(const VkDevice& device, VkFormat format);
+    std::vector<VkImage> ejectImagesArray(VkDevice device, const VkSwapchainKHR& swapChainSource);
+    std::vector<VkImageView> createImageViews(VkDevice logicalDevice, std::vector<VkImage>& swapChainImagesArray);
+    std::vector<VkFramebuffer> createFramebuffers(VkDevice device, const std::vector<VkImageView>& useImagesViewArray, const VkRenderPass& useRenderPass, const VkExtent2D& useExtent);
+   VkRenderPass createRenderPass(VkDevice device, VkFormat format);
     VkExtent2D selectSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities, const TUInt screenWidth, const TUInt screenHeight);
     VkSurfaceFormatKHR selectSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
     VkPresentModeKHR selectSwapPresentMode(const std::vector<VkPresentModeKHR>& presentModesArray);
-    void destroyExtentDependency(const VkDevice& device);
-    void destroyRenderPass(const VkDevice& device);
+    void destroyExtentDependency(VkDevice device);
+    void destroyRenderPass(VkDevice device);
 };
 
 }   //  namespace spcGaneshaEngine

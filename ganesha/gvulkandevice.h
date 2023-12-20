@@ -27,7 +27,7 @@ public:
     
     SwapChainSupportDetails querySwapChainSupport(VkSurfaceKHR& surface);
     VkPhysicalDevice getPhysicalDevice();
-    VkDevice& getLogicalDevice();
+    VkDevice getLogicalDevice();
     VkQueue& getPresentQueue();
     VkQueue& getGraphicsQueue();
     TUInt getGraphicsQueueIndex();

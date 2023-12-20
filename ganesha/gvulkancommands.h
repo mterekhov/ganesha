@@ -21,8 +21,8 @@ public:
 
     VkCommandPool& getCommandPool();
 
-    VkCommandBuffer emptyCommand(const VkDevice& device);
-    VkCommandBuffer copyBufferCommand(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size, const VkDevice& device);
+    VkCommandBuffer emptyCommand(VkDevice device);
+    VkCommandBuffer copyBufferCommand(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size, VkDevice device);
     void recordRenderCommand(VkCommandBuffer& renderCommand,
                              VkBuffer& vertexesBuffer,
                              VkBuffer& indicesBuffer,
@@ -31,7 +31,7 @@ public:
                              GVULKANSwapChain& swapChain,
                              GVULKANPipeline& pipeline,
                              VkDescriptorSet& descriptorset);
-    void destroyCommandBuffer(VkCommandBuffer& commandBuffer, const VkDevice& device);
+    void destroyCommandBuffer(VkCommandBuffer& commandBuffer, VkDevice device);
 
 private:
     GLog& log;

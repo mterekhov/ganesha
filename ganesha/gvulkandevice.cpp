@@ -93,7 +93,7 @@ VkPhysicalDevice GVULKANDevice::getPhysicalDevice() {
     return physicalDevice;
 }
 
-VkDevice& GVULKANDevice::getLogicalDevice() {
+VkDevice GVULKANDevice::getLogicalDevice() {
     return logicalDevice;
 }
 

@@ -97,7 +97,7 @@ void GVULKANPipeline::createPipeline(GVULKANDevice& device, GVULKANSwapChain& sw
 }
 
 void GVULKANPipeline::destroyPipeline(GVULKANDevice& device) {
-    VkDevice& logicalDevice = device.getLogicalDevice();
+    VkDevice logicalDevice = device.getLogicalDevice();
     
     vkDestroyPipeline(logicalDevice, graphicsPipeline, nullptr);
     vkDestroyPipelineLayout(logicalDevice, pipelineLayout, nullptr);
@@ -140,7 +140,7 @@ VkPipelineRasterizationStateCreateInfo GVULKANPipeline::createRasterizer() {
     return rasterizer;
 }
 
-VkPipelineLayout GVULKANPipeline::createPipelineLayout(const VkDevice& device, VkDescriptorSetLayout& descriptorsetLayout) {
+VkPipelineLayout GVULKANPipeline::createPipelineLayout(VkDevice device, VkDescriptorSetLayout& descriptorsetLayout) {
     VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
     pipelineLayoutInfo.setLayoutCount = 1; // Optional
@@ -155,7 +155,7 @@ VkPipelineLayout GVULKANPipeline::createPipelineLayout(const VkDevice& device, V
     return newPipelineLayout;
 }
 
-VkPipelineShaderStageCreateInfo GVULKANPipeline::createShader(const std::string shaderFile, const VkShaderStageFlagBits stage, VkDevice& device) {
+VkPipelineShaderStageCreateInfo GVULKANPipeline::createShader(const std::string shaderFile, const VkShaderStageFlagBits stage, VkDevice device) {
     GBundle bundle(log);
     const std::vector<uint8_t>& code = bundle.readFile(bundle.resourceFullPath(shaderFile));
     VkShaderModuleCreateInfo createInfo = { };

@@ -111,7 +111,7 @@ VkSwapchainKHR GVULKANSwapChain::createNewSwapChain(const TUInt screenWidth, con
     return newSwapChain;
 }
 
-std::vector<VkImage> GVULKANSwapChain::ejectImagesArray(const VkDevice& device, const VkSwapchainKHR& swapChainSource) {
+std::vector<VkImage> GVULKANSwapChain::ejectImagesArray(VkDevice device, const VkSwapchainKHR& swapChainSource) {
     std::vector<VkImage> newImagesArray;
     
     TUInt count;
@@ -122,7 +122,7 @@ std::vector<VkImage> GVULKANSwapChain::ejectImagesArray(const VkDevice& device, 
     return newImagesArray;
 }
 
-void GVULKANSwapChain::destroyExtentDependency(const VkDevice& device) {
+void GVULKANSwapChain::destroyExtentDependency(VkDevice device) {
     for (auto framebuffer : framebuffersArray) {
         vkDestroyFramebuffer(device, framebuffer, nullptr);
     }
@@ -134,11 +134,11 @@ void GVULKANSwapChain::destroyExtentDependency(const VkDevice& device) {
     vkDestroySwapchainKHR(device, swapChain, nullptr);
 }
 
-void GVULKANSwapChain::destroyRenderPass(const VkDevice& device) {
+void GVULKANSwapChain::destroyRenderPass(VkDevice device) {
     vkDestroyRenderPass(device, renderPass, nullptr);
 }
 
-VkRenderPass GVULKANSwapChain::createRenderPass(const VkDevice& device, VkFormat format) {
+VkRenderPass GVULKANSwapChain::createRenderPass(VkDevice device, VkFormat format) {
     VkAttachmentDescription colorAttachment = { };
     colorAttachment.format = format;
     colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
@@ -182,7 +182,7 @@ VkRenderPass GVULKANSwapChain::createRenderPass(const VkDevice& device, VkFormat
     return newRenderPass;
 }
 
-std::vector<VkFramebuffer> GVULKANSwapChain::createFramebuffers(VkDevice& device, const std::vector<VkImageView>& useImagesViewArray, const VkRenderPass& useRenderPass, const VkExtent2D& useExtent) {
+std::vector<VkFramebuffer> GVULKANSwapChain::createFramebuffers(VkDevice device, const std::vector<VkImageView>& useImagesViewArray, const VkRenderPass& useRenderPass, const VkExtent2D& useExtent) {
     std::vector<VkFramebuffer> newFramebuffersArray;
     
     newFramebuffersArray.resize(useImagesViewArray.size());
@@ -208,7 +208,7 @@ std::vector<VkFramebuffer> GVULKANSwapChain::createFramebuffers(VkDevice& device
     return newFramebuffersArray;
 }
 
-std::vector<VkImageView> GVULKANSwapChain::createImageViews(VkDevice& logicalDevice, std::vector<VkImage>& swapChainImagesArray) {
+std::vector<VkImageView> GVULKANSwapChain::createImageViews(VkDevice logicalDevice, std::vector<VkImage>& swapChainImagesArray) {
     std::vector<VkImageView> newImageViewsArray;
     
     newImageViewsArray.resize(swapChainImagesArray.size());

@@ -21,9 +21,9 @@ public:
     VkDescriptorSetLayout& getDescriptorsetLayout();
 
 private:
-    VkDescriptorSetLayout createLayout(const VkDevice& device);
-    VkDescriptorPool createDescriptorPool(const TUInt descriptorsPoolSize, const VkDevice& device);
-    std::vector<VkDescriptorSet> createNewDescriptorsets(std::vector<GVULKANBuffer>& buffersArray, VkDescriptorSetLayout& descriptorsetLayout, const VkDevice& device);
+    VkDescriptorSetLayout createLayout(VkDevice device);
+    VkDescriptorPool createDescriptorPool(const TUInt descriptorsPoolSize, VkDevice device);
+    std::vector<VkDescriptorSet> createNewDescriptorsets(std::vector<GVULKANBuffer>& buffersArray, VkDescriptorSetLayout& descriptorsetLayout, VkDevice device);
 
     GLog& log;
     std::vector<VkDescriptorSet> descriptorsetArray;

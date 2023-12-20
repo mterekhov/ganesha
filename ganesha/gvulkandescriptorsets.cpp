@@ -30,7 +30,7 @@ VkDescriptorSetLayout& GVULKANDescriptorsets::getDescriptorsetLayout() {
 
 #pragma mark - Routine -
 
-VkDescriptorPool GVULKANDescriptorsets::createDescriptorPool(const TUInt descriptorsPoolSize, const VkDevice& device) {
+VkDescriptorPool GVULKANDescriptorsets::createDescriptorPool(const TUInt descriptorsPoolSize, VkDevice device) {
     poolSize = descriptorsPoolSize;
     
     VkDescriptorPoolSize newPoolSize = { };
@@ -51,7 +51,7 @@ VkDescriptorPool GVULKANDescriptorsets::createDescriptorPool(const TUInt descrip
     return newPool;
 }
 
-VkDescriptorSetLayout GVULKANDescriptorsets::createLayout(const VkDevice& device) {
+VkDescriptorSetLayout GVULKANDescriptorsets::createLayout(VkDevice device) {
     VkDescriptorSetLayoutBinding layoutBinding = { };
     layoutBinding.binding = 0;
     layoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
@@ -71,7 +71,7 @@ VkDescriptorSetLayout GVULKANDescriptorsets::createLayout(const VkDevice& device
     return newLayout;
 }
 
-std::vector<VkDescriptorSet> GVULKANDescriptorsets::createNewDescriptorsets(std::vector<GVULKANBuffer>& buffersArray, VkDescriptorSetLayout& descriptorsetLayout, const VkDevice& device) {
+std::vector<VkDescriptorSet> GVULKANDescriptorsets::createNewDescriptorsets(std::vector<GVULKANBuffer>& buffersArray, VkDescriptorSetLayout& descriptorsetLayout, VkDevice device) {
     std::vector<VkDescriptorSetLayout> layoutsArray(poolSize, descriptorsetLayout);
     
     VkDescriptorSetAllocateInfo allocInfo = { };

@@ -28,10 +28,10 @@ private:
     VkPipeline graphicsPipeline;
     VkPipelineLayout pipelineLayout;
 
-    VkPipelineShaderStageCreateInfo createShader(const std::string shaderFile,  const VkShaderStageFlagBits stage, VkDevice& device);
+    VkPipelineShaderStageCreateInfo createShader(const std::string shaderFile,  const VkShaderStageFlagBits stage, VkDevice device);
     VkPipelineVertexInputStateCreateInfo createVertexInput();
     VkPipelineRasterizationStateCreateInfo createRasterizer();
-    VkPipelineLayout createPipelineLayout(const VkDevice& device, VkDescriptorSetLayout& descriptorsetLayout);
+    VkPipelineLayout createPipelineLayout(VkDevice device, VkDescriptorSetLayout& descriptorsetLayout);
 };
 
 }   //  namespace spcGaneshaEngine
