@@ -66,7 +66,7 @@ class ViewController: NSViewController, MTKViewDelegate {
         
         ganeshaBridge.drawFrame()
     }
-    
+
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         ganeshaBridge.drawableSizeWillChange(size)
     }

@@ -123,6 +123,7 @@ std::vector<VkImage> GVULKANSwapChain::ejectImagesArray(VkDevice device, const V
 }
 
 void GVULKANSwapChain::destroyExtentDependency(VkDevice device) {
+    vkDeviceWaitIdle(device);
     for (auto framebuffer : framebuffersArray) {
         vkDestroyFramebuffer(device, framebuffer, nullptr);
     }
