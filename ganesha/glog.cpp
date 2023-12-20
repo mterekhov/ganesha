@@ -40,6 +40,13 @@ void GLog::warning(const char* format, ...) {
     va_end(args);
 }
 
+void GLog::layer(const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    log(GLOG_TYPE_LAYER, format, args);
+    va_end(args);
+}
+
 void GLog::log(const GLogType type, const char* format, va_list args) {
 #ifndef DEBUG
     return;
@@ -68,8 +75,10 @@ void GLog::log(const GLogType type, const char* format, va_list args) {
             newFormat += title;
             newFormat += "-ERROR: ";
             break;
-
-        default:
+        case GLOG_TYPE_LAYER:
+            newFormat += " ";
+            newFormat += title;
+            newFormat += "-LAYER: ";
             break;
     }
     newFormat += format;

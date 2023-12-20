@@ -9,7 +9,8 @@ namespace spcGaneshaEngine {
 enum GLogType {
     GLOG_TYPE_INFO,
     GLOG_TYPE_WARNING,
-    GLOG_TYPE_ERROR
+    GLOG_TYPE_ERROR,
+    GLOG_TYPE_LAYER
 };
 
 class GLog {
@@ -20,6 +21,7 @@ public:
     void info(const char* format, ...);
     void error(const char* format, ...);
     void warning(const char* format, ...);
+    void layer(const char* format, ...);
 
 private:
     const std::string title;

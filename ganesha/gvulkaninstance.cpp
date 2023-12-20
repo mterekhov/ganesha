@@ -186,7 +186,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL GVULKANInstance::debugCallback(VkDebugUtilsMessag
                                                         void* pUserData) {
     GLog *currentLog = static_cast<GLog *>(pUserData);
     if (currentLog) {
-        currentLog->error("%s\n", pCallbackData->pMessage);
+        currentLog->layer("%s\n", pCallbackData->pMessage);
     }
     
     return VK_FALSE;
