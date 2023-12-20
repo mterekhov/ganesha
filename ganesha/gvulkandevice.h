@@ -33,7 +33,7 @@ public:
     uint32_t getGraphicsQueueIndex();
     std::vector<uint32_t> getQueuesIndecesArray();
     
-    bool presentationIsEqualToGraphics();
+    TBool presentationIsEqualToGraphics();
 
 private:
     VkPhysicalDevice selectPhysicalDevice(GVULKANInstance &vulkanInstance, const TStringsArray& useDeviceExtensions, VkSurfaceKHR &surface);
@@ -42,8 +42,8 @@ private:
     std::vector<VkExtensionProperties> collectAvailableExtensions(const VkPhysicalDevice& device);
     TCharPointersArray collectAvailableExtensionsNames(const std::vector<VkExtensionProperties>& extensionArray, const TStringsArray& useDeviceExtensions);
 
-    bool checkPhysicalDeviceCapability(const VkPhysicalDevice& device, const TStringsArray& useDeviceExtensions, VkSurfaceKHR &surface);
-    bool checkPhysicalDeviceExtensionSupport(const VkPhysicalDevice& device, const TStringsArray& useDeviceExtensions, const std::vector<VkExtensionProperties>& availableExtensions);
+    TBool checkPhysicalDeviceCapability(const VkPhysicalDevice& device, const TStringsArray& useDeviceExtensions, VkSurfaceKHR &surface);
+    TBool checkPhysicalDeviceExtensionSupport(const VkPhysicalDevice& device, const TStringsArray& useDeviceExtensions, const std::vector<VkExtensionProperties>& availableExtensions);
 
     int32_t findGraphicsQueueIndex(const std::vector<VkQueueFamilyProperties>& queuePropertiesArray);
     int32_t findPresentQueueIndex(const std::vector<VkQueueFamilyProperties>& queuePropertiesArray, VkSurfaceKHR& metalSurface);

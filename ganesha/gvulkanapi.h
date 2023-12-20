@@ -53,7 +53,7 @@ private:
     GMatrix projectionMatrix;
     GMatrix viewMatrix;
 
-    bool updateFrameSize;
+    TBool updateFrameSize;
 
     std::vector<VkSemaphore> imageAvailableSemaphores;
     std::vector<VkSemaphore> renderFinishedSemaphores;

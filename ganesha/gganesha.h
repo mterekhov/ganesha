@@ -18,7 +18,7 @@ public:
     /// @param metalLayer  layer of MTKView
     /// @param width window width
     /// @param height window height
-    bool initEngine(void *metalLayer, const uint32_t width, const uint32_t height);
+    TBool initEngine(void *metalLayer, const uint32_t width, const uint32_t height);
     
     /// Destroys all engine objects
     void destroyVulkan();

@@ -10,7 +10,7 @@ GVULKANBuffer::~GVULKANBuffer() {
     
 }
 
-void GVULKANBuffer::createBuffer(const void *data, const VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, bool protectAccess, GVULKANDevice& vulkanDevice, GVULKANCommands& vulkanCommands) {
+void GVULKANBuffer::createBuffer(const void *data, const VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, TBool protectAccess, GVULKANDevice& vulkanDevice, GVULKANCommands& vulkanCommands) {
     if (protectAccess) {
         VkBuffer stagingBuffer = createBuffer(vulkanDevice.getLogicalDevice(), size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT);
         VkDeviceMemory stagingBufferMemory = allocateBufferMemory(stagingBuffer, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, vulkanDevice);

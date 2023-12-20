@@ -36,7 +36,7 @@ private:
     VkRenderPass renderPass;
 
     VkSwapchainKHR createNewSwapChain(const uint32_t screenWidth, const uint32_t screenHeight, const SwapChainSupportDetails& supportDetails, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface);
-    void createSwapChain(const uint32_t screenWidth, const uint32_t screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface, const bool recreateSwapChain);
+    void createSwapChain(const uint32_t screenWidth, const uint32_t screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface, const TBool recreateSwapChain);
     std::vector<VkImage> ejectImagesArray(const VkDevice& device, const VkSwapchainKHR& swapChainSource);
     std::vector<VkImageView> createImageViews(VkDevice& logicalDevice, std::vector<VkImage>& swapChainImagesArray);
     std::vector<VkFramebuffer> createFramebuffers(VkDevice& device, const std::vector<VkImageView>& useImagesViewArray, const VkRenderPass& useRenderPass, const VkExtent2D& useExtent);

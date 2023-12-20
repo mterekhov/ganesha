@@ -18,7 +18,7 @@ public:
                       const VkDeviceSize size,
                       VkBufferUsageFlags usage,
                       VkMemoryPropertyFlags properties,
-                      bool protectAccess,
+                      TBool protectAccess,
                       GVULKANDevice& vulkanDevice,
                       GVULKANCommands& vulkanCommands);
     void destroyBuffer(GVULKANDevice& vulkanDevice);

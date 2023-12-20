@@ -12,7 +12,7 @@ GGanesha::~GGanesha() {
     delete graphicsAPI;
 }
 
-bool GGanesha::initEngine(void *metalLayer, const uint32_t width, const uint32_t height) {
+TBool GGanesha::initEngine(void *metalLayer, const uint32_t width, const uint32_t height) {
     
     const std::vector<Vertex> vertices = {
         {GPoint2D(-0.5f, -0.5f), GColor::blueColor()},

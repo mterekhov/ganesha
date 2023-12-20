@@ -52,7 +52,7 @@ std::vector<VkFramebuffer>& GVULKANSwapChain::getFramebuffers() {
 
 #pragma mark - Routine -
 
-void GVULKANSwapChain::createSwapChain(const uint32_t screenWidth, const uint32_t screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface, const bool recreateSwapChain) {
+void GVULKANSwapChain::createSwapChain(const uint32_t screenWidth, const uint32_t screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface, const TBool recreateSwapChain) {
     SwapChainSupportDetails supportDetails = vulkanDevice.querySwapChainSupport(surface);
     
     swapChain = createNewSwapChain(screenWidth, screenHeight, supportDetails, vulkanDevice, surface);

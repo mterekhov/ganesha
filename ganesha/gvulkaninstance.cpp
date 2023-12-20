@@ -98,7 +98,7 @@ TCharPointersArray GVULKANInstance::collectInstanceExtensionsNames() {
     return namesList;
 }
 
-bool GVULKANInstance::shouldUseInstanceExtension(const char *instanceExtensionName) {
+TBool GVULKANInstance::shouldUseInstanceExtension(const char *instanceExtensionName) {
     for (std::string avoidExtension : removeExtensions) {
         if (strcmp(instanceExtensionName, avoidExtension.c_str()) == 0) {
             return false;

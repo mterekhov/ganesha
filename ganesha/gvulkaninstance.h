@@ -33,7 +33,7 @@ private:
     
     TCharPointersArray collectValidationLayers(const TCharPointersArray& layersNamesArray);
     TCharPointersArray collectInstanceExtensionsNames();
-    bool shouldUseInstanceExtension(const char *instanceExtensionName);
+    TBool shouldUseInstanceExtension(const char *instanceExtensionName);
     
     VkDebugUtilsMessengerCreateInfoEXT createDebugUtilsMessengerInfo();
     VkResult createDebugUtilsMessenger(VkInstance instance,

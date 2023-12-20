@@ -85,7 +85,7 @@ void GVULKANDevice::destroyDevice() {
     vkDestroyDevice(logicalDevice, nullptr);
 }
 
-bool GVULKANDevice::presentationIsEqualToGraphics() {
+TBool GVULKANDevice::presentationIsEqualToGraphics() {
     return graphicQueueFamilyIndex == presentQueueFamilyIndex;
 }
 
@@ -146,7 +146,7 @@ std::vector<VkExtensionProperties> GVULKANDevice::collectAvailableExtensions(con
     return availableExtensions;
 }
 
-bool GVULKANDevice::checkPhysicalDeviceCapability(const VkPhysicalDevice& device, const TStringsArray& useDeviceExtensions, VkSurfaceKHR &surface) {
+TBool GVULKANDevice::checkPhysicalDeviceCapability(const VkPhysicalDevice& device, const TStringsArray& useDeviceExtensions, VkSurfaceKHR &surface) {
     VkPhysicalDeviceProperties deviceProperties;
     vkGetPhysicalDeviceProperties(device, &deviceProperties);
     if (deviceProperties.deviceType != VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU) {
@@ -168,7 +168,7 @@ bool GVULKANDevice::checkPhysicalDeviceCapability(const VkPhysicalDevice& device
     return true;
 }
 
-bool GVULKANDevice::checkPhysicalDeviceExtensionSupport(const VkPhysicalDevice& device, const TStringsArray& useDeviceExtensions, const std::vector<VkExtensionProperties>& availableExtensions) {
+TBool GVULKANDevice::checkPhysicalDeviceExtensionSupport(const VkPhysicalDevice& device, const TStringsArray& useDeviceExtensions, const std::vector<VkExtensionProperties>& availableExtensions) {
     std::set<std::string> requiredExtensions(useDeviceExtensions.begin(), useDeviceExtensions.end());
     log.info("physical device extensions:\n");
     for (const auto& extension : availableExtensions) {
