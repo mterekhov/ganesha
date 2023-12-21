@@ -3,7 +3,7 @@
 
 namespace spcGaneshaEngine {
 
-GVULKANSwapChain::GVULKANSwapChain(GLog& log) : log(log) {
+GVULKANSwapChain::GVULKANSwapChain(GLog& log) : log(log), depthImage(log) {
 }
 
 GVULKANSwapChain::~GVULKANSwapChain() {
@@ -13,9 +13,10 @@ void GVULKANSwapChain::createSwapChain(const TUInt screenWidth, const TUInt scre
     createSwapChain(screenWidth, screenHeight, vulkanDevice, surface, false);
 }
 
-void GVULKANSwapChain::destroySwapChain(GVULKANDevice& device) {
-    destroyExtentDependency(device.getLogicalDevice());
-    destroyRenderPass(device.getLogicalDevice());
+void GVULKANSwapChain::destroySwapChain(GVULKANDevice& vulkanDevice) {
+    depthImage.destroyImage(vulkanDevice);
+    destroyExtentDependency(vulkanDevice.getLogicalDevice());
+    destroyRenderPass(vulkanDevice.getLogicalDevice());
 }
 
 void GVULKANSwapChain::updateScreenSize(const TUInt screenWidth, const TUInt screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
@@ -62,11 +63,18 @@ void GVULKANSwapChain::createSwapChain(const TUInt screenWidth, const TUInt scre
     extent = selectSwapExtent(supportDetails.surfaceCapabilities, screenWidth, screenHeight);
 
     if (!recreateSwapChain) {
-        renderPass = createRenderPass(vulkanDevice.getLogicalDevice(), imageFormat);
+        GVULKANTools tools;
+        depthImage.createImage(extent,
+                               tools.findDepthFormat(vulkanDevice),
+                               VK_IMAGE_ASPECT_DEPTH_BIT,
+                               VK_IMAGE_TILING_OPTIMAL,
+                               VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+                               vulkanDevice);
+        renderPass = createRenderPass(vulkanDevice, imageFormat);
     }
     imagesArray = ejectImagesArray(vulkanDevice.getLogicalDevice(), swapChain);
     imageViewsArray = createImageViews(vulkanDevice.getLogicalDevice(), imagesArray);
-    framebuffersArray = createFramebuffers(vulkanDevice.getLogicalDevice(), imageViewsArray, renderPass, extent);
+    framebuffersArray = createFramebuffers(vulkanDevice.getLogicalDevice(), imageViewsArray, depthImage.getImageView(), renderPass, extent);
 }
 
 VkSwapchainKHR GVULKANSwapChain::createNewSwapChain(const TUInt screenWidth, const TUInt screenHeight, const SwapChainSupportDetails& supportDetails, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
@@ -140,7 +148,7 @@ void GVULKANSwapChain::destroyRenderPass(VkDevice device) {
     vkDestroyRenderPass(device, renderPass, nullptr);
 }
 
-VkRenderPass GVULKANSwapChain::createRenderPass(VkDevice device, VkFormat format) {
+VkRenderPass GVULKANSwapChain::createRenderPass(GVULKANDevice& vulkanDevice, VkFormat format) {
     VkAttachmentDescription colorAttachment = { };
     colorAttachment.format = format;
     colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
@@ -151,53 +159,72 @@ VkRenderPass GVULKANSwapChain::createRenderPass(VkDevice device, VkFormat format
     colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
     
+    GVULKANTools tools;
+    VkAttachmentDescription depthAttachment = { };
+    depthAttachment.format = tools.findDepthFormat(vulkanDevice);
+    depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+    depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    depthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    depthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    depthAttachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+    
     VkAttachmentReference colorAttachmentRef = { };
     colorAttachmentRef.attachment = 0;
     colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+    VkAttachmentReference depthAttachmentRef{};
+    depthAttachmentRef.attachment = 1;
+    depthAttachmentRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
     VkSubpassDescription subpass = { };
     subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
     subpass.colorAttachmentCount = 1;
     subpass.pColorAttachments = &colorAttachmentRef;
+    subpass.pDepthStencilAttachment = &depthAttachmentRef;
     
     VkSubpassDependency dependency = { };
     dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
     dependency.dstSubpass = 0;
-    dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
     dependency.srcAccessMask = 0;
-    dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-    dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-    
+    dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+    dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+
+    std::array<VkAttachmentDescription, 2> attachments = { colorAttachment, depthAttachment };
     VkRenderPassCreateInfo renderPassInfo = { };
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-    renderPassInfo.attachmentCount = 1;
-    renderPassInfo.pAttachments = &colorAttachment;
+    renderPassInfo.attachmentCount = attachments.size();
+    renderPassInfo.pAttachments = attachments.data();
     renderPassInfo.subpassCount = 1;
     renderPassInfo.pSubpasses = &subpass;
     renderPassInfo.dependencyCount =  1;
     renderPassInfo.pDependencies = &dependency;
     
     VkRenderPass newRenderPass;
-    if (vkCreateRenderPass(device, &renderPassInfo, nullptr, &newRenderPass) != VK_SUCCESS) {
+    if (vkCreateRenderPass(vulkanDevice.getLogicalDevice(), &renderPassInfo, nullptr, &newRenderPass) != VK_SUCCESS) {
         log.error("failed to create render pass\n");
     }
     
     return newRenderPass;
 }
 
-std::vector<VkFramebuffer> GVULKANSwapChain::createFramebuffers(VkDevice device, const std::vector<VkImageView>& useImagesViewArray, VkRenderPass useRenderPass, const VkExtent2D& useExtent) {
+std::vector<VkFramebuffer> GVULKANSwapChain::createFramebuffers(VkDevice device, const std::vector<VkImageView>& useImagesViewArray, VkImageView depthImageView, VkRenderPass useRenderPass, const VkExtent2D& useExtent) {
     std::vector<VkFramebuffer> newFramebuffersArray;
     
     newFramebuffersArray.resize(useImagesViewArray.size());
     for (size_t i = 0; i < useImagesViewArray.size(); i++) {
-        VkImageView attachments[] = {
-            useImagesViewArray[i]
+        std::array<VkImageView, 2> attachments = {
+            useImagesViewArray[i],
+            depthImageView
         };
         
         VkFramebufferCreateInfo framebufferInfo = { };
         framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
         framebufferInfo.renderPass = useRenderPass;
-        framebufferInfo.attachmentCount = 1;
-        framebufferInfo.pAttachments = attachments;
+        framebufferInfo.attachmentCount = attachments.size();
+        framebufferInfo.pAttachments = attachments.data();
         framebufferInfo.width = useExtent.width;
         framebufferInfo.height = useExtent.height;
         framebufferInfo.layers = 1;

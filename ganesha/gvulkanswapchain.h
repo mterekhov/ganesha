@@ -5,6 +5,7 @@
 
 #include "glog.h"
 #include "gvulkandevice.h"
+#include "gvulkanimage.h"
 
 namespace spcGaneshaEngine {
 
@@ -15,8 +16,8 @@ public:
     
     void createSwapChain(const TUInt screenWidth, const TUInt screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface);
     void updateScreenSize(const TUInt screenWidth, const TUInt screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface);
-    void destroySwapChain(GVULKANDevice& device);
-
+    void destroySwapChain(GVULKANDevice& vulkanDevice);
+    
     VkSwapchainKHR getVulkanSwapChain();
     VkRenderPass getRenderPass();
     std::vector<VkFramebuffer>& getFramebuffers();
@@ -24,7 +25,7 @@ public:
     VkExtent2D getExtent();
     VkFormat getImagesFormat();
     size_t framebuffersNumber();
-
+    
 private:
     GLog& log;
     VkSwapchainKHR swapChain;
@@ -34,13 +35,14 @@ private:
     VkFormat imageFormat;
     VkExtent2D extent;
     VkRenderPass renderPass;
-
+    GVULKANImage depthImage;
+    
     VkSwapchainKHR createNewSwapChain(const TUInt screenWidth, const TUInt screenHeight, const SwapChainSupportDetails& supportDetails, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface);
     void createSwapChain(const TUInt screenWidth, const TUInt screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface, const TBool recreateSwapChain);
     std::vector<VkImage> ejectImagesArray(VkDevice device, const VkSwapchainKHR& swapChainSource);
     std::vector<VkImageView> createImageViews(VkDevice logicalDevice, std::vector<VkImage>& swapChainImagesArray);
-    std::vector<VkFramebuffer> createFramebuffers(VkDevice device, const std::vector<VkImageView>& useImagesViewArray, VkRenderPass useRenderPass, const VkExtent2D& useExtent);
-   VkRenderPass createRenderPass(VkDevice device, VkFormat format);
+    std::vector<VkFramebuffer> createFramebuffers(VkDevice device, const std::vector<VkImageView>& useImagesViewArray, VkImageView depthImageView, VkRenderPass useRenderPass, const VkExtent2D& useExtent);
+    VkRenderPass createRenderPass(GVULKANDevice& vulkanDevice, VkFormat format);
     VkExtent2D selectSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities, const TUInt screenWidth, const TUInt screenHeight);
     VkSurfaceFormatKHR selectSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
     VkPresentModeKHR selectSwapPresentMode(const std::vector<VkPresentModeKHR>& presentModesArray);

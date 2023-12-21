@@ -24,7 +24,6 @@
 #include "gvulkandevice.h"
 #include "gvulkanpipeline.h"
 #include "gvulkanswapchain.h"
-#include "gvulkancommands.h"
 #include "gvulkanbuffer.h"
 #include "gvulkandescriptorsets.h"
 #include "gcamera.h"

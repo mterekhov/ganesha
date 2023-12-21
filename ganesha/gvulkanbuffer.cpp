@@ -11,7 +11,7 @@ GVULKANBuffer::~GVULKANBuffer() {
     
 }
 
-void GVULKANBuffer::createBuffer(const void *data, const VkDeviceSize size, const VkBufferUsageFlags usage, const VkMemoryPropertyFlags properties, const TBool protectAccess, GVULKANDevice& vulkanDevice, GVULKANCommands& vulkanCommands) {
+void GVULKANBuffer::createBuffer(const void *data, const VkDeviceSize size, const VkBufferUsageFlags usage, const VkMemoryPropertyFlags properties, const TBool protectAccess, GVULKANDevice& vulkanDevice, VkCommandPool commandPool) {
     if (protectAccess) {
         VkBuffer stagingBuffer = createBuffer(vulkanDevice.getLogicalDevice(), size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT);
         VkDeviceMemory stagingBufferMemory = allocateBufferMemory(stagingBuffer, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, vulkanDevice);
@@ -24,7 +24,7 @@ void GVULKANBuffer::createBuffer(const void *data, const VkDeviceSize size, cons
         buffer = createBuffer(vulkanDevice.getLogicalDevice(), size, usage);
         bufferMemory = allocateBufferMemory(buffer, properties, vulkanDevice);
         
-        copyBuffer(stagingBuffer, buffer, size, vulkanDevice, vulkanCommands);
+        copyBuffer(stagingBuffer, buffer, size, vulkanDevice, commandPool);
         
         vkDestroyBuffer(vulkanDevice.getLogicalDevice(), stagingBuffer, nullptr);
         vkFreeMemory(vulkanDevice.getLogicalDevice(), stagingBufferMemory, nullptr);
@@ -32,7 +32,7 @@ void GVULKANBuffer::createBuffer(const void *data, const VkDeviceSize size, cons
     else {
         buffer = createBuffer(vulkanDevice.getLogicalDevice(), size, usage);
         bufferMemory = allocateBufferMemory(buffer, properties, vulkanDevice);
-
+        
         void *mappedData;
         vkMapMemory(vulkanDevice.getLogicalDevice(), bufferMemory, 0, size, 0, &mappedData);
         memcpy(mappedData, data, static_cast<size_t>(size));
@@ -97,8 +97,8 @@ VkDeviceMemory GVULKANBuffer::allocateBufferMemory(VkBuffer originalBuffer, cons
     return newBufferMemory;
 }
 
-void GVULKANBuffer::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, const VkDeviceSize size, GVULKANDevice& vulkanDevice, GVULKANCommands& vulkanCommands) {
-    VkCommandBuffer commandBuffer = vulkanCommands.copyBufferCommand(srcBuffer, dstBuffer, size, vulkanDevice.getLogicalDevice());
+void GVULKANBuffer::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, const VkDeviceSize size, GVULKANDevice& vulkanDevice, VkCommandPool commandPool) {
+    VkCommandBuffer commandBuffer = copyBufferCommand(srcBuffer, dstBuffer, size, commandPool, vulkanDevice.getLogicalDevice());
     
     VkSubmitInfo submitInfo{};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -107,7 +107,32 @@ void GVULKANBuffer::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, const VkD
     vkQueueSubmit(vulkanDevice.getGraphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE);
     vkQueueWaitIdle(vulkanDevice.getGraphicsQueue());
     
-    vulkanCommands.destroyCommandBuffer(commandBuffer, vulkanDevice.getLogicalDevice());
+    vkFreeCommandBuffers(vulkanDevice.getLogicalDevice(), commandPool, 1, &commandBuffer);
+}
+
+VkCommandBuffer GVULKANBuffer::copyBufferCommand(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size, VkCommandPool commandPool, VkDevice device) {
+    VkCommandBufferAllocateInfo allocInfo = { };
+    allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    allocInfo.commandPool = commandPool;
+    allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+    allocInfo.commandBufferCount = 1;
+    
+    VkCommandBuffer commandBuffer;
+    vkAllocateCommandBuffers(device, &allocInfo, &commandBuffer);
+    
+    VkCommandBufferBeginInfo beginInfo = { };
+    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+    
+    vkBeginCommandBuffer(commandBuffer, &beginInfo);
+    VkBufferCopy copyRegion{};
+    copyRegion.srcOffset = 0; // Optional
+    copyRegion.dstOffset = 0; // Optional
+    copyRegion.size = size;
+    vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion);
+    vkEndCommandBuffer(commandBuffer);
+    
+    return commandBuffer;
 }
 
 }

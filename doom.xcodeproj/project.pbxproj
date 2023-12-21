@@ -49,8 +49,6 @@
 		DEC767B92B2CB93100E97CE2 /* gvulkanswapchain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEC767B72B2CB93100E97CE2 /* gvulkanswapchain.cpp */; };
 		DEC767BC2B2CF29400E97CE2 /* gvulkanpipeline.h in Headers */ = {isa = PBXBuildFile; fileRef = DEC767BA2B2CF29400E97CE2 /* gvulkanpipeline.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DEC767BE2B2DCA8000E97CE2 /* gvulkanpipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEC767BB2B2CF29400E97CE2 /* gvulkanpipeline.cpp */; };
-		DEC767C12B2EFC6A00E97CE2 /* gvulkancommands.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEC767BF2B2EFC6A00E97CE2 /* gvulkancommands.cpp */; };
-		DEC767C22B2EFC6A00E97CE2 /* gvulkancommands.h in Headers */ = {isa = PBXBuildFile; fileRef = DEC767C02B2EFC6A00E97CE2 /* gvulkancommands.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DEC767C52B2F32CC00E97CE2 /* grendergraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEC767C32B2F32CC00E97CE2 /* grendergraph.cpp */; };
 		DEC767C62B2F32CC00E97CE2 /* grendergraph.h in Headers */ = {isa = PBXBuildFile; fileRef = DEC767C42B2F32CC00E97CE2 /* grendergraph.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DEC767CB2B30A2DC00E97CE2 /* gvulkanbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEC767C92B30A2DC00E97CE2 /* gvulkanbuffer.cpp */; };
@@ -149,8 +147,6 @@
 		DEC767B72B2CB93100E97CE2 /* gvulkanswapchain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gvulkanswapchain.cpp; path = ganesha/gvulkanswapchain.cpp; sourceTree = "<group>"; };
 		DEC767BA2B2CF29400E97CE2 /* gvulkanpipeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvulkanpipeline.h; path = ganesha/gvulkanpipeline.h; sourceTree = "<group>"; };
 		DEC767BB2B2CF29400E97CE2 /* gvulkanpipeline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gvulkanpipeline.cpp; path = ganesha/gvulkanpipeline.cpp; sourceTree = "<group>"; };
-		DEC767BF2B2EFC6A00E97CE2 /* gvulkancommands.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gvulkancommands.cpp; path = ganesha/gvulkancommands.cpp; sourceTree = "<group>"; };
-		DEC767C02B2EFC6A00E97CE2 /* gvulkancommands.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gvulkancommands.h; path = ganesha/gvulkancommands.h; sourceTree = "<group>"; };
 		DEC767C32B2F32CC00E97CE2 /* grendergraph.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = grendergraph.cpp; path = ganesha/grendergraph.cpp; sourceTree = "<group>"; };
 		DEC767C42B2F32CC00E97CE2 /* grendergraph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = grendergraph.h; path = ganesha/grendergraph.h; sourceTree = "<group>"; };
 		DEC767C92B30A2DC00E97CE2 /* gvulkanbuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gvulkanbuffer.cpp; path = ganesha/gvulkanbuffer.cpp; sourceTree = "<group>"; };
@@ -303,20 +299,18 @@
 		DEA031702B27BDD500F1BB36 /* VULKAN */ = {
 			isa = PBXGroup;
 			children = (
-				DECB3FA22B33409700988801 /* gvulkantools.h */,
-				DECB3FA12B33409700988801 /* gvulkantools.cpp */,
-				DEA0314C2B27BD0A00F1BB36 /* gvulkanapi.h */,
-				DEA031512B27BD0A00F1BB36 /* gvulkanapi.cpp */,
 				DEA031462B27BD0900F1BB36 /* gvulkaninstance.h */,
 				DEC767AE2B2BBD6000E97CE2 /* gvulkaninstance.cpp */,
 				DEA0313D2B27BD0900F1BB36 /* gvulkandevice.h */,
 				DEA0314B2B27BD0A00F1BB36 /* gvulkandevice.cpp */,
+				DEA0314C2B27BD0A00F1BB36 /* gvulkanapi.h */,
+				DEA031512B27BD0A00F1BB36 /* gvulkanapi.cpp */,
+				DECB3FA22B33409700988801 /* gvulkantools.h */,
+				DECB3FA12B33409700988801 /* gvulkantools.cpp */,
 				DEC767BA2B2CF29400E97CE2 /* gvulkanpipeline.h */,
 				DEC767BB2B2CF29400E97CE2 /* gvulkanpipeline.cpp */,
 				DEC767B62B2CB93100E97CE2 /* gvulkanswapchain.h */,
 				DEC767B72B2CB93100E97CE2 /* gvulkanswapchain.cpp */,
-				DEC767C02B2EFC6A00E97CE2 /* gvulkancommands.h */,
-				DEC767BF2B2EFC6A00E97CE2 /* gvulkancommands.cpp */,
 				DEC767CA2B30A2DC00E97CE2 /* gvulkanbuffer.h */,
 				DEC767C92B30A2DC00E97CE2 /* gvulkanbuffer.cpp */,
 				DECB3F9E2B33396D00988801 /* gvulkanimage.h */,
@@ -350,7 +344,6 @@
 				DEA0315B2B27BD0A00F1BB36 /* gvector.h in Headers */,
 				DEA031582B27BD0A00F1BB36 /* gpoint.h in Headers */,
 				DEA031662B27BD0A00F1BB36 /* gpoint2d.h in Headers */,
-				DEC767C22B2EFC6A00E97CE2 /* gvulkancommands.h in Headers */,
 				DEA031682B27BD0A00F1BB36 /* gvulkanapi.h in Headers */,
 				DEC767CC2B30A2DC00E97CE2 /* gvulkanbuffer.h in Headers */,
 				DEA031592B27BD0A00F1BB36 /* gvulkandevice.h in Headers */,
@@ -495,7 +488,6 @@
 				DEA031532B27BD0A00F1BB36 /* gganesha.cpp in Sources */,
 				DEC767BE2B2DCA8000E97CE2 /* gvulkanpipeline.cpp in Sources */,
 				DEA0315E2B27BD0A00F1BB36 /* gvector.cpp in Sources */,
-				DEC767C12B2EFC6A00E97CE2 /* gvulkancommands.cpp in Sources */,
 				DEC767C52B2F32CC00E97CE2 /* grendergraph.cpp in Sources */,
 				DECB3F9B2B32E98200988801 /* gtga.cpp in Sources */,
 				DEA031542B27BD0A00F1BB36 /* ganeshastubdata.cpp in Sources */,

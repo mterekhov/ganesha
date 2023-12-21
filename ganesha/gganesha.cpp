@@ -19,15 +19,15 @@ TBool GGanesha::initEngine(void *metalLayer, const TUInt width, const TUInt heig
         { GPoint(0.5f, 0.5f, 0.2), GPoint2D{0.0f, 2.0f} },
         { GPoint(-0.5f, 0.5f, 0.2), GPoint2D{2.0f, 2.0f} },
 
-        { GPoint(-10.0f, -10.0f, 0.2), GPoint2D{10.0f, 0.0f} },
-        { GPoint(10.0f, -10.0f, 0.2), GPoint2D{0.0f, 0.0f} },
-        { GPoint(10.0f, 10.0f, 0.2), GPoint2D{0.0f, 10.0f} },
-        { GPoint(-10.0f, 10.0f, 0.2), GPoint2D{10.0f, 10.0f} },
-
+        { GPoint(-10.0f, -10.0f, 0.0), GPoint2D{10.0f, 0.0f} },
+        { GPoint(10.0f, -10.0f, 0.0), GPoint2D{0.0f, 0.0f} },
+        { GPoint(10.0f, 10.0f, 0.0), GPoint2D{0.0f, 10.0f} },
+        { GPoint(-10.0f, 10.0f, 0.0), GPoint2D{10.0f, 10.0f} },
+        
         { GPoint(-0.5f, -0.5f, 0.1), GPoint2D{2.0f, 0.0f} },
         { GPoint(0.5f, -0.5f, 0.1), GPoint2D{0.0f, 0.0f} },
         { GPoint(0.5f, 0.5f, 0.1), GPoint2D{0.0f, 2.0f} },
-        { GPoint(-0.5f, 0.5f, 0.1), GPoint2D{2.0f, 2.0f} }
+        { GPoint(-0.5f, 0.5f, 0.1), GPoint2D{2.0f, 2.0f} }        
     };
     renderGraph.defineVertexesArray(vertexes);
 

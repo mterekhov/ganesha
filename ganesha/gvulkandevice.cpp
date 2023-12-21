@@ -3,7 +3,6 @@
 #include <iostream>
 
 #include "gvulkandevice.h"
-#include "gvulkaninstance.h"
 
 namespace spcGaneshaEngine {
 

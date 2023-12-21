@@ -31,12 +31,10 @@ vulkanInstance(log),
 vulkanDevice(log),
 vulkanSwapChain(log),
 vulkanPipeline(log),
-vulkanCommands(log),
 vertexesBuffer(log),
 indexesBuffer(log),
 vulkanDescriptorset(log),
-texture(log),
-depthImage(log) {
+texture(log) {
     
 }
 
@@ -47,8 +45,6 @@ GVULKANAPI::~GVULKANAPI() {
 #pragma mark - GGraphicsAPIProtocol -
 
 void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt frameHeight, const GRenderGraph& renderGraph) {
-    updateFrameSize = false;
-    
     //  create VULKAN instance
     vulkanInstance.createInstance("DOOM", khronosValidationLayers, avoidInstanceExtensions);
     
@@ -57,8 +53,9 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
     
     //  creates physicalDevice
     vulkanDevice.createDevice(vulkanInstance, useDeviceExtensions, metalSurface);
+
     vulkanSwapChain.createSwapChain(frameWidth, frameHeight, vulkanDevice, metalSurface);
-    vulkanCommands.createCommands(vulkanDevice);
+    commandPool = createCommandPool(vulkanDevice);
     
     TUInt framebuffersNumber = static_cast<TUInt>(vulkanSwapChain.framebuffersNumber());
     VkDeviceSize bufferSize = sizeof(UniformBufferObject);
@@ -71,11 +68,12 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
                                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
                                false,
                                vulkanDevice,
-                               vulkanCommands);
+                               commandPool);
         vulkanUniformBuffers.push_back(newBuffer);
     }
     createTextures();
     vulkanDescriptorset.createDescriptorsets(vulkanDevice, vulkanUniformBuffers, texture);
+
     vulkanPipeline.createPipeline(vulkanDevice, vulkanSwapChain, vulkanDescriptorset.getDescriptorsetLayout());
     
     std::vector<Vertex> vertexesArray = renderGraph.getVertexesArray();
@@ -85,7 +83,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
                                 VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
                                 true,
                                 vulkanDevice,
-                                vulkanCommands);
+                                commandPool);
     
     TIndexArray indexesArray = renderGraph.getIndexesArray();
     indexesBuffer.createBuffer(indexesArray.data(),
@@ -94,11 +92,19 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
                                true,
                                vulkanDevice,
-                               vulkanCommands);
+                               commandPool);
     
     
     for (TUInt i = 0; i < framebuffersNumber; i++) {
-        renderCommands.push_back(vulkanCommands.emptyCommand(vulkanDevice.getLogicalDevice()));
+        VkCommandBufferAllocateInfo allocInfo = { };
+        allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+        allocInfo.commandPool = commandPool;
+        allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        allocInfo.commandBufferCount = 1;
+        
+        VkCommandBuffer newCommand;
+        vkAllocateCommandBuffers(vulkanDevice.getLogicalDevice(), &allocInfo, &newCommand);
+        renderCommands.push_back(newCommand);
     }
     
     createSemaphores();
@@ -108,7 +114,6 @@ void GVULKANAPI::destroyAPI() {
     vkDeviceWaitIdle(vulkanDevice.getLogicalDevice());
     
     texture.destroyImage(vulkanDevice);
-    depthImage.destroyImage(vulkanDevice);
     
     vulkanSwapChain.destroySwapChain(vulkanDevice);
     vulkanPipeline.destroyPipeline(vulkanDevice);
@@ -128,14 +133,13 @@ void GVULKANAPI::destroyAPI() {
         vkDestroyFence(vulkanDevice.getLogicalDevice(), inFlightFences[i], nullptr);
     }
     
-    vulkanCommands.destroyCommands(vulkanDevice);
+    vkDestroyCommandPool(vulkanDevice.getLogicalDevice(), commandPool, nullptr);
     vulkanDevice.destroyDevice();
     vkDestroySurfaceKHR(vulkanInstance.getVulkanInstance(), metalSurface, nullptr);
     vulkanInstance.destroyInstance();
 }
 
 void GVULKANAPI::frameResized(const float width, const float height) {
-    updateFrameSize = true;
     vulkanSwapChain.updateScreenSize(width, height, vulkanDevice, metalSurface);
     installIsometricView(fov, nearPlane, farPlane);
 }
@@ -154,14 +158,14 @@ void GVULKANAPI::drawFrame(GRenderGraph& renderGraph) {
     vulkanUniformBuffers[imageIndex].refreshBuffer(&ubo, vulkanDevice);
     
     vkResetCommandBuffer(renderCommands[imageIndex], 0);
-    vulkanCommands.recordRenderCommand(renderCommands[imageIndex],
-                                       vertexesBuffer.getBuffer(),
-                                       indexesBuffer.getBuffer(),
-                                       static_cast<TUInt>(renderGraph.getIndexesArray().size()),
-                                       vulkanSwapChain.getFramebuffers()[imageIndex],
-                                       vulkanSwapChain,
-                                       vulkanPipeline,
-                                       vulkanDescriptorset.getDescriptorsetArray()[imageIndex]);
+    recordRenderCommand(renderCommands[imageIndex],
+                        vertexesBuffer.getBuffer(),
+                        indexesBuffer.getBuffer(),
+                        static_cast<TUInt>(renderGraph.getIndexesArray().size()),
+                        vulkanSwapChain.getFramebuffers()[imageIndex],
+                        vulkanSwapChain,
+                        vulkanPipeline,
+                        vulkanDescriptorset.getDescriptorsetArray()[imageIndex]);
     VkSubmitInfo submitInfo{};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     
@@ -194,13 +198,8 @@ void GVULKANAPI::drawFrame(GRenderGraph& renderGraph) {
     presentInfo.swapchainCount = 1;
     presentInfo.pSwapchains = swapChains;
     presentInfo.pImageIndices = &imageIndex;
-    result = vkQueuePresentKHR(vulkanDevice.getPresentQueue(), &presentInfo);
-    if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || updateFrameSize) {
-        updateFrameSize = false;
-    } else if (result != VK_SUCCESS) {
-        log.error("failed to present frame\n");
-    }
-    
+    vkQueuePresentKHR(vulkanDevice.getPresentQueue(), &presentInfo);
+
     currentFrame = (currentFrame + 1) % maxFramesInFlight;
 }
 
@@ -221,6 +220,65 @@ void GVULKANAPI::installViewMatrix(const GMatrix& newViewMatrix) {
 }
 
 #pragma mark - Routine -
+
+void GVULKANAPI::recordRenderCommand(VkCommandBuffer renderCommand,
+                                          VkBuffer vertexesBuffer,
+                                          VkBuffer indexesBuffer,
+                                          const TUInt indexesNumber,
+                                          VkFramebuffer framebuffer,
+                                          GVULKANSwapChain& swapChain,
+                                          GVULKANPipeline& pipeline,
+                                          VkDescriptorSet descriptorset) {
+    VkCommandBufferBeginInfo beginInfo = { };
+    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    
+    vkBeginCommandBuffer(renderCommand, &beginInfo);
+        VkExtent2D swapChainExtent = swapChain.getExtent();
+        VkRenderPassBeginInfo renderPassInfo{};
+        renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+        renderPassInfo.renderPass = swapChain.getRenderPass();
+        renderPassInfo.framebuffer = framebuffer;
+        renderPassInfo.renderArea.offset = {0, 0};
+        renderPassInfo.renderArea.extent = swapChainExtent;
+        
+        std::array<VkClearValue, 2> clearValues = { };
+        clearValues[0].color = {{0.0f, 0.0f, 0.0f, 1.0f}};
+        clearValues[1].depthStencil = {1.0f, 0};
+        
+        renderPassInfo.clearValueCount = clearValues.size();
+        renderPassInfo.pClearValues = clearValues.data();
+        
+        vkCmdBeginRenderPass(renderCommand, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+        
+            vkCmdBindPipeline(renderCommand, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.getGraphicsPipeline());
+            
+            VkViewport viewport{};
+            viewport.x = 0.0f;
+            viewport.y = 0.0f;
+            viewport.width = static_cast<TFloat>(swapChainExtent.width);
+            viewport.height = static_cast<TFloat>(swapChainExtent.height);
+            viewport.minDepth = 0.0f;
+            viewport.maxDepth = 1.0f;
+            vkCmdSetViewport(renderCommand, 0, 1, &viewport);
+            
+            VkRect2D scissor{};
+            scissor.offset = {0, 0};
+            scissor.extent = swapChainExtent;
+            vkCmdSetScissor(renderCommand, 0, 1, &scissor);
+            
+            VkBuffer vertexBuffers[] = { vertexesBuffer };
+            VkDeviceSize offsets[] = {0};
+            vkCmdBindVertexBuffers(renderCommand, 0, 1, vertexBuffers, offsets);
+            
+            vkCmdBindIndexBuffer(renderCommand, indexesBuffer, 0, VK_INDEX_TYPE_UINT32);
+            
+            vkCmdBindDescriptorSets(renderCommand, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.getPipelineLayout(), 0, 1, &descriptorset, 0, nullptr);
+            vkCmdDrawIndexed(renderCommand, indexesNumber, 1, 0, 0, 0);
+        
+        vkCmdEndRenderPass(renderCommand);
+        
+    vkEndCommandBuffer(renderCommand);
+}
 
 void GVULKANAPI::createSemaphores() {
     imageAvailableSemaphores.resize(maxFramesInFlight);
@@ -243,6 +301,20 @@ void GVULKANAPI::createSemaphores() {
             return;
         }
     }
+}
+
+VkCommandPool GVULKANAPI::createCommandPool(GVULKANDevice& device) {
+    VkCommandPoolCreateInfo poolInfo{};
+    poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+    poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+    poolInfo.queueFamilyIndex = device.getGraphicsQueueIndex();
+    
+    VkCommandPool newCommandPool;
+    if (vkCreateCommandPool(device.getLogicalDevice(), &poolInfo, nullptr, &newCommandPool) != VK_SUCCESS) {
+        log.error("failed to create command pool\n");
+    }
+    
+    return newCommandPool;
 }
 
 VkSurfaceKHR GVULKANAPI::createSurface(void *metalLayer) {
@@ -286,15 +358,7 @@ void GVULKANAPI::createTextures() {
                         vulkanDevice);
     texture.deployData(tgaFile,
                        vulkanDevice,
-                       vulkanCommands);
-    
-    GVULKANTools tools;
-    depthImage.createImage({ vulkanSwapChain.getExtent().width, vulkanSwapChain.getExtent().height },
-                           tools.findDepthFormat(vulkanDevice),
-                           VK_IMAGE_ASPECT_DEPTH_BIT,
-                           VK_IMAGE_TILING_OPTIMAL,
-                           VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, 
-                           vulkanDevice);
+                       commandPool);
 }
 
 

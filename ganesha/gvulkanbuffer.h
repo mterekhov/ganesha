@@ -3,7 +3,6 @@
 
 #include <vulkan/vulkan.h>
 
-#include "gvulkancommands.h"
 #include "gvulkandevice.h"
 #include "glog.h"
 
@@ -20,7 +19,7 @@ public:
                       const VkMemoryPropertyFlags properties,
                       const TBool protectAccess,
                       GVULKANDevice& vulkanDevice,
-                      GVULKANCommands& vulkanCommands);
+                      VkCommandPool commandPool);
     void destroyBuffer(GVULKANDevice& vulkanDevice);
     void refreshBuffer(const void *data, GVULKANDevice& vulkanDevice);
     VkBuffer getBuffer();
@@ -32,10 +31,12 @@ private:
     TUInt bufferSize;
     VkDeviceMemory bufferMemory;
     
+    void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, const VkDeviceSize size, GVULKANDevice& vulkanDevice, VkCommandPool commandPool);
+
     VkBuffer createBuffer(VkDevice device, const VkDeviceSize size, const VkBufferUsageFlags usage);
     VkDeviceMemory allocateBufferMemory(VkBuffer originalBuffer, const VkMemoryPropertyFlags properties, GVULKANDevice& vulkanDevice);
-    void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, const VkDeviceSize size, GVULKANDevice& vulkanDevice, GVULKANCommands& vulkanCommands);
     TUInt findMemoryType(VkPhysicalDevice device, const TUInt typeFilter, const VkMemoryPropertyFlags properties);
+    VkCommandBuffer copyBufferCommand(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size, VkCommandPool commandPool, VkDevice device);
 };
 
 }   //  namespace spcGaneshaEngine

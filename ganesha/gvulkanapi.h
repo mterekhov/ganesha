@@ -10,7 +10,6 @@
 #include "gvulkandevice.h"
 #include "gvulkanswapchain.h"
 #include "gvulkanpipeline.h"
-#include "gvulkancommands.h"
 #include "gmatrix.h"
 #include "gvulkanbuffer.h"
 #include "gvulkandescriptorsets.h"
@@ -42,25 +41,21 @@ private:
     GVULKANInstance vulkanInstance;
     GVULKANSwapChain vulkanSwapChain;
     GVULKANPipeline vulkanPipeline;
-    GVULKANCommands vulkanCommands;
     GVULKANDescriptorsets vulkanDescriptorset;
 
-    GVULKANImage depthImage;
     GVULKANImage texture;
-
     std::vector<GVULKANBuffer> vulkanUniformBuffers;
     GVULKANBuffer vertexesBuffer;
     GVULKANBuffer indexesBuffer;
 
     VkSurfaceKHR metalSurface;
+    VkCommandPool commandPool;
 
     TFloat nearPlane;
     TFloat farPlane;
     TFloat fov;
     GMatrix projectionMatrix;
     GMatrix viewMatrix;
-
-    TBool updateFrameSize;
 
     std::vector<VkSemaphore> imageAvailableSemaphores;
     std::vector<VkSemaphore> renderFinishedSemaphores;
@@ -72,11 +67,19 @@ private:
 
     const TUInt maxFramesInFlight = 2;
 
+    void recordRenderCommand(VkCommandBuffer renderCommand,
+                             VkBuffer vertexesBuffer,
+                             VkBuffer indexesBuffer,
+                             const TUInt indexesNumber,
+                             VkFramebuffer framebuffer,
+                             GVULKANSwapChain& swapChain,
+                             GVULKANPipeline& pipeline,
+                             VkDescriptorSet descriptorset);
+    VkCommandPool createCommandPool(GVULKANDevice& device);
+    VkSurfaceKHR createSurface(void *metalLayer);
     void createTextures();
     void createSemaphores();
-    
     UniformBufferObject currentUBO();
-    VkSurfaceKHR createSurface(void *metalLayer);
 };
 
 }   //  namespace spcGaneshaEngine
