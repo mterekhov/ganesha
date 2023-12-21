@@ -72,6 +72,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
                                vulkanCommands);
         vulkanUniformBuffers.push_back(newBuffer);
     }
+    createTextures();
     vulkanDescriptorset.createDescriptorsets(vulkanDevice, vulkanUniformBuffers, texture);
     vulkanPipeline.createPipeline(vulkanDevice, vulkanSwapChain, vulkanDescriptorset.getDescriptorsetLayout());
     
@@ -99,8 +100,6 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
     }
     
     createSemaphores();
-    
-    createTextures();
 }
 
 void GVULKANAPI::destroyAPI() {

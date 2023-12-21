@@ -116,7 +116,7 @@ std::vector<VkDescriptorSet> GVULKANDescriptorsets::createNewDescriptorsets(std:
         descriptorWritesArray[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         descriptorWritesArray[0].descriptorCount = 1;
         descriptorWritesArray[0].pBufferInfo = &bufferInfo;
-        
+
         descriptorWritesArray[1].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
         descriptorWritesArray[1].dstSet = newDescriptorsetArray[i];
         descriptorWritesArray[1].dstBinding = 1;
@@ -124,7 +124,7 @@ std::vector<VkDescriptorSet> GVULKANDescriptorsets::createNewDescriptorsets(std:
         descriptorWritesArray[1].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
         descriptorWritesArray[1].descriptorCount = 1;
         descriptorWritesArray[1].pImageInfo = &imageInfo;
-        
+
         vkUpdateDescriptorSets(device, descriptorWritesArray.size(), descriptorWritesArray.data(), 0, nullptr);
     }
     
