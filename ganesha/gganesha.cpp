@@ -13,23 +13,28 @@ GGanesha::~GGanesha() {
 }
 
 TBool GGanesha::initEngine(void *metalLayer, const TUInt width, const TUInt height) {
-    
     const std::vector<Vertex> vertexes = {
-        { GPoint(-0.5f, -0.5f, 0.0), GPoint2D{2.0f, 0.0f} },
-        { GPoint(0.5f, -0.5f, 0.0), GPoint2D{0.0f, 0.0f} },
-        { GPoint(0.5f, 0.5f, 0.0), GPoint2D{0.0f, 2.0f} },
-        { GPoint(-0.5f, 0.5f, 0.0), GPoint2D{2.0f, 2.0f} },
-
         { GPoint(-0.5f, -0.5f, 0.2), GPoint2D{2.0f, 0.0f} },
         { GPoint(0.5f, -0.5f, 0.2), GPoint2D{0.0f, 0.0f} },
         { GPoint(0.5f, 0.5f, 0.2), GPoint2D{0.0f, 2.0f} },
-        { GPoint(-0.5f, 0.5f, 0.2), GPoint2D{2.0f, 2.0f} }
+        { GPoint(-0.5f, 0.5f, 0.2), GPoint2D{2.0f, 2.0f} },
+
+        { GPoint(-10.0f, -10.0f, 0.2), GPoint2D{10.0f, 0.0f} },
+        { GPoint(10.0f, -10.0f, 0.2), GPoint2D{0.0f, 0.0f} },
+        { GPoint(10.0f, 10.0f, 0.2), GPoint2D{0.0f, 10.0f} },
+        { GPoint(-10.0f, 10.0f, 0.2), GPoint2D{10.0f, 10.0f} },
+
+        { GPoint(-0.5f, -0.5f, 0.1), GPoint2D{2.0f, 0.0f} },
+        { GPoint(0.5f, -0.5f, 0.1), GPoint2D{0.0f, 0.0f} },
+        { GPoint(0.5f, 0.5f, 0.1), GPoint2D{0.0f, 2.0f} },
+        { GPoint(-0.5f, 0.5f, 0.1), GPoint2D{2.0f, 2.0f} }
     };
     renderGraph.defineVertexesArray(vertexes);
 
     const TIndexArray indexes = {
         0, 1, 2, 2, 3, 0,
-        4, 5, 6, 6, 7, 4
+        4, 5, 6, 6, 7, 4,
+        8, 9, 10, 10, 11, 8
     };
     renderGraph.defineIndexesArray(indexes);
     

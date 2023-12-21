@@ -34,7 +34,8 @@ vulkanCommands(log),
 vertexesBuffer(log),
 indexesBuffer(log),
 vulkanDescriptorset(log),
-texture(log) {
+texture(log),
+depthImage(log) {
     
 }
 
@@ -106,7 +107,7 @@ void GVULKANAPI::destroyAPI() {
     vkDeviceWaitIdle(vulkanDevice.getLogicalDevice());
     
     texture.destroyImage(vulkanDevice);
-    
+
     vulkanSwapChain.destroySwapChain(vulkanDevice);
     vulkanPipeline.destroyPipeline(vulkanDevice);
     
@@ -274,12 +275,15 @@ UniformBufferObject GVULKANAPI::currentUBO() {
 }
 
 void GVULKANAPI::createTextures() {
-    texture.createImage("/Users/cipher/Development/ganesha/resources/MWALL4_2.tga",
+    GTGA tgaFile("/Users/cipher/Development/ganesha/resources/MWALL4_2.tga");
+    texture.createImage({ tgaFile.getWidth(), tgaFile.getHeight() },
                         VK_FORMAT_R8G8B8A8_SRGB,
                         VK_IMAGE_TILING_OPTIMAL,
                         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-                        vulkanDevice,
-                        vulkanCommands);
+                        vulkanDevice);
+    texture.deployData(tgaFile,
+                       vulkanDevice,
+                       vulkanCommands);
 }
 
 }

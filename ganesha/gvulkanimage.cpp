@@ -13,20 +13,19 @@ GVULKANImage::~GVULKANImage() {
     
 }
 
-void GVULKANImage::createImage(const std::string filePath,
+void GVULKANImage::createImage(const VkExtent2D& extent,
                                VkFormat format, 
                                VkImageTiling tiling,
                                VkImageUsageFlags usage,
-                               GVULKANDevice& vulkanDevice,
-                               GVULKANCommands& vulkanCommands) {
-    GTGA tgaFile(filePath);
+                               GVULKANDevice& vulkanDevice) {
     GVULKANTools tools;
+    imageExtent = extent;
     
     VkImageCreateInfo imageInfo = {};
     imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
     imageInfo.imageType = VK_IMAGE_TYPE_2D;
-    imageInfo.extent.width = tgaFile.getWidth();
-    imageInfo.extent.height = tgaFile.getHeight();
+    imageInfo.extent.width = extent.width;
+    imageInfo.extent.height = extent.height;
     imageInfo.extent.depth = 1;
     imageInfo.mipLevels = 1;
     imageInfo.arrayLayers = 1;
@@ -37,7 +36,7 @@ void GVULKANImage::createImage(const std::string filePath,
     imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
     imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
     if (vkCreateImage(vulkanDevice.getLogicalDevice(), &imageInfo, nullptr, &image) != VK_SUCCESS) {
-        log.error("can not create image %s\n", filePath.c_str());
+        log.error("can not create image\n");
     }
     
     VkMemoryRequirements memoryRequirements;
@@ -50,7 +49,14 @@ void GVULKANImage::createImage(const std::string filePath,
         log.error("failed to allocate image memory!");
     }
     vkBindImageMemory(vulkanDevice.getLogicalDevice(), image, imageMemory, 0);
-    
+
+    imageView = tools.createImageView(image, VK_FORMAT_R8G8B8A8_SRGB, vulkanDevice.getLogicalDevice());
+    sampler = createTextureSampler(vulkanDevice);
+}
+
+void GVULKANImage::deployData(GTGA& tgaFile,
+                              GVULKANDevice& vulkanDevice,
+                              GVULKANCommands& vulkanCommands) {
     GVULKANBuffer stagingBuffer(log);
     stagingBuffer.createBuffer(tgaFile.getImageData(),
                                tgaFile.getWidth() * tgaFile.getHeight() * tgaFile.getBytepp(),
@@ -63,16 +69,13 @@ void GVULKANImage::createImage(const std::string filePath,
     VkCommandBuffer tmpCommand = vulkanCommands.transitionImageLayout(image, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, vulkanDevice.getLogicalDevice());
     vulkanCommands.submitCommand(tmpCommand, vulkanDevice);
 
-    tmpCommand = vulkanCommands.copyBufferToImage(stagingBuffer.getBuffer(), image, tgaFile.getWidth(), tgaFile.getHeight(), vulkanDevice.getLogicalDevice());
+    tmpCommand = vulkanCommands.copyBufferToImage(stagingBuffer.getBuffer(), image, imageExtent.width, imageExtent.height, vulkanDevice.getLogicalDevice());
     vulkanCommands.submitCommand(tmpCommand, vulkanDevice);
     
     tmpCommand = vulkanCommands.transitionImageLayout(image, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, vulkanDevice.getLogicalDevice());
     vulkanCommands.submitCommand(tmpCommand, vulkanDevice);
     
     stagingBuffer.destroyBuffer(vulkanDevice);
-    
-    imageView = tools.createImageView(image, VK_FORMAT_R8G8B8A8_SRGB, vulkanDevice.getLogicalDevice());
-    sampler = createTextureSampler(vulkanDevice);
 }
 
 void GVULKANImage::destroyImage(GVULKANDevice& vulkanDevice) {

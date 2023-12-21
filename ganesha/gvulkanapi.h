@@ -45,6 +45,7 @@ private:
     GVULKANCommands vulkanCommands;
     GVULKANDescriptorsets vulkanDescriptorset;
 
+    GVULKANImage depthImage;
     GVULKANImage texture;
 
     std::vector<GVULKANBuffer> vulkanUniformBuffers;
