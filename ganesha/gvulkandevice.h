@@ -64,6 +64,6 @@ private:
     int32_t presentQueueFamilyIndex = -1;
 };
 
-}   //  namespace spcGaneshaEngine
+};   //  namespace spcGaneshaEngine
 
 #endif  //  SPCGANESHAENGINE_GVULKANDEVICE_H
