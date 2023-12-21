@@ -14,7 +14,8 @@ GVULKANImage::~GVULKANImage() {
 }
 
 void GVULKANImage::createImage(const VkExtent2D& extent,
-                               VkFormat format, 
+                               VkFormat format,
+                               VkImageAspectFlags aspectFlags,
                                VkImageTiling tiling,
                                VkImageUsageFlags usage,
                                GVULKANDevice& vulkanDevice) {
@@ -50,7 +51,7 @@ void GVULKANImage::createImage(const VkExtent2D& extent,
     }
     vkBindImageMemory(vulkanDevice.getLogicalDevice(), image, imageMemory, 0);
 
-    imageView = tools.createImageView(image, VK_FORMAT_R8G8B8A8_SRGB, vulkanDevice.getLogicalDevice());
+    imageView = tools.createImageView(image, format, aspectFlags, vulkanDevice.getLogicalDevice());
     sampler = createTextureSampler(vulkanDevice);
 }
 

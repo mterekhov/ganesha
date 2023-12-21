@@ -18,6 +18,7 @@ public:
 
     void createImage(const VkExtent2D& extent,
                      VkFormat format,
+                     VkImageAspectFlags aspectFlags,
                      VkImageTiling tiling,
                      VkImageUsageFlags usage,
                      GVULKANDevice& vulkanDevice);

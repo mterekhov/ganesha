@@ -216,7 +216,7 @@ std::vector<VkImageView> GVULKANSwapChain::createImageViews(VkDevice logicalDevi
     GVULKANTools tools;
     newImageViewsArray.resize(swapChainImagesArray.size());
     for (size_t i = 0; i < swapChainImagesArray.size(); i++) {
-        newImageViewsArray[i] = tools.createImageView(swapChainImagesArray[i], imageFormat, logicalDevice);
+        newImageViewsArray[i] = tools.createImageView(swapChainImagesArray[i], imageFormat, VK_IMAGE_ASPECT_COLOR_BIT, logicalDevice);
     }
     
     return newImageViewsArray;

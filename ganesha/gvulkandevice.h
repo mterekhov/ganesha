@@ -33,6 +33,7 @@ public:
     TUInt getGraphicsQueueIndex();
     std::vector<TUInt> getQueuesIndexesArray();
     VkPhysicalDeviceProperties getPhysicalDeviceProperties();
+    VkFormatProperties getPhysicalDeviceFormatProperties(VkFormat format);
 
     TBool presentationIsEqualToGraphics();
 

@@ -9,6 +9,7 @@
 #include "gcolor.h"
 #include "gmatrix.h"
 #include "gvulkanbuffer.h"
+#include "gvulkantools.h"
 
 namespace spcGaneshaEngine {
 
@@ -107,7 +108,8 @@ void GVULKANAPI::destroyAPI() {
     vkDeviceWaitIdle(vulkanDevice.getLogicalDevice());
     
     texture.destroyImage(vulkanDevice);
-
+    depthImage.destroyImage(vulkanDevice);
+    
     vulkanSwapChain.destroySwapChain(vulkanDevice);
     vulkanPipeline.destroyPipeline(vulkanDevice);
     
@@ -278,12 +280,22 @@ void GVULKANAPI::createTextures() {
     GTGA tgaFile("/Users/cipher/Development/ganesha/resources/MWALL4_2.tga");
     texture.createImage({ tgaFile.getWidth(), tgaFile.getHeight() },
                         VK_FORMAT_R8G8B8A8_SRGB,
+                        VK_IMAGE_ASPECT_COLOR_BIT,
                         VK_IMAGE_TILING_OPTIMAL,
                         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
                         vulkanDevice);
     texture.deployData(tgaFile,
                        vulkanDevice,
                        vulkanCommands);
+    
+    GVULKANTools tools;
+    depthImage.createImage({ vulkanSwapChain.getExtent().width, vulkanSwapChain.getExtent().height },
+                           tools.findDepthFormat(vulkanDevice),
+                           VK_IMAGE_ASPECT_DEPTH_BIT,
+                           VK_IMAGE_TILING_OPTIMAL,
+                           VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, 
+                           vulkanDevice);
 }
+
 
 }

@@ -63,6 +63,16 @@ VkPhysicalDeviceProperties GVULKANDevice::getPhysicalDeviceProperties() {
     return getPhysicalDeviceProperties(physicalDevice);
 }
 
+VkFormatProperties GVULKANDevice::getPhysicalDeviceFormatProperties(VkFormat format) {
+    VkFormatProperties formatProperties;
+    
+    vkGetPhysicalDeviceFormatProperties(physicalDevice, format, &formatProperties);
+    
+    return formatProperties;
+}
+
+#pragma mark - Routine -
+
 VkPhysicalDeviceProperties GVULKANDevice::getPhysicalDeviceProperties(VkPhysicalDevice device) {
     VkPhysicalDeviceProperties deviceProperties;
     vkGetPhysicalDeviceProperties(device, &deviceProperties);
@@ -70,8 +80,6 @@ VkPhysicalDeviceProperties GVULKANDevice::getPhysicalDeviceProperties(VkPhysical
     return deviceProperties;
 
 }
-
-#pragma mark - Routine -
 
 VkPhysicalDevice GVULKANDevice::selectPhysicalDevice(GVULKANInstance &vulkanInstance, const TStringsArray& useDeviceExtensions, VkSurfaceKHR &surface) {
     TUInt count = 0;

@@ -4,13 +4,19 @@
 #include <vulkan/vulkan.h>
 
 #include "ganeshatypes.h"
+#include "gvulkandevice.h"
 
 namespace spcGaneshaEngine {
 
 class GVULKANTools {
 public:
     TUInt findMemoryType(VkPhysicalDevice device, const TUInt typeFilter, const VkMemoryPropertyFlags properties);
-    VkImageView createImageView(VkImage image, VkFormat format,  VkDevice device);
+    VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, VkDevice device);
+    VkFormat findDepthFormat(GVULKANDevice& vulkanDevice);
+    
+private:
+    VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features, GVULKANDevice& vulkanDevice);
+
 };
 
 };

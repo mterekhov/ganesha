@@ -16,13 +16,13 @@ TUInt GVULKANTools::findMemoryType(VkPhysicalDevice device, const TUInt typeFilt
     return 0;
 }
 
-VkImageView GVULKANTools::createImageView(VkImage image, VkFormat format,  VkDevice device) {
+VkImageView GVULKANTools::createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, VkDevice device) {
     VkImageViewCreateInfo viewInfo{};
     viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
     viewInfo.image = image;
     viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
     viewInfo.format = format;
-    viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    viewInfo.subresourceRange.aspectMask = aspectFlags;//VK_IMAGE_ASPECT_COLOR_BIT;
     viewInfo.subresourceRange.baseMipLevel = 0;
     viewInfo.subresourceRange.levelCount = 1;
     viewInfo.subresourceRange.baseArrayLayer = 0;
@@ -31,6 +31,28 @@ VkImageView GVULKANTools::createImageView(VkImage image, VkFormat format,  VkDev
     VkImageView newImageView;
     vkCreateImageView(device, &viewInfo, nullptr, &newImageView);
     return newImageView;
+}
+
+VkFormat GVULKANTools::findDepthFormat(GVULKANDevice& vulkanDevice) {
+    return findSupportedFormat({ VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT },
+                               VK_IMAGE_TILING_OPTIMAL,
+                               VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT,
+                               vulkanDevice);
+}
+
+VkFormat GVULKANTools::findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features, GVULKANDevice& vulkanDevice) {
+    for (VkFormat format : candidates) {
+        VkFormatProperties props = vulkanDevice.getPhysicalDeviceFormatProperties(format);
+        if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features) {
+            return format;
+        }
+        
+        if (tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features) {
+            return format;
+        }
+    }
+    
+    throw std::runtime_error("failed to find supported format!");
 }
 
 }
