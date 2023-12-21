@@ -14,14 +14,13 @@ void GVULKANSwapChain::createSwapChain(const TUInt screenWidth, const TUInt scre
 }
 
 void GVULKANSwapChain::destroySwapChain(GVULKANDevice& vulkanDevice) {
-    depthImage.destroyImage(vulkanDevice);
-    destroyExtentDependency(vulkanDevice.getLogicalDevice());
+    destroyExtentDependency(vulkanDevice);
     destroyRenderPass(vulkanDevice.getLogicalDevice());
 }
 
 void GVULKANSwapChain::updateScreenSize(const TUInt screenWidth, const TUInt screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
     vkDeviceWaitIdle(vulkanDevice.getLogicalDevice());
-    destroyExtentDependency(vulkanDevice.getLogicalDevice());
+    destroyExtentDependency(vulkanDevice);
     createSwapChain(screenWidth, screenHeight, vulkanDevice, surface, true);
 }
 
@@ -63,15 +62,15 @@ void GVULKANSwapChain::createSwapChain(const TUInt screenWidth, const TUInt scre
     extent = selectSwapExtent(supportDetails.surfaceCapabilities, screenWidth, screenHeight);
 
     if (!recreateSwapChain) {
-        GVULKANTools tools;
-        depthImage.createImage(extent,
-                               tools.findDepthFormat(vulkanDevice),
-                               VK_IMAGE_ASPECT_DEPTH_BIT,
-                               VK_IMAGE_TILING_OPTIMAL,
-                               VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
-                               vulkanDevice);
         renderPass = createRenderPass(vulkanDevice, imageFormat);
     }
+    GVULKANTools tools;
+    depthImage.createImage(extent,
+                           tools.findDepthFormat(vulkanDevice),
+                           VK_IMAGE_ASPECT_DEPTH_BIT,
+                           VK_IMAGE_TILING_OPTIMAL,
+                           VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+                           vulkanDevice);
     imagesArray = ejectImagesArray(vulkanDevice.getLogicalDevice(), swapChain);
     imageViewsArray = createImageViews(vulkanDevice.getLogicalDevice(), imagesArray);
     framebuffersArray = createFramebuffers(vulkanDevice.getLogicalDevice(), imageViewsArray, depthImage.getImageView(), renderPass, extent);
@@ -132,16 +131,18 @@ std::vector<VkImage> GVULKANSwapChain::ejectImagesArray(VkDevice device, const V
     return newImagesArray;
 }
 
-void GVULKANSwapChain::destroyExtentDependency(VkDevice device) {
+void GVULKANSwapChain::destroyExtentDependency(GVULKANDevice& vulkanDevice) {
     for (auto framebuffer : framebuffersArray) {
-        vkDestroyFramebuffer(device, framebuffer, nullptr);
+        vkDestroyFramebuffer(vulkanDevice.getLogicalDevice(), framebuffer, nullptr);
     }
 
     for (auto imageView : imageViewsArray) {
-        vkDestroyImageView(device, imageView, nullptr);
+        vkDestroyImageView(vulkanDevice.getLogicalDevice(), imageView, nullptr);
     }
     
-    vkDestroySwapchainKHR(device, swapChain, nullptr);
+    depthImage.destroyImage(vulkanDevice);
+
+    vkDestroySwapchainKHR(vulkanDevice.getLogicalDevice(), swapChain, nullptr);
 }
 
 void GVULKANSwapChain::destroyRenderPass(VkDevice device) {
