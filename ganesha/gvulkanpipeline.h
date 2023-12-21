@@ -24,7 +24,7 @@ public:
 private:
     GLog& log;
     VkVertexInputBindingDescription bindingDescription = Vertex::getBindingDescription();
-    std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions = Vertex::getAttributeDescriptions();
+    std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions = Vertex::getAttributeDescriptions();
     VkPipeline graphicsPipeline;
     VkPipelineLayout pipelineLayout;
 

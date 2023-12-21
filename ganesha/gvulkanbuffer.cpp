@@ -45,7 +45,6 @@ void GVULKANBuffer::createBuffer(const void *data, const VkDeviceSize size, cons
 void GVULKANBuffer::destroyBuffer(GVULKANDevice& vulkanDevice) {
     vkDestroyBuffer(vulkanDevice.getLogicalDevice(), buffer, nullptr);
     vkFreeMemory(vulkanDevice.getLogicalDevice(), bufferMemory, nullptr);
-
 }
 
 void GVULKANBuffer::refreshBuffer(const void *data, GVULKANDevice& vulkanDevice) {
