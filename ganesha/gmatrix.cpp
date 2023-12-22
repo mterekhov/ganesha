@@ -109,20 +109,20 @@ GMatrix GMatrix::frustum(const TFloat left,
     return frustumMatrix;
 }
 
-GMatrix GMatrix::lookAt(const GVector& eye, const GVector& center, const GVector& up) {
+GMatrix GMatrix::lookAt(const GPoint& eye, const GPoint& center, const GVector& up) {
     GVector zaxis(eye.x - center.x, eye.y - center.y, eye.z - center.z);
     zaxis.normalize();
     
-    GVector xaxis = zaxis;
-    xaxis = up.cross(xaxis);
+    GVector xaxis = up.cross(zaxis);
     xaxis.normalize();
     
     GVector yaxix = zaxis.cross(xaxis);
     yaxix.z = -yaxix.z;
     
-    TFloat xdotEye = xaxis.dot(eye);
-    TFloat ydotEye = yaxix.dot(eye);
-    TFloat zdotEye = zaxis.dot(eye);
+    GVector eyeVector(eye.x, eye.y, eye.z);
+    TFloat xdotEye = xaxis.dot(eyeVector);
+    TFloat ydotEye = yaxix.dot(eyeVector);
+    TFloat zdotEye = zaxis.dot(eyeVector);
 
     GMatrix lookAtMatrix = GMatrix::zeroMatrix();
     lookAtMatrix.m[0][0] = xaxis.x;

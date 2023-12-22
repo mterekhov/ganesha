@@ -18,7 +18,7 @@ public:
     static GMatrix rotationX(const TFloat angle);
     static GMatrix rotationY(const TFloat angle);
     static GMatrix rotationZ(const TFloat angle);
-    static GMatrix lookAt(const GVector& eye, const GVector& center, const GVector& up);
+    static GMatrix lookAt(const GPoint& eye, const GPoint& center, const GVector& up);
     static GMatrix frustum(const TFloat left,
                            const TFloat right,
                            const TFloat bottom,

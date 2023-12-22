@@ -10,8 +10,8 @@ namespace spcGaneshaEngine {
 /// Manipulates with current position
 class GCamera {
 private:
-    GVector position;
-    GVector center;
+    GPoint position;
+    GPoint center;
     GVector up;
 
     TFloat mSens;
@@ -20,7 +20,7 @@ private:
 
 public:
     GCamera();
-    GCamera(const GVector& newPosition, const GVector& newCenter, const GVector& newUp);
+    GCamera(const GPoint& newPosition, const GPoint& newCenter, const GVector& newUp);
     GMatrix viewMatrix() const;
 
     void moveCamera(TFloat speed);
