@@ -60,21 +60,27 @@ void GGanesha::processKeyboard(const TUInt keyCode) {
         case 14:
             camera.updownCamera(-speed);
             //        print("e")
+            break;
         case 12:
             camera.updownCamera(speed);
             //        print("q")
+            break;
         case 13:
             camera.moveCamera(-speed);
             //        print("w")
+            break;
         case 1:
             camera.moveCamera(speed);
             //        print("s")
+            break;
         case 0:
             camera.strafeCamera(speed);
             //        print("a")
+            break;
         case 2:
             camera.strafeCamera(-speed);
             //        print("d")
+            break;
         default:
             break;
     }
