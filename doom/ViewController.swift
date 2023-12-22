@@ -39,22 +39,7 @@ class ViewController: NSViewController, MTKViewDelegate {
     }
     
     override func keyDown(with event: NSEvent) {
-        switch event.keyCode {
-        case 12:
-            print("q")
-        case 13:
-            print("w")
-        case 14:
-            print("e")
-        case 1:
-            print("s")
-        case 0:
-            print("a")
-        case 2:
-            print("d")
-        default:
-            break
-        }
+        ganeshaBridge.processKeyboardEvent(withKeyCode: event.keyCode);
     }
     
     //  MARK: - MTKViewDelegate -
@@ -68,6 +53,10 @@ class ViewController: NSViewController, MTKViewDelegate {
     }
 
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+        if !ganeshaReady {
+            return
+        }
+
         ganeshaBridge.drawableSizeWillChange(size)
     }
 
