@@ -39,7 +39,7 @@ TBool GGanesha::initEngine(void *metalLayer, const TUInt width, const TUInt heig
     renderGraph.defineIndexesArray(indexes);
     
     graphicsAPI->initAPI(metalLayer, width, height, renderGraph);
-    graphicsAPI->installIsometricView(M_PI_4, 0.1f, 100.0f);
+    graphicsAPI->installIsometricView(M_PI_4, 0.0001f, 100.0f);
     graphicsAPI->installViewMatrix(camera.viewMatrix());
 
     return true;
