@@ -106,12 +106,12 @@ void GCamera::updownCamera(TFloat speed) {
 //	rotateCamera(angleY, 0, 1, 0);
 //}
 //
-//void GCamera::strafeCamera(TFloat speed) {
+void GCamera::strafeCamera(TFloat speed) {
 //	position.x += strafe.x * speed;
 //	position.z += strafe.z * speed;
 //	view.x += strafe.x * speed;
 //	view.z += strafe.z * speed;
-//}
+}
 //
 //void GCamera::setupCamera() {
 //	GVector tmp;
