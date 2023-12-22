@@ -20,11 +20,11 @@ GVector::~GVector() {
 }
 
 void GVector::normalize() {
-    TFloat len = x * x + y * y + z * z;
+    TFloat len = sqrtf(x * x + y * y + z * z);
     if (len > FLOAT_PRECISION) {
-        x /= sqrtf(len);
-        y /= sqrtf(len);
-        z /= sqrtf(len);
+        x /= len;
+        y /= len;
+        z /= len;
     }
 }
 

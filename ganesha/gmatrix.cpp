@@ -118,13 +118,14 @@ GMatrix GMatrix::lookAt(const GPoint& eye, const GPoint& center, const GVector& 
     
     GVector yaxix = zaxis.cross(xaxis);
     yaxix.z = -yaxix.z;
-    
+    yaxix.normalize();
+
     GVector eyeVector(eye.x, eye.y, eye.z);
     TFloat xdotEye = xaxis.dot(eyeVector);
     TFloat ydotEye = yaxix.dot(eyeVector);
     TFloat zdotEye = zaxis.dot(eyeVector);
 
-    GMatrix lookAtMatrix = GMatrix::zeroMatrix();
+    GMatrix lookAtMatrix;
     lookAtMatrix.m[0][0] = xaxis.x;
     lookAtMatrix.m[0][1] = xaxis.y;
     lookAtMatrix.m[0][2] = xaxis.z;
