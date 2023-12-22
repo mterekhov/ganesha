@@ -20,7 +20,7 @@ GVector::~GVector() {
 }
 
 void GVector::normalize() {
-    TFloat len = sqrtf(x * x + y * y + z * z);
+    TFloat len = magnitude();
     if (len > FLOAT_PRECISION) {
         x /= len;
         y /= len;
@@ -30,16 +30,48 @@ void GVector::normalize() {
 
 GVector GVector::cross(const GVector& vector) const {
     GVector crossProduct;
-
+    
     crossProduct.x = vector.z * y - z * vector.y;
     crossProduct.y = vector.x * z - x * vector.z;
     crossProduct.z = vector.x * y - x * vector.y;
-
+    
     return crossProduct;
 }
 
 TFloat GVector::dot(const GVector& vector) const {
     return x * vector.x + y * vector.y + z * vector.z;
+}
+
+TFloat GVector::magnitude() const {
+    return sqrtf(x * x + y * y + z * z);
+}
+
+TFloat GVector::angleBetween(GVector vector) {
+    TFloat dotProduct = dot(vector);
+    TFloat vectorsMagnitude = magnitude() * vector.magnitude();
+    TFloat angle = acosf(dotProduct / vectorsMagnitude);
+    
+    return angle;
+}
+
+GVector GVector::rotate(TFloat angle, GVector& vector) {
+    TFloat cosinus = cosf(angle);
+    TFloat sinus = sinf(angle);
+
+    GVector tmp;
+    tmp.x = (cosinus + (1 - cosinus) * vector.x * vector.x) * x;
+    tmp.x += ((1 - cosinus) * vector.x * vector.y - vector.z * sinus) * y;
+    tmp.x += ((1 - cosinus) * vector.x * vector.z + vector.y * sinus) * z;
+
+    tmp.y = ((1 - cosinus) * vector.x * vector.y + vector.z * sinus)* x;
+    tmp.y += (cosinus + (1 - cosinus) * vector.y * vector.y) * y;
+    tmp.y += ((1 - cosinus) * vector.y * vector.z - vector.x * sinus) * z;
+
+    tmp.z = ((1 - cosinus) * vector.x * vector.z - vector.y * sinus) * x;
+    tmp.z += ((1 - cosinus) * vector.y * vector.z + vector.x * sinus) * y;
+    tmp.z += (cosinus + (1 - cosinus) * vector.z * vector.z) * z;
+
+    return tmp;
 }
 
 }   //  namespace spcGaneshaEngine
