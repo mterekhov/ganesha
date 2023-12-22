@@ -54,6 +54,30 @@ void GGanesha::setViewSize(const TUInt width, const TUInt height) {
 }
 
 void GGanesha::processKeyboard(const TUInt keyCode) {
+    printf("key %i\n", keyCode);
+    TFloat speed = 0.5;
+    switch (keyCode) {
+        case 14:
+            camera.updownCamera(-speed);
+            //        print("e")
+        case 12:
+            camera.updownCamera(speed);
+            //        print("q")
+        case 13:
+            camera.moveCamera(-speed);
+            //        print("w")
+        case 1:
+            camera.moveCamera(speed);
+            //        print("s")
+        case 0:
+            camera.strafeCamera(speed);
+            //        print("a")
+        case 2:
+            camera.strafeCamera(-speed);
+            //        print("d")
+        default:
+            break;
+    }
     graphicsAPI->installViewMatrix(camera.viewMatrix());
 }
 

@@ -1,5 +1,6 @@
-#include "gvector.h"
 #include <math.h>
+
+#include "gvector.h"
 
 namespace spcGaneshaEngine {
 

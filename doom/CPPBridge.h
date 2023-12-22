@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)stopEngine;
 - (void)drawableSizeWillChange: (CGSize)size;
 - (void)drawFrame;
-- (void)processKeyboardEventWithKeyCode: (NSInteger)keyCode;
+- (void)processKeyboardEventWithKeyCode: (uint16_t)keyCode;
 
 @end
 
