@@ -32,9 +32,9 @@ TBool GGanesha::initEngine(void *metalLayer, const TUInt width, const TUInt heig
     renderGraph.defineVertexesArray(vertexes);
 
     const TIndexArray indexes = {
-        2, 1, 0, 0, 3, 2,
-        6, 5, 4, 4, 7, 6,
-        10, 9, 8, 8, 11, 10
+        0, 1, 2, 2, 3, 0,
+        4, 5, 6, 6, 7, 4,
+        8, 9, 10, 10, 11, 8
     };
     renderGraph.defineIndexesArray(indexes);
     
