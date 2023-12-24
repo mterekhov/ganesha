@@ -14,7 +14,7 @@
 namespace spcGaneshaEngine {
 
 /// Precision for comparison of float values
-#define FLOAT_PRECISION 0.000001f
+#define FLOAT_PRECISION std::numeric_limits<TFloat>::min()
 
 /// converts degrees into radians
 #define DEG_TO_RAD(deg) ((deg) * M_PI / 180.0f)
