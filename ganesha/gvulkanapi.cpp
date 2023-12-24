@@ -341,7 +341,7 @@ UniformBufferObject GVULKANAPI::currentUBO() {
     
     UniformBufferObject ubo = {};
     
-    ubo.model = GMatrix::rotationZ(time * M_PI_2);
+    ubo.model = GMatrix::rotationY(time * M_PI_2);
     ubo.view = viewMatrix;
     ubo.proj = projectionMatrix;
     
@@ -349,7 +349,7 @@ UniformBufferObject GVULKANAPI::currentUBO() {
 }
 
 void GVULKANAPI::createTextures() {
-    GTGA tgaFile("/Users/cipher/Development/ganesha/resources/MWALL4_2.tga");
+    GTGA tgaFile("/Users/cipher/Development/ganesha/resources/MWALL4_1.tga");
     texture.createImage({ tgaFile.getWidth(), tgaFile.getHeight() },
                         VK_FORMAT_R8G8B8A8_SRGB,
                         VK_IMAGE_ASPECT_COLOR_BIT,

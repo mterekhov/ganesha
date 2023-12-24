@@ -3,7 +3,7 @@
 
 namespace spcGaneshaEngine {
 
-GCamera::GCamera() : position(GPoint(2, 2, 2)), center(GPoint(0, 0, 0)), up(GVector(0, 0, 1)), mSens(100), kSpeed(0.25) {
+GCamera::GCamera() : position(GPoint(1, 1, 1)), center(GPoint(0, 0, 0)), up(GVector(0, 1, 0)), mSens(100), kSpeed(0.25) {
 }
 
 GCamera::GCamera(const GPoint& newPosition, const GPoint& newCenter, const GVector& newUp) : position(newPosition), center(newCenter), up(newUp), mSens(100), kSpeed(0.25) {

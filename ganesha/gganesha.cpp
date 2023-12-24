@@ -14,32 +14,32 @@ GGanesha::~GGanesha() {
 
 TBool GGanesha::initEngine(void *metalLayer, const TUInt width, const TUInt height) {
     const std::vector<Vertex> vertexes = {
-        { GPoint(-0.5f, 0.2, -0.5f), GPoint2D{2.0f, 0.0f} },
-        { GPoint(0.5f, 0.2, -0.5f), GPoint2D{0.0f, 0.0f} },
-        { GPoint(0.5f, 0.2, 0.5f), GPoint2D{0.0f, 2.0f} },
-        { GPoint(-0.5f, 0.2, 0.5f), GPoint2D{2.0f, 2.0f} },
+        { GPoint(-0.5f, -0.3, -0.5f), GPoint2D{2.0f, 0.0f} },
+        { GPoint(0.5f, -0.3, -0.5f), GPoint2D{0.0f, 0.0f} },
+        { GPoint(0.5f, -0.3, 0.5f), GPoint2D{0.0f, 2.0f} },
+        { GPoint(-0.5f, -0.3, 0.5f), GPoint2D{2.0f, 2.0f} },
 
-        { GPoint(-10.0f, 0.0, -10.0f), GPoint2D{10.0f, 0.0f} },
-        { GPoint(10.0f, 0.0, -10.0f), GPoint2D{0.0f, 0.0f} },
-        { GPoint(10.0f, 0.0, 10.0f), GPoint2D{0.0f, 10.0f} },
-        { GPoint(-10.0f, 0.0, 10.0f), GPoint2D{10.0f, 10.0f} },
-        
-        { GPoint(-0.5f, 0.1, -0.5f), GPoint2D{2.0f, 0.0f} },
-        { GPoint(0.5f, 0.1, -0.5f), GPoint2D{0.0f, 0.0f} },
-        { GPoint(0.5f, 0.1, 0.5f), GPoint2D{0.0f, 2.0f} },
-        { GPoint(-0.5f, 0.1, 0.5f), GPoint2D{2.0f, 2.0f} }
+        { GPoint(-0.5f, -0.1, -0.5f), GPoint2D{2.0f, 0.0f} },
+        { GPoint(0.5f, -0.1, -0.5f), GPoint2D{0.0f, 0.0f} },
+        { GPoint(0.5f, -0.1, 0.5f), GPoint2D{0.0f, 2.0f} },
+        { GPoint(-0.5f, -0.1, 0.5f), GPoint2D{2.0f, 2.0f} },
+
+        { GPoint(-2.5f, 0.0f, -2.5f), GPoint2D{2.0f, 0.0f} },
+        { GPoint(2.5f, 0.0f, -2.5f), GPoint2D{0.0f, 0.0f} },
+        { GPoint(2.5f, 0.0f, 2.5f), GPoint2D{0.0f, 2.0f} },
+        { GPoint(-2.5f, 0.0f, 2.5f), GPoint2D{2.0f, 2.0f} }
     };
     renderGraph.defineVertexesArray(vertexes);
 
     const TIndexArray indexes = {
-        0, 1, 2, 2, 3, 0,
-        4, 5, 6, 6, 7, 4,
-        8, 9, 10, 10, 11, 8
+        2, 1, 0, 0, 3, 2,
+        6, 5, 4, 4, 7, 6,
+        10, 9, 8, 8, 11, 10
     };
     renderGraph.defineIndexesArray(indexes);
     
     graphicsAPI->initAPI(metalLayer, width, height, renderGraph);
-    graphicsAPI->installIsometricView(M_PI_4, 0.0001f, 100.0f);
+    graphicsAPI->installIsometricView(M_PI_4, 0.000001, 100.0f);
     graphicsAPI->installViewMatrix(camera.viewMatrix());
 
     return true;
