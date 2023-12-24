@@ -33,7 +33,7 @@ GVector GVector::cross(const GVector& vector) const {
     
     crossProduct.x = vector.z * y - z * vector.y;
     crossProduct.y = vector.x * z - x * vector.z;
-    crossProduct.z = vector.x * y - x * vector.y;
+    crossProduct.z = vector.y * x - y * vector.x;
     
     return crossProduct;
 }
@@ -47,9 +47,8 @@ TFloat GVector::magnitude() const {
 }
 
 TFloat GVector::angleBetween(GVector vector) {
-    TFloat dotProduct = dot(vector);
     TFloat vectorsMagnitude = magnitude() * vector.magnitude();
-    TFloat angle = acosf(dotProduct / vectorsMagnitude);
+    TFloat angle = acosf(dot(vector) / vectorsMagnitude);
     
     return angle;
 }
