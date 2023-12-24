@@ -3,14 +3,55 @@
 
 namespace spcGaneshaEngine {
 
-GCamera::GCamera() : position(GPoint(1, -1, 1)), center(GPoint(0, 0, 0)), up(GVector(0, -1, 0)), mSens(100), kSpeed(0.25) {
+GCamera::GCamera() {
+    init(GPoint(5, -5, 5), GPoint(0, 0, 0), GVector(0, -1, 0));
 }
 
-GCamera::GCamera(const GPoint& newPosition, const GPoint& newCenter, const GVector& newUp) : position(newPosition), center(newCenter), up(newUp), mSens(100), kSpeed(0.25) {
+GCamera::GCamera(const GPoint& initialPosition, const GPoint& focusPoint, const GVector& initialUpVector) {
+    init(initialPosition, focusPoint, initialUpVector);
+}
+
+void GCamera::init(const GPoint& position, const GPoint& center, const GVector& initialUpVector) {
+    positionPoint = position;
+    centerPoint = center;
+    
+    sightVector = GVector(position.x - center.x, position.y - center.y, position.z - center.z);
+    sightVector.normalize();
+    
+    strafeVector = initialUpVector.cross(sightVector);
+    strafeVector.normalize();
+    
+    upVector = sightVector.cross(strafeVector);
+
+    strafeVector = upVector.cross(sightVector);
+    strafeVector.normalize();
 }
 
 GMatrix GCamera::viewMatrix() const {
-    return GMatrix::lookAt(position, center, up);
+    GVector positionVector(positionPoint.x, positionPoint.y, positionPoint.z);
+    TFloat xdotEye = strafeVector.dot(positionVector);
+    TFloat ydotEye = upVector.dot(positionVector);
+    TFloat zdotEye = sightVector.dot(positionVector);
+
+    GMatrix lookAtMatrix = GMatrix::zeroMatrix();
+    lookAtMatrix.m[0][0] = strafeVector.x;
+    lookAtMatrix.m[1][0] = strafeVector.y;
+    lookAtMatrix.m[2][0] = strafeVector.z;
+    lookAtMatrix.m[3][0] = xdotEye;
+    
+    lookAtMatrix.m[0][1] = upVector.x;
+    lookAtMatrix.m[1][1] = upVector.y;
+    lookAtMatrix.m[2][1] = upVector.z;
+    lookAtMatrix.m[3][1] = ydotEye;
+    
+    lookAtMatrix.m[0][2] = sightVector.x;
+    lookAtMatrix.m[1][2] = sightVector.y;
+    lookAtMatrix.m[2][2] = sightVector.z;
+    lookAtMatrix.m[3][2] = -zdotEye;
+
+    lookAtMatrix.m[3][3] = 1.0f;
+
+    return lookAtMatrix;
 }
 
 void GCamera::moveCamera(TFloat speed) {
@@ -32,9 +73,18 @@ void GCamera::moveCamera(TFloat speed) {
 //	view.z += tmp.z * speed;
 }
 
-void GCamera::updownCamera(TFloat speed) {
-	position.y += speed;
-    center.y += speed;
+void GCamera::upCamera() {
+    positionPoint.y -= keyboardSpeed;
+    centerPoint.y -= keyboardSpeed;
+    
+    printf("position %.3f\n", positionPoint.y);
+}
+
+void GCamera::downCamera() {
+    positionPoint.y += keyboardSpeed;
+    centerPoint.y += keyboardSpeed;
+    
+    printf("position %.3f\n", positionPoint.y);
 }
 
 //void GCamera::rotateCamera(TFloat angle, TFloat x,  TFloat y,  TFloat z) {
