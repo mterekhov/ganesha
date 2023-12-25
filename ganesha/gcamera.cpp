@@ -4,7 +4,7 @@
 namespace spcGaneshaEngine {
 
 GCamera::GCamera() {
-    init(GPoint(5, -5, 5), GPoint(0, 0, 0), GVector(0, -1, 0));
+    init(GPoint(0, -5, 5), GPoint(0, 0, 0), GVector(0, -1, 0));
 }
 
 GCamera::GCamera(const GPoint& initialPosition, const GPoint& focusPoint, const GVector& initialUpVector) {
@@ -31,7 +31,7 @@ GMatrix GCamera::viewMatrix() const {
     GVector positionVector(positionPoint.x, positionPoint.y, positionPoint.z);
     
     TFloat xdotEye = strafeVector.dot(positionVector);
-    TFloat ydotEye = upVector.dot(positionVector);
+    TFloat ydotEye = GVector(0, 1, 0).dot(positionVector);
     TFloat zdotEye = sightVector.dot(positionVector);
 
     GMatrix lookAtMatrix = GMatrix::identityMatrix();
@@ -57,35 +57,31 @@ GMatrix GCamera::viewMatrix() const {
 void GCamera::upCamera() {
     positionPoint.y -= keyboardSpeed;
     centerPoint.y -= keyboardSpeed;
-    
-    printf("position %.3f\n", positionPoint.y);
 }
 
 void GCamera::downCamera() {
     positionPoint.y += keyboardSpeed;
     centerPoint.y += keyboardSpeed;
-    
-    printf("position %.3f\n", positionPoint.y);
+}
+
+void GCamera::strafeLeftCamera() {
+    positionPoint.x -= keyboardSpeed;
+    centerPoint.x -= keyboardSpeed;
+}
+
+void GCamera::strafeRightCamera() {
+    positionPoint.x += keyboardSpeed;
+    centerPoint.x += keyboardSpeed;
 }
 
 void GCamera::forwardCamera() {
-    positionPoint.x += keyboardSpeed;
-    positionPoint.y += keyboardSpeed;
-    positionPoint.z += keyboardSpeed;
-    
-    centerPoint.x += keyboardSpeed;
-    centerPoint.y += keyboardSpeed;
-    centerPoint.z += keyboardSpeed;
+    positionPoint.z -= keyboardSpeed;
+    centerPoint.z -= keyboardSpeed;
 }
 
 void GCamera::backwardCamera() {
-    positionPoint.x -= keyboardSpeed;
-    positionPoint.y -= keyboardSpeed;
-    positionPoint.z -= keyboardSpeed;
-    
-    centerPoint.x -= keyboardSpeed;
-    centerPoint.y -= keyboardSpeed;
-    centerPoint.z -= keyboardSpeed;
+    positionPoint.z += keyboardSpeed;
+    centerPoint.z += keyboardSpeed;
 }
 
 //void GCamera::moveCamera(TFloat speed) {

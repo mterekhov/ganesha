@@ -29,19 +29,12 @@ public:
     GCamera(const GPoint& initialPosition, const GPoint& focusPoint, const GVector& initialUpVector);
     GMatrix viewMatrix() const;
 
+    void strafeRightCamera();
+    void strafeLeftCamera();
     void upCamera();
     void downCamera();
     void forwardCamera();
     void backwardCamera();
-//    void moveCamera(TFloat speed);
-//    void strafeCamera(TFloat speed);
-
-//    void rotateCamera(TFloat angle, TFloat x,  TFloat y,  TFloat z);
-//    void mouseCamera();
-//    void setupCamera();
-//
-//    TFloat angleBetweenVectors(GVector vector_1, GVector vector_2);
-//    GVector rotateVector(TFloat angle, GVector vector, TFloat x, TFloat y, TFloat z);
 };
 
 };  //  spcGaneshaEngine

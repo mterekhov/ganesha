@@ -54,35 +54,24 @@ void GGanesha::setViewSize(const TUInt width, const TUInt height) {
 }
 
 void GGanesha::processKeyboard(const TUInt keyCode) {
-    TFloat speed = 0.1;
     switch (keyCode) {
         case 14:
             camera.downCamera();
-            printf("E key %i\n", keyCode);
-            //        print("e")
             break;
         case 12:
             camera.upCamera();
-            printf("Q key %i\n", keyCode);
-            //        print("q")
             break;
         case 13:
             camera.forwardCamera();
-            printf("W key %i\n", keyCode);
-            //        print("w")
             break;
         case 1:
-            printf("S key %i\n", keyCode);
             camera.backwardCamera();
-            //        print("s")
             break;
         case 0:
-//            camera.strafeCamera(speed);
-            //        print("a")
+            camera.strafeLeftCamera();
             break;
         case 2:
-//            camera.strafeCamera(-speed);
-            //        print("d")
+            camera.strafeRightCamera();
             break;
         default:
             break;
