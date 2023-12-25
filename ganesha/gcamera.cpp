@@ -29,11 +29,13 @@ void GCamera::init(const GPoint& position, const GPoint& center, const GVector& 
 
 GMatrix GCamera::viewMatrix() const {
     GVector positionVector(positionPoint.x, positionPoint.y, positionPoint.z);
+    
     TFloat xdotEye = strafeVector.dot(positionVector);
     TFloat ydotEye = upVector.dot(positionVector);
     TFloat zdotEye = sightVector.dot(positionVector);
 
-    GMatrix lookAtMatrix = GMatrix::zeroMatrix();
+    GMatrix lookAtMatrix = GMatrix::identityMatrix();
+    
     lookAtMatrix.m[0][0] = strafeVector.x;
     lookAtMatrix.m[1][0] = strafeVector.y;
     lookAtMatrix.m[2][0] = strafeVector.z;
@@ -49,28 +51,7 @@ GMatrix GCamera::viewMatrix() const {
     lookAtMatrix.m[2][2] = sightVector.z;
     lookAtMatrix.m[3][2] = -zdotEye;
 
-    lookAtMatrix.m[3][3] = 1.0f;
-
     return lookAtMatrix;
-}
-
-void GCamera::moveCamera(TFloat speed) {
-//	GVector tmp;
-//	TFloat angle;
-//
-//	tmp.x = view.x - position.x;
-//	tmp.y = view.y - position.y;
-//	tmp.z = view.z - position.z;
-//
-//	angle = (TFloat)(angleBetweenVectors(tmp, up) - 90);
-//
-//	tmp = rotateVector(angle, tmp, strafe.x, strafe.y, strafe.z);
-//
-//	position.x += tmp.x * speed;
-//	position.z += tmp.z * speed;
-//
-//	view.x += tmp.x * speed;
-//	view.z += tmp.z * speed;
 }
 
 void GCamera::upCamera() {
@@ -87,6 +68,45 @@ void GCamera::downCamera() {
     printf("position %.3f\n", positionPoint.y);
 }
 
+void GCamera::forwardCamera() {
+    positionPoint.x += keyboardSpeed;
+    positionPoint.y += keyboardSpeed;
+    positionPoint.z += keyboardSpeed;
+    
+    centerPoint.x += keyboardSpeed;
+    centerPoint.y += keyboardSpeed;
+    centerPoint.z += keyboardSpeed;
+}
+
+void GCamera::backwardCamera() {
+    positionPoint.x -= keyboardSpeed;
+    positionPoint.y -= keyboardSpeed;
+    positionPoint.z -= keyboardSpeed;
+    
+    centerPoint.x -= keyboardSpeed;
+    centerPoint.y -= keyboardSpeed;
+    centerPoint.z -= keyboardSpeed;
+}
+
+//void GCamera::moveCamera(TFloat speed) {
+//    GVector tmp;
+//    TFloat angle;
+//
+//    tmp.x = view.x - position.x;
+//    tmp.y = view.y - position.y;
+//    tmp.z = view.z - position.z;
+//
+//    angle = (TFloat)(angleBetweenVectors(tmp, up) - 90);
+//
+//    tmp = rotateVector(angle, tmp, strafe.x, strafe.y, strafe.z);
+//
+//    position.x += tmp.x * speed;
+//    position.z += tmp.z * speed;
+//
+//    view.x += tmp.x * speed;
+//    view.z += tmp.z * speed;
+//}
+//
 //void GCamera::rotateCamera(TFloat angle, TFloat x,  TFloat y,  TFloat z) {
 //	GVector tmp;
 //
@@ -156,12 +176,12 @@ void GCamera::downCamera() {
 //	rotateCamera(angleY, 0, 1, 0);
 //}
 //
-void GCamera::strafeCamera(TFloat speed) {
+//void GCamera::strafeCamera(TFloat speed) {
 //	position.x += strafe.x * speed;
 //	position.z += strafe.z * speed;
 //	view.x += strafe.x * speed;
 //	view.z += strafe.z * speed;
-}
+//}
 //
 //void GCamera::setupCamera() {
 //	GVector tmp;
@@ -187,35 +207,6 @@ void GCamera::strafeCamera(TFloat speed) {
 //	mouseCamera();
 //}
 //
-//GVector GCamera::Cross(GVector vector_1, GVector vector_2) {
-//	GVector normal;
-//
-//	normal.x = ((vector_1.y * vector_2.z) - (vector_1.z * vector_2.y));
-//	normal.y = ((vector_1.z * vector_2.x) - (vector_1.x * vector_2.z));
-//	normal.z = ((vector_1.x * vector_2.y) - (vector_1.y * vector_2.x));
-//
-//	return normal;
-//}
-//
-//GVector GCamera::Normalize(GVector vector) {
-//	TFloat length;
-//
-//	length = vectorLength(vector);
-//	vector.x /= length;
-//	vector.y /= length;
-//	vector.z /= length;
-//
-//	return vector;
-//}
-//
-//TFloat GCamera::vectorLength(GVector vector) {
-//	TFloat length;
-//
-//	length = sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
-//
-//	return length;
-//}
-//
 //TFloat GCamera::angleBetweenVectors(GVector vector_1, GVector vector_2) {
 //    TFloat angle;
 //	TFloat dotProduct, vectorsMagnitude;
@@ -226,10 +217,6 @@ void GCamera::strafeCamera(TFloat speed) {
 //
 //	if (_isnan(angle)) return 0;
 //	return angle;
-//}
-//
-//TFloat GCamera::scalMult(GVector vector_1, GVector vector_2) {
-//	return vector_1.x * vector_2.x + vector_1.y * vector_2.y + vector_1.z * vector_2.z;
 //}
 //
 //GVector GCamera::rotateVector(TFloat angle, GVector vector, TFloat x, TFloat y, TFloat z) {

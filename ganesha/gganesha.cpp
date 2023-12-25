@@ -19,10 +19,10 @@ TBool GGanesha::initEngine(void *metalLayer, const TUInt width, const TUInt heig
         { GPoint(0.5f, -0.3, 0.5f), GPoint2D{0.0f, 2.0f} },
         { GPoint(-0.5f, -0.3, 0.5f), GPoint2D{2.0f, 2.0f} },
 
-        { GPoint(-0.5f, -0.1, -0.5f), GPoint2D{2.0f, 0.0f} },
-        { GPoint(0.5f, -0.1, -0.5f), GPoint2D{0.0f, 0.0f} },
-        { GPoint(0.5f, -0.1, 0.5f), GPoint2D{0.0f, 2.0f} },
-        { GPoint(-0.5f, -0.1, 0.5f), GPoint2D{2.0f, 2.0f} },
+        { GPoint(0.0f, -0.1, 0.0f), GPoint2D{2.0f, 0.0f} },
+        { GPoint(1.0f, -0.1, 0.0f), GPoint2D{0.0f, 0.0f} },
+        { GPoint(1.0f, -0.1, 1.0f), GPoint2D{0.0f, 2.0f} },
+        { GPoint(0.0f, -0.1, 1.0f), GPoint2D{2.0f, 2.0f} },
 
         { GPoint(-2.5f, 0.0f, -2.5f), GPoint2D{2.0f, 0.0f} },
         { GPoint(2.5f, 0.0f, -2.5f), GPoint2D{0.0f, 0.0f} },
@@ -54,31 +54,34 @@ void GGanesha::setViewSize(const TUInt width, const TUInt height) {
 }
 
 void GGanesha::processKeyboard(const TUInt keyCode) {
-    printf("key %i\n", keyCode);
-    TFloat speed = 0.5;
+    TFloat speed = 0.1;
     switch (keyCode) {
         case 14:
-            camera.updownCamera(-speed);
+            camera.downCamera();
+            printf("E key %i\n", keyCode);
             //        print("e")
             break;
         case 12:
-            camera.updownCamera(speed);
+            camera.upCamera();
+            printf("Q key %i\n", keyCode);
             //        print("q")
             break;
         case 13:
-            camera.moveCamera(-speed);
+            camera.forwardCamera();
+            printf("W key %i\n", keyCode);
             //        print("w")
             break;
         case 1:
-            camera.moveCamera(speed);
+            printf("S key %i\n", keyCode);
+            camera.backwardCamera();
             //        print("s")
             break;
         case 0:
-            camera.strafeCamera(speed);
+//            camera.strafeCamera(speed);
             //        print("a")
             break;
         case 2:
-            camera.strafeCamera(-speed);
+//            camera.strafeCamera(-speed);
             //        print("d")
             break;
         default:
