@@ -35,6 +35,8 @@ public:
     /// @param keyCode keyboard event code
     void processKeyboard(const TUInt keyCode);
     
+    void processMouseMove(const TFloat diff_x, const TFloat diff_y);
+
 private:
     GGraphicsAPIProtocol *graphicsAPI;
     GCamera camera;

@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)drawableSizeWillChange: (CGSize)size;
 - (void)drawFrame;
 - (void)processKeyboardEventWithKeyCode: (uint16_t)keyCode;
+- (void)processMouseMoveWithDiffX: (CGFloat) diff_x
+                           diff_y: (CGFloat) diff_y;
 
 @end
 

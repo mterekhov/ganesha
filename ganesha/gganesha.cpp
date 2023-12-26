@@ -53,6 +53,11 @@ void GGanesha::setViewSize(const TUInt width, const TUInt height) {
     graphicsAPI->frameResized(width, height);
 }
 
+void GGanesha::processMouseMove(const TFloat diff_x, const TFloat diff_y) {
+    camera.mouseCamera(diff_x, diff_y);
+    graphicsAPI->installViewMatrix(camera.viewMatrix());
+}
+
 void GGanesha::processKeyboard(const TUInt keyCode) {
     switch (keyCode) {
         case 14:

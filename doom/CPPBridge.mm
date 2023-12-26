@@ -30,8 +30,8 @@
     
     self.ganeshaEngine = new spcGaneshaEngine::GGanesha();
     if (!self.ganeshaEngine->initEngine((__bridge void *)layer,
-                                       static_cast<spcGaneshaEngine::TUInt>(CGRectGetWidth(layer.bounds)),
-                                       static_cast<spcGaneshaEngine::TUInt>(CGRectGetHeight(layer.bounds)))) {
+                                        static_cast<spcGaneshaEngine::TUInt>(CGRectGetWidth(layer.bounds)),
+                                        static_cast<spcGaneshaEngine::TUInt>(CGRectGetHeight(layer.bounds)))) {
         NSLog(@"ACHTUNG: no chance to create VULKAN instance");
         return;
     }
@@ -51,6 +51,11 @@
 
 - (void)processKeyboardEventWithKeyCode: (uint16_t)keyCode {
     self.ganeshaEngine->processKeyboard(keyCode);
+}
+
+- (void)processMouseMoveWithDiffX: (CGFloat) diff_x
+                           diff_y: (CGFloat) diff_y {
+    self.ganeshaEngine->processMouseMove(diff_x, diff_y);
 }
 
 @end

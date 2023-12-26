@@ -14,13 +14,18 @@ public:
     
     /// Normalizes vector
     void normalize();
+    
     /// Calculates length of vector
     TFloat magnitude() const;
+    
     /// Cross product of current vector and vector in parameter. It will be new vector which is perpendicular to other two
     /// - Parameter vector: second vector
     GVector cross(const GVector& vector) const;
-
+    
+    /// Projection of one vector to another, result is always scalar
+    /// - Parameter vector: vector for projection
     TFloat dot(const GVector& vector) const;
+    
     TFloat angleBetween(GVector vector);
     GVector rotate(TFloat angle, GVector& vector);
 

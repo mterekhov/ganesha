@@ -4,27 +4,11 @@
 namespace spcGaneshaEngine {
 
 GCamera::GCamera() {
-    init(GPoint(0, -5, 5), GPoint(0, 0, 0), GVector(0, -1, 0));
+    init(GPoint(0, -1, 3), GPoint(0, 0, 0), GVector(0, -1, 0));
 }
 
 GCamera::GCamera(const GPoint& initialPosition, const GPoint& focusPoint, const GVector& initialUpVector) {
     init(initialPosition, focusPoint, initialUpVector);
-}
-
-void GCamera::init(const GPoint& position, const GPoint& center, const GVector& initialUpVector) {
-    positionPoint = position;
-    centerPoint = center;
-    
-    sightVector = GVector(position.x - center.x, position.y - center.y, position.z - center.z);
-    sightVector.normalize();
-    
-    strafeVector = initialUpVector.cross(sightVector);
-    strafeVector.normalize();
-    
-    upVector = sightVector.cross(strafeVector);
-
-    strafeVector = upVector.cross(sightVector);
-    strafeVector.normalize();
 }
 
 GMatrix GCamera::viewMatrix() const {
@@ -82,6 +66,37 @@ void GCamera::forwardCamera() {
 void GCamera::backwardCamera() {
     positionPoint.z += keyboardSpeed;
     centerPoint.z += keyboardSpeed;
+}
+
+void GCamera::mouseCamera(const TFloat diff_x, const TFloat diff_y) {
+    TFloat rotationAngle = mouseSens * diff_x * M_PI_2;
+    sightVector = strafeVector.rotate(rotationAngle, sightVector);
+    sightVector.normalize();
+
+    rotationAngle = mouseSens * diff_y * 2 * M_PI;
+    sightVector = GVector(0, 1, 0).rotate(rotationAngle, sightVector);
+    sightVector.normalize();
+    centerPoint = GPoint(positionPoint.x + sightVector.x,
+                         positionPoint.y + sightVector.y,
+                         positionPoint.z + sightVector.z);
+}
+
+#pragma mark - Routine -
+
+void GCamera::init(const GPoint& position, const GPoint& center, const GVector& initialUpVector) {
+    positionPoint = position;
+    centerPoint = center;
+    
+    sightVector = GVector(position.x - center.x, position.y - center.y, position.z - center.z);
+    sightVector.normalize();
+    
+    strafeVector = initialUpVector.cross(sightVector);
+    strafeVector.normalize();
+    
+    upVector = sightVector.cross(strafeVector);
+
+    strafeVector = upVector.cross(sightVector);
+    strafeVector.normalize();
 }
 
 //void GCamera::moveCamera(TFloat speed) {
