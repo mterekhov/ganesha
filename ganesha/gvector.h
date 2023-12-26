@@ -27,7 +27,7 @@ public:
     TFloat dot(const GVector& vector) const;
     
     TFloat angleBetween(GVector vector);
-    GVector rotate(TFloat angle, GVector& vector);
+    GVector rotate(const TFloat angle, const GVector& vector);
 
     TFloat x;
     TFloat y;

@@ -53,7 +53,7 @@ TFloat GVector::angleBetween(GVector vector) {
     return angle;
 }
 
-GVector GVector::rotate(TFloat angle, GVector& vector) {
+GVector GVector::rotate(const TFloat angle, const GVector& vector) {
     TFloat cosinus = cosf(angle);
     TFloat sinus = sinf(angle);
 
