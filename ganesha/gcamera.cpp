@@ -4,15 +4,25 @@
 namespace spcGaneshaEngine {
 
 GCamera::GCamera() : positionPoint(GPoint(0, -1, 3)), centerPoint(GPoint(0, 0, 0)) {
+    updateVectors();
 }
 
 GCamera::GCamera(const GPoint& initialPosition, const GPoint& focusPoint) : positionPoint(initialPosition), centerPoint(focusPoint) {
+    updateVectors();
 }
 
 void GCamera::mouseCamera(const TFloat diff_x, const TFloat diff_y) {
-    TFloat rotationAngle = mouseSens * diff_x * M_PI_2;
-//    sightVector = strafeVector.rotate(rotationAngle, sightVector);
-//    sightVector.normalize();
+    TFloat rotationAngle = mouseSens * diff_y * M_PI_2;
+    if (rotationAngle > M_PI_2) {
+        rotationAngle = M_PI_2;
+    }
+    if (rotationAngle < -M_PI_2) {
+        rotationAngle = -M_PI_2;
+    }
+    sightVector = strafeVector.rotate(rotationAngle, sightVector);
+    sightVector.normalize();
+
+    positionPoint.y = centerPoint.y + sightVector.y;
 
     rotationAngle = mouseSens * diff_x * M_PI_2;
     if (rotationAngle > M_PI_2) {
@@ -22,19 +32,15 @@ void GCamera::mouseCamera(const TFloat diff_x, const TFloat diff_y) {
         rotationAngle = -M_PI_2;
     }
 
-    sightVector = sightVector.rotate(rotationAngle, cameraUpVector);
+    updateVectors();
+    
+    sightVector = cameraUpVector.rotate(rotationAngle, sightVector);
     sightVector.normalize();
 
-    centerPoint.x = positionPoint.x + sightVector.x;
-    centerPoint.y = positionPoint.y + sightVector.y;
-//    centerPoint.z = positionPoint.z + sightVector.z;
-
-//    centerPoint = GPoint(positionPoint.x + sightVector.x,
-//                         positionPoint.y + sightVector.y,
-//                         positionPoint.z + sightVector.z);
+    positionPoint.x = centerPoint.x + sightVector.x;
 }
 
-GMatrix GCamera::viewMatrix() {
+void GCamera::updateVectors() {
     sightVector = GVector(positionPoint.x - centerPoint.x, positionPoint.y - centerPoint.y, positionPoint.z - centerPoint.z);
     sightVector.normalize();
     
@@ -45,7 +51,11 @@ GMatrix GCamera::viewMatrix() {
 
     strafeVector = sightVector.cross(cameraUpVector);
     strafeVector.normalize();
+}
 
+GMatrix GCamera::viewMatrix() {
+    updateVectors();
+    
     GVector positionVector(positionPoint.x, positionPoint.y, positionPoint.z);
     TFloat xdotEye = strafeVector.dot(positionVector);
     TFloat ydotEye = cameraUpVector.dot(positionVector);

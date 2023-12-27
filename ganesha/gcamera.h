@@ -37,7 +37,7 @@ private:
     const TFloat DefaultKeyboardSpeed = 0.1;
     TFloat keyboardSpeed = DefaultKeyboardSpeed;
 
-    void init(const GPoint& position, const GPoint& center);
+    void updateVectors();
 };
 
 };  //  spcGaneshaEngine
