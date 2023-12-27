@@ -12,8 +12,6 @@ class ViewController: NSViewController, MTKViewDelegate {
     
     private let ganeshaBridge = CPPBridge()
     private var ganeshaReady = false
-    private var lastMousePosition = NSZeroPoint
-    private let scaleSize = NSSize(width: CGDisplayPixelsWide(CGMainDisplayID()), height: CGDisplayPixelsHigh(CGMainDisplayID()))
 
     override var acceptsFirstResponder: Bool {
         get {

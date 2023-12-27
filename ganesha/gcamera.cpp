@@ -3,19 +3,52 @@
 
 namespace spcGaneshaEngine {
 
-GCamera::GCamera() {
-    init(GPoint(0, -1, 3), GPoint(0, 0, 0), GVector(0, -1, 0));
+GCamera::GCamera() : positionPoint(GPoint(0, -1, 3)), centerPoint(GPoint(0, 0, 0)) {
 }
 
-GCamera::GCamera(const GPoint& initialPosition, const GPoint& focusPoint, const GVector& initialUpVector) {
-    init(initialPosition, focusPoint, initialUpVector);
+GCamera::GCamera(const GPoint& initialPosition, const GPoint& focusPoint) : positionPoint(initialPosition), centerPoint(focusPoint) {
 }
 
-GMatrix GCamera::viewMatrix() const {
-    GVector positionVector(positionPoint.x, positionPoint.y, positionPoint.z);
+void GCamera::mouseCamera(const TFloat diff_x, const TFloat diff_y) {
+    TFloat rotationAngle = mouseSens * diff_x * M_PI_2;
+//    sightVector = strafeVector.rotate(rotationAngle, sightVector);
+//    sightVector.normalize();
+
+    rotationAngle = mouseSens * diff_x * M_PI_2;
+    if (rotationAngle > M_PI_2) {
+        rotationAngle = M_PI_2;
+    }
+    if (rotationAngle < -M_PI_2) {
+        rotationAngle = -M_PI_2;
+    }
+
+    sightVector = sightVector.rotate(rotationAngle, cameraUpVector);
+    sightVector.normalize();
+
+    centerPoint.x = positionPoint.x + sightVector.x;
+    centerPoint.y = positionPoint.y + sightVector.y;
+//    centerPoint.z = positionPoint.z + sightVector.z;
+
+//    centerPoint = GPoint(positionPoint.x + sightVector.x,
+//                         positionPoint.y + sightVector.y,
+//                         positionPoint.z + sightVector.z);
+}
+
+GMatrix GCamera::viewMatrix() {
+    sightVector = GVector(positionPoint.x - centerPoint.x, positionPoint.y - centerPoint.y, positionPoint.z - centerPoint.z);
+    sightVector.normalize();
     
+    strafeVector = worldUpVector.cross(sightVector);
+    strafeVector.normalize();
+    
+    cameraUpVector = sightVector.cross(strafeVector);
+
+    strafeVector = sightVector.cross(cameraUpVector);
+    strafeVector.normalize();
+
+    GVector positionVector(positionPoint.x, positionPoint.y, positionPoint.z);
     TFloat xdotEye = strafeVector.dot(positionVector);
-    TFloat ydotEye = GVector(0, 1, 0).dot(positionVector);
+    TFloat ydotEye = cameraUpVector.dot(positionVector);
     TFloat zdotEye = sightVector.dot(positionVector);
 
     GMatrix lookAtMatrix = GMatrix::identityMatrix();
@@ -25,9 +58,9 @@ GMatrix GCamera::viewMatrix() const {
     lookAtMatrix.m[2][0] = strafeVector.z;
     lookAtMatrix.m[3][0] = xdotEye;
     
-    lookAtMatrix.m[0][1] = upVector.x;
-    lookAtMatrix.m[1][1] = upVector.y;
-    lookAtMatrix.m[2][1] = upVector.z;
+    lookAtMatrix.m[0][1] = cameraUpVector.x;
+    lookAtMatrix.m[1][1] = cameraUpVector.y;
+    lookAtMatrix.m[2][1] = cameraUpVector.z;
     lookAtMatrix.m[3][1] = ydotEye;
     
     lookAtMatrix.m[0][2] = sightVector.x;
@@ -49,13 +82,13 @@ void GCamera::downCamera() {
 }
 
 void GCamera::strafeLeftCamera() {
-    positionPoint.x -= keyboardSpeed;
-    centerPoint.x -= keyboardSpeed;
+    positionPoint.x += keyboardSpeed;
+    centerPoint.x += keyboardSpeed;
 }
 
 void GCamera::strafeRightCamera() {
-    positionPoint.x += keyboardSpeed;
-    centerPoint.x += keyboardSpeed;
+    positionPoint.x -= keyboardSpeed;
+    centerPoint.x -= keyboardSpeed;
 }
 
 void GCamera::forwardCamera() {
@@ -68,36 +101,7 @@ void GCamera::backwardCamera() {
     centerPoint.z += keyboardSpeed;
 }
 
-void GCamera::mouseCamera(const TFloat diff_x, const TFloat diff_y) {
-    TFloat rotationAngle = mouseSens * diff_x * M_PI_2;
-    sightVector = strafeVector.rotate(rotationAngle, sightVector);
-    sightVector.normalize();
-
-    rotationAngle = mouseSens * diff_y * 2 * M_PI;
-    sightVector = GVector(0, 1, 0).rotate(rotationAngle, sightVector);
-    sightVector.normalize();
-    centerPoint = GPoint(positionPoint.x + sightVector.x,
-                         positionPoint.y + sightVector.y,
-                         positionPoint.z + sightVector.z);
-}
-
 #pragma mark - Routine -
-
-void GCamera::init(const GPoint& position, const GPoint& center, const GVector& initialUpVector) {
-    positionPoint = position;
-    centerPoint = center;
-    
-    sightVector = GVector(position.x - center.x, position.y - center.y, position.z - center.z);
-    sightVector.normalize();
-    
-    strafeVector = initialUpVector.cross(sightVector);
-    strafeVector.normalize();
-    
-    upVector = sightVector.cross(strafeVector);
-
-    strafeVector = upVector.cross(sightVector);
-    strafeVector.normalize();
-}
 
 //void GCamera::moveCamera(TFloat speed) {
 //    GVector tmp;

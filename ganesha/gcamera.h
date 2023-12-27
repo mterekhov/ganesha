@@ -11,8 +11,8 @@ namespace spcGaneshaEngine {
 class GCamera {
 public:
     GCamera();
-    GCamera(const GPoint& initialPosition, const GPoint& focusPoint, const GVector& initialUpVector);
-    GMatrix viewMatrix() const;
+    GCamera(const GPoint& initialPosition, const GPoint& focusPoint);
+    GMatrix viewMatrix();
 
     void mouseCamera(const TFloat diff_x, const TFloat diff_y);
     void strafeRightCamera();
@@ -26,7 +26,8 @@ private:
     GPoint positionPoint;
     GPoint centerPoint;
     
-    GVector upVector;   //  yaxis
+    const GVector worldUpVector = GVector(0, -1, 0);   //  yaxis
+    GVector cameraUpVector;   //  yaxis
     GVector sightVector;    //  zaxis
     GVector strafeVector;   //  xaxis
 
@@ -36,7 +37,7 @@ private:
     const TFloat DefaultKeyboardSpeed = 0.1;
     TFloat keyboardSpeed = DefaultKeyboardSpeed;
 
-    void init(const GPoint& position, const GPoint& center, const GVector& initialUpVector);
+    void init(const GPoint& position, const GPoint& center);
 };
 
 };  //  spcGaneshaEngine
