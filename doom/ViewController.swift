@@ -12,6 +12,7 @@ class ViewController: NSViewController, MTKViewDelegate {
     
     private let ganeshaBridge = CPPBridge()
     private var ganeshaReady = false
+    private var previousMousePoint = NSZeroPoint;
 
     override var acceptsFirstResponder: Bool {
         get {
@@ -45,11 +46,18 @@ class ViewController: NSViewController, MTKViewDelegate {
               var mousePoint = view.window?.convertPoint(toScreen: event.locationInWindow) else {
             return
         }
-        mousePoint.y += 1;
+//        mousePoint.y += 1;
         
+        if screenCenterPoint.x == mousePoint.x &&
+            screenCenterPoint.y == mousePoint.y {
+            return
+        }
         var diffRange = -0.5...0.5;
         let diff_x = (screenCenterPoint.x - mousePoint.x) / view.frame.width;
         let diff_y = (screenCenterPoint.y - mousePoint.y) / view.frame.height;
+        if abs(diff_x) > 0.4 || abs(diff_y) > 0.4 {
+            CGDisplayMoveCursorToPoint(CGMainDisplayID(), screenCenterPoint);
+        }
         print("diff \(diff_x) - \(diff_y)");
         ganeshaBridge.processMouseMove(withDiffX: diff_x, diff_y: diff_y);
 //        if !diffRange.contains(diff_x) || !diffRange.contains(diff_y) {
