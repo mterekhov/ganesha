@@ -53,24 +53,26 @@ TFloat GVector::angleBetween(GVector vector) {
     return angle;
 }
 
-GVector GVector::rotate(const TFloat angle, const GVector& vector) {
+void GVector::rotate(const TFloat angle, const GVector& aroundVector) {
     TFloat cosinus = cosf(angle);
     TFloat sinus = sinf(angle);
 
     GVector tmp;
-    tmp.x = (cosinus + (1 - cosinus) * vector.x * vector.x) * x;
-    tmp.x += ((1 - cosinus) * vector.x * vector.y - vector.z * sinus) * y;
-    tmp.x += ((1 - cosinus) * vector.x * vector.z + vector.y * sinus) * z;
+    tmp.x = (cosinus + (1 - cosinus) * x * x) * aroundVector.x;
+    tmp.x += ((1 - cosinus) * x * y - z * sinus) * aroundVector.y;
+    tmp.x += ((1 - cosinus) * x * z + y * sinus) * aroundVector.z;
 
-    tmp.y = ((1 - cosinus) * vector.x * vector.y + vector.z * sinus)* x;
-    tmp.y += (cosinus + (1 - cosinus) * vector.y * vector.y) * y;
-    tmp.y += ((1 - cosinus) * vector.y * vector.z - vector.x * sinus) * z;
+    tmp.y = ((1 - cosinus) * x * y + z * sinus)* aroundVector.x;
+    tmp.y += (cosinus + (1 - cosinus) * y * y) * aroundVector.y;
+    tmp.y += ((1 - cosinus) * y * z - x * sinus) * aroundVector.z;
 
-    tmp.z = ((1 - cosinus) * vector.x * vector.z - vector.y * sinus) * x;
-    tmp.z += ((1 - cosinus) * vector.y * vector.z + vector.x * sinus) * y;
-    tmp.z += (cosinus + (1 - cosinus) * vector.z * vector.z) * z;
+    tmp.z = ((1 - cosinus) * x * z - y * sinus) * aroundVector.x;
+    tmp.z += ((1 - cosinus) * y * z + x * sinus) * aroundVector.y;
+    tmp.z += (cosinus + (1 - cosinus) * z * z) * aroundVector.z;
 
-    return tmp;
+    x = tmp.x;
+    y = tmp.y;
+    z = tmp.z;
 }
 
 }   //  namespace spcGaneshaEngine

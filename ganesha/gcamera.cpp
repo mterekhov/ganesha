@@ -19,7 +19,7 @@ void GCamera::mouseCamera(const TFloat diff_x, const TFloat diff_y) {
     if (rotationAngle < -M_PI_2) {
         rotationAngle = -M_PI_2;
     }
-    sightVector = strafeVector.rotate(rotationAngle, sightVector);
+    sightVector.rotate(rotationAngle, strafeVector);
     sightVector.normalize();
 
     positionPoint.y = centerPoint.y + sightVector.y;
@@ -34,7 +34,7 @@ void GCamera::mouseCamera(const TFloat diff_x, const TFloat diff_y) {
 
     updateVectors();
     
-    sightVector = cameraUpVector.rotate(rotationAngle, sightVector);
+    sightVector.rotate(rotationAngle, cameraUpVector);
     sightVector.normalize();
 
     positionPoint.x = centerPoint.x + sightVector.x;
