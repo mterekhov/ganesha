@@ -31,7 +31,7 @@ private:
     GVector sightVector;    //  zaxis
     GVector strafeVector;   //  xaxis
 
-    const TFloat DefaultMouseSens = 1.0f;
+    const TFloat DefaultMouseSens = 5.0f;
     TFloat mouseSens = DefaultMouseSens;
     
     const TFloat DefaultKeyboardSpeed = 0.1;
