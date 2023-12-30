@@ -2,7 +2,6 @@
 #define SPCGANESHAENGINE_GMATRIX_H
 
 #include "ganeshatypes.h"
-#include "gvector.h"
 #include "gpoint.h"
 
 namespace spcGaneshaEngine {
@@ -18,7 +17,6 @@ public:
     static GMatrix rotationX(const TFloat angle);
     static GMatrix rotationY(const TFloat angle);
     static GMatrix rotationZ(const TFloat angle);
-    static GMatrix lookAt(const GPoint& eye, const GPoint& center, const GVector& up);
     static GMatrix frustum(const TFloat left,
                            const TFloat right,
                            const TFloat bottom,

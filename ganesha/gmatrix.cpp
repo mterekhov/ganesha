@@ -1,5 +1,6 @@
-#include "gmatrix.h"
 #include <math.h>
+
+#include "gmatrix.h"
 
 namespace spcGaneshaEngine  {
 
@@ -107,43 +108,6 @@ GMatrix GMatrix::frustum(const TFloat left,
     frustumMatrix.m[3][3] = 0.0f;
 
     return frustumMatrix;
-}
-
-GMatrix GMatrix::lookAt(const GPoint& eye, const GPoint& center, const GVector& up) {
-    GVector zaxis(eye.x - center.x, eye.y - center.y, eye.z - center.z);
-    zaxis.normalize();
-    
-    GVector xaxis = up.cross(zaxis);
-    xaxis.normalize();
-    
-    GVector yaxis = zaxis.cross(xaxis);
-//    yaxis.z = -yaxis.z;
-//    yaxis.normalize();
-
-    GVector eyeVector(eye.x, eye.y, eye.z);
-    TFloat xdotEye = xaxis.dot(eyeVector);
-    TFloat ydotEye = yaxis.dot(eyeVector);
-    TFloat zdotEye = zaxis.dot(eyeVector);
-
-    GMatrix lookAtMatrix = GMatrix::zeroMatrix();
-    lookAtMatrix.m[0][0] = xaxis.x;
-    lookAtMatrix.m[1][0] = xaxis.y;
-    lookAtMatrix.m[2][0] = xaxis.z;
-    lookAtMatrix.m[3][0] = xdotEye;
-    
-    lookAtMatrix.m[0][1] = yaxis.x;
-    lookAtMatrix.m[1][1] = yaxis.y;
-    lookAtMatrix.m[2][1] = yaxis.z;
-    lookAtMatrix.m[3][1] = ydotEye;
-    
-    lookAtMatrix.m[0][2] = zaxis.x;
-    lookAtMatrix.m[1][2] = zaxis.y;
-    lookAtMatrix.m[2][2] = zaxis.z;
-    lookAtMatrix.m[3][2] = -zdotEye;
-
-    lookAtMatrix.m[3][3] = 1.0f;
-    
-    return lookAtMatrix;
 }
 
 GMatrix GMatrix::rotationX(const TFloat angle) {
