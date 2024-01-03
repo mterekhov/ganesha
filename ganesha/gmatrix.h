@@ -10,6 +10,8 @@ struct GMatrix {
 public:
     TFloat m[4][4];
     
+    void print();
+    
     void transponate();
     
     static GMatrix zeroMatrix();
