@@ -12,37 +12,36 @@ GCamera::GCamera(const GPoint& initialPosition, const GPoint& focusPoint) : posi
 }
 
 void GCamera::mouseCamera(const TFloat diff_x, const TFloat diff_y) {
-    TFloat rotationAngle = mouseSens * diff_y * M_PI_2;
-    if (rotationAngle > M_PI_2) {
-        rotationAngle = M_PI_2;
+    if (diff_y > 0) {
+        rotationAroundVertical += mouseSens * diff_y * M_PI;
+        if (rotationAroundVertical > M_PI_2) {
+            rotationAroundVertical = M_PI_2;
+        }
+        if (rotationAroundVertical < 0) {
+            rotationAroundVertical = 0.1;
+        }
+        sightVector.rotate(rotationAroundVertical, worldUpVector);
+        sightVector.normalize();
+        positionPoint.y = centerPoint.y + sightVector.y;
     }
-    if (rotationAngle < -M_PI_2) {
-        rotationAngle = -M_PI_2;
-    }
-    sightVector.rotate(rotationAngle, strafeVector);
-    sightVector.normalize();
-
-    positionPoint.y = centerPoint.y + sightVector.y;
-
-    rotationAngle = mouseSens * diff_x * M_PI_2;
-    if (rotationAngle > M_PI_2) {
-        rotationAngle = M_PI_2;
-    }
-    if (rotationAngle < -M_PI_2) {
-        rotationAngle = -M_PI_2;
+    
+    if (diff_x > 0) {
+        rotationAroundStrafe += mouseSens * diff_x * M_PI;
+        if (rotationAroundStrafe > M_PI_2) {
+            rotationAroundStrafe = M_PI_2;
+        }
+        if (rotationAroundStrafe < 0) {
+            rotationAroundStrafe = 0.1;
+        }
+        sightVector.rotate(rotationAroundStrafe, strafeVector);
+        sightVector.normalize();
+        positionPoint.x = centerPoint.x + sightVector.x;
     }
 
     updateVectors();
-    
-    sightVector.rotate(rotationAngle, cameraUpVector);
-    sightVector.normalize();
-
-    positionPoint.x = centerPoint.x + sightVector.x;
 }
 
 GMatrix GCamera::viewMatrix() {
-    updateVectors();
-    
     GVector positionVector(positionPoint.x, positionPoint.y, positionPoint.z);
     TFloat xdotEye = strafeVector.dot(positionVector);
     TFloat ydotEye = cameraUpVector.dot(positionVector);

@@ -23,6 +23,8 @@ public:
     void backwardCamera();
 
 private:
+    TFloat rotationAroundStrafe;
+    TFloat rotationAroundVertical;
     GPoint positionPoint;
     GPoint centerPoint;
     
@@ -31,7 +33,7 @@ private:
     GVector sightVector;    //  zaxis
     GVector strafeVector;   //  xaxis
 
-    const TFloat DefaultMouseSens = 5.0f;
+    const TFloat DefaultMouseSens = 0.1f;
     TFloat mouseSens = DefaultMouseSens;
     
     const TFloat DefaultKeyboardSpeed = 0.1;
