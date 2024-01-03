@@ -15,7 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         window = createWindow()
-        window?.toggleFullScreen(nil);
+//        window?.toggleFullScreen(nil);
         NSApp.mainMenu = createMenubar()
     }
 
