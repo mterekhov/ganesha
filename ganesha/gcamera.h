@@ -24,7 +24,7 @@ public:
 
 private:
     TFloat rotationAroundStrafe;
-    TFloat rotationAroundVertical;// = M_PI_2;
+    TFloat rotationAroundVertical;
     GPoint positionPoint;
     GPoint centerPoint;
     

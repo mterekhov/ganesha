@@ -3,7 +3,7 @@
 
 namespace spcGaneshaEngine {
 
-GCamera::GCamera() : positionPoint(GPoint(3, -1, 3)), centerPoint(GPoint(0, 0, 0)) {
+GCamera::GCamera() : positionPoint(GPoint(0, -1, 3)), centerPoint(GPoint(0, 0, 2)) {
     updateVectors();
 }
 
@@ -12,20 +12,24 @@ GCamera::GCamera(const GPoint& initialPosition, const GPoint& focusPoint) : posi
 }
 
 void GCamera::mouseCamera(const TFloat diff_x, const TFloat diff_y) {
-//    if (diff_x > 0) {
-//        rotationAroundStrafe -= mouseSens * M_PI;
-//    }
-//    if (diff_x < 0) {
-//        rotationAroundStrafe += mouseSens * M_PI;
-//    }
-//    if (rotationAroundStrafe < 0) {
-//        rotationAroundStrafe = 0;
-//    }
-//    if (rotationAroundStrafe > M_PI) {
-//        rotationAroundStrafe = M_PI;
-//    }
-//    sightVector.rotate(rotationAroundStrafe, strafeVector);
+    if (diff_y > 0) {
+        rotationAroundStrafe -= mouseSens * M_PI;
+    }
+    if (diff_y < 0) {
+        rotationAroundStrafe += mouseSens * M_PI;
+    }
+    if (rotationAroundStrafe < -M_PI_2) {
+        rotationAroundStrafe = -M_PI_2;
+    }
+    if (rotationAroundStrafe > M_PI_2) {
+        rotationAroundStrafe = M_PI_2;
+    }
+    GVector tempVector = sightVector;
+    tempVector.rotate(rotationAroundStrafe, strafeVector);
+    positionPoint.y = centerPoint.y + tempVector.y;
 
+//=========================================================================================================
+    
     if (diff_x > 0) {
         rotationAroundVertical += mouseSens * M_PI_2;
     }
@@ -38,13 +42,11 @@ void GCamera::mouseCamera(const TFloat diff_x, const TFloat diff_y) {
     if (rotationAroundVertical > M_PI_2) {
         rotationAroundVertical = M_PI_2;
     }
-    sightVector.rotate(rotationAroundVertical, cameraUpVector);
+    tempVector = sightVector;
+    tempVector.rotate(rotationAroundVertical, worldUpVector);
+    positionPoint.x = centerPoint.x + tempVector.x;
 
     printf("around strafe = %.3f\taround vertical = %.3f\n", rotationAroundStrafe, rotationAroundVertical);
-    sightVector.normalize();
-
-    positionPoint.x = centerPoint.x + sightVector.x;
-//    positionPoint.y = centerPoint.y + sightVector.y;
 
     updateVectors();
 }
