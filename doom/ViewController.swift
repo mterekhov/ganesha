@@ -10,6 +10,7 @@ import MetalKit
 
 class ViewController: NSViewController, MTKViewDelegate {
     
+    private var lastMousePoint = NSZeroPoint
     private let ganeshaBridge = CPPBridge()
     private var ganeshaReady = false
     private var previousMousePoint = NSZeroPoint;
@@ -40,24 +41,29 @@ class ViewController: NSViewController, MTKViewDelegate {
     override func keyDown(with event: NSEvent) {
         ganeshaBridge.processKeyboardEvent(withKeyCode: event.keyCode);
     }
-    
+        
     override func mouseMoved(with event: NSEvent) {
-        guard let screenCenterPoint = screenCenter(),
-              var mousePoint = view.window?.convertPoint(toScreen: event.locationInWindow) else {
+        var mousePoint = event.locationInWindow
+        guard let screenCenterPoint = screenCenter() else {
             return
         }
         mousePoint.y += 1;
         
-        if screenCenterPoint == mousePoint {
+        if lastMousePoint == NSZeroPoint {
+            lastMousePoint = screenCenterPoint
+        }
+        
+        if (mousePoint.x > ceil(9.0 * view.bounds.width / 10.0)) ||
+            (mousePoint.x < ceil(view.bounds.width / 10.0)) {
+            lastMousePoint = screenCenterPoint
+            CGDisplayMoveCursorToPoint(CGMainDisplayID(), screenCenterPoint);
             return
         }
         
-        let diff_x = (screenCenterPoint.x - mousePoint.x) / screenCenterPoint.x;
-        let diff_y = (screenCenterPoint.y - mousePoint.y) / screenCenterPoint.y;
-        if abs(diff_x) > 0.4 || abs(diff_y) > 0.4 {
-            CGDisplayMoveCursorToPoint(CGMainDisplayID(), screenCenterPoint);
-        }
+        let diff_x = lastMousePoint.x - mousePoint.x
+        let diff_y = lastMousePoint.y - mousePoint.y
         ganeshaBridge.processMouseMove(withDiffX: diff_x, diff_y: diff_y);
+        lastMousePoint = mousePoint
     }
     
     func screenCenter() -> NSPoint? {
