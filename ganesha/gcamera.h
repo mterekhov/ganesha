@@ -24,7 +24,7 @@ public:
 
 private:
     TFloat rotationAroundStrafe;
-    TFloat rotationAroundVertical;
+    TFloat rotationAroundVertical;// = M_PI_2;
     GPoint positionPoint;
     GPoint centerPoint;
     
@@ -33,7 +33,7 @@ private:
     GVector sightVector;    //  zaxis
     GVector strafeVector;   //  xaxis
 
-    const TFloat DefaultMouseSens = 0.1f;
+    const TFloat DefaultMouseSens = 0.01f;
     TFloat mouseSens = DefaultMouseSens;
     
     const TFloat DefaultKeyboardSpeed = 0.1;
