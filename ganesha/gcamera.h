@@ -4,6 +4,7 @@
 #include "ganeshatypes.h"
 #include "gvector.h"
 #include "gmatrix.h"
+#include "gquaternion.h"
 
 namespace spcGaneshaEngine {
 
@@ -23,23 +24,15 @@ public:
     void backwardCamera();
 
 private:
-    TFloat rotationAroundStrafe;
-    TFloat rotationAroundVertical;
+    GQuaternion orientation;
     GPoint positionPoint;
     GPoint centerPoint;
     
-    const GVector worldUpVector = GVector(0, -1, 0);   //  yaxis
-    GVector cameraUpVector;   //  yaxis
-    GVector sightVector;    //  zaxis
-    GVector strafeVector;   //  xaxis
-
     const TFloat DefaultMouseSens = 0.01f;
     TFloat mouseSens = DefaultMouseSens;
     
     const TFloat DefaultKeyboardSpeed = 0.1;
     TFloat keyboardSpeed = DefaultKeyboardSpeed;
-
-    void updateVectors();
 };
 
 };  //  spcGaneshaEngine

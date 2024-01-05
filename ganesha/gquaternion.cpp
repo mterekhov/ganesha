@@ -2,13 +2,15 @@
 
 namespace spcGaneshaEngine {
 
+GQuaternion::GQuaternion() : x(0), y(0), z(0), w(0) {
+    
+}
+
 GQuaternion::GQuaternion(const GVector& axis, const TFloat angle) {
     GVector normalizedAxis(axis);
-    
     normalizedAxis.normalize();
     
-    TFloat halfAngle = angle / 2.0f;
-    
+    TFloat halfAngle = angle / 2.0f;    
     TFloat sinus = sinf(halfAngle);
     TFloat cosinus = cosf(halfAngle);
 
@@ -32,6 +34,41 @@ const GQuaternion& GQuaternion::operator*=(const GQuaternion &q) {
     z = tz;
     
     return (*this);
+}
+
+void GQuaternion::euler(TFloat pitch, TFloat yaw, TFloat roll) {
+    TFloat halfPitch = pitch / 2.0f;
+    TFloat halfYaw = yaw / 2.0f;
+    TFloat halfRoll = roll / 2.0f;
+
+    TFloat cX = cosf(halfPitch);
+    TFloat cY = cosf(halfYaw);
+    TFloat cZ = cosf(halfRoll);
+    TFloat sX = sinf(halfPitch);
+    TFloat sY = sinf(halfYaw);
+    TFloat sZ = sinf(halfRoll);
+
+    TFloat cYcZ = cY * cZ;
+    TFloat sYsZ = sY * sZ;
+    TFloat cYsZ = cY * sZ;
+    TFloat sYcZ = sY * cZ;
+
+    w = cX * cYcZ + sX * sYsZ;
+    x = sX * cYcZ - cX * sYsZ;
+    y = cX * sYcZ + sX * cYsZ;
+    z = cX * cYsZ - sX * sYcZ;
+}
+
+TFloat GQuaternion::euler_x() const {
+    return atan2f(2.0f * (w * x + y * z), 1.0f - 2.0f * (x * x + y * y));
+}
+
+TFloat GQuaternion::euler_y() const {
+    return asinf(2.0f * (w * y - z * x));
+}
+
+TFloat GQuaternion::euler_z() const {
+    return atan2f(2.0f * (w * z + x * y), 1.0f - 2.0f * (y * y + z * z));
 }
 
 GMatrix GQuaternion::matrix() const {
