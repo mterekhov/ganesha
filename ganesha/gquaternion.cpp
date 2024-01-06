@@ -64,7 +64,16 @@ TFloat GQuaternion::euler_x() const {
 }
 
 TFloat GQuaternion::euler_y() const {
-    return asinf(2.0f * (w * y - z * x));
+    TFloat sinValue = 2.0f * (w * y - z * x);
+    if (sinValue > 1.0f) {
+        return M_PI_2;
+    }
+    
+    if (sinValue < -1.0f) {
+        return -M_PI_2;
+    }
+
+    return asinf(sinValue);;
 }
 
 TFloat GQuaternion::euler_z() const {
