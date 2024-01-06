@@ -3,22 +3,49 @@
 
 namespace spcGaneshaEngine {
 
-GCamera::GCamera() : positionPoint(GPoint(0, -1, 3)), centerPoint(GPoint(0, 0, 2)) {
+GCamera::GCamera(GLog& log) : positionPoint(GPoint(0, -1, 10)), log(log) {
+}
+
+GCamera::~GCamera() {
+    
+}
+
+
+TFloat GCamera::aroundX(const TFloat diff, const TFloat currentAngle) {
+    TFloat angle = mouseSens * M_PI;
+    if (diff < 0) {
+        angle *= -1;
+    }
+
+    TFloat resultAngle = currentAngle + angle;
+    if (resultAngle > M_PI_2) {
+        resultAngle = M_PI_2;
+    }
+    if (resultAngle < 0) {
+        resultAngle = 0;
+    }
+    
+    return resultAngle;
+}
+
+TFloat GCamera::aroundY(const TFloat diff, const TFloat currentAngle) {
+    if (diff < std::numeric_limits<TFloat>::min()) {
+//        log.info("no changes\n");
+        return currentAngle;
+    }
+    
+    TFloat angle = mouseSens * M_PI;
+    if (diff < 0) {
+        angle *= -1;
+    }
+
+    log.info("diff %.3f, around Y %.3f\n", diff, currentAngle + angle);
+    return currentAngle + angle;
 }
 
 void GCamera::mouseCamera(const TFloat diff_x, const TFloat diff_y) {
-    TFloat angle = mouseSens * M_PI;
-    if (diff_y > 0) {
-        angle *= -1;
-    }
-
-    TFloat around_x = orientation.euler_x() + angle;
-    
-    angle = mouseSens * M_PI;
-    if (diff_x < 0) {
-        angle *= -1;
-    }
-    TFloat around_y = orientation.euler_y() + angle;
+    TFloat around_x = aroundY(diff_x, orientation.euler_x());
+    TFloat around_y = 0.1;//aroundX(diff_y, orientation.euler_y());
     TFloat around_z = orientation.euler_z();
     
     orientation.euler(around_x, around_y, around_z);
@@ -35,32 +62,26 @@ GMatrix GCamera::viewMatrix() {
 
 void GCamera::upCamera() {
     positionPoint.y += keyboardSpeed;
-    centerPoint.y += keyboardSpeed;
 }
 
 void GCamera::downCamera() {
     positionPoint.y -= keyboardSpeed;
-    centerPoint.y -= keyboardSpeed;
 }
 
 void GCamera::strafeLeftCamera() {
     positionPoint.x += keyboardSpeed;
-    centerPoint.x += keyboardSpeed;
 }
 
 void GCamera::strafeRightCamera() {
     positionPoint.x -= keyboardSpeed;
-    centerPoint.x -= keyboardSpeed;
 }
 
 void GCamera::forwardCamera() {
     positionPoint.z -= keyboardSpeed;
-    centerPoint.z -= keyboardSpeed;
 }
 
 void GCamera::backwardCamera() {
     positionPoint.z += keyboardSpeed;
-    centerPoint.z += keyboardSpeed;
 }
 
 }

@@ -2,9 +2,11 @@
 #define SPCGANESHAENGINE_GGANESHA_H
 
 #include <stdio.h>
+
 #include "ggraphicsapiprotocol.h"
 #include "gcamera.h"
 #include "grendergraph.h"
+#include "glog.h"
 
 namespace spcGaneshaEngine {
 
@@ -40,6 +42,7 @@ public:
 private:
     GGraphicsAPIProtocol *graphicsAPI;
     GCamera camera;
+    GLog log;
     GRenderGraph renderGraph;
 
 };

@@ -25,7 +25,7 @@ struct UniformBufferObject {
 
 class GVULKANAPI: public GGraphicsAPIProtocol {
 public:
-    GVULKANAPI();
+    GVULKANAPI(GLog& log);
     virtual ~GVULKANAPI();
 
     virtual void initAPI(void *metalLayer, const TUInt frameWidth, const TUInt frameHeight, const GRenderGraph& renderGraph);
@@ -36,7 +36,7 @@ public:
     virtual void installViewMatrix(const GMatrix& newViewMatrix);
 
 private:
-    GLog log;
+    GLog& log;
     GVULKANDevice vulkanDevice;
     GVULKANInstance vulkanInstance;
     GVULKANSwapChain vulkanSwapChain;

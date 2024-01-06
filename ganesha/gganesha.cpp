@@ -4,8 +4,8 @@
 
 namespace spcGaneshaEngine {
 
-GGanesha::GGanesha() {
-    graphicsAPI = new GVULKANAPI();
+GGanesha::GGanesha() : log("Ganesha"), camera(log) {
+    graphicsAPI = new GVULKANAPI(log);
 }
 
 GGanesha::~GGanesha() {
