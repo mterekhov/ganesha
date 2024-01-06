@@ -59,7 +59,13 @@ class ViewController: NSViewController, MTKViewDelegate {
             CGDisplayMoveCursorToPoint(CGMainDisplayID(), screenCenterPoint);
             return
         }
-        
+        if (mousePoint.y > ceil(9.0 * view.bounds.height / 10.0)) ||
+            (mousePoint.y < ceil(view.bounds.height / 10.0)) {
+            lastMousePoint = screenCenterPoint
+            CGDisplayMoveCursorToPoint(CGMainDisplayID(), screenCenterPoint);
+            return
+        }
+
         let diff_x = lastMousePoint.x - mousePoint.x
         let diff_y = lastMousePoint.y - mousePoint.y
         ganeshaBridge.processMouseMove(withDiffX: diff_x, diff_y: diff_y);
