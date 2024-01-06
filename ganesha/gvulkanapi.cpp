@@ -26,7 +26,7 @@ const TStringsArray useDeviceExtensions = {
     "VK_KHR_portability_subset"
 };
 
-GVULKANAPI::GVULKANAPI() : log("Ganesha"),
+GVULKANAPI::GVULKANAPI(GLog& log) : log(log),
 vulkanInstance(log),
 vulkanDevice(log),
 vulkanSwapChain(log),

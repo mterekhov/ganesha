@@ -4,14 +4,17 @@
 #include "ganeshatypes.h"
 #include "gvector.h"
 #include "gmatrix.h"
+#include "gquaternion.h"
+#include "glog.h"
 
 namespace spcGaneshaEngine {
 
 /// Manipulates with current position
 class GCamera {
 public:
-    GCamera();
-    GCamera(const GPoint& initialPosition, const GPoint& focusPoint);
+    GCamera(GLog& log);
+    ~GCamera();
+    
     GMatrix viewMatrix();
 
     void mouseCamera(const TFloat diff_x, const TFloat diff_y);
@@ -23,23 +26,19 @@ public:
     void backwardCamera();
 
 private:
-    TFloat rotationAroundStrafe;
-    TFloat rotationAroundVertical;
+    GLog& log;
+    GQuaternion orientation;
     GPoint positionPoint;
     GPoint centerPoint;
     
-    const GVector worldUpVector = GVector(0, -1, 0);   //  yaxis
-    GVector cameraUpVector;   //  yaxis
-    GVector sightVector;    //  zaxis
-    GVector strafeVector;   //  xaxis
-
-    const TFloat DefaultMouseSens = 0.01f;
+    const TFloat DefaultMouseSens = 0.001f;
     TFloat mouseSens = DefaultMouseSens;
     
     const TFloat DefaultKeyboardSpeed = 0.1;
     TFloat keyboardSpeed = DefaultKeyboardSpeed;
 
-    void updateVectors();
+    TFloat aroundX(const TFloat diff, const TFloat currentAngle);
+    TFloat aroundY(const TFloat diff, const TFloat currentAngle);
 };
 
 };  //  spcGaneshaEngine

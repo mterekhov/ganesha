@@ -1,12 +1,8 @@
-//
-//  GLog.cpp
-//  yajnavalkya
-//
-//  Created by cipher on 08.09.2023.
-//
-
 #include <stdio.h>
 #include <time.h>
+#include <chrono>
+#include <iomanip>
+
 #include "glog.h"
 
 namespace spcGaneshaEngine {
@@ -52,11 +48,21 @@ void GLog::log(const GLogType type, const char* format, va_list args) {
     return;
 #endif
     
-    time_t rawtime;
-    time(&rawtime);
+    std::chrono::system_clock::time_point nowTimePoint = std::chrono::system_clock::now();
+    std::chrono::system_clock::duration epochTime = nowTimePoint.time_since_epoch();
+    epochTime -= duration_cast<std::chrono::seconds>(epochTime);
+    time_t nowTimeStamp = std::chrono::system_clock::to_time_t(nowTimePoint);
+    tm localTime = *localtime(&nowTimeStamp);
+    char const *timeFormat = "%02u-%02u-%04u %02u:%02u:%02u.%03u";
     char timeBuffer[BUFSIZ] = {0};
-    char const *timeFormat = "%d-%m-%Y %H:%M:%S";
-    strftime(timeBuffer, BUFSIZ, timeFormat, localtime(&rawtime));
+    snprintf(timeBuffer, BUFSIZ, timeFormat, 
+             localTime.tm_mday,
+             localTime.tm_mon + 1,
+             localTime.tm_year + 1900,
+             localTime.tm_hour,
+             localTime.tm_min,
+             localTime.tm_sec,
+             static_cast<unsigned>(epochTime / std::chrono::milliseconds(1)));
 
     std::string newFormat = timeBuffer;
     switch (type) {
