@@ -29,23 +29,17 @@ TFloat GCamera::aroundX(const TFloat diff, const TFloat currentAngle) {
 }
 
 TFloat GCamera::aroundY(const TFloat diff, const TFloat currentAngle) {
-    if (diff < std::numeric_limits<TFloat>::min()) {
-//        log.info("no changes\n");
-        return currentAngle;
-    }
-    
     TFloat angle = mouseSens * M_PI;
     if (diff < 0) {
-        angle *= -1;
+        angle = -angle;
     }
 
-    log.info("diff %.3f, around Y %.3f\n", diff, currentAngle + angle);
     return currentAngle + angle;
 }
 
 void GCamera::mouseCamera(const TFloat diff_x, const TFloat diff_y) {
-    TFloat around_x = aroundY(diff_x, orientation.euler_x());
-    TFloat around_y = 0.1;//aroundX(diff_y, orientation.euler_y());
+    TFloat around_x = aroundX(diff_y, orientation.euler_x());
+    TFloat around_y = aroundY(diff_x, orientation.euler_y());
     TFloat around_z = orientation.euler_z();
     
     orientation.euler(around_x, around_y, around_z);

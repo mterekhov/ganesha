@@ -31,7 +31,7 @@ private:
     GPoint positionPoint;
     GPoint centerPoint;
     
-    const TFloat DefaultMouseSens = 0.0001f;
+    const TFloat DefaultMouseSens = 0.001f;
     TFloat mouseSens = DefaultMouseSens;
     
     const TFloat DefaultKeyboardSpeed = 0.1;
