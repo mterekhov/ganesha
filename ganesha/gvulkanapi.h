@@ -77,7 +77,7 @@ private:
                              VkDescriptorSet descriptorset);
     VkCommandPool createCommandPool(GVULKANDevice& device);
     VkSurfaceKHR createSurface(void *metalLayer);
-    void createTextures();
+    void createTextures(GRenderGraph& renderGraph);
     void createSemaphores();
     UniformBufferObject currentUBO();
 };

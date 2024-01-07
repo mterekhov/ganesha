@@ -70,7 +70,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
                                commandPool);
         vulkanUniformBuffers.push_back(newBuffer);
     }
-    createTextures();
+    createTextures(renderGraph);
     vulkanDescriptorset.createDescriptorsets(vulkanDevice, vulkanUniformBuffers, texture);
 
     vulkanPipeline.createPipeline(vulkanDevice, vulkanSwapChain, vulkanDescriptorset.getDescriptorsetLayout(), renderGraph);
@@ -347,8 +347,12 @@ UniformBufferObject GVULKANAPI::currentUBO() {
     return ubo;
 }
 
-void GVULKANAPI::createTextures() {
-    GTGA tgaFile("/Users/cipher/Development/RENDER/dengine/doom/resources/images/BIGDOOR2.tga");
+void GVULKANAPI::createTextures(GRenderGraph& renderGraph) {
+    std::string textureFilePath;
+    for (const std::string& filePath : renderGraph.getTextureFilePathArray()) {
+        textureFilePath = filePath;
+    }
+    GTGA tgaFile(textureFilePath);
     texture.createImage({ tgaFile.getWidth(), tgaFile.getHeight() },
                         VK_FORMAT_R8G8B8A8_SRGB,
                         VK_IMAGE_ASPECT_COLOR_BIT,

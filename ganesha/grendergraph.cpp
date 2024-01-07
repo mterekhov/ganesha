@@ -33,6 +33,14 @@ TStringsArray& GRenderGraph::getFragmentShadersArray() {
     return fragmentsShadersArray;
 }
 
+void GRenderGraph::pushTextureFilePath(const std::string& shaderFullFilePath) {
+    texturesFilePathArray.push_back(shaderFullFilePath);
+}
+
+TStringsArray& GRenderGraph::getTextureFilePathArray() {
+    return texturesFilePathArray;
+}
+
 void GRenderGraph::defineVertexesArray(const std::vector<Vertex>& newVertexesArray) {
     vertexesArray = newVertexesArray;
 }

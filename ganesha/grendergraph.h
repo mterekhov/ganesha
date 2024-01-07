@@ -25,9 +25,14 @@ public:
     void pushFragmentShader(const std::string& shaderFullFilePath);
     TStringsArray& getFragmentShadersArray();
 
+    void pushTextureFilePath(const std::string& textureFullFilePath);
+    TStringsArray& getTextureFilePathArray();
+
 private:
     TStringsArray vertexShadersArray;
     TStringsArray fragmentsShadersArray;
+    TStringsArray texturesFilePathArray;
+
     std::vector<Vertex> vertexesArray;
     TIndexArray indexesArray;
 };
