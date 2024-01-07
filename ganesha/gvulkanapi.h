@@ -28,7 +28,7 @@ public:
     GVULKANAPI(GLog& log);
     virtual ~GVULKANAPI();
 
-    virtual void initAPI(void *metalLayer, const TUInt frameWidth, const TUInt frameHeight, const GRenderGraph& renderGraph);
+    virtual void initAPI(void *metalLayer, const TUInt frameWidth, const TUInt frameHeight, GRenderGraph& renderGraph);
     virtual void destroyAPI();
     virtual void drawFrame(GRenderGraph& renderGraph);
     virtual void frameResized(const float width, const float height);

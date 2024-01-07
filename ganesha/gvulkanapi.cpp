@@ -4,7 +4,6 @@
 #include <math.h>
 
 #include "gvulkanapi.h"
-#include "gbundle.h"
 #include "gpoint2d.h"
 #include "gcolor.h"
 #include "gmatrix.h"
@@ -44,7 +43,7 @@ GVULKANAPI::~GVULKANAPI() {
 
 #pragma mark - GGraphicsAPIProtocol -
 
-void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt frameHeight, const GRenderGraph& renderGraph) {
+void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt frameHeight, GRenderGraph& renderGraph) {
     //  create VULKAN instance
     vulkanInstance.createInstance("DOOM", khronosValidationLayers, avoidInstanceExtensions);
     
@@ -74,7 +73,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
     createTextures();
     vulkanDescriptorset.createDescriptorsets(vulkanDevice, vulkanUniformBuffers, texture);
 
-    vulkanPipeline.createPipeline(vulkanDevice, vulkanSwapChain, vulkanDescriptorset.getDescriptorsetLayout());
+    vulkanPipeline.createPipeline(vulkanDevice, vulkanSwapChain, vulkanDescriptorset.getDescriptorsetLayout(), renderGraph);
     
     std::vector<Vertex> vertexesArray = renderGraph.getVertexesArray();
     vertexesBuffer.createBuffer(vertexesArray.data(),

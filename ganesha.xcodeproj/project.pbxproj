@@ -18,7 +18,6 @@
 		DE9D0CA92B4A14D500EA0B7C /* ganeshastubdata.h in Headers */ = {isa = PBXBuildFile; fileRef = DE9D0C7A2B4A14D400EA0B7C /* ganeshastubdata.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE9D0CAA2B4A14D500EA0B7C /* gganesha.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE9D0C7B2B4A14D400EA0B7C /* gganesha.cpp */; };
 		DE9D0CAB2B4A14D500EA0B7C /* grendergraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE9D0C7C2B4A14D400EA0B7C /* grendergraph.cpp */; };
-		DE9D0CAC2B4A14D500EA0B7C /* gbundle.mm in Sources */ = {isa = PBXBuildFile; fileRef = DE9D0C7D2B4A14D400EA0B7C /* gbundle.mm */; };
 		DE9D0CAD2B4A14D500EA0B7C /* gvector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE9D0C7E2B4A14D400EA0B7C /* gvector.cpp */; };
 		DE9D0CAE2B4A14D500EA0B7C /* gcamera.h in Headers */ = {isa = PBXBuildFile; fileRef = DE9D0C7F2B4A14D400EA0B7C /* gcamera.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE9D0CAF2B4A14D500EA0B7C /* ggraphicsapiprotocol.h in Headers */ = {isa = PBXBuildFile; fileRef = DE9D0C802B4A14D400EA0B7C /* ggraphicsapiprotocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -48,7 +47,6 @@
 		DE9D0CC72B4A14D500EA0B7C /* gvulkanswapchain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE9D0C982B4A14D500EA0B7C /* gvulkanswapchain.cpp */; };
 		DE9D0CC82B4A14D500EA0B7C /* gtga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE9D0C992B4A14D500EA0B7C /* gtga.cpp */; };
 		DE9D0CC92B4A14D500EA0B7C /* ganeshastubdata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE9D0C9A2B4A14D500EA0B7C /* ganeshastubdata.cpp */; };
-		DE9D0CCA2B4A14D500EA0B7C /* gbundle.h in Headers */ = {isa = PBXBuildFile; fileRef = DE9D0C9B2B4A14D500EA0B7C /* gbundle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE9D0CCB2B4A14D500EA0B7C /* gvulkaninstance.h in Headers */ = {isa = PBXBuildFile; fileRef = DE9D0C9C2B4A14D500EA0B7C /* gvulkaninstance.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE9D0CCC2B4A14D500EA0B7C /* gvulkanswapchain.h in Headers */ = {isa = PBXBuildFile; fileRef = DE9D0C9D2B4A14D500EA0B7C /* gvulkanswapchain.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE9D0CCD2B4A14D500EA0B7C /* gvulkaninstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE9D0C9E2B4A14D500EA0B7C /* gvulkaninstance.cpp */; };
@@ -70,7 +68,6 @@
 		DE9D0C7A2B4A14D400EA0B7C /* ganeshastubdata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ganeshastubdata.h; path = ganesha/ganeshastubdata.h; sourceTree = "<group>"; };
 		DE9D0C7B2B4A14D400EA0B7C /* gganesha.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gganesha.cpp; path = ganesha/gganesha.cpp; sourceTree = "<group>"; };
 		DE9D0C7C2B4A14D400EA0B7C /* grendergraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = grendergraph.cpp; path = ganesha/grendergraph.cpp; sourceTree = "<group>"; };
-		DE9D0C7D2B4A14D400EA0B7C /* gbundle.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = gbundle.mm; path = ganesha/gbundle.mm; sourceTree = "<group>"; };
 		DE9D0C7E2B4A14D400EA0B7C /* gvector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gvector.cpp; path = ganesha/gvector.cpp; sourceTree = "<group>"; };
 		DE9D0C7F2B4A14D400EA0B7C /* gcamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gcamera.h; path = ganesha/gcamera.h; sourceTree = "<group>"; };
 		DE9D0C802B4A14D400EA0B7C /* ggraphicsapiprotocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ggraphicsapiprotocol.h; path = ganesha/ggraphicsapiprotocol.h; sourceTree = "<group>"; };
@@ -100,7 +97,6 @@
 		DE9D0C982B4A14D500EA0B7C /* gvulkanswapchain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gvulkanswapchain.cpp; path = ganesha/gvulkanswapchain.cpp; sourceTree = "<group>"; };
 		DE9D0C992B4A14D500EA0B7C /* gtga.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gtga.cpp; path = ganesha/gtga.cpp; sourceTree = "<group>"; };
 		DE9D0C9A2B4A14D500EA0B7C /* ganeshastubdata.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ganeshastubdata.cpp; path = ganesha/ganeshastubdata.cpp; sourceTree = "<group>"; };
-		DE9D0C9B2B4A14D500EA0B7C /* gbundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gbundle.h; path = ganesha/gbundle.h; sourceTree = "<group>"; };
 		DE9D0C9C2B4A14D500EA0B7C /* gvulkaninstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvulkaninstance.h; path = ganesha/gvulkaninstance.h; sourceTree = "<group>"; };
 		DE9D0C9D2B4A14D500EA0B7C /* gvulkanswapchain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvulkanswapchain.h; path = ganesha/gvulkanswapchain.h; sourceTree = "<group>"; };
 		DE9D0C9E2B4A14D500EA0B7C /* gvulkaninstance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gvulkaninstance.cpp; path = ganesha/gvulkaninstance.cpp; sourceTree = "<group>"; };
@@ -143,22 +139,22 @@
 		DE69D2002B4B47D6002D28E2 /* VULKAN */ = {
 			isa = PBXGroup;
 			children = (
-				DE9D0C8D2B4A14D400EA0B7C /* gvulkanapi.cpp */,
 				DE9D0C8E2B4A14D400EA0B7C /* gvulkanapi.h */,
-				DE9D0C872B4A14D400EA0B7C /* gvulkanbuffer.cpp */,
-				DE9D0C8F2B4A14D500EA0B7C /* gvulkanbuffer.h */,
-				DE9D0C892B4A14D400EA0B7C /* gvulkandescriptorsets.cpp */,
-				DE9D0C8B2B4A14D400EA0B7C /* gvulkandescriptorsets.h */,
-				DE9D0C972B4A14D500EA0B7C /* gvulkandevice.cpp */,
-				DE9D0C8C2B4A14D400EA0B7C /* gvulkandevice.h */,
-				DE9D0C962B4A14D500EA0B7C /* gvulkanimage.cpp */,
-				DE9D0C762B4A14D400EA0B7C /* gvulkanimage.h */,
+				DE9D0C8D2B4A14D400EA0B7C /* gvulkanapi.cpp */,
 				DE9D0C9E2B4A14D500EA0B7C /* gvulkaninstance.cpp */,
 				DE9D0C9C2B4A14D500EA0B7C /* gvulkaninstance.h */,
+				DE9D0C972B4A14D500EA0B7C /* gvulkandevice.cpp */,
+				DE9D0C8C2B4A14D400EA0B7C /* gvulkandevice.h */,
 				DE9D0C942B4A14D500EA0B7C /* gvulkanpipeline.cpp */,
 				DE9D0C722B4A14D400EA0B7C /* gvulkanpipeline.h */,
 				DE9D0C982B4A14D500EA0B7C /* gvulkanswapchain.cpp */,
 				DE9D0C9D2B4A14D500EA0B7C /* gvulkanswapchain.h */,
+				DE9D0C892B4A14D400EA0B7C /* gvulkandescriptorsets.cpp */,
+				DE9D0C8B2B4A14D400EA0B7C /* gvulkandescriptorsets.h */,
+				DE9D0C872B4A14D400EA0B7C /* gvulkanbuffer.cpp */,
+				DE9D0C8F2B4A14D500EA0B7C /* gvulkanbuffer.h */,
+				DE9D0C962B4A14D500EA0B7C /* gvulkanimage.cpp */,
+				DE9D0C762B4A14D400EA0B7C /* gvulkanimage.h */,
 				DE9D0C732B4A14D400EA0B7C /* gvulkantools.cpp */,
 				DE9D0C952B4A14D500EA0B7C /* gvulkantools.h */,
 			);
@@ -168,8 +164,6 @@
 		DE69D2012B4B47F4002D28E2 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
-				DE9D0C9B2B4A14D500EA0B7C /* gbundle.h */,
-				DE9D0C7D2B4A14D400EA0B7C /* gbundle.mm */,
 				DE9D0C842B4A14D400EA0B7C /* glog.cpp */,
 				DE9D0C922B4A14D500EA0B7C /* glog.h */,
 				DE9D0C992B4A14D500EA0B7C /* gtga.cpp */,
@@ -247,7 +241,6 @@
 				DE9D0CBD2B4A14D500EA0B7C /* gvulkanapi.h in Headers */,
 				DE9D0CA42B4A14D500EA0B7C /* grendergraph.h in Headers */,
 				DE9D0CBA2B4A14D500EA0B7C /* gvulkandescriptorsets.h in Headers */,
-				DE9D0CCA2B4A14D500EA0B7C /* gbundle.h in Headers */,
 				DE9D0CBB2B4A14D500EA0B7C /* gvulkandevice.h in Headers */,
 				DE9D0CB52B4A14D500EA0B7C /* gvector.h in Headers */,
 				DE9D0CA72B4A14D500EA0B7C /* gquaternion.h in Headers */,
@@ -331,7 +324,6 @@
 				DE9D0CA62B4A14D500EA0B7C /* gcamera.cpp in Sources */,
 				DE9D0CC82B4A14D500EA0B7C /* gtga.cpp in Sources */,
 				DE9D0CC72B4A14D500EA0B7C /* gvulkanswapchain.cpp in Sources */,
-				DE9D0CAC2B4A14D500EA0B7C /* gbundle.mm in Sources */,
 				DE9D0CB32B4A14D500EA0B7C /* glog.cpp in Sources */,
 				DE9D0CC92B4A14D500EA0B7C /* ganeshastubdata.cpp in Sources */,
 				DE9D0CCF2B4A14D500EA0B7C /* gcolor.cpp in Sources */,

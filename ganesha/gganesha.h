@@ -39,12 +39,12 @@ public:
     
     void processMouseMove(const TFloat diff_x, const TFloat diff_y);
 
+    GRenderGraph renderGraph;
+    
 private:
     GGraphicsAPIProtocol *graphicsAPI;
     GCamera camera;
     GLog log;
-    GRenderGraph renderGraph;
-
 };
 
 }   //  namespace spcGaneshaEngine

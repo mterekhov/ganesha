@@ -8,6 +8,7 @@
 #include "gvulkandevice.h"
 #include "gvulkanswapchain.h"
 #include "ganeshastubdata.h"
+#include "grendergraph.h"
 
 namespace spcGaneshaEngine {
 
@@ -16,7 +17,7 @@ public:
     GVULKANPipeline(GLog& log);
     ~GVULKANPipeline();
     
-    void createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapChain& swapChain, VkDescriptorSetLayout descriptorsetLayout);
+    void createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapChain& swapChain, VkDescriptorSetLayout descriptorsetLayout, GRenderGraph& renderGraph);
     void destroyPipeline(GVULKANDevice& vulkanDevice);
     VkPipeline getGraphicsPipeline();
     VkPipelineLayout getPipelineLayout();
@@ -28,6 +29,8 @@ private:
     VkPipeline graphicsPipeline;
     VkPipelineLayout pipelineLayout;
 
+    VkPipelineShaderStageCreateInfo createFragmentShaders(const TStringsArray& shadersArray, VkDevice device);
+    VkPipelineShaderStageCreateInfo createVertexShaders(const TStringsArray& shadersArray, VkDevice device);
     VkPipelineShaderStageCreateInfo createShader(const std::string& shaderFile,  const VkShaderStageFlagBits stage, VkDevice device);
     VkPipelineVertexInputStateCreateInfo createVertexInput();
     VkPipelineRasterizationStateCreateInfo createRasterizer();

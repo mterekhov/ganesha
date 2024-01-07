@@ -2,6 +2,22 @@
 
 namespace spcGaneshaEngine {
 
+std::vector<uint8_t> GVULKANTools::readFile(const std::string& filename) {
+    FILE *file = fopen(filename.c_str(), "rb");
+    if (file == 0) {
+        return std::vector<uint8_t>();
+    }
+    
+    fseek(file, 0L, SEEK_END);
+    size_t fileSize = ftell(file);
+    std::vector<uint8_t> buffer(fileSize);
+    fseek(file, 0L, SEEK_SET);
+    fread(buffer.data(), fileSize, 1, file);
+    fclose(file);
+    
+    return buffer;
+}
+
 TUInt GVULKANTools::findMemoryType(VkPhysicalDevice device, const TUInt typeFilter, const VkMemoryPropertyFlags properties) {
     VkPhysicalDeviceMemoryProperties memoryProperties;
     vkGetPhysicalDeviceMemoryProperties(device, &memoryProperties);

@@ -16,7 +16,6 @@
 #include "gpoint2d.h"
 #include "gvector.h"
 #include "glog.h"
-#include "gbundle.h"
 #include "gcolor.h"
 #include "ggraphicsapiprotocol.h"
 #include "gvulkanapi.h"

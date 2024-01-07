@@ -1,5 +1,5 @@
 #include "gvulkanpipeline.h"
-#include "gbundle.h"
+#include "gvulkantools.h"
 
 namespace spcGaneshaEngine {
 
@@ -9,9 +9,9 @@ GVULKANPipeline::GVULKANPipeline(GLog& log) : log(log) {
 GVULKANPipeline::~GVULKANPipeline() {
 }
 
-void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapChain& swapChain, VkDescriptorSetLayout descriptorsetLayout) {
-    VkPipelineShaderStageCreateInfo vertShaderStageInfo = createShader("vert.spv", VK_SHADER_STAGE_VERTEX_BIT, vulkanDevice.getLogicalDevice());
-    VkPipelineShaderStageCreateInfo fragShaderStageInfo = createShader("frag.spv", VK_SHADER_STAGE_FRAGMENT_BIT, vulkanDevice.getLogicalDevice());
+void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapChain& swapChain, VkDescriptorSetLayout descriptorsetLayout, GRenderGraph& renderGraph) {
+    VkPipelineShaderStageCreateInfo vertShaderStageInfo = createVertexShaders(renderGraph.getVertexesShadersArray(), vulkanDevice.getLogicalDevice());
+    VkPipelineShaderStageCreateInfo fragShaderStageInfo = createFragmentShaders(renderGraph.getFragmentShadersArray(), vulkanDevice.getLogicalDevice());
     VkPipelineShaderStageCreateInfo pipelineShaderStageInfosList[] = {vertShaderStageInfo, fragShaderStageInfo};
     
     VkPipelineVertexInputStateCreateInfo vertexInputInfo = createVertexInput();
@@ -164,9 +164,29 @@ VkPipelineLayout GVULKANPipeline::createPipelineLayout(VkDevice device, VkDescri
     return newPipelineLayout;
 }
 
+VkPipelineShaderStageCreateInfo GVULKANPipeline::createVertexShaders(const TStringsArray& shadersArray, VkDevice device) {
+    VkPipelineShaderStageCreateInfo vertShaderStageInfo = {};
+    
+    for (const std::string& shaderFullFilePath : shadersArray) {
+        vertShaderStageInfo = createShader(shaderFullFilePath, VK_SHADER_STAGE_VERTEX_BIT, device);
+    }
+    
+    return vertShaderStageInfo;
+}
+
+VkPipelineShaderStageCreateInfo GVULKANPipeline::createFragmentShaders(const TStringsArray& shadersArray, VkDevice device) {
+    VkPipelineShaderStageCreateInfo fragShaderStageInfo = {};
+    
+    for (const std::string& shaderFullFilePath : shadersArray) {
+        fragShaderStageInfo = createShader(shaderFullFilePath, VK_SHADER_STAGE_FRAGMENT_BIT, device);
+    }
+    
+    return fragShaderStageInfo;
+}
+
 VkPipelineShaderStageCreateInfo GVULKANPipeline::createShader(const std::string& shaderFile, const VkShaderStageFlagBits stage, VkDevice device) {
-    GBundle bundle(log);
-    const std::vector<uint8_t> code = bundle.readFile(bundle.resourceFullPath(shaderFile));
+    GVULKANTools tools;
+    const std::vector<uint8_t> code = tools.readFile(shaderFile);
     VkShaderModuleCreateInfo createInfo = { };
     
     createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;

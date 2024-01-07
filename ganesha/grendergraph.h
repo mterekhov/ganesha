@@ -19,7 +19,15 @@ public:
     void defineIndexesArray(const TIndexArray& newIndexesArray);
     const TIndexArray& getIndexesArray() const;
     
+    void pushVertexShader(const std::string& shaderFullFilePath);
+    TStringsArray& getVertexesShadersArray();
+    
+    void pushFragmentShader(const std::string& shaderFullFilePath);
+    TStringsArray& getFragmentShadersArray();
+
 private:
+    TStringsArray vertexShadersArray;
+    TStringsArray fragmentsShadersArray;
     std::vector<Vertex> vertexesArray;
     TIndexArray indexesArray;
 };
