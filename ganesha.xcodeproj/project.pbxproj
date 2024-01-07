@@ -121,6 +121,63 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DE69D1FF2B4B47C1002D28E2 /* Basics */ = {
+			isa = PBXGroup;
+			children = (
+				DE9D0CA02B4A14D500EA0B7C /* gcolor.cpp */,
+				DE9D0C832B4A14D400EA0B7C /* gcolor.h */,
+				DE9D0C912B4A14D500EA0B7C /* gmatrix.cpp */,
+				DE9D0C792B4A14D400EA0B7C /* gmatrix.h */,
+				DE9D0C9F2B4A14D500EA0B7C /* gpoint.cpp */,
+				DE9D0C742B4A14D400EA0B7C /* gpoint.h */,
+				DE9D0C8A2B4A14D400EA0B7C /* gpoint2d.cpp */,
+				DE9D0C902B4A14D500EA0B7C /* gpoint2d.h */,
+				DE9D0C822B4A14D400EA0B7C /* gquaternion.cpp */,
+				DE9D0C782B4A14D400EA0B7C /* gquaternion.h */,
+				DE9D0C7E2B4A14D400EA0B7C /* gvector.cpp */,
+				DE9D0C862B4A14D400EA0B7C /* gvector.h */,
+			);
+			name = Basics;
+			sourceTree = "<group>";
+		};
+		DE69D2002B4B47D6002D28E2 /* VULKAN */ = {
+			isa = PBXGroup;
+			children = (
+				DE9D0C8D2B4A14D400EA0B7C /* gvulkanapi.cpp */,
+				DE9D0C8E2B4A14D400EA0B7C /* gvulkanapi.h */,
+				DE9D0C872B4A14D400EA0B7C /* gvulkanbuffer.cpp */,
+				DE9D0C8F2B4A14D500EA0B7C /* gvulkanbuffer.h */,
+				DE9D0C892B4A14D400EA0B7C /* gvulkandescriptorsets.cpp */,
+				DE9D0C8B2B4A14D400EA0B7C /* gvulkandescriptorsets.h */,
+				DE9D0C972B4A14D500EA0B7C /* gvulkandevice.cpp */,
+				DE9D0C8C2B4A14D400EA0B7C /* gvulkandevice.h */,
+				DE9D0C962B4A14D500EA0B7C /* gvulkanimage.cpp */,
+				DE9D0C762B4A14D400EA0B7C /* gvulkanimage.h */,
+				DE9D0C9E2B4A14D500EA0B7C /* gvulkaninstance.cpp */,
+				DE9D0C9C2B4A14D500EA0B7C /* gvulkaninstance.h */,
+				DE9D0C942B4A14D500EA0B7C /* gvulkanpipeline.cpp */,
+				DE9D0C722B4A14D400EA0B7C /* gvulkanpipeline.h */,
+				DE9D0C982B4A14D500EA0B7C /* gvulkanswapchain.cpp */,
+				DE9D0C9D2B4A14D500EA0B7C /* gvulkanswapchain.h */,
+				DE9D0C732B4A14D400EA0B7C /* gvulkantools.cpp */,
+				DE9D0C952B4A14D500EA0B7C /* gvulkantools.h */,
+			);
+			name = VULKAN;
+			sourceTree = "<group>";
+		};
+		DE69D2012B4B47F4002D28E2 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				DE9D0C9B2B4A14D500EA0B7C /* gbundle.h */,
+				DE9D0C7D2B4A14D400EA0B7C /* gbundle.mm */,
+				DE9D0C842B4A14D400EA0B7C /* glog.cpp */,
+				DE9D0C922B4A14D500EA0B7C /* glog.h */,
+				DE9D0C992B4A14D500EA0B7C /* gtga.cpp */,
+				DE9D0C852B4A14D400EA0B7C /* gtga.h */,
+			);
+			name = Tools;
+			sourceTree = "<group>";
+		};
 		DE82CE522B4A149500EF0925 = {
 			isa = PBXGroup;
 			children = (
@@ -141,53 +198,20 @@
 		DE82CE5E2B4A149500EF0925 /* ganesha */ = {
 			isa = PBXGroup;
 			children = (
-				DE9D0C932B4A14D500EA0B7C /* ganesha.h */,
-				DE9D0C9A2B4A14D500EA0B7C /* ganeshastubdata.cpp */,
-				DE9D0C7A2B4A14D400EA0B7C /* ganeshastubdata.h */,
-				DE9D0C812B4A14D400EA0B7C /* ganeshatypes.h */,
-				DE9D0C9B2B4A14D500EA0B7C /* gbundle.h */,
-				DE9D0C7D2B4A14D400EA0B7C /* gbundle.mm */,
+				DE69D1FF2B4B47C1002D28E2 /* Basics */,
+				DE69D2002B4B47D6002D28E2 /* VULKAN */,
+				DE69D2012B4B47F4002D28E2 /* Tools */,
 				DE9D0C772B4A14D400EA0B7C /* gcamera.cpp */,
 				DE9D0C7F2B4A14D400EA0B7C /* gcamera.h */,
-				DE9D0CA02B4A14D500EA0B7C /* gcolor.cpp */,
-				DE9D0C832B4A14D400EA0B7C /* gcolor.h */,
-				DE9D0C7B2B4A14D400EA0B7C /* gganesha.cpp */,
-				DE9D0C882B4A14D400EA0B7C /* gganesha.h */,
+				DE9D0C9A2B4A14D500EA0B7C /* ganeshastubdata.cpp */,
+				DE9D0C7A2B4A14D400EA0B7C /* ganeshastubdata.h */,
 				DE9D0C802B4A14D400EA0B7C /* ggraphicsapiprotocol.h */,
-				DE9D0C842B4A14D400EA0B7C /* glog.cpp */,
-				DE9D0C922B4A14D500EA0B7C /* glog.h */,
-				DE9D0C912B4A14D500EA0B7C /* gmatrix.cpp */,
-				DE9D0C792B4A14D400EA0B7C /* gmatrix.h */,
-				DE9D0C9F2B4A14D500EA0B7C /* gpoint.cpp */,
-				DE9D0C742B4A14D400EA0B7C /* gpoint.h */,
-				DE9D0C8A2B4A14D400EA0B7C /* gpoint2d.cpp */,
-				DE9D0C902B4A14D500EA0B7C /* gpoint2d.h */,
-				DE9D0C822B4A14D400EA0B7C /* gquaternion.cpp */,
-				DE9D0C782B4A14D400EA0B7C /* gquaternion.h */,
 				DE9D0C7C2B4A14D400EA0B7C /* grendergraph.cpp */,
 				DE9D0C752B4A14D400EA0B7C /* grendergraph.h */,
-				DE9D0C992B4A14D500EA0B7C /* gtga.cpp */,
-				DE9D0C852B4A14D400EA0B7C /* gtga.h */,
-				DE9D0C7E2B4A14D400EA0B7C /* gvector.cpp */,
-				DE9D0C862B4A14D400EA0B7C /* gvector.h */,
-				DE9D0C8D2B4A14D400EA0B7C /* gvulkanapi.cpp */,
-				DE9D0C8E2B4A14D400EA0B7C /* gvulkanapi.h */,
-				DE9D0C872B4A14D400EA0B7C /* gvulkanbuffer.cpp */,
-				DE9D0C8F2B4A14D500EA0B7C /* gvulkanbuffer.h */,
-				DE9D0C892B4A14D400EA0B7C /* gvulkandescriptorsets.cpp */,
-				DE9D0C8B2B4A14D400EA0B7C /* gvulkandescriptorsets.h */,
-				DE9D0C972B4A14D500EA0B7C /* gvulkandevice.cpp */,
-				DE9D0C8C2B4A14D400EA0B7C /* gvulkandevice.h */,
-				DE9D0C962B4A14D500EA0B7C /* gvulkanimage.cpp */,
-				DE9D0C762B4A14D400EA0B7C /* gvulkanimage.h */,
-				DE9D0C9E2B4A14D500EA0B7C /* gvulkaninstance.cpp */,
-				DE9D0C9C2B4A14D500EA0B7C /* gvulkaninstance.h */,
-				DE9D0C942B4A14D500EA0B7C /* gvulkanpipeline.cpp */,
-				DE9D0C722B4A14D400EA0B7C /* gvulkanpipeline.h */,
-				DE9D0C982B4A14D500EA0B7C /* gvulkanswapchain.cpp */,
-				DE9D0C9D2B4A14D500EA0B7C /* gvulkanswapchain.h */,
-				DE9D0C732B4A14D400EA0B7C /* gvulkantools.cpp */,
-				DE9D0C952B4A14D500EA0B7C /* gvulkantools.h */,
+				DE9D0C7B2B4A14D400EA0B7C /* gganesha.cpp */,
+				DE9D0C882B4A14D400EA0B7C /* gganesha.h */,
+				DE9D0C812B4A14D400EA0B7C /* ganeshatypes.h */,
+				DE9D0C932B4A14D500EA0B7C /* ganesha.h */,
 			);
 			name = ganesha;
 			sourceTree = "<group>";
