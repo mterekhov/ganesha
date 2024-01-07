@@ -349,7 +349,7 @@ UniformBufferObject GVULKANAPI::currentUBO() {
 }
 
 void GVULKANAPI::createTextures() {
-    GTGA tgaFile("/Users/cipher/Development/RENDER/ganesha/resources/MWALL4_1.tga");
+    GTGA tgaFile("/Users/cipher/Development/RENDER/dengine/doom/resources/images/BIGDOOR2.tga");
     texture.createImage({ tgaFile.getWidth(), tgaFile.getHeight() },
                         VK_FORMAT_R8G8B8A8_SRGB,
                         VK_IMAGE_ASPECT_COLOR_BIT,
