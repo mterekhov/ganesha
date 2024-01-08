@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "ganeshastubdata.h"
+#include "ggraphnode.h"
 
 namespace spcGaneshaEngine {
 
@@ -29,6 +30,8 @@ public:
     TStringsArray& getTextureFilePathArray();
 
 private:
+    std::vector<GGraphNode *> graph;
+    
     TStringsArray vertexShadersArray;
     TStringsArray fragmentsShadersArray;
     TStringsArray texturesFilePathArray;

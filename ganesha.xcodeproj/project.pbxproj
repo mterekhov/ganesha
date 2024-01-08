@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DE69D20F2B4BFAA6002D28E2 /* ggraphnode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE69D20D2B4BFAA6002D28E2 /* ggraphnode.cpp */; };
+		DE69D2102B4BFAA6002D28E2 /* ggraphnode.h in Headers */ = {isa = PBXBuildFile; fileRef = DE69D20E2B4BFAA6002D28E2 /* ggraphnode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE69D2132B4BFABB002D28E2 /* gnode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE69D2112B4BFABB002D28E2 /* gnode.cpp */; };
+		DE69D2142B4BFABB002D28E2 /* gnode.h in Headers */ = {isa = PBXBuildFile; fileRef = DE69D2122B4BFABB002D28E2 /* gnode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE69D2172B4BFC3E002D28E2 /* gspritenode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE69D2152B4BFC3E002D28E2 /* gspritenode.cpp */; };
+		DE69D2182B4BFC3E002D28E2 /* gspritenode.h in Headers */ = {isa = PBXBuildFile; fileRef = DE69D2162B4BFC3E002D28E2 /* gspritenode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE9D0CA12B4A14D500EA0B7C /* gvulkanpipeline.h in Headers */ = {isa = PBXBuildFile; fileRef = DE9D0C722B4A14D400EA0B7C /* gvulkanpipeline.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE9D0CA22B4A14D500EA0B7C /* gvulkantools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE9D0C732B4A14D400EA0B7C /* gvulkantools.cpp */; };
 		DE9D0CA32B4A14D500EA0B7C /* gpoint.h in Headers */ = {isa = PBXBuildFile; fileRef = DE9D0C742B4A14D400EA0B7C /* gpoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -56,6 +62,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DE69D20D2B4BFAA6002D28E2 /* ggraphnode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ggraphnode.cpp; path = ganesha/ggraphnode.cpp; sourceTree = "<group>"; };
+		DE69D20E2B4BFAA6002D28E2 /* ggraphnode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ggraphnode.h; path = ganesha/ggraphnode.h; sourceTree = "<group>"; };
+		DE69D2112B4BFABB002D28E2 /* gnode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gnode.cpp; path = ganesha/gnode.cpp; sourceTree = "<group>"; };
+		DE69D2122B4BFABB002D28E2 /* gnode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gnode.h; path = ganesha/gnode.h; sourceTree = "<group>"; };
+		DE69D2152B4BFC3E002D28E2 /* gspritenode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gspritenode.cpp; path = ganesha/gspritenode.cpp; sourceTree = "<group>"; };
+		DE69D2162B4BFC3E002D28E2 /* gspritenode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gspritenode.h; path = ganesha/gspritenode.h; sourceTree = "<group>"; };
 		DE82CE5C2B4A149500EF0925 /* ganesha.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ganesha.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE9D0C722B4A14D400EA0B7C /* gvulkanpipeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvulkanpipeline.h; path = ganesha/gvulkanpipeline.h; sourceTree = "<group>"; };
 		DE9D0C732B4A14D400EA0B7C /* gvulkantools.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gvulkantools.cpp; path = ganesha/gvulkantools.cpp; sourceTree = "<group>"; };
@@ -172,6 +184,21 @@
 			name = Tools;
 			sourceTree = "<group>";
 		};
+		DE69D20C2B4BFA63002D28E2 /* Graph */ = {
+			isa = PBXGroup;
+			children = (
+				DE69D2112B4BFABB002D28E2 /* gnode.cpp */,
+				DE69D2122B4BFABB002D28E2 /* gnode.h */,
+				DE69D2152B4BFC3E002D28E2 /* gspritenode.cpp */,
+				DE69D2162B4BFC3E002D28E2 /* gspritenode.h */,
+				DE9D0C7C2B4A14D400EA0B7C /* grendergraph.cpp */,
+				DE9D0C752B4A14D400EA0B7C /* grendergraph.h */,
+				DE69D20D2B4BFAA6002D28E2 /* ggraphnode.cpp */,
+				DE69D20E2B4BFAA6002D28E2 /* ggraphnode.h */,
+			);
+			name = Graph;
+			sourceTree = "<group>";
+		};
 		DE82CE522B4A149500EF0925 = {
 			isa = PBXGroup;
 			children = (
@@ -192,6 +219,7 @@
 		DE82CE5E2B4A149500EF0925 /* ganesha */ = {
 			isa = PBXGroup;
 			children = (
+				DE69D20C2B4BFA63002D28E2 /* Graph */,
 				DE69D1FF2B4B47C1002D28E2 /* Basics */,
 				DE69D2002B4B47D6002D28E2 /* VULKAN */,
 				DE69D2012B4B47F4002D28E2 /* Tools */,
@@ -200,8 +228,6 @@
 				DE9D0C9A2B4A14D500EA0B7C /* ganeshastubdata.cpp */,
 				DE9D0C7A2B4A14D400EA0B7C /* ganeshastubdata.h */,
 				DE9D0C802B4A14D400EA0B7C /* ggraphicsapiprotocol.h */,
-				DE9D0C7C2B4A14D400EA0B7C /* grendergraph.cpp */,
-				DE9D0C752B4A14D400EA0B7C /* grendergraph.h */,
 				DE9D0C7B2B4A14D400EA0B7C /* gganesha.cpp */,
 				DE9D0C882B4A14D400EA0B7C /* gganesha.h */,
 				DE9D0C812B4A14D400EA0B7C /* ganeshatypes.h */,
@@ -245,6 +271,9 @@
 				DE9D0CB52B4A14D500EA0B7C /* gvector.h in Headers */,
 				DE9D0CA72B4A14D500EA0B7C /* gquaternion.h in Headers */,
 				DE9D0CB42B4A14D500EA0B7C /* gtga.h in Headers */,
+				DE69D2182B4BFC3E002D28E2 /* gspritenode.h in Headers */,
+				DE69D2142B4BFABB002D28E2 /* gnode.h in Headers */,
+				DE69D2102B4BFAA6002D28E2 /* ggraphnode.h in Headers */,
 				DE9D0CC42B4A14D500EA0B7C /* gvulkantools.h in Headers */,
 				DE9D0CA92B4A14D500EA0B7C /* ganeshastubdata.h in Headers */,
 				DE9D0CAE2B4A14D500EA0B7C /* gcamera.h in Headers */,
@@ -330,14 +359,17 @@
 				DE9D0CB92B4A14D500EA0B7C /* gpoint2d.cpp in Sources */,
 				DE9D0CA22B4A14D500EA0B7C /* gvulkantools.cpp in Sources */,
 				DE9D0CCD2B4A14D500EA0B7C /* gvulkaninstance.cpp in Sources */,
+				DE69D2172B4BFC3E002D28E2 /* gspritenode.cpp in Sources */,
 				DE9D0CAB2B4A14D500EA0B7C /* grendergraph.cpp in Sources */,
 				DE9D0CB12B4A14D500EA0B7C /* gquaternion.cpp in Sources */,
 				DE9D0CC52B4A14D500EA0B7C /* gvulkanimage.cpp in Sources */,
 				DE9D0CC02B4A14D500EA0B7C /* gmatrix.cpp in Sources */,
+				DE69D2132B4BFABB002D28E2 /* gnode.cpp in Sources */,
 				DE9D0CC62B4A14D500EA0B7C /* gvulkandevice.cpp in Sources */,
 				DE9D0CB62B4A14D500EA0B7C /* gvulkanbuffer.cpp in Sources */,
 				DE9D0CBC2B4A14D500EA0B7C /* gvulkanapi.cpp in Sources */,
 				DE9D0CAD2B4A14D500EA0B7C /* gvector.cpp in Sources */,
+				DE69D20F2B4BFAA6002D28E2 /* ggraphnode.cpp in Sources */,
 				DE9D0CC32B4A14D500EA0B7C /* gvulkanpipeline.cpp in Sources */,
 				DE9D0CAA2B4A14D500EA0B7C /* gganesha.cpp in Sources */,
 				DE9D0CCE2B4A14D500EA0B7C /* gpoint.cpp in Sources */,
