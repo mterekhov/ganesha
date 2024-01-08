@@ -187,10 +187,6 @@
 		DE69D20C2B4BFA63002D28E2 /* Graph */ = {
 			isa = PBXGroup;
 			children = (
-				DE69D2112B4BFABB002D28E2 /* gnode.cpp */,
-				DE69D2122B4BFABB002D28E2 /* gnode.h */,
-				DE69D2152B4BFC3E002D28E2 /* gspritenode.cpp */,
-				DE69D2162B4BFC3E002D28E2 /* gspritenode.h */,
 				DE9D0C7C2B4A14D400EA0B7C /* grendergraph.cpp */,
 				DE9D0C752B4A14D400EA0B7C /* grendergraph.h */,
 				DE69D20D2B4BFAA6002D28E2 /* ggraphnode.cpp */,
@@ -219,6 +215,7 @@
 		DE82CE5E2B4A149500EF0925 /* ganesha */ = {
 			isa = PBXGroup;
 			children = (
+				DEBE148E2B4C8B89001EF6FB /* Meshes */,
 				DE69D20C2B4BFA63002D28E2 /* Graph */,
 				DE69D1FF2B4B47C1002D28E2 /* Basics */,
 				DE69D2002B4B47D6002D28E2 /* VULKAN */,
@@ -242,6 +239,17 @@
 				DE9D0CD12B4A17E500EA0B7C /* vulkan.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DEBE148E2B4C8B89001EF6FB /* Meshes */ = {
+			isa = PBXGroup;
+			children = (
+				DE69D2112B4BFABB002D28E2 /* gnode.cpp */,
+				DE69D2122B4BFABB002D28E2 /* gnode.h */,
+				DE69D2152B4BFC3E002D28E2 /* gspritenode.cpp */,
+				DE69D2162B4BFC3E002D28E2 /* gspritenode.h */,
+			);
+			name = Meshes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

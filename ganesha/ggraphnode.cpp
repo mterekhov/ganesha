@@ -2,7 +2,7 @@
 
 namespace spcGaneshaEngine {
 
-GGraphNode::GGraphNode() {
+GGraphNode::GGraphNode(GNode *node) : node(node), rtsMatrix(GMatrix::identityMatrix()) {
     
 }
 

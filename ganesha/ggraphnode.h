@@ -8,12 +8,10 @@ namespace spcGaneshaEngine {
 
 class GGraphNode {
 public:
-    GGraphNode();
+    GGraphNode(GNode *node);
     ~GGraphNode();
     
-    GMatrix rtsMatrix();
-    
-private:
+    GMatrix rtsMatrix;
     GNode *node;
 };
 

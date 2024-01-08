@@ -14,6 +14,11 @@ public:
     GRenderGraph();
     ~GRenderGraph();
 
+    GGraphNode *createSpriteNode(const std::string& textureFilePath);
+    
+    void pushNode(GGraphNode *node);
+    std::vector<GGraphNode *>& getNodeArray();
+
     void defineVertexesArray(const std::vector<Vertex>& newVertexesArray);
     const std::vector<Vertex>& getVertexesArray() const;
     
@@ -30,7 +35,7 @@ public:
     TStringsArray& getTextureFilePathArray();
 
 private:
-    std::vector<GGraphNode *> graph;
+    std::vector<GGraphNode *> graphNodeArray;
     
     TStringsArray vertexShadersArray;
     TStringsArray fragmentsShadersArray;

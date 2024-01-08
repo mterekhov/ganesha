@@ -6,6 +6,7 @@
 //
 
 #include "grendergraph.h"
+#include "gspritenode.h"
 
 namespace spcGaneshaEngine {
 
@@ -15,6 +16,25 @@ GRenderGraph::GRenderGraph() {
 
 GRenderGraph::~GRenderGraph() {
     
+}
+
+GGraphNode *GRenderGraph::createSpriteNode(const std::string& textureFilePath) {
+    //  creating mesh
+    GSpriteNode *spriteMesh = new GSpriteNode(textureFilePath);
+    
+    //  creating mesh instance
+    GGraphNode *meshInstance = new GGraphNode(spriteMesh);
+    meshInstance->rtsMatrix = GMatrix::identityMatrix();
+    
+    return meshInstance;
+}
+
+void GRenderGraph::pushNode(GGraphNode *node) {
+    graphNodeArray.push_back(node);
+}
+
+std::vector<GGraphNode *>& GRenderGraph::getNodeArray() {
+    return graphNodeArray;
 }
 
 void GRenderGraph::pushVertexShader(const std::string& shaderFullFilePath) {

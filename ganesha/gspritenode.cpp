@@ -2,7 +2,7 @@
 
 namespace spcGaneshaEngine {
 
-GSpriteNode::GSpriteNode() {
+GSpriteNode::GSpriteNode(const std::string& textureFilePath) {
     
 }
 
