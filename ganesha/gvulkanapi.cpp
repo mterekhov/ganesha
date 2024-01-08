@@ -239,16 +239,13 @@ void GVULKANAPI::recordRenderCommand(VkCommandBuffer renderCommand,
         renderPassInfo.framebuffer = framebuffer;
         renderPassInfo.renderArea.offset = {0, 0};
         renderPassInfo.renderArea.extent = swapChainExtent;
-        
         std::array<VkClearValue, 2> clearValues = { };
         clearValues[0].color = {{0.0f, 0.0f, 0.0f, 1.0f}};
         clearValues[1].depthStencil = {1.0f, 0};
-        
         renderPassInfo.clearValueCount = clearValues.size();
         renderPassInfo.pClearValues = clearValues.data();
         
         vkCmdBeginRenderPass(renderCommand, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-        
             vkCmdBindPipeline(renderCommand, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.getGraphicsPipeline());
             
             VkViewport viewport{};
@@ -267,15 +264,13 @@ void GVULKANAPI::recordRenderCommand(VkCommandBuffer renderCommand,
             
             VkBuffer vertexBuffers[] = { vertexesBuffer };
             VkDeviceSize offsets[] = {0};
+    
             vkCmdBindVertexBuffers(renderCommand, 0, 1, vertexBuffers, offsets);
-            
             vkCmdBindIndexBuffer(renderCommand, indexesBuffer, 0, VK_INDEX_TYPE_UINT32);
-            
             vkCmdBindDescriptorSets(renderCommand, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.getPipelineLayout(), 0, 1, &descriptorset, 0, nullptr);
             vkCmdDrawIndexed(renderCommand, indexesNumber, 1, 0, 0, 0);
-        
+    
         vkCmdEndRenderPass(renderCommand);
-        
     vkEndCommandBuffer(renderCommand);
 }
 
