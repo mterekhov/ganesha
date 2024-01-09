@@ -54,20 +54,26 @@ VkDescriptorPool GVULKANDescriptorsets::createDescriptorPool(const TUInt descrip
 }
 
 VkDescriptorSetLayout GVULKANDescriptorsets::createLayout(VkDevice device) {
-    VkDescriptorSetLayoutBinding vertexBinding = { };
-    vertexBinding.binding = 0;
-    vertexBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    vertexBinding.descriptorCount = 1;
-    vertexBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+    VkDescriptorSetLayoutBinding projectionBinding = { };
+    projectionBinding.binding = 0;
+    projectionBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    projectionBinding.descriptorCount = 1;
+    projectionBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+    
+    VkDescriptorSetLayoutBinding modelBinding = { };
+    modelBinding.binding = 1;
+    modelBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    modelBinding.descriptorCount = 1;
+    modelBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
     
     VkDescriptorSetLayoutBinding fragmentBinding = { };
-    fragmentBinding.binding = 1;
+    fragmentBinding.binding = 2;
     fragmentBinding.descriptorCount = 1;
     fragmentBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
     fragmentBinding.pImmutableSamplers = nullptr;
     fragmentBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
-    std::array<VkDescriptorSetLayoutBinding, 2> bindingsArray = { vertexBinding, fragmentBinding };
+    std::array<VkDescriptorSetLayoutBinding, 3> bindingsArray = { projectionBinding, modelBinding, fragmentBinding };
     
     VkDescriptorSetLayoutCreateInfo layoutInfo = { };
     layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
