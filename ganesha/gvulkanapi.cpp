@@ -58,23 +58,38 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
     commandPool = createCommandPool(vulkanDevice);
     
     TUInt framebuffersNumber = static_cast<TUInt>(vulkanSwapChain.framebuffersNumber());
-    VkDeviceSize bufferSize = sizeof(UniformBufferObject);
     for (TUInt i = 0; i < framebuffersNumber; i++) {
-        GVULKANBuffer newBuffer(log);
-        UniformBufferObject ubo = currentUBO();
-        newBuffer.createBuffer(&ubo,
-                               bufferSize,
+        GVULKANBuffer newProjectionBuffer(log);
+        ProjectionsBufferObject projectionBufferObject = currentProjectionBufferObject();
+        newProjectionBuffer.createBuffer(&projectionBufferObject,
+                               sizeof(ProjectionsBufferObject),
                                VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
                                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
                                false,
                                vulkanDevice,
                                commandPool);
-        vulkanUniformBuffers.push_back(newBuffer);
+        vulkanProjectionBuffers.push_back(newProjectionBuffer);
+
+        GVULKANBuffer newModelBuffer(log);
+        ModelBufferObject modelBufferObject = currentModelBufferObject();
+        newModelBuffer.createBuffer(&modelBufferObject,
+                               sizeof(ModelBufferObject),
+                               VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+                               VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                               false,
+                               vulkanDevice,
+                               commandPool);
+        vulkanModelBuffers.push_back(newModelBuffer);
     }
     
     materialsService = new GMaterialsService(log, commandPool);
+    std::string materialFilePath;
+    for (const std::string& filePath : renderGraph.getTextureFilePathArray()) {
+        materialFilePath = filePath;
+    }
+    GVULKANImage& material = materialsService->createMaterial(materialFilePath, vulkanDevice);
 //    createTextures(renderGraph);
-    vulkanDescriptorset.createDescriptorsets(vulkanDevice, vulkanUniformBuffers, texture);
+    vulkanDescriptorset.createDescriptorsets(vulkanDevice, vulkanProjectionBuffers, vulkanModelBuffers, material);
 
     vulkanPipeline.createPipeline(vulkanDevice, vulkanSwapChain, vulkanDescriptorset.getDescriptorsetLayout(), renderGraph);
     
@@ -121,10 +136,13 @@ void GVULKANAPI::destroyAPI() {
     vulkanSwapChain.destroySwapChain(vulkanDevice);
     vulkanPipeline.destroyPipeline(vulkanDevice);
     
-    for (size_t i = 0; i < vulkanUniformBuffers.size(); i++) {
-        vulkanUniformBuffers[i].destroyBuffer(vulkanDevice);
+    for (size_t i = 0; i < vulkanProjectionBuffers.size(); i++) {
+        vulkanProjectionBuffers[i].destroyBuffer(vulkanDevice);
     }
-    
+    for (size_t i = 0; i < vulkanModelBuffers.size(); i++) {
+        vulkanModelBuffers[i].destroyBuffer(vulkanDevice);
+    }
+
     vulkanDescriptorset.destroyDescriptorsets(vulkanDevice);
     
     indexesBuffer.destroyBuffer(vulkanDevice);
@@ -157,9 +175,11 @@ void GVULKANAPI::drawFrame(GRenderGraph& renderGraph) {
     }
     imagesInFlight[imageIndex] = inFlightFences[currentFrame];
     
-    UniformBufferObject ubo = currentUBO();
-    vulkanUniformBuffers[imageIndex].refreshBuffer(&ubo, vulkanDevice);
-    
+    ProjectionsBufferObject projectionBufferObject = currentProjectionBufferObject();
+    vulkanProjectionBuffers[imageIndex].refreshBuffer(&projectionBufferObject, vulkanDevice);
+    ModelBufferObject modelBufferObject = currentModelBufferObject();
+    vulkanModelBuffers[imageIndex].refreshBuffer(&modelBufferObject, vulkanDevice);
+
     vkResetCommandBuffer(renderCommands[imageIndex], 0);
     recordRenderCommand(renderCommands[imageIndex],
                         vertexesBuffer.getBuffer(),
@@ -331,19 +351,25 @@ VkSurfaceKHR GVULKANAPI::createSurface(void *metalLayer) {
     return newSurface;
 }
 
-UniformBufferObject GVULKANAPI::currentUBO() {
-    static auto startTime = std::chrono::high_resolution_clock::now();
+ProjectionsBufferObject GVULKANAPI::currentProjectionBufferObject() {
+    ProjectionsBufferObject projectionBufferObject = {};
     
+    projectionBufferObject.view = viewMatrix;
+    projectionBufferObject.proj = projectionMatrix;
+    
+    return projectionBufferObject;
+}
+
+ModelBufferObject GVULKANAPI::currentModelBufferObject() {
+    static auto startTime = std::chrono::high_resolution_clock::now();
     auto currentTime = std::chrono::high_resolution_clock::now();
     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
     
-    UniformBufferObject ubo = {};
+    ModelBufferObject modelBufferObject = {};
     
-    ubo.model = GMatrix::rotationY(time * M_PI_2);
-    ubo.view = viewMatrix;
-    ubo.proj = projectionMatrix;
+    modelBufferObject.model = GMatrix::rotationY(time * M_PI_2);
     
-    return ubo;
+    return modelBufferObject;
 }
 
 //void GVULKANAPI::createTextures(GRenderGraph& renderGraph) {

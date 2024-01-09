@@ -18,8 +18,11 @@
 
 namespace spcGaneshaEngine {
 
-struct UniformBufferObject {
+struct ModelBufferObject {
     GMatrix model;
+};
+
+struct ProjectionsBufferObject {
     GMatrix view;
     GMatrix proj;
 };
@@ -47,7 +50,6 @@ private:
 //    GVULKANImage texture;
     GMaterialsServiceProtocol *materialsService;
     
-    std::vector<GVULKANBuffer> vulkanUniformBuffers;
     GVULKANBuffer vertexesBuffer;
     GVULKANBuffer indexesBuffer;
 
@@ -80,9 +82,14 @@ private:
                              VkDescriptorSet descriptorset);
     VkCommandPool createCommandPool(GVULKANDevice& device);
     VkSurfaceKHR createSurface(void *metalLayer);
-//    void createTextures(GRenderGraph& renderGraph);
     void createSemaphores();
-    UniformBufferObject currentUBO();
+
+//    void createTextures(GRenderGraph& renderGraph);
+//    UniformBufferObject currentUBO();
+    std::vector<GVULKANBuffer> vulkanModelBuffers;
+    std::vector<GVULKANBuffer> vulkanProjectionBuffers;
+    ProjectionsBufferObject currentProjectionBufferObject();
+    ModelBufferObject currentModelBufferObject();
 };
 
 }   //  namespace spcGaneshaEngine
