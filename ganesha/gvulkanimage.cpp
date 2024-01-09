@@ -79,11 +79,11 @@ void GVULKANImage::deployData(GTGA& tgaFile,
     stagingBuffer.destroyBuffer(vulkanDevice);
 }
 
-void GVULKANImage::destroyImage(GVULKANDevice& vulkanDevice) {
-    vkDestroySampler(vulkanDevice.getLogicalDevice(), sampler, nullptr);
-    vkDestroyImageView(vulkanDevice.getLogicalDevice(), imageView, nullptr);
-    vkDestroyImage(vulkanDevice.getLogicalDevice(), image, nullptr);
-    vkFreeMemory(vulkanDevice.getLogicalDevice(), imageMemory, nullptr);
+void GVULKANImage::destroyImage(VkDevice device) {
+    vkDestroySampler(device, sampler, nullptr);
+    vkDestroyImageView(device, imageView, nullptr);
+    vkDestroyImage(device, image, nullptr);
+    vkFreeMemory(device, imageMemory, nullptr);
 }
 
 VkImageView GVULKANImage::getImageView() {

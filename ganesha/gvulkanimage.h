@@ -24,7 +24,7 @@ public:
     void deployData(GTGA& tgaFile,
                     GVULKANDevice& vulkanDevice,
                     VkCommandPool commandPool);
-    void destroyImage(GVULKANDevice& vulkanDevice);
+    void destroyImage(VkDevice device);
     
     VkImageView getImageView();
     VkSampler getSampler();

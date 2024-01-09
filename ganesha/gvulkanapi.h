@@ -14,6 +14,7 @@
 #include "gvulkanbuffer.h"
 #include "gvulkandescriptorsets.h"
 #include "gvulkanimage.h"
+#include "gmaterialsservice.h"
 
 namespace spcGaneshaEngine {
 
@@ -43,7 +44,9 @@ private:
     GVULKANPipeline vulkanPipeline;
     GVULKANDescriptorsets vulkanDescriptorset;
 
-    GVULKANImage texture;
+//    GVULKANImage texture;
+    GMaterialsServiceProtocol *materialsService;
+    
     std::vector<GVULKANBuffer> vulkanUniformBuffers;
     GVULKANBuffer vertexesBuffer;
     GVULKANBuffer indexesBuffer;
@@ -77,7 +80,7 @@ private:
                              VkDescriptorSet descriptorset);
     VkCommandPool createCommandPool(GVULKANDevice& device);
     VkSurfaceKHR createSurface(void *metalLayer);
-    void createTextures(GRenderGraph& renderGraph);
+//    void createTextures(GRenderGraph& renderGraph);
     void createSemaphores();
     UniformBufferObject currentUBO();
 };

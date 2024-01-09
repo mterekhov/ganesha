@@ -140,7 +140,7 @@ void GVULKANSwapChain::destroyExtentDependency(GVULKANDevice& vulkanDevice) {
         vkDestroyImageView(vulkanDevice.getLogicalDevice(), imageView, nullptr);
     }
     
-    depthImage.destroyImage(vulkanDevice);
+    depthImage.destroyImage(vulkanDevice.getLogicalDevice());
 
     vkDestroySwapchainKHR(vulkanDevice.getLogicalDevice(), swapChain, nullptr);
 }

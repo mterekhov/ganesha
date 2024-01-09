@@ -29,5 +29,6 @@
 #include "grendergraph.h"
 #include "gganesha.h"
 #include "ganeshatypes.h"
+#include "gmaterialsservice.h"
 
 #endif  //  GANESHA_H

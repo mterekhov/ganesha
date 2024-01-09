@@ -32,8 +32,9 @@ vulkanSwapChain(log),
 vulkanPipeline(log),
 vertexesBuffer(log),
 indexesBuffer(log),
-vulkanDescriptorset(log),
-texture(log) {
+vulkanDescriptorset(log)
+//texture(log) 
+{
     
 }
 
@@ -70,7 +71,9 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
                                commandPool);
         vulkanUniformBuffers.push_back(newBuffer);
     }
-    createTextures(renderGraph);
+    
+    materialsService = new GMaterialsService(log, commandPool);
+//    createTextures(renderGraph);
     vulkanDescriptorset.createDescriptorsets(vulkanDevice, vulkanUniformBuffers, texture);
 
     vulkanPipeline.createPipeline(vulkanDevice, vulkanSwapChain, vulkanDescriptorset.getDescriptorsetLayout(), renderGraph);
@@ -112,7 +115,8 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
 void GVULKANAPI::destroyAPI() {
     vkDeviceWaitIdle(vulkanDevice.getLogicalDevice());
     
-    texture.destroyImage(vulkanDevice);
+    delete materialsService;
+//    texture.destroyImage(vulkanDevice.getLogicalDevice());
     
     vulkanSwapChain.destroySwapChain(vulkanDevice);
     vulkanPipeline.destroyPipeline(vulkanDevice);
@@ -144,10 +148,10 @@ void GVULKANAPI::frameResized(const float width, const float height) {
 }
 
 void GVULKANAPI::drawFrame(GRenderGraph& renderGraph) {
-    VkResult result = vkWaitForFences(vulkanDevice.getLogicalDevice(), 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
+    vkWaitForFences(vulkanDevice.getLogicalDevice(), 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
     
     TUInt imageIndex;
-    result = vkAcquireNextImageKHR(vulkanDevice.getLogicalDevice(), vulkanSwapChain.getVulkanSwapChain(), UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
+    vkAcquireNextImageKHR(vulkanDevice.getLogicalDevice(), vulkanSwapChain.getVulkanSwapChain(), UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
     if (imagesInFlight[imageIndex] != VK_NULL_HANDLE) {
         vkWaitForFences(vulkanDevice.getLogicalDevice(), 1, &imagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
     }
@@ -298,7 +302,7 @@ void GVULKANAPI::createSemaphores() {
 }
 
 VkCommandPool GVULKANAPI::createCommandPool(GVULKANDevice& device) {
-    VkCommandPoolCreateInfo poolInfo{};
+    VkCommandPoolCreateInfo poolInfo = { };
     poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
     poolInfo.queueFamilyIndex = device.getGraphicsQueueIndex();
@@ -342,22 +346,22 @@ UniformBufferObject GVULKANAPI::currentUBO() {
     return ubo;
 }
 
-void GVULKANAPI::createTextures(GRenderGraph& renderGraph) {
-    std::string textureFilePath;
-    for (const std::string& filePath : renderGraph.getTextureFilePathArray()) {
-        textureFilePath = filePath;
-    }
-    GTGA tgaFile(textureFilePath);
-    texture.createImage({ tgaFile.getWidth(), tgaFile.getHeight() },
-                        VK_FORMAT_R8G8B8A8_SRGB,
-                        VK_IMAGE_ASPECT_COLOR_BIT,
-                        VK_IMAGE_TILING_OPTIMAL,
-                        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-                        vulkanDevice);
-    texture.deployData(tgaFile,
-                       vulkanDevice,
-                       commandPool);
-}
+//void GVULKANAPI::createTextures(GRenderGraph& renderGraph) {
+//    std::string textureFilePath;
+//    for (const std::string& filePath : renderGraph.getTextureFilePathArray()) {
+//        textureFilePath = filePath;
+//    }
+//    GTGA tgaFile(textureFilePath);
+//    texture.createImage({ tgaFile.getWidth(), tgaFile.getHeight() },
+//                        VK_FORMAT_R8G8B8A8_SRGB,
+//                        VK_IMAGE_ASPECT_COLOR_BIT,
+//                        VK_IMAGE_TILING_OPTIMAL,
+//                        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+//                        vulkanDevice);
+//    texture.deployData(tgaFile,
+//                       vulkanDevice,
+//                       commandPool);
+//}
 
 
 }
