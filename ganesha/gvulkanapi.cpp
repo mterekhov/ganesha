@@ -130,6 +130,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
 void GVULKANAPI::destroyAPI() {
     vkDeviceWaitIdle(vulkanDevice.getLogicalDevice());
     
+    materialsService->destroyMaterials(vulkanDevice.getLogicalDevice());
     delete materialsService;
 //    texture.destroyImage(vulkanDevice.getLogicalDevice());
     
