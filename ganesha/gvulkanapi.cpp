@@ -128,7 +128,7 @@ void GVULKANAPI::destroyAPI() {
     }
     
     descriptorService->destroy(vulkanDevice.getLogicalDevice());
-    
+
     vkDestroyCommandPool(vulkanDevice.getLogicalDevice(), commandPool, nullptr);
     vulkanDevice.destroyDevice();
     vkDestroySurfaceKHR(vulkanInstance.getVulkanInstance(), metalSurface, nullptr);
@@ -145,19 +145,16 @@ void GVULKANAPI::drawFrame() {
     
     TUInt imageIndex;
     vkAcquireNextImageKHR(vulkanDevice.getLogicalDevice(), vulkanSwapChain.getVulkanSwapChain(), UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
-    if (imagesInFlight[imageIndex] != VK_NULL_HANDLE) {
-        vkWaitForFences(vulkanDevice.getLogicalDevice(), 1, &imagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
-    }
-    imagesInFlight[imageIndex] = inFlightFences[currentFrame];
-    
+
     ProjectionsBufferObject projectionBufferObject = currentProjectionBufferObject();
     vulkanProjectionBuffers[imageIndex].refreshBuffer(&projectionBufferObject, vulkanDevice);
     ModelBufferObject modelBufferObject = currentModelBufferObject();
     vulkanModelBuffers[imageIndex].refreshBuffer(&modelBufferObject, vulkanDevice);
     
-    vkResetCommandBuffer(renderCommands[imageIndex], 0);
-    recordRenderCommand(renderCommands[imageIndex],
-                        renderGraphArray[imageIndex],
+    vkResetFences(vulkanDevice.getLogicalDevice(), 1, &inFlightFences[currentFrame]);
+    vkResetCommandBuffer(renderCommands[currentFrame], 0);
+    recordRenderCommand(renderCommands[currentFrame],
+                        renderGraphArray[currentFrame],
                         vulkanSwapChain.getFramebuffers()[imageIndex],
                         vulkanSwapChain,
                         vulkanPipeline,
@@ -173,13 +170,11 @@ void GVULKANAPI::drawFrame() {
     submitInfo.pWaitDstStageMask = waitStages;
     
     submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers = &renderCommands[imageIndex];
+    submitInfo.pCommandBuffers = &renderCommands[currentFrame];
     
     VkSemaphore signalSemaphores[] = {renderFinishedSemaphores[currentFrame]};
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores = signalSemaphores;
-    
-    vkResetFences(vulkanDevice.getLogicalDevice(), 1, &inFlightFences[currentFrame]);
     
     if (vkQueueSubmit(vulkanDevice.getGraphicsQueue(), 1, &submitInfo, inFlightFences[currentFrame]) != VK_SUCCESS) {
         log.error("failed to submit draw command buffer\n");
