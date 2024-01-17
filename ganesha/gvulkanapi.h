@@ -14,6 +14,7 @@
 #include "gvulkanbuffer.h"
 #include "gvulkanimage.h"
 #include "gmaterialsservice.h"
+#include "gdescriptorsetservice.h"
 
 namespace spcGaneshaEngine {
 
@@ -44,6 +45,7 @@ private:
     GVULKANInstance vulkanInstance;
     GVULKANSwapChain vulkanSwapChain;
     GVULKANPipeline vulkanPipeline;
+    GDescriptorsetServiceProtocol *descriptorService;
     
     VkSurfaceKHR metalSurface;
     VkCommandPool commandPool;

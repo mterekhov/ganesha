@@ -9,7 +9,7 @@ GVULKANPipeline::GVULKANPipeline(GLog& log) : log(log) {
 GVULKANPipeline::~GVULKANPipeline() {
 }
 
-void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapChain& swapChain, GRenderGraph& renderGraph) {
+void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapChain& swapChain, GRenderGraph& renderGraph, VkDescriptorSetLayout descriptorsetLayout) {
     VkPipelineVertexInputStateCreateInfo vertexInputInfo = createVertexInput();
     
     VkPipelineInputAssemblyStateCreateInfo inputAssembly = { };
@@ -65,7 +65,7 @@ void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapCha
     dynamicState.dynamicStateCount = static_cast<TUInt>(dynamicStates.size());
     dynamicState.pDynamicStates = dynamicStates.data();
     
-    pipelineLayout = createPipelineLayout(vulkanDevice.getLogicalDevice(), renderGraph.getDescriptoprsetsLayout());
+    pipelineLayout = createPipelineLayout(vulkanDevice.getLogicalDevice(), descriptorsetLayout);
     
     VkPipelineDepthStencilStateCreateInfo depthStencil = { };
     depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;

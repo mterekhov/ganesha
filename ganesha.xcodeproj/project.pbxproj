@@ -61,6 +61,8 @@
 		DEBE14922B4DC2C5001EF6FB /* gmaterialsservice.h in Headers */ = {isa = PBXBuildFile; fileRef = DEBE14902B4DC2C5001EF6FB /* gmaterialsservice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DEBE14952B51E548001EF6FB /* gganeshacontent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEBE14932B51E548001EF6FB /* gganeshacontent.cpp */; };
 		DEBE14962B51E548001EF6FB /* gganeshacontent.h in Headers */ = {isa = PBXBuildFile; fileRef = DEBE14942B51E548001EF6FB /* gganeshacontent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DEDF76782B58711000F569A7 /* gdescriptorsetservice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEDF76762B58711000F569A7 /* gdescriptorsetservice.cpp */; };
+		DEDF76792B58711000F569A7 /* gdescriptorsetservice.h in Headers */ = {isa = PBXBuildFile; fileRef = DEDF76772B58711000F569A7 /* gdescriptorsetservice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -119,6 +121,8 @@
 		DEBE14902B4DC2C5001EF6FB /* gmaterialsservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gmaterialsservice.h; path = ganesha/gmaterialsservice.h; sourceTree = "<group>"; };
 		DEBE14932B51E548001EF6FB /* gganeshacontent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gganeshacontent.cpp; path = ganesha/gganeshacontent.cpp; sourceTree = "<group>"; };
 		DEBE14942B51E548001EF6FB /* gganeshacontent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gganeshacontent.h; path = ganesha/gganeshacontent.h; sourceTree = "<group>"; };
+		DEDF76762B58711000F569A7 /* gdescriptorsetservice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gdescriptorsetservice.cpp; path = ganesha/gdescriptorsetservice.cpp; sourceTree = "<group>"; };
+		DEDF76772B58711000F569A7 /* gdescriptorsetservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gdescriptorsetservice.h; path = ganesha/gdescriptorsetservice.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +176,8 @@
 				DE9D0C962B4A14D500EA0B7C /* gvulkanimage.cpp */,
 				DE9D0C732B4A14D400EA0B7C /* gvulkantools.cpp */,
 				DE9D0C952B4A14D500EA0B7C /* gvulkantools.h */,
+				DEDF76762B58711000F569A7 /* gdescriptorsetservice.cpp */,
+				DEDF76772B58711000F569A7 /* gdescriptorsetservice.h */,
 			);
 			name = VULKAN;
 			sourceTree = "<group>";
@@ -289,6 +295,7 @@
 				DE69D2182B4BFC3E002D28E2 /* gspritenode.h in Headers */,
 				DE69D2142B4BFABB002D28E2 /* gnode.h in Headers */,
 				DE69D2102B4BFAA6002D28E2 /* ggraphnode.h in Headers */,
+				DEDF76792B58711000F569A7 /* gdescriptorsetservice.h in Headers */,
 				DE9D0CC42B4A14D500EA0B7C /* gvulkantools.h in Headers */,
 				DE9D0CA92B4A14D500EA0B7C /* ganeshastubdata.h in Headers */,
 				DE9D0CAE2B4A14D500EA0B7C /* gcamera.h in Headers */,
@@ -375,6 +382,7 @@
 				DE9D0CCD2B4A14D500EA0B7C /* gvulkaninstance.cpp in Sources */,
 				DEBE14912B4DC2C5001EF6FB /* gmaterialsservice.cpp in Sources */,
 				DE69D2172B4BFC3E002D28E2 /* gspritenode.cpp in Sources */,
+				DEDF76782B58711000F569A7 /* gdescriptorsetservice.cpp in Sources */,
 				DEBE14952B51E548001EF6FB /* gganeshacontent.cpp in Sources */,
 				DE9D0CAB2B4A14D500EA0B7C /* grendergraph.cpp in Sources */,
 				DE9D0CB12B4A14D500EA0B7C /* gquaternion.cpp in Sources */,

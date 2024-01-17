@@ -52,15 +52,18 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
     
     vulkanSwapChain.createSwapChain(frameWidth, frameHeight, vulkanDevice, metalSurface);
     commandPool = createCommandPool(vulkanDevice);
+
+    descriptorService = new GDescriptorsetService();
+    descriptorService->initService(vulkanDevice.getLogicalDevice());
     
     for (TUInt i = 0; i < maxFramesInFlight; i++) {
         GRenderGraph newRenderGraph(log);
         newRenderGraph.createGraph(vulkanDevice, commandPool);
-        newRenderGraph.loadContent(content, vulkanDevice, commandPool);
+        newRenderGraph.loadContent(content, vulkanDevice, commandPool, descriptorService);
         renderGraphArray.push_back(newRenderGraph);
     }
     
-    vulkanPipeline.createPipeline(vulkanDevice, vulkanSwapChain, *renderGraphArray.begin());
+    vulkanPipeline.createPipeline(vulkanDevice, vulkanSwapChain, *renderGraphArray.begin(), descriptorService->getDescriptorsetLayout());
 
     TUInt framebuffersNumber = static_cast<TUInt>(vulkanSwapChain.framebuffersNumber());
     for (TUInt i = 0; i < framebuffersNumber; i++) {
@@ -74,6 +77,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
                                          false,
                                          vulkanDevice,
                                          commandPool);
+        descriptorService->attachBufferToDescriptorset(newProjectionBuffer, 0, vulkanDevice.getLogicalDevice());
         vulkanProjectionBuffers.push_back(newProjectionBuffer);
         
         //  model matrix
@@ -86,6 +90,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
                                     false,
                                     vulkanDevice,
                                     commandPool);
+        descriptorService->attachBufferToDescriptorset(newModelBuffer, 1, vulkanDevice.getLogicalDevice());
         vulkanModelBuffers.push_back(newModelBuffer);
 
         //  render commands
@@ -122,6 +127,8 @@ void GVULKANAPI::destroyAPI() {
         vkDestroyFence(vulkanDevice.getLogicalDevice(), inFlightFences[i], nullptr);
     }
     
+    descriptorService->destroy(vulkanDevice.getLogicalDevice());
+    
     vkDestroyCommandPool(vulkanDevice.getLogicalDevice(), commandPool, nullptr);
     vulkanDevice.destroyDevice();
     vkDestroySurfaceKHR(vulkanInstance.getVulkanInstance(), metalSurface, nullptr);
@@ -154,7 +161,7 @@ void GVULKANAPI::drawFrame() {
                         vulkanSwapChain.getFramebuffers()[imageIndex],
                         vulkanSwapChain,
                         vulkanPipeline,
-                        renderGraphArray[imageIndex].getDescriptorset());
+                        descriptorService->getDescriptorset());
     VkSubmitInfo submitInfo{};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     
@@ -262,7 +269,7 @@ void GVULKANAPI::createSemaphores() {
     imageAvailableSemaphores.resize(maxFramesInFlight);
     renderFinishedSemaphores.resize(maxFramesInFlight);
     inFlightFences.resize(maxFramesInFlight);
-    imagesInFlight.resize(maxFramesInFlight, VK_NULL_HANDLE);
+    imagesInFlight.resize(3, VK_NULL_HANDLE);
     
     VkSemaphoreCreateInfo semaphoreInfo = { };
     semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;

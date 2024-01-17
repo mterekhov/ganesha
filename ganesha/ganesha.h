@@ -30,5 +30,6 @@
 #include "ganeshatypes.h"
 #include "gmaterialsservice.h"
 #include "gganeshacontent.h"
+#include "gdescriptorsetservice.h"
 
 #endif  //  GANESHA_H

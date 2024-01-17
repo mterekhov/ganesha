@@ -17,7 +17,7 @@ public:
     GVULKANPipeline(GLog& log);
     ~GVULKANPipeline();
     
-    void createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapChain& swapChain, GRenderGraph& renderGraph);
+    void createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapChain& swapChain, GRenderGraph& renderGraph, VkDescriptorSetLayout descriptorsetLayout);
     void destroyPipeline(GVULKANDevice& vulkanDevice);
     VkPipeline getGraphicsPipeline();
     VkPipelineLayout getPipelineLayout();

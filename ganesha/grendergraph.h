@@ -8,6 +8,7 @@
 #include "gmaterialsservice.h"
 #include "gvulkanbuffer.h"
 #include "gganeshacontent.h"
+#include "gdescriptorsetservice.h"
 
 namespace spcGaneshaEngine {
 
@@ -19,15 +20,13 @@ public:
     void createGraph(GVULKANDevice& vulkanDevice, VkCommandPool commandPool);
     void destroyGraph(VkDevice device);
     
-    void loadContent(GGaneshaContent& contentLoader, GVULKANDevice& vulkanDevice, VkCommandPool commandPool);
+    void loadContent(GGaneshaContent& contentLoader, GVULKANDevice& vulkanDevice, VkCommandPool commandPool, GDescriptorsetServiceProtocol *descriptorsetService);
 
-    GGraphNode *createSpriteNode(const std::string& materialFilePath, GVULKANDevice& vulkanDevice, VkCommandPool commandPool);
+    GGraphNode *createSpriteNode(const std::string& materialFilePath, GVULKANDevice& vulkanDevice, VkCommandPool commandPool, GDescriptorsetServiceProtocol *descriptorsetService);
     void pushNode(GGraphNode *node);
     
     std::vector<GGraphNode *>& getNodeArray();
     std::vector<VkPipelineShaderStageCreateInfo>& getShadersArray();
-    VkDescriptorSetLayout getDescriptoprsetsLayout();
-    VkDescriptorSet getDescriptorset();
     
 private:
     GLog& log;
@@ -35,17 +34,8 @@ private:
     std::vector<GGraphNode *> graphNodeArray;
     std::vector<VkPipelineShaderStageCreateInfo> shadersArray;
     GMaterialsServiceProtocol *materialsService;
-    VkDescriptorPool descriptorsetsPool;
-    VkDescriptorSetLayout descriptorsetsLayout;
-    VkDescriptorSet descriptorset;
-    
+
     VkPipelineShaderStageCreateInfo createShader(const std::string& shaderFile,  const VkShaderStageFlagBits stage, VkDevice device);
-    
-    VkDescriptorSet createDescriptorset(VkDevice device);
-    void attachImageToDescriptorset(GVULKANImage& image, VkDescriptorSet dstDescriptorset, TUInt bindingIndex, VkDevice device);
-    void attachBufferToDescriptorset(GVULKANBuffer& buffer, VkDescriptorSet dstDescriptorset, TUInt bindingIndex, VkDevice device);
-    VkDescriptorPool createDescriptorsetsPool(VkDevice device);
-    VkDescriptorSetLayout createDescriptorsetsLayout(VkDevice device);
 };
 
 };  //  spcGaneshaEngine
