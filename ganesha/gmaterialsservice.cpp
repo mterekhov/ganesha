@@ -10,7 +10,7 @@ GMaterialsService::GMaterialsService(GLog& log, VkCommandPool commandPool) : log
 GMaterialsService::~GMaterialsService() {
 }
 
-GVULKANImage& GMaterialsService::createMaterial(const std::string &imageFilePath, GVULKANDevice& vulkanDevice) {
+GVULKANImage *GMaterialsService::createMaterial(const std::string &imageFilePath, GVULKANDevice& vulkanDevice) {
     GTGA tgaFile(imageFilePath);
     
     GVULKANImage *newImage = new GVULKANImage(log);
@@ -26,11 +26,11 @@ GVULKANImage& GMaterialsService::createMaterial(const std::string &imageFilePath
     
     materialsMap[imageFilePath] = newImage;
     
-    return *materialsMap[imageFilePath];
+    return materialsMap[imageFilePath];
 }
 
-GVULKANImage& GMaterialsService::findMaterial(const std::string& imageFilePath) {
-    return *materialsMap[imageFilePath];
+GVULKANImage *GMaterialsService::findMaterial(const std::string& imageFilePath) {
+    return materialsMap[imageFilePath];
 }
 
 std::map<std::string, GVULKANImage *>& GMaterialsService::getMaterialsMap() {

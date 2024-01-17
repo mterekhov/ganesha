@@ -28,6 +28,7 @@ public:
     
     VkImageView getImageView();
     VkSampler getSampler();
+    VkDescriptorSet getDescriptorSet();
 
 private:
     GLog& log;

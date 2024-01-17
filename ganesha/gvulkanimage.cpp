@@ -76,7 +76,7 @@ void GVULKANImage::deployData(GTGA& tgaFile,
     tmpCommand = transitionImageLayout(image, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, commandPool, vulkanDevice.getLogicalDevice());
     submitCommand(tmpCommand, commandPool, vulkanDevice);
     
-    stagingBuffer.destroyBuffer(vulkanDevice);
+    stagingBuffer.destroyBuffer(vulkanDevice.getLogicalDevice());
 }
 
 void GVULKANImage::destroyImage(VkDevice device) {

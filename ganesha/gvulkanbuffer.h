@@ -20,7 +20,7 @@ public:
                       const TBool protectAccess,
                       GVULKANDevice& vulkanDevice,
                       VkCommandPool commandPool);
-    void destroyBuffer(GVULKANDevice& vulkanDevice);
+    void destroyBuffer(VkDevice device);
     void refreshBuffer(const void *data, GVULKANDevice& vulkanDevice);
     VkBuffer getBuffer();
     TUInt getBufferSize();

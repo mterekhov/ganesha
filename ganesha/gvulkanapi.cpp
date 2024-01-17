@@ -9,6 +9,7 @@
 #include "gmatrix.h"
 #include "gvulkanbuffer.h"
 #include "gvulkantools.h"
+#include "gspritenode.h"
 
 namespace spcGaneshaEngine {
 
@@ -29,12 +30,7 @@ GVULKANAPI::GVULKANAPI(GLog& log) : log(log),
 vulkanInstance(log),
 vulkanDevice(log),
 vulkanSwapChain(log),
-vulkanPipeline(log),
-vertexesBuffer(log),
-indexesBuffer(log),
-vulkanDescriptorset(log)
-//texture(log) 
-{
+vulkanPipeline(log) {
     
 }
 
@@ -44,7 +40,7 @@ GVULKANAPI::~GVULKANAPI() {
 
 #pragma mark - GGraphicsAPIProtocol -
 
-void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt frameHeight, GRenderGraph& renderGraph) {
+void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt frameHeight, GGaneshaContent& content) {
     //  create VULKAN instance
     vulkanInstance.createInstance("DOOM", khronosValidationLayers, avoidInstanceExtensions);
     
@@ -53,66 +49,46 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
     
     //  creates physicalDevice
     vulkanDevice.createDevice(vulkanInstance, useDeviceExtensions, metalSurface);
-
+    
     vulkanSwapChain.createSwapChain(frameWidth, frameHeight, vulkanDevice, metalSurface);
     commandPool = createCommandPool(vulkanDevice);
     
+    for (TUInt i = 0; i < maxFramesInFlight; i++) {
+        GRenderGraph newRenderGraph(log);
+        newRenderGraph.createGraph(vulkanDevice, commandPool);
+        newRenderGraph.loadContent(content, vulkanDevice, commandPool);
+        renderGraphArray.push_back(newRenderGraph);
+    }
+    
+    vulkanPipeline.createPipeline(vulkanDevice, vulkanSwapChain, *renderGraphArray.begin());
+
     TUInt framebuffersNumber = static_cast<TUInt>(vulkanSwapChain.framebuffersNumber());
     for (TUInt i = 0; i < framebuffersNumber; i++) {
+        //  projection matrix
         GVULKANBuffer newProjectionBuffer(log);
         ProjectionsBufferObject projectionBufferObject = currentProjectionBufferObject();
         newProjectionBuffer.createBuffer(&projectionBufferObject,
-                               sizeof(ProjectionsBufferObject),
-                               VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
-                               VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-                               false,
-                               vulkanDevice,
-                               commandPool);
+                                         sizeof(ProjectionsBufferObject),
+                                         VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+                                         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                                         false,
+                                         vulkanDevice,
+                                         commandPool);
         vulkanProjectionBuffers.push_back(newProjectionBuffer);
-
+        
+        //  model matrix
         GVULKANBuffer newModelBuffer(log);
         ModelBufferObject modelBufferObject = currentModelBufferObject();
         newModelBuffer.createBuffer(&modelBufferObject,
-                               sizeof(ModelBufferObject),
-                               VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
-                               VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-                               false,
-                               vulkanDevice,
-                               commandPool);
+                                    sizeof(ModelBufferObject),
+                                    VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+                                    VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                                    false,
+                                    vulkanDevice,
+                                    commandPool);
         vulkanModelBuffers.push_back(newModelBuffer);
-    }
-    
-    materialsService = new GMaterialsService(log, commandPool);
-    std::string materialFilePath;
-    for (const std::string& filePath : renderGraph.getTextureFilePathArray()) {
-        materialFilePath = filePath;
-    }
-    GVULKANImage& material = materialsService->createMaterial(materialFilePath, vulkanDevice);
-//    createTextures(renderGraph);
-    vulkanDescriptorset.createDescriptorsets(vulkanDevice, vulkanProjectionBuffers, vulkanModelBuffers, material);
 
-    vulkanPipeline.createPipeline(vulkanDevice, vulkanSwapChain, vulkanDescriptorset.getDescriptorsetLayout(), renderGraph);
-    
-    std::vector<Vertex> vertexesArray = renderGraph.getVertexesArray();
-    vertexesBuffer.createBuffer(vertexesArray.data(),
-                                sizeof(Vertex) * vertexesArray.size(),
-                                VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
-                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-                                true,
-                                vulkanDevice,
-                                commandPool);
-    
-    TIndexArray indexesArray = renderGraph.getIndexesArray();
-    indexesBuffer.createBuffer(indexesArray.data(),
-                               sizeof(TIndex) * indexesArray.size(),
-                               VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
-                               VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-                               true,
-                               vulkanDevice,
-                               commandPool);
-    
-    
-    for (TUInt i = 0; i < framebuffersNumber; i++) {
+        //  render commands
         VkCommandBufferAllocateInfo allocInfo = { };
         allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
         allocInfo.commandPool = commandPool;
@@ -123,31 +99,22 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
         vkAllocateCommandBuffers(vulkanDevice.getLogicalDevice(), &allocInfo, &newCommand);
         renderCommands.push_back(newCommand);
     }
-    
+
     createSemaphores();
 }
 
 void GVULKANAPI::destroyAPI() {
     vkDeviceWaitIdle(vulkanDevice.getLogicalDevice());
     
-    materialsService->destroyMaterials(vulkanDevice.getLogicalDevice());
-    delete materialsService;
-//    texture.destroyImage(vulkanDevice.getLogicalDevice());
-    
     vulkanSwapChain.destroySwapChain(vulkanDevice);
     vulkanPipeline.destroyPipeline(vulkanDevice);
     
     for (size_t i = 0; i < vulkanProjectionBuffers.size(); i++) {
-        vulkanProjectionBuffers[i].destroyBuffer(vulkanDevice);
+        vulkanProjectionBuffers[i].destroyBuffer(vulkanDevice.getLogicalDevice());
     }
     for (size_t i = 0; i < vulkanModelBuffers.size(); i++) {
-        vulkanModelBuffers[i].destroyBuffer(vulkanDevice);
+        vulkanModelBuffers[i].destroyBuffer(vulkanDevice.getLogicalDevice());
     }
-
-    vulkanDescriptorset.destroyDescriptorsets(vulkanDevice);
-    
-    indexesBuffer.destroyBuffer(vulkanDevice);
-    vertexesBuffer.destroyBuffer(vulkanDevice);
     
     for (size_t i = 0; i < maxFramesInFlight; i++) {
         vkDestroySemaphore(vulkanDevice.getLogicalDevice(), renderFinishedSemaphores[i], nullptr);
@@ -166,7 +133,7 @@ void GVULKANAPI::frameResized(const float width, const float height) {
     installIsometricView(fov, nearPlane, farPlane);
 }
 
-void GVULKANAPI::drawFrame(GRenderGraph& renderGraph) {
+void GVULKANAPI::drawFrame() {
     vkWaitForFences(vulkanDevice.getLogicalDevice(), 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
     
     TUInt imageIndex;
@@ -180,16 +147,14 @@ void GVULKANAPI::drawFrame(GRenderGraph& renderGraph) {
     vulkanProjectionBuffers[imageIndex].refreshBuffer(&projectionBufferObject, vulkanDevice);
     ModelBufferObject modelBufferObject = currentModelBufferObject();
     vulkanModelBuffers[imageIndex].refreshBuffer(&modelBufferObject, vulkanDevice);
-
+    
     vkResetCommandBuffer(renderCommands[imageIndex], 0);
     recordRenderCommand(renderCommands[imageIndex],
-                        vertexesBuffer.getBuffer(),
-                        indexesBuffer.getBuffer(),
-                        static_cast<TUInt>(renderGraph.getIndexesArray().size()),
+                        renderGraphArray[imageIndex],
                         vulkanSwapChain.getFramebuffers()[imageIndex],
                         vulkanSwapChain,
                         vulkanPipeline,
-                        vulkanDescriptorset.getDescriptorsetArray()[imageIndex]);
+                        renderGraphArray[imageIndex].getDescriptorset());
     VkSubmitInfo submitInfo{};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     
@@ -223,7 +188,7 @@ void GVULKANAPI::drawFrame(GRenderGraph& renderGraph) {
     presentInfo.pSwapchains = swapChains;
     presentInfo.pImageIndices = &imageIndex;
     vkQueuePresentKHR(vulkanDevice.getPresentQueue(), &presentInfo);
-
+    
     currentFrame = (currentFrame + 1) % maxFramesInFlight;
 }
 
@@ -246,31 +211,29 @@ void GVULKANAPI::installViewMatrix(const GMatrix& newViewMatrix) {
 #pragma mark - Routine -
 
 void GVULKANAPI::recordRenderCommand(VkCommandBuffer renderCommand,
-                                          VkBuffer vertexesBuffer,
-                                          VkBuffer indexesBuffer,
-                                          const TUInt indexesNumber,
-                                          VkFramebuffer framebuffer,
-                                          GVULKANSwapChain& swapChain,
-                                          GVULKANPipeline& pipeline,
-                                          VkDescriptorSet descriptorset) {
+                                     GRenderGraph& renderGraph,
+                                     VkFramebuffer framebuffer,
+                                     GVULKANSwapChain& swapChain,
+                                     GVULKANPipeline& pipeline,
+                                     VkDescriptorSet descriptorset) {
     VkCommandBufferBeginInfo beginInfo = { };
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     
     vkBeginCommandBuffer(renderCommand, &beginInfo);
         VkExtent2D swapChainExtent = swapChain.getExtent();
-        VkRenderPassBeginInfo renderPassInfo{};
-        renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-        renderPassInfo.renderPass = swapChain.getRenderPass();
-        renderPassInfo.framebuffer = framebuffer;
-        renderPassInfo.renderArea.offset = {0, 0};
-        renderPassInfo.renderArea.extent = swapChainExtent;
-        std::array<VkClearValue, 2> clearValues = { };
-        clearValues[0].color = {{0.0f, 0.0f, 0.0f, 1.0f}};
-        clearValues[1].depthStencil = {1.0f, 0};
-        renderPassInfo.clearValueCount = clearValues.size();
-        renderPassInfo.pClearValues = clearValues.data();
-        
-        vkCmdBeginRenderPass(renderCommand, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+        VkRenderPassBeginInfo renderPassInfo = { };
+            renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+            renderPassInfo.renderPass = swapChain.getRenderPass();
+            renderPassInfo.framebuffer = framebuffer;
+            renderPassInfo.renderArea.offset = {0, 0};
+            renderPassInfo.renderArea.extent = swapChainExtent;
+            std::array<VkClearValue, 2> clearValues = { };
+            clearValues[0].color = {{0.0f, 0.0f, 0.0f, 1.0f}};
+            clearValues[1].depthStencil = {1.0f, 0};
+            renderPassInfo.clearValueCount = clearValues.size();
+            renderPassInfo.pClearValues = clearValues.data();
+            
+            vkCmdBeginRenderPass(renderCommand, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
             vkCmdBindPipeline(renderCommand, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.getGraphicsPipeline());
             
             VkViewport viewport{};
@@ -281,20 +244,16 @@ void GVULKANAPI::recordRenderCommand(VkCommandBuffer renderCommand,
             viewport.minDepth = 0.0f;
             viewport.maxDepth = 1.0f;
             vkCmdSetViewport(renderCommand, 0, 1, &viewport);
-            
+
             VkRect2D scissor{};
             scissor.offset = {0, 0};
             scissor.extent = swapChainExtent;
             vkCmdSetScissor(renderCommand, 0, 1, &scissor);
-            
-            VkBuffer vertexBuffers[] = { vertexesBuffer };
-            VkDeviceSize offsets[] = {0};
-    
-            vkCmdBindVertexBuffers(renderCommand, 0, 1, vertexBuffers, offsets);
-            vkCmdBindIndexBuffer(renderCommand, indexesBuffer, 0, VK_INDEX_TYPE_UINT32);
+
             vkCmdBindDescriptorSets(renderCommand, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.getPipelineLayout(), 0, 1, &descriptorset, 0, nullptr);
-            vkCmdDrawIndexed(renderCommand, indexesNumber, 1, 0, 0, 0);
-    
+            for (GGraphNode *graphNode:renderGraph.getNodeArray()) {
+                graphNode->node->render(renderCommand);
+            }
         vkCmdEndRenderPass(renderCommand);
     vkEndCommandBuffer(renderCommand);
 }
@@ -303,12 +262,12 @@ void GVULKANAPI::createSemaphores() {
     imageAvailableSemaphores.resize(maxFramesInFlight);
     renderFinishedSemaphores.resize(maxFramesInFlight);
     inFlightFences.resize(maxFramesInFlight);
-    imagesInFlight.resize(vulkanSwapChain.framebuffersNumber(), VK_NULL_HANDLE);
+    imagesInFlight.resize(maxFramesInFlight, VK_NULL_HANDLE);
     
-    VkSemaphoreCreateInfo semaphoreInfo{};
+    VkSemaphoreCreateInfo semaphoreInfo = { };
     semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
     
-    VkFenceCreateInfo fenceInfo{};
+    VkFenceCreateInfo fenceInfo = { };
     fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
     fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
     
@@ -372,23 +331,5 @@ ModelBufferObject GVULKANAPI::currentModelBufferObject() {
     
     return modelBufferObject;
 }
-
-//void GVULKANAPI::createTextures(GRenderGraph& renderGraph) {
-//    std::string textureFilePath;
-//    for (const std::string& filePath : renderGraph.getTextureFilePathArray()) {
-//        textureFilePath = filePath;
-//    }
-//    GTGA tgaFile(textureFilePath);
-//    texture.createImage({ tgaFile.getWidth(), tgaFile.getHeight() },
-//                        VK_FORMAT_R8G8B8A8_SRGB,
-//                        VK_IMAGE_ASPECT_COLOR_BIT,
-//                        VK_IMAGE_TILING_OPTIMAL,
-//                        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-//                        vulkanDevice);
-//    texture.deployData(tgaFile,
-//                       vulkanDevice,
-//                       commandPool);
-//}
-
 
 }

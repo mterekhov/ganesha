@@ -12,7 +12,6 @@
 #include "gvulkanpipeline.h"
 #include "gmatrix.h"
 #include "gvulkanbuffer.h"
-#include "gvulkandescriptorsets.h"
 #include "gvulkanimage.h"
 #include "gmaterialsservice.h"
 
@@ -32,9 +31,9 @@ public:
     GVULKANAPI(GLog& log);
     virtual ~GVULKANAPI();
 
-    virtual void initAPI(void *metalLayer, const TUInt frameWidth, const TUInt frameHeight, GRenderGraph& renderGraph);
+    virtual void initAPI(void *metalLayer, const TUInt frameWidth, const TUInt frameHeight, GGaneshaContent& content);
     virtual void destroyAPI();
-    virtual void drawFrame(GRenderGraph& renderGraph);
+    virtual void drawFrame();
     virtual void frameResized(const float width, const float height);
     virtual void installIsometricView(const TFloat fieldOfView, const TFloat near, const TFloat far);
     virtual void installViewMatrix(const GMatrix& newViewMatrix);
@@ -45,14 +44,7 @@ private:
     GVULKANInstance vulkanInstance;
     GVULKANSwapChain vulkanSwapChain;
     GVULKANPipeline vulkanPipeline;
-    GVULKANDescriptorsets vulkanDescriptorset;
-
-//    GVULKANImage texture;
-    GMaterialsServiceProtocol *materialsService;
     
-    GVULKANBuffer vertexesBuffer;
-    GVULKANBuffer indexesBuffer;
-
     VkSurfaceKHR metalSurface;
     VkCommandPool commandPool;
 
@@ -69,13 +61,12 @@ private:
     size_t currentFrame = 0;
 
     std::vector<VkCommandBuffer> renderCommands;
+    std::vector<GRenderGraph> renderGraphArray;
 
     const TUInt maxFramesInFlight = 2;
 
     void recordRenderCommand(VkCommandBuffer renderCommand,
-                             VkBuffer vertexesBuffer,
-                             VkBuffer indexesBuffer,
-                             const TUInt indexesNumber,
+                             GRenderGraph& renderGraph,
                              VkFramebuffer framebuffer,
                              GVULKANSwapChain& swapChain,
                              GVULKANPipeline& pipeline,
@@ -84,8 +75,6 @@ private:
     VkSurfaceKHR createSurface(void *metalLayer);
     void createSemaphores();
 
-//    void createTextures(GRenderGraph& renderGraph);
-//    UniformBufferObject currentUBO();
     std::vector<GVULKANBuffer> vulkanModelBuffers;
     std::vector<GVULKANBuffer> vulkanProjectionBuffers;
     ProjectionsBufferObject currentProjectionBufferObject();

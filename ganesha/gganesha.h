@@ -5,8 +5,8 @@
 
 #include "ggraphicsapiprotocol.h"
 #include "gcamera.h"
-#include "grendergraph.h"
 #include "glog.h"
+#include "gganeshacontent.h"
 
 namespace spcGaneshaEngine {
 
@@ -20,7 +20,7 @@ public:
     /// @param metalLayer  layer of MTKView
     /// @param width window width
     /// @param height window height
-    TBool initEngine(void *metalLayer, const TUInt width, const TUInt height);
+    TBool initEngine(void *metalLayer, const TUInt width, const TUInt height, GGaneshaContent& content);
     
     /// Destroys all engine objects
     void destroyVulkan();
@@ -39,8 +39,6 @@ public:
     
     void processMouseMove(const TFloat diff_x, const TFloat diff_y);
 
-    GRenderGraph renderGraph;
-    
 private:
     GGraphicsAPIProtocol *graphicsAPI;
     GCamera camera;
