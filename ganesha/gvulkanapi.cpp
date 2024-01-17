@@ -126,7 +126,10 @@ void GVULKANAPI::destroyAPI() {
         vkDestroySemaphore(vulkanDevice.getLogicalDevice(), imageAvailableSemaphores[i], nullptr);
         vkDestroyFence(vulkanDevice.getLogicalDevice(), inFlightFences[i], nullptr);
     }
-    
+        
+    for (GRenderGraph graph:renderGraphArray) {
+        graph.destroyGraph(vulkanDevice.getLogicalDevice());
+    }
     descriptorService->destroy(vulkanDevice.getLogicalDevice());
 
     vkDestroyCommandPool(vulkanDevice.getLogicalDevice(), commandPool, nullptr);
