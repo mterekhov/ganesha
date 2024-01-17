@@ -24,11 +24,12 @@
 #include "gvulkanpipeline.h"
 #include "gvulkanswapchain.h"
 #include "gvulkanbuffer.h"
-#include "gvulkandescriptorsets.h"
 #include "gcamera.h"
 #include "grendergraph.h"
 #include "gganesha.h"
 #include "ganeshatypes.h"
 #include "gmaterialsservice.h"
+#include "gganeshacontent.h"
+#include "gdescriptorsetservice.h"
 
 #endif  //  GANESHA_H

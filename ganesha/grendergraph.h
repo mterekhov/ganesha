@@ -5,44 +5,37 @@
 
 #include "ganeshastubdata.h"
 #include "ggraphnode.h"
+#include "gmaterialsservice.h"
+#include "gvulkanbuffer.h"
+#include "gganeshacontent.h"
+#include "gdescriptorsetservice.h"
 
 namespace spcGaneshaEngine {
 
 /// Manipulates with current position
 class GRenderGraph {
 public:
-    GRenderGraph();
+    GRenderGraph(GLog& log);
     ~GRenderGraph();
-
-    GGraphNode *createSpriteNode(const std::string& textureFilePath);
+    void createGraph(GVULKANDevice& vulkanDevice, VkCommandPool commandPool);
+    void destroyGraph(VkDevice device);
     
+    void loadContent(GGaneshaContent& contentLoader, GVULKANDevice& vulkanDevice, VkCommandPool commandPool, GDescriptorsetServiceProtocol *descriptorsetService);
+
+    GGraphNode *createSpriteNode(const std::string& materialFilePath, GVULKANDevice& vulkanDevice, VkCommandPool commandPool, GDescriptorsetServiceProtocol *descriptorsetService);
     void pushNode(GGraphNode *node);
+    
     std::vector<GGraphNode *>& getNodeArray();
-
-    void defineVertexesArray(const std::vector<Vertex>& newVertexesArray);
-    const std::vector<Vertex>& getVertexesArray() const;
+    std::vector<VkPipelineShaderStageCreateInfo>& getShadersArray();
     
-    void defineIndexesArray(const TIndexArray& newIndexesArray);
-    const TIndexArray& getIndexesArray() const;
-    
-    void pushVertexShader(const std::string& shaderFullFilePath);
-    TStringsArray& getVertexesShadersArray();
-    
-    void pushFragmentShader(const std::string& shaderFullFilePath);
-    TStringsArray& getFragmentShadersArray();
-
-    void pushTextureFilePath(const std::string& textureFullFilePath);
-    TStringsArray& getTextureFilePathArray();
-
 private:
-    std::vector<GGraphNode *> graphNodeArray;
-    
-    TStringsArray vertexShadersArray;
-    TStringsArray fragmentsShadersArray;
-    TStringsArray texturesFilePathArray;
+    GLog& log;
 
-    std::vector<Vertex> vertexesArray;
-    TIndexArray indexesArray;
+    std::vector<GGraphNode *> graphNodeArray;
+    std::vector<VkPipelineShaderStageCreateInfo> shadersArray;
+    GMaterialsServiceProtocol *materialsService;
+
+    VkPipelineShaderStageCreateInfo createShader(const std::string& shaderFile,  const VkShaderStageFlagBits stage, VkDevice device);
 };
 
 };  //  spcGaneshaEngine

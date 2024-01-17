@@ -9,11 +9,7 @@ GVULKANPipeline::GVULKANPipeline(GLog& log) : log(log) {
 GVULKANPipeline::~GVULKANPipeline() {
 }
 
-void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapChain& swapChain, VkDescriptorSetLayout descriptorsetLayout, GRenderGraph& renderGraph) {
-    VkPipelineShaderStageCreateInfo vertShaderStageInfo = createVertexShaders(renderGraph.getVertexesShadersArray(), vulkanDevice.getLogicalDevice());
-    VkPipelineShaderStageCreateInfo fragShaderStageInfo = createFragmentShaders(renderGraph.getFragmentShadersArray(), vulkanDevice.getLogicalDevice());
-    VkPipelineShaderStageCreateInfo pipelineShaderStageInfosList[] = {vertShaderStageInfo, fragShaderStageInfo};
-    
+void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapChain& swapChain, GRenderGraph& renderGraph, VkDescriptorSetLayout descriptorsetLayout) {
     VkPipelineVertexInputStateCreateInfo vertexInputInfo = createVertexInput();
     
     VkPipelineInputAssemblyStateCreateInfo inputAssembly = { };
@@ -81,8 +77,8 @@ void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapCha
 
     VkGraphicsPipelineCreateInfo pipelineInfo{};
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-    pipelineInfo.stageCount = 2;
-    pipelineInfo.pStages = pipelineShaderStageInfosList;
+    pipelineInfo.stageCount = renderGraph.getShadersArray().size();
+    pipelineInfo.pStages = renderGraph.getShadersArray().data();
     pipelineInfo.pVertexInputState = &vertexInputInfo;
     pipelineInfo.pInputAssemblyState = &inputAssembly;
     pipelineInfo.pViewportState = &viewportState;
@@ -100,9 +96,6 @@ void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapCha
     if (result != VK_SUCCESS) {
         log.error("error while creating pipeline itself\n");
     }
-    
-    vkDestroyShaderModule(vulkanDevice.getLogicalDevice(), fragShaderStageInfo.module, nullptr);
-    vkDestroyShaderModule(vulkanDevice.getLogicalDevice(), vertShaderStageInfo.module, nullptr);
 }
 
 void GVULKANPipeline::destroyPipeline(GVULKANDevice& vulkanDevice) {
@@ -149,8 +142,8 @@ VkPipelineRasterizationStateCreateInfo GVULKANPipeline::createRasterizer() {
     return rasterizer;
 }
 
-VkPipelineLayout GVULKANPipeline::createPipelineLayout(VkDevice device, VkDescriptorSetLayout& descriptorsetLayout) {
-    VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
+VkPipelineLayout GVULKANPipeline::createPipelineLayout(VkDevice device, VkDescriptorSetLayout descriptorsetLayout) {
+    VkPipelineLayoutCreateInfo pipelineLayoutInfo = { };
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
     pipelineLayoutInfo.setLayoutCount = 1; // Optional
     pipelineLayoutInfo.pSetLayouts = &descriptorsetLayout;
@@ -164,47 +157,47 @@ VkPipelineLayout GVULKANPipeline::createPipelineLayout(VkDevice device, VkDescri
     return newPipelineLayout;
 }
 
-VkPipelineShaderStageCreateInfo GVULKANPipeline::createVertexShaders(const TStringsArray& shadersArray, VkDevice device) {
-    VkPipelineShaderStageCreateInfo vertShaderStageInfo = {};
-    
-    for (const std::string& shaderFullFilePath : shadersArray) {
-        vertShaderStageInfo = createShader(shaderFullFilePath, VK_SHADER_STAGE_VERTEX_BIT, device);
-    }
-    
-    return vertShaderStageInfo;
-}
-
-VkPipelineShaderStageCreateInfo GVULKANPipeline::createFragmentShaders(const TStringsArray& shadersArray, VkDevice device) {
-    VkPipelineShaderStageCreateInfo fragShaderStageInfo = {};
-    
-    for (const std::string& shaderFullFilePath : shadersArray) {
-        fragShaderStageInfo = createShader(shaderFullFilePath, VK_SHADER_STAGE_FRAGMENT_BIT, device);
-    }
-    
-    return fragShaderStageInfo;
-}
-
-VkPipelineShaderStageCreateInfo GVULKANPipeline::createShader(const std::string& shaderFile, const VkShaderStageFlagBits stage, VkDevice device) {
-    GVULKANTools tools;
-    const std::vector<uint8_t> code = tools.readFile(shaderFile);
-    VkShaderModuleCreateInfo createInfo = { };
-    
-    createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-    createInfo.codeSize = code.size();
-    createInfo.pCode = reinterpret_cast<const TUInt*>(code.data());
-    
-    VkShaderModule shaderModule;
-    if (vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
-        log.error("No chance to create shader module\n");
-    }
-    
-    VkPipelineShaderStageCreateInfo shaderStageInfo{};
-    shaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-    shaderStageInfo.stage = stage;
-    shaderStageInfo.module = shaderModule;
-    shaderStageInfo.pName = "main";
-    
-    return shaderStageInfo;
-}
+//VkPipelineShaderStageCreateInfo GVULKANPipeline::createVertexShaders(const TStringsArray& shadersArray, VkDevice device) {
+//    VkPipelineShaderStageCreateInfo vertShaderStageInfo = {};
+//    
+//    for (const std::string& shaderFullFilePath : shadersArray) {
+//        vertShaderStageInfo = createShader(shaderFullFilePath, VK_SHADER_STAGE_VERTEX_BIT, device);
+//    }
+//    
+//    return vertShaderStageInfo;
+//}
+//
+//VkPipelineShaderStageCreateInfo GVULKANPipeline::createFragmentShaders(const TStringsArray& shadersArray, VkDevice device) {
+//    VkPipelineShaderStageCreateInfo fragShaderStageInfo = {};
+//    
+//    for (const std::string& shaderFullFilePath : shadersArray) {
+//        fragShaderStageInfo = createShader(shaderFullFilePath, VK_SHADER_STAGE_FRAGMENT_BIT, device);
+//    }
+//    
+//    return fragShaderStageInfo;
+//}
+//
+//VkPipelineShaderStageCreateInfo GVULKANPipeline::createShader(const std::string& shaderFile, const VkShaderStageFlagBits stage, VkDevice device) {
+//    GVULKANTools tools;
+//    const std::vector<uint8_t> code = tools.readFile(shaderFile);
+//    VkShaderModuleCreateInfo createInfo = { };
+//    
+//    createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+//    createInfo.codeSize = code.size();
+//    createInfo.pCode = reinterpret_cast<const TUInt*>(code.data());
+//    
+//    VkShaderModule shaderModule;
+//    if (vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
+//        log.error("No chance to create shader module\n");
+//    }
+//    
+//    VkPipelineShaderStageCreateInfo shaderStageInfo{};
+//    shaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+//    shaderStageInfo.stage = stage;
+//    shaderStageInfo.module = shaderModule;
+//    shaderStageInfo.pName = "main";
+//    
+//    return shaderStageInfo;
+//}
 
 }

@@ -4,15 +4,23 @@
 #include <string>
 
 #include "gnode.h"
+#include "gvulkanbuffer.h"
+#include "gvulkanimage.h"
 
 namespace spcGaneshaEngine {
 
 class GSpriteNode: public GNode {
 public:
-    GSpriteNode(const std::string& textureFilePath);
+    GSpriteNode(GVULKANImage *material, GVULKANDevice& vulkanDevice, VkCommandPool commandPool, GLog& log);
     virtual ~GSpriteNode();
 
-    virtual void render();
+    virtual void render(VkCommandBuffer renderCommand);
+    virtual void destroyNode(VkDevice device);
+
+private:
+    GVULKANBuffer vertexesBuffer;
+    GVULKANBuffer indexesBuffer;
+    GVULKANImage *material;
 };
 
 };  //  spcGaneshaEngine

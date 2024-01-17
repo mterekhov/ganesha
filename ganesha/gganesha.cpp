@@ -1,6 +1,7 @@
+#include <math.h>
+
 #include "gganesha.h"
 #include "gvulkanapi.h"
-#include <math.h>
 
 namespace spcGaneshaEngine {
 
@@ -12,11 +13,11 @@ GGanesha::~GGanesha() {
     delete graphicsAPI;
 }
 
-TBool GGanesha::initEngine(void *metalLayer, const TUInt width, const TUInt height) {    
-    graphicsAPI->initAPI(metalLayer, width, height, renderGraph);
+TBool GGanesha::initEngine(void *metalLayer, const TUInt width, const TUInt height, GGaneshaContent& content) {
+    graphicsAPI->initAPI(metalLayer, width, height, content);
     graphicsAPI->installIsometricView(M_PI_4, 0.000001, 100.0f);
     graphicsAPI->installViewMatrix(camera.viewMatrix());
-
+    
     return true;
 }
 
@@ -60,7 +61,7 @@ void GGanesha::processKeyboard(const TUInt keyCode) {
 }
 
 void GGanesha::mainLoop() {
-    graphicsAPI->drawFrame(renderGraph);
+    graphicsAPI->drawFrame();
 }
 
 }
