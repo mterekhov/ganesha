@@ -10,7 +10,7 @@ GDescriptorsetService::~GDescriptorsetService() {
     
 }
 
-void GDescriptorsetService::initService(VkDevice device) {
+void GDescriptorsetService::init(VkDevice device) {
     descriptorsetsPool = createDescriptorsetsPool(device);
     descriptorsetsLayout = createDescriptorsetsLayout(device);
     descriptorset = createDescriptorset(descriptorsetsPool, descriptorsetsLayout, device);

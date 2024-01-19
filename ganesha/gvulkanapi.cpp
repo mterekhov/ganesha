@@ -50,7 +50,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
     commandPool = createCommandPool(vulkanDevice);
 
     descriptorService = new GDescriptorsetService();
-    descriptorService->initService(vulkanDevice.getLogicalDevice());
+    descriptorService->init(vulkanDevice.getLogicalDevice());
     
     for (TUInt i = 0; i < maxFramesInFlight; i++) {
         GRenderGraph newRenderGraph;

@@ -10,8 +10,9 @@ namespace spcGaneshaEngine {
 
 class GDescriptorsetServiceProtocol {
 public:
-    virtual void initService(VkDevice device) = 0;
+    virtual void init(VkDevice device) = 0;
     virtual void destroy(VkDevice device) = 0;
+    
     virtual VkDescriptorSetLayout getDescriptorsetLayout() = 0;
     virtual VkDescriptorSet getDescriptorset() = 0;
     virtual void attachImageToDescriptorset(GVULKANImage& image, TUInt bindingIndex, VkDevice device) = 0;
@@ -23,7 +24,7 @@ public:
     GDescriptorsetService();
     virtual ~GDescriptorsetService();
     
-    void initService(VkDevice device);
+    void init(VkDevice device);
     void destroy(VkDevice device);
     VkDescriptorSetLayout getDescriptorsetLayout();
     VkDescriptorSet getDescriptorset();

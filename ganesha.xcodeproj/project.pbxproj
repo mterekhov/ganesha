@@ -13,6 +13,8 @@
 		DE69D2142B4BFABB002D28E2 /* gnode.h in Headers */ = {isa = PBXBuildFile; fileRef = DE69D2122B4BFABB002D28E2 /* gnode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE69D2172B4BFC3E002D28E2 /* gspritenode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE69D2152B4BFC3E002D28E2 /* gspritenode.cpp */; };
 		DE69D2182B4BFC3E002D28E2 /* gspritenode.h in Headers */ = {isa = PBXBuildFile; fileRef = DE69D2162B4BFC3E002D28E2 /* gspritenode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE7DD1622B5A8A6E00E22894 /* gcommandservice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE7DD1602B5A8A6E00E22894 /* gcommandservice.cpp */; };
+		DE7DD1632B5A8A6E00E22894 /* gcommandservice.h in Headers */ = {isa = PBXBuildFile; fileRef = DE7DD1612B5A8A6E00E22894 /* gcommandservice.h */; };
 		DE9D0CA12B4A14D500EA0B7C /* gvulkanpipeline.h in Headers */ = {isa = PBXBuildFile; fileRef = DE9D0C722B4A14D400EA0B7C /* gvulkanpipeline.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE9D0CA22B4A14D500EA0B7C /* gvulkantools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE9D0C732B4A14D400EA0B7C /* gvulkantools.cpp */; };
 		DE9D0CA32B4A14D500EA0B7C /* gpoint.h in Headers */ = {isa = PBXBuildFile; fileRef = DE9D0C742B4A14D400EA0B7C /* gpoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -72,6 +74,8 @@
 		DE69D2122B4BFABB002D28E2 /* gnode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gnode.h; path = ganesha/gnode.h; sourceTree = "<group>"; };
 		DE69D2152B4BFC3E002D28E2 /* gspritenode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gspritenode.cpp; path = ganesha/gspritenode.cpp; sourceTree = "<group>"; };
 		DE69D2162B4BFC3E002D28E2 /* gspritenode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gspritenode.h; path = ganesha/gspritenode.h; sourceTree = "<group>"; };
+		DE7DD1602B5A8A6E00E22894 /* gcommandservice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gcommandservice.cpp; path = ganesha/gcommandservice.cpp; sourceTree = "<group>"; };
+		DE7DD1612B5A8A6E00E22894 /* gcommandservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gcommandservice.h; path = ganesha/gcommandservice.h; sourceTree = "<group>"; };
 		DE82CE5C2B4A149500EF0925 /* ganesha.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ganesha.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE9D0C722B4A14D400EA0B7C /* gvulkanpipeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvulkanpipeline.h; path = ganesha/gvulkanpipeline.h; sourceTree = "<group>"; };
 		DE9D0C732B4A14D400EA0B7C /* gvulkantools.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gvulkantools.cpp; path = ganesha/gvulkantools.cpp; sourceTree = "<group>"; };
@@ -178,6 +182,10 @@
 				DE9D0C952B4A14D500EA0B7C /* gvulkantools.h */,
 				DEDF76762B58711000F569A7 /* gdescriptorsetservice.cpp */,
 				DEDF76772B58711000F569A7 /* gdescriptorsetservice.h */,
+				DEBE148F2B4DC2C5001EF6FB /* gmaterialsservice.cpp */,
+				DEBE14902B4DC2C5001EF6FB /* gmaterialsservice.h */,
+				DE7DD1612B5A8A6E00E22894 /* gcommandservice.h */,
+				DE7DD1602B5A8A6E00E22894 /* gcommandservice.cpp */,
 			);
 			name = VULKAN;
 			sourceTree = "<group>";
@@ -239,8 +247,6 @@
 				DE9D0C882B4A14D400EA0B7C /* gganesha.h */,
 				DE9D0C812B4A14D400EA0B7C /* ganeshatypes.h */,
 				DE9D0C932B4A14D500EA0B7C /* ganesha.h */,
-				DEBE148F2B4DC2C5001EF6FB /* gmaterialsservice.cpp */,
-				DEBE14902B4DC2C5001EF6FB /* gmaterialsservice.h */,
 			);
 			name = ganesha;
 			sourceTree = "<group>";
@@ -289,6 +295,7 @@
 				DE9D0CBD2B4A14D500EA0B7C /* gvulkanapi.h in Headers */,
 				DE9D0CA42B4A14D500EA0B7C /* grendergraph.h in Headers */,
 				DE9D0CBB2B4A14D500EA0B7C /* gvulkandevice.h in Headers */,
+				DE7DD1632B5A8A6E00E22894 /* gcommandservice.h in Headers */,
 				DE9D0CB52B4A14D500EA0B7C /* gvector.h in Headers */,
 				DE9D0CA72B4A14D500EA0B7C /* gquaternion.h in Headers */,
 				DE9D0CB42B4A14D500EA0B7C /* gtga.h in Headers */,
@@ -371,6 +378,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE7DD1622B5A8A6E00E22894 /* gcommandservice.cpp in Sources */,
 				DE9D0CA62B4A14D500EA0B7C /* gcamera.cpp in Sources */,
 				DE9D0CC82B4A14D500EA0B7C /* gtga.cpp in Sources */,
 				DE9D0CC72B4A14D500EA0B7C /* gvulkanswapchain.cpp in Sources */,
