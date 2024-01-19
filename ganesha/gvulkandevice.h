@@ -33,6 +33,7 @@ public:
     VkPhysicalDeviceProperties getPhysicalDeviceProperties();
     VkFormatProperties getPhysicalDeviceFormatProperties(VkFormat format);
     TUInt findMemoryType(const TUInt typeFilter, const VkMemoryPropertyFlags properties);
+    VkFormat findDepthImageFormat();
 
     TBool presentationIsEqualToGraphics();
 

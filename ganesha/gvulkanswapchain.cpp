@@ -66,7 +66,7 @@ void GVULKANSwapChain::createSwapChain(const TUInt screenWidth, const TUInt scre
     }
     GVULKANTools tools;
     depthImage.createImage(extent,
-                           tools.findDepthFormat(vulkanDevice),
+                           vulkanDevice.findDepthImageFormat(),
                            VK_IMAGE_ASPECT_DEPTH_BIT,
                            VK_IMAGE_TILING_OPTIMAL,
                            VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
@@ -160,9 +160,8 @@ VkRenderPass GVULKANSwapChain::createRenderPass(GVULKANDevice& vulkanDevice, VkF
     colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
     
-    GVULKANTools tools;
     VkAttachmentDescription depthAttachment = { };
-    depthAttachment.format = tools.findDepthFormat(vulkanDevice);
+    depthAttachment.format = vulkanDevice.findDepthImageFormat();
     depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
     depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
