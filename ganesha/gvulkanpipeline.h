@@ -14,7 +14,7 @@ namespace spcGaneshaEngine {
 
 class GVULKANPipeline {
 public:
-    GVULKANPipeline(GLog& log);
+    GVULKANPipeline();
     ~GVULKANPipeline();
     
     void createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapChain& swapChain, GRenderGraph& renderGraph, VkDescriptorSetLayout descriptorsetLayout);
@@ -23,7 +23,6 @@ public:
     VkPipelineLayout getPipelineLayout();
 
 private:
-    GLog& log;
     VkVertexInputBindingDescription bindingDescription = Vertex::getBindingDescription();
     std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions = Vertex::getAttributeDescriptions();
     VkPipeline graphicsPipeline;

@@ -11,7 +11,7 @@ namespace spcGaneshaEngine {
 
 class GSpriteNode: public GNode {
 public:
-    GSpriteNode(GVULKANImage *material, GVULKANDevice& vulkanDevice, VkCommandPool commandPool, GLog& log);
+    GSpriteNode(GVULKANImage *material, GVULKANDevice& vulkanDevice, VkCommandPool commandPool);
     virtual ~GSpriteNode();
 
     virtual void render(VkCommandBuffer renderCommand);

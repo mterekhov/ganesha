@@ -5,7 +5,6 @@
 
 #include "ggraphicsapiprotocol.h"
 #include "gcamera.h"
-#include "glog.h"
 #include "gganeshacontent.h"
 
 namespace spcGaneshaEngine {
@@ -42,7 +41,6 @@ public:
 private:
     GGraphicsAPIProtocol *graphicsAPI;
     GCamera camera;
-    GLog log;
 };
 
 }   //  namespace spcGaneshaEngine

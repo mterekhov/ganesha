@@ -10,7 +10,7 @@ namespace spcGaneshaEngine {
 
 class GVULKANBuffer {
 public:
-    GVULKANBuffer(GLog& log);
+    GVULKANBuffer();
     ~GVULKANBuffer();
 
     void createBuffer(const void *data,
@@ -26,7 +26,6 @@ public:
     TUInt getBufferSize();
 
 private:
-    GLog& log;
     VkBuffer buffer;
     TUInt bufferSize;
     VkDeviceMemory bufferMemory;
@@ -36,7 +35,7 @@ private:
     VkBuffer createBuffer(VkDevice device, const VkDeviceSize size, const VkBufferUsageFlags usage);
     VkDeviceMemory allocateBufferMemory(VkBuffer originalBuffer, const VkMemoryPropertyFlags properties, GVULKANDevice& vulkanDevice);
     TUInt findMemoryType(VkPhysicalDevice device, const TUInt typeFilter, const VkMemoryPropertyFlags properties);
-    VkCommandBuffer copyBufferCommand(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size, VkCommandPool commandPool, VkDevice device);
+    VkCommandBuffer allocateBufferCommand(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size, VkCommandPool commandPool, VkDevice device);
 };
 
 }   //  namespace spcGaneshaEngine

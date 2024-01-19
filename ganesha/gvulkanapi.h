@@ -29,18 +29,17 @@ struct ProjectionsBufferObject {
 
 class GVULKANAPI: public GGraphicsAPIProtocol {
 public:
-    GVULKANAPI(GLog& log);
+    GVULKANAPI();
     virtual ~GVULKANAPI();
 
     virtual void initAPI(void *metalLayer, const TUInt frameWidth, const TUInt frameHeight, GGaneshaContent& content);
     virtual void destroyAPI();
     virtual void drawFrame();
-    virtual void frameResized(const float width, const float height);
+    virtual void frameResized(const TFloat width, const TFloat height);
     virtual void installIsometricView(const TFloat fieldOfView, const TFloat near, const TFloat far);
     virtual void installViewMatrix(const GMatrix& newViewMatrix);
 
 private:
-    GLog& log;
     GVULKANDevice vulkanDevice;
     GVULKANInstance vulkanInstance;
     GVULKANSwapChain vulkanSwapChain;

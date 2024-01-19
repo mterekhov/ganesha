@@ -7,13 +7,7 @@
 
 namespace spcGaneshaEngine {
 
-GLog::GLog(const std::string& title) : title(title) {
-    
-}
-
-GLog::~GLog() {
-    
-}
+const std::string GLog::title = "GANESHA";
 
 void GLog::info(const char* format, ...) {
     va_list args;

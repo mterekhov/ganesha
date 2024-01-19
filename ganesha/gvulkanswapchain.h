@@ -11,7 +11,7 @@ namespace spcGaneshaEngine {
 
 class GVULKANSwapChain {
 public:
-    GVULKANSwapChain(GLog& log);
+    GVULKANSwapChain();
     ~GVULKANSwapChain();
     
     void createSwapChain(const TUInt screenWidth, const TUInt screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface);
@@ -27,7 +27,6 @@ public:
     size_t framebuffersNumber();
     
 private:
-    GLog& log;
     VkSwapchainKHR swapChain;
     std::vector<VkImage> imagesArray;
     std::vector<VkImageView> imageViewsArray;

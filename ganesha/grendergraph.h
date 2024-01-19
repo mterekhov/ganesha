@@ -15,7 +15,7 @@ namespace spcGaneshaEngine {
 /// Manipulates with current position
 class GRenderGraph {
 public:
-    GRenderGraph(GLog& log);
+    GRenderGraph();
     ~GRenderGraph();
     void createGraph(GVULKANDevice& vulkanDevice, VkCommandPool commandPool);
     void destroyGraph(VkDevice device);
@@ -29,8 +29,6 @@ public:
     std::vector<VkPipelineShaderStageCreateInfo>& getShadersArray();
     
 private:
-    GLog& log;
-
     std::vector<GGraphNode *> graphNodeArray;
     std::vector<VkPipelineShaderStageCreateInfo> shadersArray;
     GMaterialsServiceProtocol *materialsService;

@@ -6,7 +6,7 @@
 
 namespace spcGaneshaEngine {
 
-GVULKANDevice::GVULKANDevice(GLog& log) : log(log) {
+GVULKANDevice::GVULKANDevice() {
     
 }
 
@@ -128,11 +128,11 @@ VkDevice GVULKANDevice::createLogicalDevice(VkPhysicalDevice device, const TStri
 
     VkDevice newDevice;
     if (vkCreateDevice(physicalDevice, &logicalDeviceInfo, nullptr, &newDevice) != VK_SUCCESS) {
-        log.error("error creating logical device\n");
+        GLOG_ERROR("error creating logical device\n");
     }
 
     for (const auto& name : deviceExtensionsNamesArray) {
-        log.info("\t%s\n", name);
+        GLOG_INFO("\t%s\n", name);
         delete [] name;
     }
 
@@ -189,9 +189,9 @@ TBool GVULKANDevice::checkPhysicalDeviceCapability(VkPhysicalDevice device, cons
 
 TBool GVULKANDevice::checkPhysicalDeviceExtensionSupport(VkPhysicalDevice device, const TStringsArray& useDeviceExtensions, const std::vector<VkExtensionProperties>& availableExtensions) {
     std::set<std::string> requiredExtensions(useDeviceExtensions.begin(), useDeviceExtensions.end());
-    log.info("physical device extensions:\n");
+    GLOG_INFO("physical device extensions:\n");
     for (const auto& extension : availableExtensions) {
-        log.info("\t%s\n", extension.extensionName);
+        GLOG_INFO("\t%s\n", extension.extensionName);
         requiredExtensions.erase(extension.extensionName);
     }
     

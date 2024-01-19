@@ -4,7 +4,7 @@
 
 namespace spcGaneshaEngine {
 
-GRenderGraph::GRenderGraph(GLog& log) : log(log) {
+GRenderGraph::GRenderGraph() {
 }
 
 GRenderGraph::~GRenderGraph() {
@@ -12,7 +12,7 @@ GRenderGraph::~GRenderGraph() {
 }
 
 void GRenderGraph::createGraph(GVULKANDevice& vulkanDevice, VkCommandPool commandPool) {
-    materialsService = new GMaterialsService(log, commandPool);
+    materialsService = new GMaterialsService(commandPool);
 }
 
 void GRenderGraph::destroyGraph(VkDevice device) {
@@ -53,10 +53,10 @@ GGraphNode *GRenderGraph::createSpriteNode(const std::string& materialFilePath, 
         material = materialsService->createMaterial(materialFilePath, vulkanDevice);
         descriptorsetService->attachImageToDescriptorset(*material, 2, vulkanDevice.getLogicalDevice());
     }
-    GSpriteNode *spriteMesh = new GSpriteNode(material, vulkanDevice, commandPool, log);
+    GSpriteNode *spriteMesh = new GSpriteNode(material, vulkanDevice, commandPool);
     
     //  creating mesh instance
-    GGraphNode *meshInstance = new GGraphNode(spriteMesh);
+    GGraphNode *meshInstance = new GGraphNode(spriteMesh, descriptorsetService, vulkanDevice, commandPool);
     return meshInstance;
 }
 
@@ -78,7 +78,7 @@ VkPipelineShaderStageCreateInfo GRenderGraph::createShader(const std::string& sh
     
     VkShaderModule shaderModule;
     if (vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
-        log.error("No chance to create shader module\n");
+        GLOG_ERROR("No chance to create shader module\n");
     }
     
     VkPipelineShaderStageCreateInfo shaderStageInfo = { };

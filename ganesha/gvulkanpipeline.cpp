@@ -3,7 +3,7 @@
 
 namespace spcGaneshaEngine {
 
-GVULKANPipeline::GVULKANPipeline(GLog& log) : log(log) {
+GVULKANPipeline::GVULKANPipeline() {
 }
 
 GVULKANPipeline::~GVULKANPipeline() {
@@ -94,7 +94,7 @@ void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapCha
     
     VkResult result = vkCreateGraphicsPipelines(vulkanDevice.getLogicalDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline);
     if (result != VK_SUCCESS) {
-        log.error("error while creating pipeline itself\n");
+        GLOG_ERROR("error while creating pipeline itself\n");
     }
 }
 
@@ -151,7 +151,7 @@ VkPipelineLayout GVULKANPipeline::createPipelineLayout(VkDevice device, VkDescri
     
     VkPipelineLayout newPipelineLayout;
     if (vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &newPipelineLayout) != VK_SUCCESS) {
-        log.error("error while creating pipeline layout\n");
+        GLOG_ERROR("error while creating pipeline layout\n");
     }
     
     return newPipelineLayout;
@@ -188,7 +188,7 @@ VkPipelineLayout GVULKANPipeline::createPipelineLayout(VkDevice device, VkDescri
 //    
 //    VkShaderModule shaderModule;
 //    if (vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
-//        log.error("No chance to create shader module\n");
+//        GLOG_ERROR("No chance to create shader module\n");
 //    }
 //    
 //    VkPipelineShaderStageCreateInfo shaderStageInfo{};

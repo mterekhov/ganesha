@@ -12,7 +12,7 @@ namespace spcGaneshaEngine {
 
 class GVULKANImage {
 public:
-    GVULKANImage(GLog& log);
+    GVULKANImage();
     ~GVULKANImage();
 
     void createImage(const VkExtent2D& extent,
@@ -31,7 +31,6 @@ public:
     VkDescriptorSet getDescriptorSet();
 
 private:
-    GLog& log;
     VkExtent2D imageExtent;
     VkImage image;
     VkDeviceMemory imageMemory;
@@ -42,7 +41,7 @@ private:
     VkCommandBuffer copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, VkCommandPool commandPool, VkDevice device);
     VkCommandBuffer transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout, VkCommandPool commandPool, VkDevice device);
     void submitCommand(VkCommandBuffer command, VkCommandPool commandPool, GVULKANDevice& vulkanDevice);
-    VkCommandBuffer createCommand(VkCommandPool commandPool, VkDevice device);
+    VkCommandBuffer allocateCommandBuffer(VkCommandPool commandPool, VkDevice device);
 };
 
 }   //  namespace spcGaneshaEngine

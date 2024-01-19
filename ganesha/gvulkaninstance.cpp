@@ -2,7 +2,7 @@
 
 namespace spcGaneshaEngine {
 
-GVULKANInstance::GVULKANInstance(GLog& log) : log(log) {
+GVULKANInstance::GVULKANInstance() {
     
 }
 
@@ -18,18 +18,18 @@ void GVULKANInstance::createInstance(const std::string& applicationName, const T
     VkInstanceCreateInfo instanceInfo = createInstanceInfo(applicationInfo, availableValidationLayersArray, extensionsNamesArray);
     auto result = vkCreateInstance(&instanceInfo, nullptr, &vulkanInstance);
     if (result != VK_SUCCESS) {
-        log.error("error creating VULKAN instance\n");
+        GLOG_ERROR("error creating VULKAN instance\n");
     }
     
-    log.info("extensions:\n");
+    GLOG_INFO("extensions:\n");
     for (const auto& name : extensionsNamesArray) {
-        log.info("\t%s\n", name);
+        GLOG_INFO("\t%s\n", name);
         delete [] name;
     }
 
     if (!availableValidationLayersArray.empty()) {
         if (createDebugUtilsMessenger(vulkanInstance, &debugUtilsMessengerInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
-            log.error("failed to set up debug messenger\n");
+            GLOG_ERROR("failed to set up debug messenger\n");
         }
     }
 }
@@ -57,9 +57,9 @@ TCharPointersArray GVULKANInstance::collectValidationLayers(const TCharPointersA
         return supportedValidationLayersArray;
     }
 
-    log.info("validation layers:\n");
+    GLOG_INFO("validation layers:\n");
     for (const auto& layerProperties : availableLayersArray) {
-        log.info("\t%s\n", layerProperties.layerName);
+        GLOG_INFO("\t%s\n", layerProperties.layerName);
         for (const auto layerName : layersNamesArray) {
             if (strcmp(layerName, layerProperties.layerName) == 0) {
                 supportedValidationLayersArray.push_back(layerName);
@@ -145,7 +145,6 @@ VkDebugUtilsMessengerCreateInfoEXT GVULKANInstance::createDebugUtilsMessengerInf
     newDebugUtilsMessengerInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
     newDebugUtilsMessengerInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
     newDebugUtilsMessengerInfo.pfnUserCallback = debugCallback;
-    newDebugUtilsMessengerInfo.pUserData = &log;
     
     return newDebugUtilsMessengerInfo;
 }
@@ -175,11 +174,8 @@ VKAPI_ATTR VkBool32 VKAPI_CALL GVULKANInstance::debugCallback(VkDebugUtilsMessag
                                                         VkDebugUtilsMessageTypeFlagsEXT messageType,
                                                         const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
                                                         void* pUserData) {
-    GLog *currentLog = static_cast<GLog *>(pUserData);
-    if (currentLog) {
-        currentLog->layer("%s\n", pCallbackData->pMessage);
-    }
-    
+    GLOG_LAYER("%s\n", pCallbackData->pMessage);
+
     return VK_FALSE;
 }
 

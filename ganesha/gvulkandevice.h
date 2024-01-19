@@ -17,7 +17,7 @@ struct SwapChainSupportDetails {
 
 class GVULKANDevice {
 public:
-    GVULKANDevice(GLog& log);
+    GVULKANDevice();
     ~GVULKANDevice();
 
     void createDevice(GVULKANInstance& vulkanInstance, const TStringsArray& useDeviceExtensions, VkSurfaceKHR &surface);
@@ -52,8 +52,6 @@ private:
     int32_t findPresentQueueIndex(const std::vector<VkQueueFamilyProperties>& queuePropertiesArray, VkSurfaceKHR& metalSurface);
     void findQueuesIndexes(VkSurfaceKHR& metalSurface);
     SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device, VkSurfaceKHR& surface);
-
-    GLog& log;
 
     VkPhysicalDevice physicalDevice;
     VkDevice logicalDevice;

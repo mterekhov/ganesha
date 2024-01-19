@@ -26,11 +26,7 @@ const TStringsArray useDeviceExtensions = {
     "VK_KHR_portability_subset"
 };
 
-GVULKANAPI::GVULKANAPI(GLog& log) : log(log),
-vulkanInstance(log),
-vulkanDevice(log),
-vulkanSwapChain(log),
-vulkanPipeline(log) {
+GVULKANAPI::GVULKANAPI() {
     
 }
 
@@ -57,7 +53,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
     descriptorService->initService(vulkanDevice.getLogicalDevice());
     
     for (TUInt i = 0; i < maxFramesInFlight; i++) {
-        GRenderGraph newRenderGraph(log);
+        GRenderGraph newRenderGraph;
         newRenderGraph.createGraph(vulkanDevice, commandPool);
         newRenderGraph.loadContent(content, vulkanDevice, commandPool, descriptorService);
         renderGraphArray.push_back(newRenderGraph);
@@ -68,7 +64,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
     TUInt framebuffersNumber = static_cast<TUInt>(vulkanSwapChain.framebuffersNumber());
     for (TUInt i = 0; i < framebuffersNumber; i++) {
         //  projection matrix
-        GVULKANBuffer newProjectionBuffer(log);
+        GVULKANBuffer newProjectionBuffer;
         ProjectionsBufferObject projectionBufferObject = currentProjectionBufferObject();
         newProjectionBuffer.createBuffer(&projectionBufferObject,
                                          sizeof(ProjectionsBufferObject),
@@ -81,7 +77,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
         vulkanProjectionBuffers.push_back(newProjectionBuffer);
         
         //  model matrix
-        GVULKANBuffer newModelBuffer(log);
+        GVULKANBuffer newModelBuffer;
         ModelBufferObject modelBufferObject = currentModelBufferObject();
         newModelBuffer.createBuffer(&modelBufferObject,
                                     sizeof(ModelBufferObject),
@@ -100,9 +96,9 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
         allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
         allocInfo.commandBufferCount = 1;
         
-        VkCommandBuffer newCommand;
-        vkAllocateCommandBuffers(vulkanDevice.getLogicalDevice(), &allocInfo, &newCommand);
-        renderCommands.push_back(newCommand);
+        VkCommandBuffer newCommandBuffer;
+        vkAllocateCommandBuffers(vulkanDevice.getLogicalDevice(), &allocInfo, &newCommandBuffer);
+        renderCommands.push_back(newCommandBuffer);
     }
 
     createSemaphores();
@@ -138,9 +134,25 @@ void GVULKANAPI::destroyAPI() {
     vulkanInstance.destroyInstance();
 }
 
-void GVULKANAPI::frameResized(const float width, const float height) {
+void GVULKANAPI::frameResized(const TFloat width, const TFloat height) {
     vulkanSwapChain.updateScreenSize(width, height, vulkanDevice, metalSurface);
     installIsometricView(fov, nearPlane, farPlane);
+}
+
+void GVULKANAPI::installIsometricView(const TFloat fieldOfView, const TFloat near, const TFloat far) {
+    VkExtent2D swapChainExtent = vulkanSwapChain.getExtent();
+    TFloat aspect = static_cast<TFloat>(swapChainExtent.width) / static_cast<TFloat>(swapChainExtent.height);
+    TFloat size = near * tanf(fieldOfView / 2.0);
+    TFloat aspectHeight = aspect * size;
+    
+    nearPlane = near;
+    farPlane = far;
+    fov = fieldOfView;
+    projectionMatrix = GMatrix::frustum(-aspectHeight, aspectHeight, -size, size, near, far);
+}
+
+void GVULKANAPI::installViewMatrix(const GMatrix& newViewMatrix) {
+    viewMatrix = newViewMatrix;
 }
 
 void GVULKANAPI::drawFrame() {
@@ -177,10 +189,9 @@ void GVULKANAPI::drawFrame() {
     
     VkSemaphore signalSemaphores[] = {renderFinishedSemaphores[currentFrame]};
     submitInfo.signalSemaphoreCount = 1;
-    submitInfo.pSignalSemaphores = signalSemaphores;
-    
+    submitInfo.pSignalSemaphores = signalSemaphores;    
     if (vkQueueSubmit(vulkanDevice.getGraphicsQueue(), 1, &submitInfo, inFlightFences[currentFrame]) != VK_SUCCESS) {
-        log.error("failed to submit draw command buffer\n");
+        GLOG_ERROR("failed to submit draw command buffer\n");
     }
     
     VkPresentInfoKHR presentInfo{};
@@ -195,22 +206,6 @@ void GVULKANAPI::drawFrame() {
     vkQueuePresentKHR(vulkanDevice.getPresentQueue(), &presentInfo);
     
     currentFrame = (currentFrame + 1) % maxFramesInFlight;
-}
-
-void GVULKANAPI::installIsometricView(const TFloat fieldOfView, const TFloat near, const TFloat far) {
-    VkExtent2D swapChainExtent = vulkanSwapChain.getExtent();
-    TFloat aspect = static_cast<TFloat>(swapChainExtent.width) / static_cast<TFloat>(swapChainExtent.height);
-    TFloat size = near * tanf(fieldOfView / 2.0);
-    TFloat aspectHeight = aspect * size;
-    
-    nearPlane = near;
-    farPlane = far;
-    fov = fieldOfView;
-    projectionMatrix = GMatrix::frustum(-aspectHeight, aspectHeight, -size, size, near, far);
-}
-
-void GVULKANAPI::installViewMatrix(const GMatrix& newViewMatrix) {
-    viewMatrix = newViewMatrix;
 }
 
 #pragma mark - Routine -
@@ -280,7 +275,7 @@ void GVULKANAPI::createSemaphores() {
         if (vkCreateSemaphore(vulkanDevice.getLogicalDevice(), &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
             vkCreateSemaphore(vulkanDevice.getLogicalDevice(), &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS ||
             vkCreateFence(vulkanDevice.getLogicalDevice(), &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
-            log.error("failed to create semaphores\n");
+            GLOG_ERROR("failed to create semaphores\n");
             return;
         }
     }
@@ -294,7 +289,7 @@ VkCommandPool GVULKANAPI::createCommandPool(GVULKANDevice& device) {
     
     VkCommandPool newCommandPool;
     if (vkCreateCommandPool(device.getLogicalDevice(), &poolInfo, nullptr, &newCommandPool) != VK_SUCCESS) {
-        log.error("failed to create command pool\n");
+        GLOG_ERROR("failed to create command pool\n");
     }
     
     return newCommandPool;
@@ -310,7 +305,7 @@ VkSurfaceKHR GVULKANAPI::createSurface(void *metalLayer) {
     
     VkSurfaceKHR newSurface;
     if (vkCreateMetalSurfaceEXT(vulkanInstance.getVulkanInstance(), &metalSurfaceInfo, NULL, &newSurface) != VK_SUCCESS) {
-        log.error("error creating metal surface\n");
+        GLOG_ERROR("error creating metal surface\n");
     }
     
     return newSurface;

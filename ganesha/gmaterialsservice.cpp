@@ -3,7 +3,7 @@
 
 namespace spcGaneshaEngine {
 
-GMaterialsService::GMaterialsService(GLog& log, VkCommandPool commandPool) : log(log), commandPool(commandPool) {
+GMaterialsService::GMaterialsService(VkCommandPool commandPool) : commandPool(commandPool) {
     
 }
 
@@ -13,7 +13,7 @@ GMaterialsService::~GMaterialsService() {
 GVULKANImage *GMaterialsService::createMaterial(const std::string &imageFilePath, GVULKANDevice& vulkanDevice) {
     GTGA tgaFile(imageFilePath);
     
-    GVULKANImage *newImage = new GVULKANImage(log);
+    GVULKANImage *newImage = new GVULKANImage();
     newImage->createImage({ tgaFile.getWidth(), tgaFile.getHeight() },
                          VK_FORMAT_R8G8B8A8_SRGB,
                          VK_IMAGE_ASPECT_COLOR_BIT,

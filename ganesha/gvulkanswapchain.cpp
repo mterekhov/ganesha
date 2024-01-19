@@ -3,7 +3,7 @@
 
 namespace spcGaneshaEngine {
 
-GVULKANSwapChain::GVULKANSwapChain(GLog& log) : log(log), depthImage(log) {
+GVULKANSwapChain::GVULKANSwapChain() {
 }
 
 GVULKANSwapChain::~GVULKANSwapChain() {
@@ -114,7 +114,7 @@ VkSwapchainKHR GVULKANSwapChain::createNewSwapChain(const TUInt screenWidth, con
     
     VkSwapchainKHR newSwapChain;
     if (vkCreateSwapchainKHR(vulkanDevice.getLogicalDevice(), &swapChainInfo, nullptr, &newSwapChain) != VK_SUCCESS) {
-        log.error("failed to create swap chain\n");
+        GLOG_ERROR("failed to create swap chain\n");
     }
     
     return newSwapChain;
@@ -205,7 +205,7 @@ VkRenderPass GVULKANSwapChain::createRenderPass(GVULKANDevice& vulkanDevice, VkF
     
     VkRenderPass newRenderPass;
     if (vkCreateRenderPass(vulkanDevice.getLogicalDevice(), &renderPassInfo, nullptr, &newRenderPass) != VK_SUCCESS) {
-        log.error("failed to create render pass\n");
+        GLOG_ERROR("failed to create render pass\n");
     }
     
     return newRenderPass;
@@ -231,7 +231,7 @@ std::vector<VkFramebuffer> GVULKANSwapChain::createFramebuffers(VkDevice device,
         framebufferInfo.layers = 1;
         
         if (vkCreateFramebuffer(device, &framebufferInfo, nullptr, &newFramebuffersArray[i]) != VK_SUCCESS) {
-            log.error("failed to create framebuffer with index %zu\n", i);
+            GLOG_ERROR("failed to create framebuffer with index %zu\n", i);
         }
     }
     

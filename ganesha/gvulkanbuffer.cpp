@@ -3,7 +3,7 @@
 
 namespace spcGaneshaEngine {
 
-GVULKANBuffer::GVULKANBuffer(GLog& log) : log(log) {
+GVULKANBuffer::GVULKANBuffer() {
     
 }
 
@@ -73,7 +73,7 @@ VkBuffer GVULKANBuffer::createBuffer(VkDevice device, const VkDeviceSize size, c
     
     VkBuffer newBuffer;
     if (vkCreateBuffer(device, &bufferInfo, nullptr, &newBuffer) != VK_SUCCESS) {
-        log.error("failed to create vertex buffer\n");
+        GLOG_ERROR("failed to create vertex buffer\n");
     }
     
     return newBuffer;
@@ -90,7 +90,7 @@ VkDeviceMemory GVULKANBuffer::allocateBufferMemory(VkBuffer originalBuffer, cons
     
     VkDeviceMemory newBufferMemory;
     if (vkAllocateMemory(vulkanDevice.getLogicalDevice(), &memoryAllocateInfo, nullptr, &newBufferMemory) != VK_SUCCESS) {
-        log.error("failed to allocate vertex buffer memory\n");
+        GLOG_ERROR("failed to allocate vertex buffer memory\n");
     }
     vkBindBufferMemory(vulkanDevice.getLogicalDevice(), originalBuffer, newBufferMemory, 0);
     
@@ -98,8 +98,19 @@ VkDeviceMemory GVULKANBuffer::allocateBufferMemory(VkBuffer originalBuffer, cons
 }
 
 void GVULKANBuffer::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, const VkDeviceSize size, GVULKANDevice& vulkanDevice, VkCommandPool commandPool) {
-    VkCommandBuffer commandBuffer = copyBufferCommand(srcBuffer, dstBuffer, size, commandPool, vulkanDevice.getLogicalDevice());
+    VkCommandBuffer commandBuffer = allocateBufferCommand(srcBuffer, dstBuffer, size, commandPool, vulkanDevice.getLogicalDevice());
     
+    VkCommandBufferBeginInfo beginInfo = { };
+    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+    vkBeginCommandBuffer(commandBuffer, &beginInfo);
+        VkBufferCopy copyRegion{};
+        copyRegion.srcOffset = 0; // Optional
+        copyRegion.dstOffset = 0; // Optional
+        copyRegion.size = size;
+        vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion);
+    vkEndCommandBuffer(commandBuffer);
+
     VkSubmitInfo submitInfo{};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     submitInfo.commandBufferCount = 1;
@@ -110,28 +121,15 @@ void GVULKANBuffer::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, const VkD
     vkFreeCommandBuffers(vulkanDevice.getLogicalDevice(), commandPool, 1, &commandBuffer);
 }
 
-VkCommandBuffer GVULKANBuffer::copyBufferCommand(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size, VkCommandPool commandPool, VkDevice device) {
+VkCommandBuffer GVULKANBuffer::allocateBufferCommand(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size, VkCommandPool commandPool, VkDevice device) {
     VkCommandBufferAllocateInfo allocInfo = { };
     allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
     allocInfo.commandPool = commandPool;
     allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
     allocInfo.commandBufferCount = 1;
-    
     VkCommandBuffer commandBuffer;
     vkAllocateCommandBuffers(device, &allocInfo, &commandBuffer);
-    
-    VkCommandBufferBeginInfo beginInfo = { };
-    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-    
-    vkBeginCommandBuffer(commandBuffer, &beginInfo);
-    VkBufferCopy copyRegion{};
-    copyRegion.srcOffset = 0; // Optional
-    copyRegion.dstOffset = 0; // Optional
-    copyRegion.size = size;
-    vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion);
-    vkEndCommandBuffer(commandBuffer);
-    
+
     return commandBuffer;
 }
 

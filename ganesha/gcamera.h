@@ -12,7 +12,7 @@ namespace spcGaneshaEngine {
 /// Manipulates with current position
 class GCamera {
 public:
-    GCamera(GLog& log);
+    GCamera();
     ~GCamera();
     
     GMatrix viewMatrix();
@@ -26,7 +26,6 @@ public:
     void backwardCamera();
 
 private:
-    GLog& log;
     GQuaternion orientation;
     GPoint positionPoint;
     GPoint centerPoint;

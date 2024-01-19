@@ -2,7 +2,7 @@
 
 namespace spcGaneshaEngine {
 
-GSpriteNode::GSpriteNode(GVULKANImage *material, GVULKANDevice& vulkanDevice, VkCommandPool commandPool, GLog& log) : vertexesBuffer(log), indexesBuffer(log), material(material) {
+GSpriteNode::GSpriteNode(GVULKANImage *material, GVULKANDevice& vulkanDevice, VkCommandPool commandPool) : material(material) {
     const std::vector<TFloat> vertexesArray = {
         -0.5f, -0.3, -0.5f, 2.0f, 0.0f,
         0.5f, -0.3, -0.5f,  0.0f, 0.0,

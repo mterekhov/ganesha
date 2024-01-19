@@ -15,20 +15,23 @@ enum GLogType {
 
 class GLog {
 public:
-    GLog(const std::string& title);
-    ~GLog();
+    static void info(const char* format, ...);
+    static void error(const char* format, ...);
+    static void warning(const char* format, ...);
+    static void layer(const char* format, ...);
     
-    void info(const char* format, ...);
-    void error(const char* format, ...);
-    void warning(const char* format, ...);
-    void layer(const char* format, ...);
-
-private:
-    const std::string title;
+private:    
+    static const std::string title;
     
-    void log(const GLogType type, const char* format, va_list args);
+    static void log(const GLogType type, const char* format, va_list args);
 };
 
+#define GLOG_INFO(...) GLog::info(__VA_ARGS__)
+#define GLOG_ERROR(...) GLog::error(__VA_ARGS__)
+#define GLOG_WARNING(...) GLog::warning(__VA_ARGS__)
+#define GLOG_LAYER(...) GLog::layer(__VA_ARGS__)
+
 };
+
 
 #endif    //    SPCGANESHAENGINE_GLOG_H

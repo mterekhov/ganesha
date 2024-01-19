@@ -22,7 +22,7 @@ public:
 
 class GMaterialsService: public GMaterialsServiceProtocol {
 public:
-    GMaterialsService(GLog& log, VkCommandPool commandPool);
+    GMaterialsService(VkCommandPool commandPool);
     virtual ~GMaterialsService();
 
     GVULKANImage *createMaterial(const std::string& imageFilePath, GVULKANDevice& vulkanDevice);
@@ -32,7 +32,6 @@ public:
 
 private:
     VkCommandPool commandPool;
-    GLog& log;
     std::map<std::string, GVULKANImage *> materialsMap;
 };
 

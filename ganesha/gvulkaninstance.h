@@ -10,7 +10,7 @@ namespace spcGaneshaEngine {
 
 class GVULKANInstance {
 public:
-    GVULKANInstance(GLog& log);
+    GVULKANInstance();
     ~GVULKANInstance();
     
     void createInstance(const std::string& applicationName, const TCharPointersArray& khronosValidationLayers, const TStringsArray& shouldNotUseExtensionsArray);
@@ -19,7 +19,6 @@ public:
     VkInstance getVulkanInstance();
     
 private:
-    GLog& log;
     VkInstance vulkanInstance;
     VkDebugUtilsMessengerCreateInfoEXT debugUtilsMessengerInfo;
     VkDebugUtilsMessengerEXT debugMessenger;

@@ -3,7 +3,7 @@
 
 namespace spcGaneshaEngine {
 
-GCamera::GCamera(GLog& log) : positionPoint(GPoint(0, -1, 10)), log(log) {
+GCamera::GCamera() : positionPoint(GPoint(0, -1, 10)) {
 }
 
 GCamera::~GCamera() {
