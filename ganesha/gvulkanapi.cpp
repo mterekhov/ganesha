@@ -245,7 +245,6 @@ void GVULKANAPI::createSemaphores() {
     imageAvailableSemaphores.resize(maxFramesInFlight);
     renderFinishedSemaphores.resize(maxFramesInFlight);
     inFlightFences.resize(maxFramesInFlight);
-    imagesInFlight.resize(3, VK_NULL_HANDLE);
     
     VkSemaphoreCreateInfo semaphoreInfo = { };
     semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
