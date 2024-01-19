@@ -1,9 +1,6 @@
 #ifndef SPCGANESHAENGINE_GGANESHACONTENT_H
 #define SPCGANESHAENGINE_GGANESHACONTENT_H
 
-#include <string>
-#include <vector>
-
 #include "ganeshatypes.h"
 
 namespace spcGaneshaEngine {

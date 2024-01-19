@@ -1,5 +1,5 @@
-#include "gcamera.h"
 #include <math.h>
+#include "gcamera.h"
 
 namespace spcGaneshaEngine {
 

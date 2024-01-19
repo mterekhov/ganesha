@@ -170,8 +170,6 @@
 				DE9D0C722B4A14D400EA0B7C /* gvulkanpipeline.h */,
 				DE9D0C982B4A14D500EA0B7C /* gvulkanswapchain.cpp */,
 				DE9D0C9D2B4A14D500EA0B7C /* gvulkanswapchain.h */,
-				DE9D0C732B4A14D400EA0B7C /* gvulkantools.cpp */,
-				DE9D0C952B4A14D500EA0B7C /* gvulkantools.h */,
 				DE9D0C8F2B4A14D500EA0B7C /* gvulkanbuffer.h */,
 				DE9D0C872B4A14D400EA0B7C /* gvulkanbuffer.cpp */,
 				DE9D0C762B4A14D400EA0B7C /* gvulkanimage.h */,
@@ -189,6 +187,8 @@
 		DE69D2012B4B47F4002D28E2 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				DE9D0C732B4A14D400EA0B7C /* gvulkantools.cpp */,
+				DE9D0C952B4A14D500EA0B7C /* gvulkantools.h */,
 				DE9D0C922B4A14D500EA0B7C /* glog.h */,
 				DE9D0C842B4A14D400EA0B7C /* glog.cpp */,
 				DE9D0C852B4A14D400EA0B7C /* gtga.h */,
