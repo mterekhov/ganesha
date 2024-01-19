@@ -19,10 +19,6 @@
 
 namespace spcGaneshaEngine {
 
-struct ModelBufferObject {
-    GMatrix model;
-};
-
 struct ProjectionsBufferObject {
     GMatrix view;
     GMatrix proj;
@@ -77,7 +73,6 @@ private:
 
     std::vector<GVULKANBuffer> vulkanProjectionBuffers;
     ProjectionsBufferObject currentProjectionBufferObject();
-    ModelBufferObject currentModelBufferObject();
 };
 
 }   //  namespace spcGaneshaEngine

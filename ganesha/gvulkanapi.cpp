@@ -275,16 +275,4 @@ ProjectionsBufferObject GVULKANAPI::currentProjectionBufferObject() {
     return projectionBufferObject;
 }
 
-ModelBufferObject GVULKANAPI::currentModelBufferObject() {
-    static auto startTime = std::chrono::high_resolution_clock::now();
-    auto currentTime = std::chrono::high_resolution_clock::now();
-    float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
-    
-    ModelBufferObject modelBufferObject = {};
-    
-    modelBufferObject.model = GMatrix::rotationY(time * M_PI_2);
-    
-    return modelBufferObject;
-}
-
 }
