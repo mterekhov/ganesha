@@ -11,8 +11,18 @@ GRenderGraph::~GRenderGraph() {
     
 }
 
-void GRenderGraph::createGraph(GVULKANDevice& vulkanDevice) {
+void GRenderGraph::createGraph(GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice) {
     materialsService = new GMaterialsService(commandService);
+    
+    GMatrix identityMatrix = GMatrix::identityMatrix();
+    modelBuffer.createBuffer(&identityMatrix,
+                             sizeof(GMatrix),
+                             VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+                             VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                             false,
+                             vulkanDevice,
+                             commandService);
+    descriptorsetService->attachBufferToDescriptorset(modelBuffer, 1, vulkanDevice.getLogicalDevice());
 }
 
 void GRenderGraph::destroyGraph(VkDevice device) {
@@ -28,6 +38,8 @@ void GRenderGraph::destroyGraph(VkDevice device) {
     
     materialsService->destroyMaterials(device);
     delete materialsService;
+    
+    modelBuffer.destroyBuffer(device);
 }
 
 void GRenderGraph::loadContent(GGaneshaContent& contentLoader, GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice) {
@@ -56,7 +68,7 @@ GGraphNode *GRenderGraph::createSpriteNode(const std::string& materialFilePath, 
     GSpriteNode *spriteMesh = new GSpriteNode(material, vulkanDevice, commandService);
     
     //  creating mesh instance
-    GGraphNode *meshInstance = new GGraphNode(spriteMesh, descriptorsetService, vulkanDevice, commandService);
+    GGraphNode *meshInstance = new GGraphNode(spriteMesh);
     return meshInstance;
 }
 
@@ -66,6 +78,10 @@ void GRenderGraph::pushNode(GGraphNode *node) {
 
 std::vector<GGraphNode *>& GRenderGraph::getNodeArray() {
     return graphNodeArray;
+}
+
+GVULKANBuffer& GRenderGraph::getModelBuffer() {
+    return modelBuffer;
 }
 
 VkPipelineShaderStageCreateInfo GRenderGraph::createShader(const std::string& shaderFile, const VkShaderStageFlagBits stage, VkDevice device) {

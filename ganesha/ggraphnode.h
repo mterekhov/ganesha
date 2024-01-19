@@ -3,26 +3,16 @@
 
 #include "gnode.h"
 #include "gmatrix.h"
-#include "gvulkanbuffer.h"
-#include "gdescriptorsetservice.h"
-#include "gcommandservice.h"
-#include "gquaternion.h"
-#include "gvector.h"
 
 namespace spcGaneshaEngine {
 
 class GGraphNode {
 public:
-    GGraphNode(GNode *node, GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice, GCommandServiceProtocol *commandService);
+    GGraphNode(GNode *node);
     ~GGraphNode();
     
     GNode *node;
-
-    void updateRTS(GMatrix& newRTSMatrix, GVULKANDevice& vulkanDevice);
-
-private:
     GMatrix rts;
-    GVULKANBuffer rtsBuffer;
 };
 
 };  //  spcGaneshaEngine

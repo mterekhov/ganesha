@@ -75,7 +75,6 @@ private:
     VkSurfaceKHR createSurface(void *metalLayer);
     void createSemaphores();
 
-    std::vector<GVULKANBuffer> vulkanModelBuffers;
     std::vector<GVULKANBuffer> vulkanProjectionBuffers;
     ProjectionsBufferObject currentProjectionBufferObject();
     ModelBufferObject currentModelBufferObject();

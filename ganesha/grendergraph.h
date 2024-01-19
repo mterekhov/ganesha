@@ -18,7 +18,7 @@ class GRenderGraph {
 public:
     GRenderGraph(GCommandServiceProtocol *commandService);
     ~GRenderGraph();
-    void createGraph(GVULKANDevice& vulkanDevice);
+    void createGraph(GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice);
     void destroyGraph(VkDevice device);
     
     void loadContent(GGaneshaContent& contentLoader, GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice);
@@ -28,8 +28,10 @@ public:
     
     std::vector<GGraphNode *>& getNodeArray();
     std::vector<VkPipelineShaderStageCreateInfo>& getShadersArray();
-    
+    GVULKANBuffer& getModelBuffer();
+
 private:
+    GVULKANBuffer modelBuffer;
     GCommandServiceProtocol *commandService;
     std::vector<GGraphNode *> graphNodeArray;
     std::vector<VkPipelineShaderStageCreateInfo> shadersArray;

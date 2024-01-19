@@ -56,7 +56,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
     
     for (TUInt i = 0; i < maxFramesInFlight; i++) {
         GRenderGraph newRenderGraph(commandService);
-        newRenderGraph.createGraph(vulkanDevice);
+        newRenderGraph.createGraph(descriptorService, vulkanDevice);
         newRenderGraph.loadContent(content, descriptorService, vulkanDevice);
         renderGraphArray.push_back(newRenderGraph);
     }
@@ -77,19 +77,6 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
                                          commandService);
         descriptorService->attachBufferToDescriptorset(newProjectionBuffer, 0, vulkanDevice.getLogicalDevice());
         vulkanProjectionBuffers.push_back(newProjectionBuffer);
-        
-        //  model matrix
-        GVULKANBuffer newModelBuffer;
-        ModelBufferObject modelBufferObject = currentModelBufferObject();
-        newModelBuffer.createBuffer(&modelBufferObject,
-                                    sizeof(ModelBufferObject),
-                                    VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
-                                    VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-                                    false,
-                                    vulkanDevice,
-                                    commandService);
-        descriptorService->attachBufferToDescriptorset(newModelBuffer, 1, vulkanDevice.getLogicalDevice());
-        vulkanModelBuffers.push_back(newModelBuffer);
 
         //  render commands
         renderCommands.push_back(commandService->allocateCommandBuffer());
@@ -107,10 +94,7 @@ void GVULKANAPI::destroyAPI() {
     for (size_t i = 0; i < vulkanProjectionBuffers.size(); i++) {
         vulkanProjectionBuffers[i].destroyBuffer(vulkanDevice.getLogicalDevice());
     }
-    for (size_t i = 0; i < vulkanModelBuffers.size(); i++) {
-        vulkanModelBuffers[i].destroyBuffer(vulkanDevice.getLogicalDevice());
-    }
-    
+
     for (size_t i = 0; i < maxFramesInFlight; i++) {
         vkDestroySemaphore(vulkanDevice.getLogicalDevice(), renderFinishedSemaphores[i], nullptr);
         vkDestroySemaphore(vulkanDevice.getLogicalDevice(), imageAvailableSemaphores[i], nullptr);
@@ -157,8 +141,6 @@ void GVULKANAPI::drawFrame() {
 
     ProjectionsBufferObject projectionBufferObject = currentProjectionBufferObject();
     vulkanProjectionBuffers[imageIndex].refreshBuffer(&projectionBufferObject, vulkanDevice.getLogicalDevice());
-    ModelBufferObject modelBufferObject = currentModelBufferObject();
-    vulkanModelBuffers[imageIndex].refreshBuffer(&modelBufferObject, vulkanDevice.getLogicalDevice());
     
     vkResetFences(vulkanDevice.getLogicalDevice(), 1, &inFlightFences[currentFrame]);
     vkResetCommandBuffer(renderCommands[currentFrame], 0);
@@ -234,7 +216,9 @@ void GVULKANAPI::recordRenderCommand(VkCommandBuffer renderCommand,
             vkCmdSetScissor(renderCommand, 0, 1, &scissor);
 
             vkCmdBindDescriptorSets(renderCommand, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.getPipelineLayout(), 0, 1, &descriptorset, 0, nullptr);
+            GVULKANBuffer& modelBuffer = renderGraph.getModelBuffer();
             for (GGraphNode *graphNode:renderGraph.getNodeArray()) {
+                modelBuffer.refreshBuffer(&graphNode->rts, vulkanDevice.getLogicalDevice());
                 graphNode->node->render(renderCommand);
             }
         vkCmdEndRenderPass(renderCommand);
