@@ -70,6 +70,20 @@ VkFormatProperties GVULKANDevice::getPhysicalDeviceFormatProperties(VkFormat for
     return formatProperties;
 }
 
+TUInt GVULKANDevice::findMemoryType(const TUInt typeFilter, const VkMemoryPropertyFlags properties) {
+    VkPhysicalDeviceMemoryProperties memoryProperties;
+    vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memoryProperties);
+    
+    for (TUInt i = 0; i < memoryProperties.memoryTypeCount; i++) {
+        if ((typeFilter & (1 << i)) &&
+            (memoryProperties.memoryTypes[i].propertyFlags & properties) == properties) {
+            return i;
+        }
+    }
+    
+    return 0;
+}
+
 #pragma mark - Routine -
 
 VkPhysicalDeviceProperties GVULKANDevice::getPhysicalDeviceProperties(VkPhysicalDevice device) {

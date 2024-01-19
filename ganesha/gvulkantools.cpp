@@ -18,20 +18,6 @@ std::vector<uint8_t> GVULKANTools::readFile(const std::string& filename) {
     return buffer;
 }
 
-TUInt GVULKANTools::findMemoryType(VkPhysicalDevice device, const TUInt typeFilter, const VkMemoryPropertyFlags properties) {
-    VkPhysicalDeviceMemoryProperties memoryProperties;
-    vkGetPhysicalDeviceMemoryProperties(device, &memoryProperties);
-    
-    for (TUInt i = 0; i < memoryProperties.memoryTypeCount; i++) {
-        if ((typeFilter & (1 << i)) &&
-            (memoryProperties.memoryTypes[i].propertyFlags & properties) == properties) {
-            return i;
-        }
-    }
-    
-    return 0;
-}
-
 VkImageView GVULKANTools::createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, VkDevice device) {
     VkImageViewCreateInfo viewInfo{};
     viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;

@@ -10,7 +10,6 @@ namespace spcGaneshaEngine {
 
 class GVULKANTools {
 public:
-    TUInt findMemoryType(VkPhysicalDevice device, const TUInt typeFilter, const VkMemoryPropertyFlags properties);
     VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, VkDevice device);
     VkFormat findDepthFormat(GVULKANDevice& vulkanDevice);
     std::vector<uint8_t> readFile(const std::string& filename);

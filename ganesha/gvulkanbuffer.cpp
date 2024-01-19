@@ -94,7 +94,7 @@ VkDeviceMemory GVULKANBuffer::allocateBufferMemory(VkBuffer originalBuffer, cons
     VkMemoryAllocateInfo memoryAllocateInfo = { };
     memoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     memoryAllocateInfo.allocationSize = memoryRequirements.size;
-    memoryAllocateInfo.memoryTypeIndex = GVULKANTools().findMemoryType(vulkanDevice.getPhysicalDevice(), memoryRequirements.memoryTypeBits, properties);
+    memoryAllocateInfo.memoryTypeIndex = vulkanDevice.findMemoryType(memoryRequirements.memoryTypeBits, properties);
     
     VkDeviceMemory newBufferMemory;
     if (vkAllocateMemory(vulkanDevice.getLogicalDevice(), &memoryAllocateInfo, nullptr, &newBufferMemory) != VK_SUCCESS) {

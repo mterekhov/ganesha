@@ -32,6 +32,7 @@ public:
     std::vector<TUInt> getQueuesIndexesArray();
     VkPhysicalDeviceProperties getPhysicalDeviceProperties();
     VkFormatProperties getPhysicalDeviceFormatProperties(VkFormat format);
+    TUInt findMemoryType(const TUInt typeFilter, const VkMemoryPropertyFlags properties);
 
     TBool presentationIsEqualToGraphics();
 
