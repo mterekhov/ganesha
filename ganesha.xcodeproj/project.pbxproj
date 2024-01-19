@@ -14,7 +14,7 @@
 		DE69D2172B4BFC3E002D28E2 /* gspritenode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE69D2152B4BFC3E002D28E2 /* gspritenode.cpp */; };
 		DE69D2182B4BFC3E002D28E2 /* gspritenode.h in Headers */ = {isa = PBXBuildFile; fileRef = DE69D2162B4BFC3E002D28E2 /* gspritenode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE7DD1622B5A8A6E00E22894 /* gcommandservice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE7DD1602B5A8A6E00E22894 /* gcommandservice.cpp */; };
-		DE7DD1632B5A8A6E00E22894 /* gcommandservice.h in Headers */ = {isa = PBXBuildFile; fileRef = DE7DD1612B5A8A6E00E22894 /* gcommandservice.h */; };
+		DE7DD1632B5A8A6E00E22894 /* gcommandservice.h in Headers */ = {isa = PBXBuildFile; fileRef = DE7DD1612B5A8A6E00E22894 /* gcommandservice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE9D0CA12B4A14D500EA0B7C /* gvulkanpipeline.h in Headers */ = {isa = PBXBuildFile; fileRef = DE9D0C722B4A14D400EA0B7C /* gvulkanpipeline.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE9D0CA22B4A14D500EA0B7C /* gvulkantools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE9D0C732B4A14D400EA0B7C /* gvulkantools.cpp */; };
 		DE9D0CA32B4A14D500EA0B7C /* gpoint.h in Headers */ = {isa = PBXBuildFile; fileRef = DE9D0C742B4A14D400EA0B7C /* gpoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -174,16 +174,16 @@
 				DE9D0C722B4A14D400EA0B7C /* gvulkanpipeline.h */,
 				DE9D0C982B4A14D500EA0B7C /* gvulkanswapchain.cpp */,
 				DE9D0C9D2B4A14D500EA0B7C /* gvulkanswapchain.h */,
-				DE9D0C872B4A14D400EA0B7C /* gvulkanbuffer.cpp */,
-				DE9D0C8F2B4A14D500EA0B7C /* gvulkanbuffer.h */,
-				DE9D0C762B4A14D400EA0B7C /* gvulkanimage.h */,
-				DE9D0C962B4A14D500EA0B7C /* gvulkanimage.cpp */,
 				DE9D0C732B4A14D400EA0B7C /* gvulkantools.cpp */,
 				DE9D0C952B4A14D500EA0B7C /* gvulkantools.h */,
+				DE9D0C8F2B4A14D500EA0B7C /* gvulkanbuffer.h */,
+				DE9D0C872B4A14D400EA0B7C /* gvulkanbuffer.cpp */,
+				DE9D0C762B4A14D400EA0B7C /* gvulkanimage.h */,
+				DE9D0C962B4A14D500EA0B7C /* gvulkanimage.cpp */,
 				DEDF76762B58711000F569A7 /* gdescriptorsetservice.cpp */,
 				DEDF76772B58711000F569A7 /* gdescriptorsetservice.h */,
-				DEBE148F2B4DC2C5001EF6FB /* gmaterialsservice.cpp */,
 				DEBE14902B4DC2C5001EF6FB /* gmaterialsservice.h */,
+				DEBE148F2B4DC2C5001EF6FB /* gmaterialsservice.cpp */,
 				DE7DD1612B5A8A6E00E22894 /* gcommandservice.h */,
 				DE7DD1602B5A8A6E00E22894 /* gcommandservice.cpp */,
 			);

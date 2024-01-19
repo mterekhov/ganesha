@@ -6,12 +6,13 @@
 #include "gnode.h"
 #include "gvulkanbuffer.h"
 #include "gvulkanimage.h"
+#include "gcommandservice.h"
 
 namespace spcGaneshaEngine {
 
 class GSpriteNode: public GNode {
 public:
-    GSpriteNode(GVULKANImage *material, GVULKANDevice& vulkanDevice, VkCommandPool commandPool);
+    GSpriteNode(GVULKANImage *material, GVULKANDevice& vulkanDevice, GCommandServiceProtocol *commandService);
     virtual ~GSpriteNode();
 
     virtual void render(VkCommandBuffer renderCommand);

@@ -2,7 +2,7 @@
 
 namespace spcGaneshaEngine {
 
-GSpriteNode::GSpriteNode(GVULKANImage *material, GVULKANDevice& vulkanDevice, VkCommandPool commandPool) : material(material) {
+GSpriteNode::GSpriteNode(GVULKANImage *material, GVULKANDevice& vulkanDevice, GCommandServiceProtocol *commandService) : material(material) {
     const std::vector<TFloat> vertexesArray = {
         -0.5f, -0.3, -0.5f, 2.0f, 0.0f,
         0.5f, -0.3, -0.5f,  0.0f, 0.0,
@@ -25,7 +25,7 @@ GSpriteNode::GSpriteNode(GVULKANImage *material, GVULKANDevice& vulkanDevice, Vk
                                 VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
                                 true,
                                 vulkanDevice,
-                                commandPool);
+                                commandService);
     
     const TIndexArray indexesArray = {
         2, 1, 0, 0, 3, 2,
@@ -38,7 +38,7 @@ GSpriteNode::GSpriteNode(GVULKANImage *material, GVULKANDevice& vulkanDevice, Vk
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
                                true,
                                vulkanDevice,
-                               commandPool);    
+                               commandService);
 }
 
 GSpriteNode::~GSpriteNode() {

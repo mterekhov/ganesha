@@ -4,15 +4,15 @@
 
 namespace spcGaneshaEngine {
 
-GRenderGraph::GRenderGraph() {
+GRenderGraph::GRenderGraph(GCommandServiceProtocol *commandService) : commandService(commandService) {
 }
 
 GRenderGraph::~GRenderGraph() {
     
 }
 
-void GRenderGraph::createGraph(GVULKANDevice& vulkanDevice, VkCommandPool commandPool) {
-    materialsService = new GMaterialsService(commandPool);
+void GRenderGraph::createGraph(GVULKANDevice& vulkanDevice) {
+    materialsService = new GMaterialsService(commandService);
 }
 
 void GRenderGraph::destroyGraph(VkDevice device) {
@@ -30,7 +30,7 @@ void GRenderGraph::destroyGraph(VkDevice device) {
     delete materialsService;
 }
 
-void GRenderGraph::loadContent(GGaneshaContent& contentLoader, GVULKANDevice& vulkanDevice, VkCommandPool commandPool, GDescriptorsetServiceProtocol *descriptorsetService) {
+void GRenderGraph::loadContent(GGaneshaContent& contentLoader, GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice) {
     //  loading shaders
     for (auto shader:contentLoader.getVertexShadersArray()) {
         shadersArray.push_back(createShader(shader, VK_SHADER_STAGE_VERTEX_BIT, vulkanDevice.getLogicalDevice()));
@@ -41,22 +41,22 @@ void GRenderGraph::loadContent(GGaneshaContent& contentLoader, GVULKANDevice& vu
     
     //  creating sprites
     for (auto spriteMaterial:contentLoader.getSpritesMaterialsArray()) {
-        GGraphNode *newSprite = createSpriteNode(spriteMaterial, vulkanDevice, commandPool, descriptorsetService);
+        GGraphNode *newSprite = createSpriteNode(spriteMaterial, descriptorsetService, vulkanDevice);
         pushNode(newSprite);
     }
 }
 
-GGraphNode *GRenderGraph::createSpriteNode(const std::string& materialFilePath, GVULKANDevice& vulkanDevice, VkCommandPool commandPool, GDescriptorsetServiceProtocol *descriptorsetService) {
+GGraphNode *GRenderGraph::createSpriteNode(const std::string& materialFilePath, GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice) {
     //  creating mesh
     GVULKANImage *material = materialsService->findMaterial(materialFilePath);
     if (material == 0) {
         material = materialsService->createMaterial(materialFilePath, vulkanDevice);
         descriptorsetService->attachImageToDescriptorset(*material, 2, vulkanDevice.getLogicalDevice());
     }
-    GSpriteNode *spriteMesh = new GSpriteNode(material, vulkanDevice, commandPool);
+    GSpriteNode *spriteMesh = new GSpriteNode(material, vulkanDevice, commandService);
     
     //  creating mesh instance
-    GGraphNode *meshInstance = new GGraphNode(spriteMesh, descriptorsetService, vulkanDevice, commandPool);
+    GGraphNode *meshInstance = new GGraphNode(spriteMesh, descriptorsetService, vulkanDevice, commandService);
     return meshInstance;
 }
 

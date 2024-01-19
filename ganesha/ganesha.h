@@ -31,5 +31,6 @@
 #include "gmaterialsservice.h"
 #include "gganeshacontent.h"
 #include "gdescriptorsetservice.h"
+#include "gcommandservice.h"
 
 #endif  //  GANESHA_H

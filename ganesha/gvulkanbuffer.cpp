@@ -11,26 +11,34 @@ GVULKANBuffer::~GVULKANBuffer() {
     
 }
 
-void GVULKANBuffer::createBuffer(const void *data, const VkDeviceSize size, const VkBufferUsageFlags usage, const VkMemoryPropertyFlags properties, const TBool protectAccess, GVULKANDevice& vulkanDevice, VkCommandPool commandPool) {
+void GVULKANBuffer::createBuffer(const void *data, 
+                                 const VkDeviceSize size,
+                                 const VkBufferUsageFlags usage,
+                                 const VkMemoryPropertyFlags properties,
+                                 const TBool protectAccess,
+                                 GVULKANDevice& vulkanDevice,
+                                 GCommandServiceProtocol *commandService) {
     if (protectAccess) {
-        VkBuffer stagingBuffer = createBuffer(vulkanDevice.getLogicalDevice(), size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT);
-        VkDeviceMemory stagingBufferMemory = allocateBufferMemory(stagingBuffer, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, vulkanDevice);
+        VkBuffer stagingBuffer = createBuffer(size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, vulkanDevice.getLogicalDevice());
+        VkDeviceMemory stagingBufferMemory = allocateBufferMemory(stagingBuffer, 
+                                                                  VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                                                                  vulkanDevice);
         
         void *mappedData;
         vkMapMemory(vulkanDevice.getLogicalDevice(), stagingBufferMemory, 0, size, 0, &mappedData);
         memcpy(mappedData, data, static_cast<size_t>(size));
         vkUnmapMemory(vulkanDevice.getLogicalDevice(), stagingBufferMemory);
         
-        buffer = createBuffer(vulkanDevice.getLogicalDevice(), size, usage);
+        buffer = createBuffer(size, usage, vulkanDevice.getLogicalDevice());
         bufferMemory = allocateBufferMemory(buffer, properties, vulkanDevice);
         
-        copyBuffer(stagingBuffer, buffer, size, vulkanDevice, commandPool);
+        copyBuffer(stagingBuffer, buffer, size, commandService);
         
         vkDestroyBuffer(vulkanDevice.getLogicalDevice(), stagingBuffer, nullptr);
         vkFreeMemory(vulkanDevice.getLogicalDevice(), stagingBufferMemory, nullptr);
     }
     else {
-        buffer = createBuffer(vulkanDevice.getLogicalDevice(), size, usage);
+        buffer = createBuffer(size, usage, vulkanDevice.getLogicalDevice());
         bufferMemory = allocateBufferMemory(buffer, properties, vulkanDevice);
         
         void *mappedData;
@@ -47,11 +55,11 @@ void GVULKANBuffer::destroyBuffer(VkDevice device) {
     vkFreeMemory(device, bufferMemory, nullptr);
 }
 
-void GVULKANBuffer::refreshBuffer(const void *data, GVULKANDevice& vulkanDevice) {
+void GVULKANBuffer::refreshBuffer(const void *data, VkDevice device) {
     void *mappedData;
-    vkMapMemory(vulkanDevice.getLogicalDevice(), bufferMemory, 0, bufferSize, 0, &mappedData);
+    vkMapMemory(device, bufferMemory, 0, bufferSize, 0, &mappedData);
     memcpy(mappedData, data, static_cast<size_t>(bufferSize));
-    vkUnmapMemory(vulkanDevice.getLogicalDevice(), bufferMemory);
+    vkUnmapMemory(device, bufferMemory);
 }
 
 TUInt GVULKANBuffer::getBufferSize() {
@@ -64,7 +72,7 @@ VkBuffer GVULKANBuffer::getBuffer() {
 
 #pragma mark - Routine -
 
-VkBuffer GVULKANBuffer::createBuffer(VkDevice device, const VkDeviceSize size, const VkBufferUsageFlags usage) {
+VkBuffer GVULKANBuffer::createBuffer(const VkDeviceSize size, const VkBufferUsageFlags usage, VkDevice device) {
     VkBufferCreateInfo bufferInfo = { };
     bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
     bufferInfo.size = size;
@@ -97,8 +105,8 @@ VkDeviceMemory GVULKANBuffer::allocateBufferMemory(VkBuffer originalBuffer, cons
     return newBufferMemory;
 }
 
-void GVULKANBuffer::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, const VkDeviceSize size, GVULKANDevice& vulkanDevice, VkCommandPool commandPool) {
-    VkCommandBuffer commandBuffer = allocateBufferCommand(srcBuffer, dstBuffer, size, commandPool, vulkanDevice.getLogicalDevice());
+void GVULKANBuffer::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, const VkDeviceSize size, GCommandServiceProtocol *commandService) {
+    VkCommandBuffer commandBuffer = commandService->allocateCommandBuffer();
     
     VkCommandBufferBeginInfo beginInfo = { };
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -111,26 +119,7 @@ void GVULKANBuffer::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, const VkD
         vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion);
     vkEndCommandBuffer(commandBuffer);
 
-    VkSubmitInfo submitInfo{};
-    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers = &commandBuffer;
-    vkQueueSubmit(vulkanDevice.getGraphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE);
-    vkQueueWaitIdle(vulkanDevice.getGraphicsQueue());
-    
-    vkFreeCommandBuffers(vulkanDevice.getLogicalDevice(), commandPool, 1, &commandBuffer);
-}
-
-VkCommandBuffer GVULKANBuffer::allocateBufferCommand(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size, VkCommandPool commandPool, VkDevice device) {
-    VkCommandBufferAllocateInfo allocInfo = { };
-    allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    allocInfo.commandPool = commandPool;
-    allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-    allocInfo.commandBufferCount = 1;
-    VkCommandBuffer commandBuffer;
-    vkAllocateCommandBuffers(device, &allocInfo, &commandBuffer);
-
-    return commandBuffer;
+    commandService->submitCommandBuffer({ commandBuffer });
 }
 
 }

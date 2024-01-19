@@ -9,26 +9,28 @@
 #include "gvulkanbuffer.h"
 #include "gganeshacontent.h"
 #include "gdescriptorsetservice.h"
+#include "gcommandservice.h"
 
 namespace spcGaneshaEngine {
 
 /// Manipulates with current position
 class GRenderGraph {
 public:
-    GRenderGraph();
+    GRenderGraph(GCommandServiceProtocol *commandService);
     ~GRenderGraph();
-    void createGraph(GVULKANDevice& vulkanDevice, VkCommandPool commandPool);
+    void createGraph(GVULKANDevice& vulkanDevice);
     void destroyGraph(VkDevice device);
     
-    void loadContent(GGaneshaContent& contentLoader, GVULKANDevice& vulkanDevice, VkCommandPool commandPool, GDescriptorsetServiceProtocol *descriptorsetService);
+    void loadContent(GGaneshaContent& contentLoader, GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice);
 
-    GGraphNode *createSpriteNode(const std::string& materialFilePath, GVULKANDevice& vulkanDevice, VkCommandPool commandPool, GDescriptorsetServiceProtocol *descriptorsetService);
+    GGraphNode *createSpriteNode(const std::string& materialFilePath, GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice);
     void pushNode(GGraphNode *node);
     
     std::vector<GGraphNode *>& getNodeArray();
     std::vector<VkPipelineShaderStageCreateInfo>& getShadersArray();
     
 private:
+    GCommandServiceProtocol *commandService;
     std::vector<GGraphNode *> graphNodeArray;
     std::vector<VkPipelineShaderStageCreateInfo> shadersArray;
     GMaterialsServiceProtocol *materialsService;

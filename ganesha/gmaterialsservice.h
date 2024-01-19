@@ -6,8 +6,8 @@
 #include <vulkan/vulkan.h>
 
 #include "gvulkanimage.h"
-#include "glog.h"
 #include "gvulkandevice.h"
+#include "gcommandservice.h"
 
 namespace spcGaneshaEngine {
 
@@ -22,7 +22,7 @@ public:
 
 class GMaterialsService: public GMaterialsServiceProtocol {
 public:
-    GMaterialsService(VkCommandPool commandPool);
+    GMaterialsService(GCommandServiceProtocol *commandService);
     virtual ~GMaterialsService();
 
     GVULKANImage *createMaterial(const std::string& imageFilePath, GVULKANDevice& vulkanDevice);
@@ -31,7 +31,7 @@ public:
     void destroyMaterials(VkDevice device);
 
 private:
-    VkCommandPool commandPool;
+    GCommandServiceProtocol *commandService;
     std::map<std::string, GVULKANImage *> materialsMap;
 };
 

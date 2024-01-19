@@ -47,15 +47,17 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
     vulkanDevice.createDevice(vulkanInstance, useDeviceExtensions, metalSurface);
     
     vulkanSwapChain.createSwapChain(frameWidth, frameHeight, vulkanDevice, metalSurface);
-    commandPool = createCommandPool(vulkanDevice);
 
     descriptorService = new GDescriptorsetService();
     descriptorService->init(vulkanDevice.getLogicalDevice());
     
+    commandService = new GCommandService(vulkanDevice);
+    commandService->init();
+    
     for (TUInt i = 0; i < maxFramesInFlight; i++) {
-        GRenderGraph newRenderGraph;
-        newRenderGraph.createGraph(vulkanDevice, commandPool);
-        newRenderGraph.loadContent(content, vulkanDevice, commandPool, descriptorService);
+        GRenderGraph newRenderGraph(commandService);
+        newRenderGraph.createGraph(vulkanDevice);
+        newRenderGraph.loadContent(content, descriptorService, vulkanDevice);
         renderGraphArray.push_back(newRenderGraph);
     }
     
@@ -72,7 +74,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
                                          VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
                                          false,
                                          vulkanDevice,
-                                         commandPool);
+                                         commandService);
         descriptorService->attachBufferToDescriptorset(newProjectionBuffer, 0, vulkanDevice.getLogicalDevice());
         vulkanProjectionBuffers.push_back(newProjectionBuffer);
         
@@ -85,20 +87,12 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
                                     VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
                                     false,
                                     vulkanDevice,
-                                    commandPool);
+                                    commandService);
         descriptorService->attachBufferToDescriptorset(newModelBuffer, 1, vulkanDevice.getLogicalDevice());
         vulkanModelBuffers.push_back(newModelBuffer);
 
         //  render commands
-        VkCommandBufferAllocateInfo allocInfo = { };
-        allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-        allocInfo.commandPool = commandPool;
-        allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        allocInfo.commandBufferCount = 1;
-        
-        VkCommandBuffer newCommandBuffer;
-        vkAllocateCommandBuffers(vulkanDevice.getLogicalDevice(), &allocInfo, &newCommandBuffer);
-        renderCommands.push_back(newCommandBuffer);
+        renderCommands.push_back(commandService->allocateCommandBuffer());
     }
 
     createSemaphores();
@@ -127,8 +121,8 @@ void GVULKANAPI::destroyAPI() {
         graph.destroyGraph(vulkanDevice.getLogicalDevice());
     }
     descriptorService->destroy(vulkanDevice.getLogicalDevice());
-
-    vkDestroyCommandPool(vulkanDevice.getLogicalDevice(), commandPool, nullptr);
+    commandService->destroy();
+    
     vulkanDevice.destroyDevice();
     vkDestroySurfaceKHR(vulkanInstance.getVulkanInstance(), metalSurface, nullptr);
     vulkanInstance.destroyInstance();
@@ -162,9 +156,9 @@ void GVULKANAPI::drawFrame() {
     vkAcquireNextImageKHR(vulkanDevice.getLogicalDevice(), vulkanSwapChain.getVulkanSwapChain(), UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
 
     ProjectionsBufferObject projectionBufferObject = currentProjectionBufferObject();
-    vulkanProjectionBuffers[imageIndex].refreshBuffer(&projectionBufferObject, vulkanDevice);
+    vulkanProjectionBuffers[imageIndex].refreshBuffer(&projectionBufferObject, vulkanDevice.getLogicalDevice());
     ModelBufferObject modelBufferObject = currentModelBufferObject();
-    vulkanModelBuffers[imageIndex].refreshBuffer(&modelBufferObject, vulkanDevice);
+    vulkanModelBuffers[imageIndex].refreshBuffer(&modelBufferObject, vulkanDevice.getLogicalDevice());
     
     vkResetFences(vulkanDevice.getLogicalDevice(), 1, &inFlightFences[currentFrame]);
     vkResetCommandBuffer(renderCommands[currentFrame], 0);
@@ -174,30 +168,19 @@ void GVULKANAPI::drawFrame() {
                         vulkanSwapChain,
                         vulkanPipeline,
                         descriptorService->getDescriptorset());
-    VkSubmitInfo submitInfo{};
-    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     
-    VkSemaphore waitSemaphores[] = {imageAvailableSemaphores[currentFrame]};
-    submitInfo.waitSemaphoreCount = 1;
-    submitInfo.pWaitSemaphores = waitSemaphores;
-    
-    VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
-    submitInfo.pWaitDstStageMask = waitStages;
-    
-    submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers = &renderCommands[currentFrame];
-    
-    VkSemaphore signalSemaphores[] = {renderFinishedSemaphores[currentFrame]};
-    submitInfo.signalSemaphoreCount = 1;
-    submitInfo.pSignalSemaphores = signalSemaphores;    
-    if (vkQueueSubmit(vulkanDevice.getGraphicsQueue(), 1, &submitInfo, inFlightFences[currentFrame]) != VK_SUCCESS) {
-        GLOG_ERROR("failed to submit draw command buffer\n");
-    }
+    std::vector<VkSemaphore> signalSemaphores = { renderFinishedSemaphores[currentFrame] };
+    commandService->submitCommandBuffer({ renderCommands[currentFrame] },
+                                        { imageAvailableSemaphores[currentFrame] },
+                                        signalSemaphores,
+                                        inFlightFences[currentFrame],
+                                        false,
+                                        false);
     
     VkPresentInfoKHR presentInfo{};
     presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-    presentInfo.waitSemaphoreCount = 1;
-    presentInfo.pWaitSemaphores = signalSemaphores;
+    presentInfo.waitSemaphoreCount = signalSemaphores.size();
+    presentInfo.pWaitSemaphores = signalSemaphores.data();
     
     VkSwapchainKHR swapChains[] = { vulkanSwapChain.getVulkanSwapChain() };
     presentInfo.swapchainCount = 1;
@@ -279,20 +262,6 @@ void GVULKANAPI::createSemaphores() {
             return;
         }
     }
-}
-
-VkCommandPool GVULKANAPI::createCommandPool(GVULKANDevice& device) {
-    VkCommandPoolCreateInfo poolInfo = { };
-    poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-    poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-    poolInfo.queueFamilyIndex = device.getGraphicsQueueIndex();
-    
-    VkCommandPool newCommandPool;
-    if (vkCreateCommandPool(device.getLogicalDevice(), &poolInfo, nullptr, &newCommandPool) != VK_SUCCESS) {
-        GLOG_ERROR("failed to create command pool\n");
-    }
-    
-    return newCommandPool;
 }
 
 VkSurfaceKHR GVULKANAPI::createSurface(void *metalLayer) {

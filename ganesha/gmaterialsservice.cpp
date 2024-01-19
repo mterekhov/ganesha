@@ -3,12 +3,14 @@
 
 namespace spcGaneshaEngine {
 
-GMaterialsService::GMaterialsService(VkCommandPool commandPool) : commandPool(commandPool) {
+GMaterialsService::GMaterialsService(GCommandServiceProtocol *commandService) : commandService(commandService) {
     
 }
 
 GMaterialsService::~GMaterialsService() {
 }
+
+#pragma mark - GMaterialsServiceProtocol -
 
 GVULKANImage *GMaterialsService::createMaterial(const std::string &imageFilePath, GVULKANDevice& vulkanDevice) {
     GTGA tgaFile(imageFilePath);
@@ -22,7 +24,7 @@ GVULKANImage *GMaterialsService::createMaterial(const std::string &imageFilePath
                          vulkanDevice);
     newImage->deployData(tgaFile,
                         vulkanDevice,
-                        commandPool);
+                        commandService);
     
     materialsMap[imageFilePath] = newImage;
     

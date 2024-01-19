@@ -5,6 +5,7 @@
 #include "gmatrix.h"
 #include "gvulkanbuffer.h"
 #include "gdescriptorsetservice.h"
+#include "gcommandservice.h"
 #include "gquaternion.h"
 #include "gvector.h"
 
@@ -12,7 +13,7 @@ namespace spcGaneshaEngine {
 
 class GGraphNode {
 public:
-    GGraphNode(GNode *node, GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice, VkCommandPool commandPool);
+    GGraphNode(GNode *node, GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice, GCommandServiceProtocol *commandService);
     ~GGraphNode();
     
     GNode *node;

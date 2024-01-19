@@ -41,18 +41,23 @@ void GCommandService::submitCommandBuffer(std::vector<VkCommandBuffer> commandBu
     VkSubmitInfo submitInfo = { };
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-    submitInfo.waitSemaphoreCount = waitSemaphoresArray.size();
-    submitInfo.pWaitSemaphores = waitSemaphoresArray.data();
+    if (!waitSemaphoresArray.empty()) {
+        submitInfo.waitSemaphoreCount = waitSemaphoresArray.size();
+        submitInfo.pWaitSemaphores = waitSemaphoresArray.data();
+        VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+        submitInfo.pWaitDstStageMask = waitStages;
+    }
     
-    submitInfo.signalSemaphoreCount = signalSemaphoresArray.size();
-    submitInfo.pSignalSemaphores = signalSemaphoresArray.data();
-
-    submitInfo.commandBufferCount = commandBuffersArray.size();
-    submitInfo.pCommandBuffers = commandBuffersArray.data();
+    if (!signalSemaphoresArray.empty()) {
+        submitInfo.signalSemaphoreCount = signalSemaphoresArray.size();
+        submitInfo.pSignalSemaphores = signalSemaphoresArray.data();
+    }
     
-    VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
-    submitInfo.pWaitDstStageMask = waitStages;
-
+    if (!commandBuffersArray.empty()) {
+        submitInfo.commandBufferCount = commandBuffersArray.size();
+        submitInfo.pCommandBuffers = commandBuffersArray.data();
+    }
+        
     if (vkQueueSubmit(vulkanDevice.getGraphicsQueue(), 1, &submitInfo, fence) != VK_SUCCESS) {
         GLOG_ERROR("failed to submit draw command buffer\n");
     }
@@ -61,7 +66,7 @@ void GCommandService::submitCommandBuffer(std::vector<VkCommandBuffer> commandBu
         vkQueueWaitIdle(vulkanDevice.getGraphicsQueue());
     }
     
-    if (freeCommandBuffer) {
+    if (freeCommandBuffer && !commandBuffersArray.empty()) {
         vkFreeCommandBuffers(vulkanDevice.getLogicalDevice(), commandPool, commandBuffersArray.size(), commandBuffersArray.data());
     }
 }

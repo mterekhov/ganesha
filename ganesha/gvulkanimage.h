@@ -5,8 +5,8 @@
 #include <vulkan/vulkan.h>
 
 #include "gvulkandevice.h"
-#include "glog.h"
 #include "gtga.h"
+#include "gcommandservice.h"
 
 namespace spcGaneshaEngine {
 
@@ -23,12 +23,11 @@ public:
                      GVULKANDevice& vulkanDevice);
     void deployData(GTGA& tgaFile,
                     GVULKANDevice& vulkanDevice,
-                    VkCommandPool commandPool);
+                    GCommandServiceProtocol *commandService);
     void destroyImage(VkDevice device);
     
     VkImageView getImageView();
     VkSampler getSampler();
-    VkDescriptorSet getDescriptorSet();
 
 private:
     VkExtent2D imageExtent;
@@ -38,10 +37,8 @@ private:
     VkSampler sampler;
     
     VkSampler createTextureSampler(GVULKANDevice& device);
-    VkCommandBuffer copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, VkCommandPool commandPool, VkDevice device);
-    VkCommandBuffer transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout, VkCommandPool commandPool, VkDevice device);
-    void submitCommand(VkCommandBuffer command, VkCommandPool commandPool, GVULKANDevice& vulkanDevice);
-    VkCommandBuffer allocateCommandBuffer(VkCommandPool commandPool, VkDevice device);
+    void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, GCommandServiceProtocol *commandService);
+    void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout, GCommandServiceProtocol *commandService);
 };
 
 }   //  namespace spcGaneshaEngine
