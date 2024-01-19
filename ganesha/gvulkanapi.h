@@ -73,7 +73,6 @@ private:
                              GVULKANSwapChain& swapChain,
                              GVULKANPipeline& pipeline,
                              VkDescriptorSet descriptorset);
-    VkCommandPool createCommandPool(GVULKANDevice& device);
     VkSurfaceKHR createSurface(void *metalLayer);
     void createSemaphores();
 

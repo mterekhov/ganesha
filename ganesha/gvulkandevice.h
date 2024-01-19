@@ -23,8 +23,6 @@ public:
     void createDevice(GVULKANInstance& vulkanInstance, const TStringsArray& useDeviceExtensions, VkSurfaceKHR &surface);
     void destroyDevice();
 
-    VkCommandPool createCommandPool();
-    
     SwapChainSupportDetails querySwapChainSupport(VkSurfaceKHR& surface);
     VkPhysicalDevice getPhysicalDevice();
     VkDevice getLogicalDevice();

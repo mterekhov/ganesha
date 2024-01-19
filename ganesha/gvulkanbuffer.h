@@ -31,11 +31,8 @@ private:
     VkDeviceMemory bufferMemory;
     
     void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, const VkDeviceSize size, GCommandServiceProtocol *commandService);
-
     VkBuffer createBuffer(const VkDeviceSize size, const VkBufferUsageFlags usage, VkDevice device);
     VkDeviceMemory allocateBufferMemory(VkBuffer originalBuffer, const VkMemoryPropertyFlags properties, GVULKANDevice& vulkanDevice);
-    TUInt findMemoryType(VkPhysicalDevice device, const TUInt typeFilter, const VkMemoryPropertyFlags properties);
-    VkCommandBuffer allocateBufferCommand(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size, VkCommandPool commandPool, VkDevice device);
 };
 
 }   //  namespace spcGaneshaEngine
