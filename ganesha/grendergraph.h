@@ -2,8 +2,8 @@
 #define SPCGANESHAENGINE_GRENDERGRAPH_H
 
 #include <vector>
+#include <array>
 
-#include "ganeshastubdata.h"
 #include "ggraphnode.h"
 #include "gmaterialsservice.h"
 #include "gvulkanbuffer.h"
@@ -16,6 +16,9 @@ namespace spcGaneshaEngine {
 /// Manipulates with current position
 class GRenderGraph {
 public:
+    static VkVertexInputBindingDescription getBindingDescription();
+    static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions();
+
     GRenderGraph(GCommandServiceProtocol *commandService);
     ~GRenderGraph();
     void createGraph(GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice);

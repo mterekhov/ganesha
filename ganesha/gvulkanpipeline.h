@@ -7,7 +7,6 @@
 #include "glog.h"
 #include "gvulkandevice.h"
 #include "gvulkanswapchain.h"
-#include "ganeshastubdata.h"
 #include "grendergraph.h"
 
 namespace spcGaneshaEngine {
@@ -23,8 +22,6 @@ public:
     VkPipelineLayout getPipelineLayout();
 
 private:
-    VkVertexInputBindingDescription bindingDescription = Vertex::getBindingDescription();
-    std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions = Vertex::getAttributeDescriptions();
     VkPipeline graphicsPipeline;
     VkPipelineLayout pipelineLayout;
 

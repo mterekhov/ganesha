@@ -8,16 +8,6 @@ GSpriteNode::GSpriteNode(GVULKANImage *material, GVULKANDevice& vulkanDevice, GC
         0.5f, -0.3, -0.5f,  0.0f, 0.0,
         0.5f, -0.3, 0.5f,   0.0f, 2.0,
         -0.5f, -0.3, 0.5f,  2.0f, 2.0,
-        
-        0.0f, -0.1, 0.0f,   2.0f, 0.0,
-        1.0f, -0.1, 0.0f,   0.0f, 0.0,
-        1.0f, -0.1, 1.0f,   0.0f, 2.0,
-        0.0f, -0.1, 1.0f,   2.0f, 2.0,
-        
-        -2.5f, 0.0f, -2.5f, 2.0f, 0.0,
-        2.5f, 0.0f, -2.5f,  0.0f, 0.0,
-        2.5f, 0.0f, 2.5f,   0.0f, 2.0,
-        -2.5f, 0.0f, 2.5f,  2.0f, 2.0f
     };
     vertexesBuffer.createBuffer(vertexesArray.data(),
                                 sizeof(TFloat) * vertexesArray.size(),
@@ -28,9 +18,7 @@ GSpriteNode::GSpriteNode(GVULKANImage *material, GVULKANDevice& vulkanDevice, GC
                                 commandService);
     
     const TIndexArray indexesArray = {
-        2, 1, 0, 0, 3, 2,
-        6, 5, 4, 4, 7, 6,
-        10, 9, 8, 8, 11, 10
+        2, 1, 0, 0, 3, 2
     };
     indexesBuffer.createBuffer(indexesArray.data(),
                                sizeof(TIndex) * indexesArray.size(),

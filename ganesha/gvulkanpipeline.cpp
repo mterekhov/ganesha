@@ -10,8 +10,15 @@ GVULKANPipeline::~GVULKANPipeline() {
 }
 
 void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapChain& swapChain, GRenderGraph& renderGraph, VkDescriptorSetLayout descriptorsetLayout) {
-    VkPipelineVertexInputStateCreateInfo vertexInputInfo = createVertexInput();
-    
+    VkPipelineVertexInputStateCreateInfo vertexInputInfo = { };
+    VkVertexInputBindingDescription bindingDescription = GRenderGraph::getBindingDescription();
+    std::array<VkVertexInputAttributeDescription, 2> attributeDescription = GRenderGraph::getAttributeDescriptions();
+    vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+    vertexInputInfo.vertexBindingDescriptionCount = 1;
+    vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
+    vertexInputInfo.vertexAttributeDescriptionCount = static_cast<TUInt>(attributeDescription.size());
+    vertexInputInfo.pVertexAttributeDescriptions = attributeDescription.data();
+
     VkPipelineInputAssemblyStateCreateInfo inputAssembly = { };
     inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
     inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
@@ -115,18 +122,6 @@ VkPipelineLayout GVULKANPipeline::getPipelineLayout() {
 
 #pragma mark - Routine -
 
-VkPipelineVertexInputStateCreateInfo GVULKANPipeline::createVertexInput() {
-    VkPipelineVertexInputStateCreateInfo vertexInput = { };
-    
-    vertexInput.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    vertexInput.vertexBindingDescriptionCount = 1;
-    vertexInput.vertexAttributeDescriptionCount = static_cast<TUInt>(attributeDescriptions.size());
-    vertexInput.pVertexBindingDescriptions = &bindingDescription;
-    vertexInput.pVertexAttributeDescriptions = attributeDescriptions.data();
-    
-    return vertexInput;
-}
-
 VkPipelineRasterizationStateCreateInfo GVULKANPipeline::createRasterizer() {
     VkPipelineRasterizationStateCreateInfo rasterizer = { };
     
@@ -156,48 +151,5 @@ VkPipelineLayout GVULKANPipeline::createPipelineLayout(VkDevice device, VkDescri
     
     return newPipelineLayout;
 }
-
-//VkPipelineShaderStageCreateInfo GVULKANPipeline::createVertexShaders(const TStringsArray& shadersArray, VkDevice device) {
-//    VkPipelineShaderStageCreateInfo vertShaderStageInfo = {};
-//    
-//    for (const std::string& shaderFullFilePath : shadersArray) {
-//        vertShaderStageInfo = createShader(shaderFullFilePath, VK_SHADER_STAGE_VERTEX_BIT, device);
-//    }
-//    
-//    return vertShaderStageInfo;
-//}
-//
-//VkPipelineShaderStageCreateInfo GVULKANPipeline::createFragmentShaders(const TStringsArray& shadersArray, VkDevice device) {
-//    VkPipelineShaderStageCreateInfo fragShaderStageInfo = {};
-//    
-//    for (const std::string& shaderFullFilePath : shadersArray) {
-//        fragShaderStageInfo = createShader(shaderFullFilePath, VK_SHADER_STAGE_FRAGMENT_BIT, device);
-//    }
-//    
-//    return fragShaderStageInfo;
-//}
-//
-//VkPipelineShaderStageCreateInfo GVULKANPipeline::createShader(const std::string& shaderFile, const VkShaderStageFlagBits stage, VkDevice device) {
-//    GVULKANTools tools;
-//    const std::vector<uint8_t> code = tools.readFile(shaderFile);
-//    VkShaderModuleCreateInfo createInfo = { };
-//    
-//    createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-//    createInfo.codeSize = code.size();
-//    createInfo.pCode = reinterpret_cast<const TUInt*>(code.data());
-//    
-//    VkShaderModule shaderModule;
-//    if (vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
-//        GLOG_ERROR("No chance to create shader module\n");
-//    }
-//    
-//    VkPipelineShaderStageCreateInfo shaderStageInfo{};
-//    shaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-//    shaderStageInfo.stage = stage;
-//    shaderStageInfo.module = shaderModule;
-//    shaderStageInfo.pName = "main";
-//    
-//    return shaderStageInfo;
-//}
 
 }

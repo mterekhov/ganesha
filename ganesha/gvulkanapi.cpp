@@ -217,10 +217,13 @@ void GVULKANAPI::recordRenderCommand(VkCommandBuffer renderCommand,
 
             vkCmdBindDescriptorSets(renderCommand, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.getPipelineLayout(), 0, 1, &descriptorset, 0, nullptr);
             GVULKANBuffer& modelBuffer = renderGraph.getModelBuffer();
+            TUInt counter = 1;
             for (GGraphNode *graphNode:renderGraph.getNodeArray()) {
+                GLOG_INFO("object %i\n", counter++);
                 modelBuffer.refreshBuffer(&graphNode->rts, vulkanDevice.getLogicalDevice());
                 graphNode->node->render(renderCommand);
             }
+            GLOG_INFO("finished\n");
         vkCmdEndRenderPass(renderCommand);
     vkEndCommandBuffer(renderCommand);
 }

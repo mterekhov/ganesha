@@ -4,6 +4,32 @@
 
 namespace spcGaneshaEngine {
 
+VkVertexInputBindingDescription GRenderGraph::getBindingDescription() {
+    VkVertexInputBindingDescription bindingDescription {};
+    
+    bindingDescription.binding = 0;
+    bindingDescription.stride = sizeof(TFloat) * 5;
+    bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+    
+    return bindingDescription;
+}
+
+std::array<VkVertexInputAttributeDescription, 2> GRenderGraph::getAttributeDescriptions()  {
+    std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions{};
+    
+    attributeDescriptions[0].binding = 0;
+    attributeDescriptions[0].location = 0;
+    attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
+    attributeDescriptions[0].offset = 0;
+    
+    attributeDescriptions[1].binding = 0;
+    attributeDescriptions[1].location = 1;
+    attributeDescriptions[1].format = VK_FORMAT_R32G32_SFLOAT;
+    attributeDescriptions[1].offset = sizeof(TFloat) * 3;
+    
+    return attributeDescriptions;
+}
+
 GRenderGraph::GRenderGraph(GCommandServiceProtocol *commandService) : commandService(commandService) {
 }
 
@@ -54,6 +80,10 @@ void GRenderGraph::loadContent(GGaneshaContent& contentLoader, GDescriptorsetSer
     //  creating sprites
     for (auto spriteMaterial:contentLoader.getSpritesMaterialsArray()) {
         GGraphNode *newSprite = createSpriteNode(spriteMaterial, descriptorsetService, vulkanDevice);
+        pushNode(newSprite);
+        
+        newSprite = createSpriteNode(spriteMaterial, descriptorsetService, vulkanDevice);
+//        newSprite->rts.m[3][1] = 5;
         pushNode(newSprite);
     }
 }
