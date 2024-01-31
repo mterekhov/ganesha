@@ -1,19 +1,19 @@
-#ifndef SPCGANESHAENGINE_GSPRITENODE_H
-#define SPCGANESHAENGINE_GSPRITENODE_H
+#ifndef SPCGANESHAENGINE_GSPRITEMESH_H
+#define SPCGANESHAENGINE_GSPRITEMESH_H
 
 #include <string>
 
-#include "gnode.h"
+#include "gmesh.h"
 #include "gvulkanbuffer.h"
 #include "gvulkanimage.h"
 #include "gcommandservice.h"
 
 namespace spcGaneshaEngine {
 
-class GSpriteNode: public GNode {
+class GSpriteMesh: public GMesh {
 public:
-    GSpriteNode(GVULKANImage *material, GVULKANDevice& vulkanDevice, GCommandServiceProtocol *commandService);
-    virtual ~GSpriteNode();
+    GSpriteMesh(GVULKANImage *material, GVULKANDevice& vulkanDevice, GCommandServiceProtocol *commandService);
+    virtual ~GSpriteMesh();
 
     virtual void render(VkCommandBuffer renderCommand);
     virtual void destroyNode(VkDevice device);
@@ -26,4 +26,4 @@ private:
 
 };  //  spcGaneshaEngine
 
-#endif  //  SPCGANESHAENGINE_GSPRITENODE_H
+#endif  //  SPCGANESHAENGINE_GSPRITEMESH_H

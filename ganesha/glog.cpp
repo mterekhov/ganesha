@@ -87,4 +87,3 @@ void GLog::log(const GLogType type, const char* format, va_list args) {
 }
 
 }
-

@@ -1,5 +1,5 @@
 #include "grendergraph.h"
-#include "gspritenode.h"
+#include "gspritemesh.h"
 #include "gvulkantools.h"
 
 namespace spcGaneshaEngine {
@@ -53,8 +53,8 @@ void GRenderGraph::createGraph(GDescriptorsetServiceProtocol *descriptorsetServi
 
 void GRenderGraph::destroyGraph(VkDevice device) {
     for (auto node:graphNodeArray) {
-        node->node->destroyNode(device);
-        delete node->node;
+        node->mesh->destroyNode(device);
+        delete node->mesh;
         delete node;
     }
     
@@ -95,7 +95,7 @@ GGraphNode *GRenderGraph::createSpriteNode(const std::string& materialFilePath, 
         material = materialsService->createMaterial(materialFilePath, vulkanDevice);
         descriptorsetService->attachImageToDescriptorset(*material, 2, vulkanDevice.getLogicalDevice());
     }
-    GSpriteNode *spriteMesh = new GSpriteNode(material, vulkanDevice, commandService);
+    GSpriteMesh *spriteMesh = new GSpriteMesh(material, vulkanDevice, commandService);
     
     //  creating mesh instance
     GGraphNode *meshInstance = new GGraphNode(spriteMesh);

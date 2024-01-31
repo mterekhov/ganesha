@@ -1,8 +1,8 @@
-#include "gspritenode.h"
+#include "gspritemesh.h"
 
 namespace spcGaneshaEngine {
 
-GSpriteNode::GSpriteNode(GVULKANImage *material, GVULKANDevice& vulkanDevice, GCommandServiceProtocol *commandService) : material(material) {
+GSpriteMesh::GSpriteMesh(GVULKANImage *material, GVULKANDevice& vulkanDevice, GCommandServiceProtocol *commandService) : material(material) {
     const std::vector<TFloat> vertexesArray = {
         -0.5f, -0.3, -0.5f, 2.0f, 0.0f,
         0.5f, -0.3, -0.5f,  0.0f, 0.0,
@@ -29,15 +29,15 @@ GSpriteNode::GSpriteNode(GVULKANImage *material, GVULKANDevice& vulkanDevice, GC
                                commandService);
 }
 
-GSpriteNode::~GSpriteNode() {
+GSpriteMesh::~GSpriteMesh() {
 }
 
-void GSpriteNode::destroyNode(VkDevice device) {
+void GSpriteMesh::destroyNode(VkDevice device) {
     vertexesBuffer.destroyBuffer(device);
     indexesBuffer.destroyBuffer(device);
 }
 
-void GSpriteNode::render(VkCommandBuffer renderCommand) {
+void GSpriteMesh::render(VkCommandBuffer renderCommand) {
     VkBuffer vertexBuffers[] = { vertexesBuffer.getBuffer() };
     VkDeviceSize offsets[] = {0};
     vkCmdBindVertexBuffers(renderCommand, 0, 1, vertexBuffers, offsets);

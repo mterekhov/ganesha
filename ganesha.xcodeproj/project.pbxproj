@@ -7,12 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DE20635B2B5E5AC700D8E12F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DE20635A2B5E5AC700D8E12F /* README.md */; };
 		DE69D20F2B4BFAA6002D28E2 /* ggraphnode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE69D20D2B4BFAA6002D28E2 /* ggraphnode.cpp */; };
 		DE69D2102B4BFAA6002D28E2 /* ggraphnode.h in Headers */ = {isa = PBXBuildFile; fileRef = DE69D20E2B4BFAA6002D28E2 /* ggraphnode.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		DE69D2132B4BFABB002D28E2 /* gnode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE69D2112B4BFABB002D28E2 /* gnode.cpp */; };
-		DE69D2142B4BFABB002D28E2 /* gnode.h in Headers */ = {isa = PBXBuildFile; fileRef = DE69D2122B4BFABB002D28E2 /* gnode.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		DE69D2172B4BFC3E002D28E2 /* gspritenode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE69D2152B4BFC3E002D28E2 /* gspritenode.cpp */; };
-		DE69D2182B4BFC3E002D28E2 /* gspritenode.h in Headers */ = {isa = PBXBuildFile; fileRef = DE69D2162B4BFC3E002D28E2 /* gspritenode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE69D2132B4BFABB002D28E2 /* gmesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE69D2112B4BFABB002D28E2 /* gmesh.cpp */; };
+		DE69D2142B4BFABB002D28E2 /* gmesh.h in Headers */ = {isa = PBXBuildFile; fileRef = DE69D2122B4BFABB002D28E2 /* gmesh.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE69D2172B4BFC3E002D28E2 /* gspritemesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE69D2152B4BFC3E002D28E2 /* gspritemesh.cpp */; };
+		DE69D2182B4BFC3E002D28E2 /* gspritemesh.h in Headers */ = {isa = PBXBuildFile; fileRef = DE69D2162B4BFC3E002D28E2 /* gspritemesh.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE7DD1622B5A8A6E00E22894 /* gcommandservice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE7DD1602B5A8A6E00E22894 /* gcommandservice.cpp */; };
 		DE7DD1632B5A8A6E00E22894 /* gcommandservice.h in Headers */ = {isa = PBXBuildFile; fileRef = DE7DD1612B5A8A6E00E22894 /* gcommandservice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE9D0CA12B4A14D500EA0B7C /* gvulkanpipeline.h in Headers */ = {isa = PBXBuildFile; fileRef = DE9D0C722B4A14D400EA0B7C /* gvulkanpipeline.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -66,12 +67,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DE20635A2B5E5AC700D8E12F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		DE69D20D2B4BFAA6002D28E2 /* ggraphnode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ggraphnode.cpp; path = ganesha/ggraphnode.cpp; sourceTree = "<group>"; };
 		DE69D20E2B4BFAA6002D28E2 /* ggraphnode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ggraphnode.h; path = ganesha/ggraphnode.h; sourceTree = "<group>"; };
-		DE69D2112B4BFABB002D28E2 /* gnode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gnode.cpp; path = ganesha/gnode.cpp; sourceTree = "<group>"; };
-		DE69D2122B4BFABB002D28E2 /* gnode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gnode.h; path = ganesha/gnode.h; sourceTree = "<group>"; };
-		DE69D2152B4BFC3E002D28E2 /* gspritenode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gspritenode.cpp; path = ganesha/gspritenode.cpp; sourceTree = "<group>"; };
-		DE69D2162B4BFC3E002D28E2 /* gspritenode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gspritenode.h; path = ganesha/gspritenode.h; sourceTree = "<group>"; };
+		DE69D2112B4BFABB002D28E2 /* gmesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gmesh.cpp; path = ganesha/gmesh.cpp; sourceTree = "<group>"; };
+		DE69D2122B4BFABB002D28E2 /* gmesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gmesh.h; path = ganesha/gmesh.h; sourceTree = "<group>"; };
+		DE69D2152B4BFC3E002D28E2 /* gspritemesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gspritemesh.cpp; path = ganesha/gspritemesh.cpp; sourceTree = "<group>"; };
+		DE69D2162B4BFC3E002D28E2 /* gspritemesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gspritemesh.h; path = ganesha/gspritemesh.h; sourceTree = "<group>"; };
 		DE7DD1602B5A8A6E00E22894 /* gcommandservice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gcommandservice.cpp; path = ganesha/gcommandservice.cpp; sourceTree = "<group>"; };
 		DE7DD1612B5A8A6E00E22894 /* gcommandservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gcommandservice.h; path = ganesha/gcommandservice.h; sourceTree = "<group>"; };
 		DE82CE5C2B4A149500EF0925 /* ganesha.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ganesha.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -174,8 +176,8 @@
 				DE9D0C872B4A14D400EA0B7C /* gvulkanbuffer.cpp */,
 				DE9D0C762B4A14D400EA0B7C /* gvulkanimage.h */,
 				DE9D0C962B4A14D500EA0B7C /* gvulkanimage.cpp */,
-				DEDF76762B58711000F569A7 /* gdescriptorsetservice.cpp */,
 				DEDF76772B58711000F569A7 /* gdescriptorsetservice.h */,
+				DEDF76762B58711000F569A7 /* gdescriptorsetservice.cpp */,
 				DEBE14902B4DC2C5001EF6FB /* gmaterialsservice.h */,
 				DEBE148F2B4DC2C5001EF6FB /* gmaterialsservice.cpp */,
 				DE7DD1612B5A8A6E00E22894 /* gcommandservice.h */,
@@ -211,6 +213,7 @@
 		DE82CE522B4A149500EF0925 = {
 			isa = PBXGroup;
 			children = (
+				DE20635A2B5E5AC700D8E12F /* README.md */,
 				DE82CE5E2B4A149500EF0925 /* ganesha */,
 				DE82CE5D2B4A149500EF0925 /* Products */,
 				DE9D0CD02B4A17E500EA0B7C /* Frameworks */,
@@ -256,10 +259,10 @@
 		DEBE148E2B4C8B89001EF6FB /* Meshes */ = {
 			isa = PBXGroup;
 			children = (
-				DE69D2122B4BFABB002D28E2 /* gnode.h */,
-				DE69D2112B4BFABB002D28E2 /* gnode.cpp */,
-				DE69D2162B4BFC3E002D28E2 /* gspritenode.h */,
-				DE69D2152B4BFC3E002D28E2 /* gspritenode.cpp */,
+				DE69D2122B4BFABB002D28E2 /* gmesh.h */,
+				DE69D2112B4BFABB002D28E2 /* gmesh.cpp */,
+				DE69D2162B4BFC3E002D28E2 /* gspritemesh.h */,
+				DE69D2152B4BFC3E002D28E2 /* gspritemesh.cpp */,
 			);
 			name = Meshes;
 			sourceTree = "<group>";
@@ -293,8 +296,8 @@
 				DE9D0CB52B4A14D500EA0B7C /* gvector.h in Headers */,
 				DE9D0CA72B4A14D500EA0B7C /* gquaternion.h in Headers */,
 				DE9D0CB42B4A14D500EA0B7C /* gtga.h in Headers */,
-				DE69D2182B4BFC3E002D28E2 /* gspritenode.h in Headers */,
-				DE69D2142B4BFABB002D28E2 /* gnode.h in Headers */,
+				DE69D2182B4BFC3E002D28E2 /* gspritemesh.h in Headers */,
+				DE69D2142B4BFABB002D28E2 /* gmesh.h in Headers */,
 				DE69D2102B4BFAA6002D28E2 /* ggraphnode.h in Headers */,
 				DEDF76792B58711000F569A7 /* gdescriptorsetservice.h in Headers */,
 				DE9D0CC42B4A14D500EA0B7C /* gvulkantools.h in Headers */,
@@ -361,6 +364,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE20635B2B5E5AC700D8E12F /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,14 +385,14 @@
 				DE9D0CA22B4A14D500EA0B7C /* gvulkantools.cpp in Sources */,
 				DE9D0CCD2B4A14D500EA0B7C /* gvulkaninstance.cpp in Sources */,
 				DEBE14912B4DC2C5001EF6FB /* gmaterialsservice.cpp in Sources */,
-				DE69D2172B4BFC3E002D28E2 /* gspritenode.cpp in Sources */,
+				DE69D2172B4BFC3E002D28E2 /* gspritemesh.cpp in Sources */,
 				DEDF76782B58711000F569A7 /* gdescriptorsetservice.cpp in Sources */,
 				DEBE14952B51E548001EF6FB /* gganeshacontent.cpp in Sources */,
 				DE9D0CAB2B4A14D500EA0B7C /* grendergraph.cpp in Sources */,
 				DE9D0CB12B4A14D500EA0B7C /* gquaternion.cpp in Sources */,
 				DE9D0CC52B4A14D500EA0B7C /* gvulkanimage.cpp in Sources */,
 				DE9D0CC02B4A14D500EA0B7C /* gmatrix.cpp in Sources */,
-				DE69D2132B4BFABB002D28E2 /* gnode.cpp in Sources */,
+				DE69D2132B4BFABB002D28E2 /* gmesh.cpp in Sources */,
 				DE9D0CC62B4A14D500EA0B7C /* gvulkandevice.cpp in Sources */,
 				DE9D0CB62B4A14D500EA0B7C /* gvulkanbuffer.cpp in Sources */,
 				DE9D0CBC2B4A14D500EA0B7C /* gvulkanapi.cpp in Sources */,

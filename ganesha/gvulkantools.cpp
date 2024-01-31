@@ -35,5 +35,4 @@ VkImageView GVULKANTools::createImageView(VkImage image, VkFormat format, VkImag
     return newImageView;
 }
 
-
 }

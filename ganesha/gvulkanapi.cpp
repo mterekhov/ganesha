@@ -9,7 +9,7 @@
 #include "gmatrix.h"
 #include "gvulkanbuffer.h"
 #include "gvulkantools.h"
-#include "gspritenode.h"
+#include "gspritemesh.h"
 
 namespace spcGaneshaEngine {
 
@@ -221,7 +221,7 @@ void GVULKANAPI::recordRenderCommand(VkCommandBuffer renderCommand,
             for (GGraphNode *graphNode:renderGraph.getNodeArray()) {
                 GLOG_INFO("object %i\n", counter++);
                 modelBuffer.refreshBuffer(&graphNode->rts, vulkanDevice.getLogicalDevice());
-                graphNode->node->render(renderCommand);
+                graphNode->mesh->render(renderCommand);
             }
             GLOG_INFO("finished\n");
         vkCmdEndRenderPass(renderCommand);

@@ -1,4 +1,4 @@
-#include "gnode.h"
+#include "gmesh.h"
 
 namespace spcGaneshaEngine {
 

@@ -1,17 +1,17 @@
 #ifndef SPCGANESHAENGINE_GGRAPHNODE_H
 #define SPCGANESHAENGINE_GGRAPHNODE_H
 
-#include "gnode.h"
+#include "gmesh.h"
 #include "gmatrix.h"
 
 namespace spcGaneshaEngine {
 
 class GGraphNode {
 public:
-    GGraphNode(GNode *node);
+    GGraphNode(GMesh *mesh);
     ~GGraphNode();
     
-    GNode *node;
+    GMesh *mesh;
     GMatrix rts;
 };
 
