@@ -31,7 +31,9 @@ GVULKANAPI::GVULKANAPI() {
 }
 
 GVULKANAPI::~GVULKANAPI() {
-    
+    delete descriptorService;
+    delete shadersService;
+    delete commandService;
 }
 
 #pragma mark - GGraphicsAPIProtocol -
@@ -47,13 +49,22 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
     vulkanDevice.createDevice(vulkanInstance, useDeviceExtensions, metalSurface);
     
     vulkanSwapChain.createSwapChain(frameWidth, frameHeight, vulkanDevice, metalSurface);
-
+    
     descriptorService = new GDescriptorsetService();
     descriptorService->init(vulkanDevice.getLogicalDevice());
     
     commandService = new GCommandService(vulkanDevice);
     commandService->init();
     
+    shadersService = new GShadersService(vulkanDevice);
+    shadersService->init();
+    for (auto shader:content.getVertexShadersArray()) {
+        shadersService->addVertexShader(shader);
+    }
+    for (auto shader:content.getFragmetShadersArrray()) {
+        shadersService->addFragmentShader(shader);
+    }
+
     for (TUInt i = 0; i < maxFramesInFlight; i++) {
         GRenderGraph newRenderGraph(commandService);
         newRenderGraph.createGraph(descriptorService, vulkanDevice);
@@ -61,7 +72,8 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
         renderGraphArray.push_back(newRenderGraph);
     }
     
-    vulkanPipeline.createPipeline(vulkanDevice, vulkanSwapChain, *renderGraphArray.begin(), descriptorService->getDescriptorsetLayout());
+    std::vector<VkPipelineShaderStageCreateInfo> shadersArray = shadersService->getAllShadersArray();
+    vulkanPipeline.createPipeline(vulkanDevice, vulkanSwapChain, shadersArray, descriptorService->getDescriptorsetLayout());
 
     TUInt framebuffersNumber = static_cast<TUInt>(vulkanSwapChain.framebuffersNumber());
     for (TUInt i = 0; i < framebuffersNumber; i++) {
@@ -106,6 +118,8 @@ void GVULKANAPI::destroyAPI() {
     }
     descriptorService->destroy(vulkanDevice.getLogicalDevice());
     commandService->destroy();
+    
+    shadersService->destroy();
     
     vulkanDevice.destroyDevice();
     vkDestroySurfaceKHR(vulkanInstance.getVulkanInstance(), metalSurface, nullptr);

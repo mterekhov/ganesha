@@ -62,8 +62,16 @@
 		DEBE14922B4DC2C5001EF6FB /* gmaterialsservice.h in Headers */ = {isa = PBXBuildFile; fileRef = DEBE14902B4DC2C5001EF6FB /* gmaterialsservice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DEBE14952B51E548001EF6FB /* gganeshacontent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEBE14932B51E548001EF6FB /* gganeshacontent.cpp */; };
 		DEBE14962B51E548001EF6FB /* gganeshacontent.h in Headers */ = {isa = PBXBuildFile; fileRef = DEBE14942B51E548001EF6FB /* gganeshacontent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DEDD0F1E2B6A9C4300F6F9B1 /* geventsservice.h in Headers */ = {isa = PBXBuildFile; fileRef = DEDD0F1C2B6A9C4300F6F9B1 /* geventsservice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DEDD0F1F2B6A9C4300F6F9B1 /* geventsservice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEDD0F1D2B6A9C4300F6F9B1 /* geventsservice.cpp */; };
+		DEDD0F222B6AAE1D00F6F9B1 /* gevent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEDD0F202B6AAE1D00F6F9B1 /* gevent.cpp */; };
+		DEDD0F232B6AAE1D00F6F9B1 /* gevent.h in Headers */ = {isa = PBXBuildFile; fileRef = DEDD0F212B6AAE1D00F6F9B1 /* gevent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DEDD0F262B6AAF6C00F6F9B1 /* geventwindoweresize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEDD0F242B6AAF6C00F6F9B1 /* geventwindoweresize.cpp */; };
+		DEDD0F272B6AAF6D00F6F9B1 /* geventwindoweresize.h in Headers */ = {isa = PBXBuildFile; fileRef = DEDD0F252B6AAF6C00F6F9B1 /* geventwindoweresize.h */; };
 		DEDF76782B58711000F569A7 /* gdescriptorsetservice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEDF76762B58711000F569A7 /* gdescriptorsetservice.cpp */; };
 		DEDF76792B58711000F569A7 /* gdescriptorsetservice.h in Headers */ = {isa = PBXBuildFile; fileRef = DEDF76772B58711000F569A7 /* gdescriptorsetservice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DEFDBCFB2B6C0569001EBFF6 /* gshadersservice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEFDBCF92B6C0569001EBFF6 /* gshadersservice.cpp */; };
+		DEFDBCFC2B6C0569001EBFF6 /* gshadersservice.h in Headers */ = {isa = PBXBuildFile; fileRef = DEFDBCFA2B6C0569001EBFF6 /* gshadersservice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -123,8 +131,16 @@
 		DEBE14902B4DC2C5001EF6FB /* gmaterialsservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gmaterialsservice.h; path = ganesha/gmaterialsservice.h; sourceTree = "<group>"; };
 		DEBE14932B51E548001EF6FB /* gganeshacontent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gganeshacontent.cpp; path = ganesha/gganeshacontent.cpp; sourceTree = "<group>"; };
 		DEBE14942B51E548001EF6FB /* gganeshacontent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gganeshacontent.h; path = ganesha/gganeshacontent.h; sourceTree = "<group>"; };
+		DEDD0F1C2B6A9C4300F6F9B1 /* geventsservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = geventsservice.h; path = ganesha/geventsservice.h; sourceTree = "<group>"; };
+		DEDD0F1D2B6A9C4300F6F9B1 /* geventsservice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = geventsservice.cpp; path = ganesha/geventsservice.cpp; sourceTree = "<group>"; };
+		DEDD0F202B6AAE1D00F6F9B1 /* gevent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gevent.cpp; path = ganesha/gevent.cpp; sourceTree = "<group>"; };
+		DEDD0F212B6AAE1D00F6F9B1 /* gevent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gevent.h; path = ganesha/gevent.h; sourceTree = "<group>"; };
+		DEDD0F242B6AAF6C00F6F9B1 /* geventwindoweresize.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = geventwindoweresize.cpp; path = ganesha/geventwindoweresize.cpp; sourceTree = "<group>"; };
+		DEDD0F252B6AAF6C00F6F9B1 /* geventwindoweresize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = geventwindoweresize.h; path = ganesha/geventwindoweresize.h; sourceTree = "<group>"; };
 		DEDF76762B58711000F569A7 /* gdescriptorsetservice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gdescriptorsetservice.cpp; path = ganesha/gdescriptorsetservice.cpp; sourceTree = "<group>"; };
 		DEDF76772B58711000F569A7 /* gdescriptorsetservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gdescriptorsetservice.h; path = ganesha/gdescriptorsetservice.h; sourceTree = "<group>"; };
+		DEFDBCF92B6C0569001EBFF6 /* gshadersservice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gshadersservice.cpp; path = ganesha/gshadersservice.cpp; sourceTree = "<group>"; };
+		DEFDBCFA2B6C0569001EBFF6 /* gshadersservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gshadersservice.h; path = ganesha/gshadersservice.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -231,6 +247,9 @@
 		DE82CE5E2B4A149500EF0925 /* ganesha */ = {
 			isa = PBXGroup;
 			children = (
+				DEFDBCFA2B6C0569001EBFF6 /* gshadersservice.h */,
+				DEFDBCF92B6C0569001EBFF6 /* gshadersservice.cpp */,
+				DEFDBCFD2B6C0858001EBFF6 /* Events */,
 				DEBE148E2B4C8B89001EF6FB /* Meshes */,
 				DE69D20C2B4BFA63002D28E2 /* Graph */,
 				DE69D1FF2B4B47C1002D28E2 /* Basics */,
@@ -267,6 +286,19 @@
 			name = Meshes;
 			sourceTree = "<group>";
 		};
+		DEFDBCFD2B6C0858001EBFF6 /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				DEDD0F202B6AAE1D00F6F9B1 /* gevent.cpp */,
+				DEDD0F212B6AAE1D00F6F9B1 /* gevent.h */,
+				DEDD0F242B6AAF6C00F6F9B1 /* geventwindoweresize.cpp */,
+				DEDD0F252B6AAF6C00F6F9B1 /* geventwindoweresize.h */,
+				DEDD0F1C2B6A9C4300F6F9B1 /* geventsservice.h */,
+				DEDD0F1D2B6A9C4300F6F9B1 /* geventsservice.cpp */,
+			);
+			name = Events;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -279,7 +311,9 @@
 				DE9D0CA12B4A14D500EA0B7C /* gvulkanpipeline.h in Headers */,
 				DE9D0CA32B4A14D500EA0B7C /* gpoint.h in Headers */,
 				DE9D0CAF2B4A14D500EA0B7C /* ggraphicsapiprotocol.h in Headers */,
+				DEDD0F272B6AAF6D00F6F9B1 /* geventwindoweresize.h in Headers */,
 				DE9D0CCB2B4A14D500EA0B7C /* gvulkaninstance.h in Headers */,
+				DEDD0F232B6AAE1D00F6F9B1 /* gevent.h in Headers */,
 				DE9D0CB02B4A14D500EA0B7C /* ganeshatypes.h in Headers */,
 				DE9D0CC12B4A14D500EA0B7C /* glog.h in Headers */,
 				DE9D0CBF2B4A14D500EA0B7C /* gpoint2d.h in Headers */,
@@ -298,11 +332,13 @@
 				DE9D0CB42B4A14D500EA0B7C /* gtga.h in Headers */,
 				DE69D2182B4BFC3E002D28E2 /* gspritemesh.h in Headers */,
 				DE69D2142B4BFABB002D28E2 /* gmesh.h in Headers */,
+				DEFDBCFC2B6C0569001EBFF6 /* gshadersservice.h in Headers */,
 				DE69D2102B4BFAA6002D28E2 /* ggraphnode.h in Headers */,
 				DEDF76792B58711000F569A7 /* gdescriptorsetservice.h in Headers */,
 				DE9D0CC42B4A14D500EA0B7C /* gvulkantools.h in Headers */,
 				DE9D0CAE2B4A14D500EA0B7C /* gcamera.h in Headers */,
 				DE9D0CA52B4A14D500EA0B7C /* gvulkanimage.h in Headers */,
+				DEDD0F1E2B6A9C4300F6F9B1 /* geventsservice.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,6 +415,7 @@
 				DE9D0CA62B4A14D500EA0B7C /* gcamera.cpp in Sources */,
 				DE9D0CC82B4A14D500EA0B7C /* gtga.cpp in Sources */,
 				DE9D0CC72B4A14D500EA0B7C /* gvulkanswapchain.cpp in Sources */,
+				DEDD0F222B6AAE1D00F6F9B1 /* gevent.cpp in Sources */,
 				DE9D0CB32B4A14D500EA0B7C /* glog.cpp in Sources */,
 				DE9D0CCF2B4A14D500EA0B7C /* gcolor.cpp in Sources */,
 				DE9D0CB92B4A14D500EA0B7C /* gpoint2d.cpp in Sources */,
@@ -388,9 +425,11 @@
 				DE69D2172B4BFC3E002D28E2 /* gspritemesh.cpp in Sources */,
 				DEDF76782B58711000F569A7 /* gdescriptorsetservice.cpp in Sources */,
 				DEBE14952B51E548001EF6FB /* gganeshacontent.cpp in Sources */,
+				DEFDBCFB2B6C0569001EBFF6 /* gshadersservice.cpp in Sources */,
 				DE9D0CAB2B4A14D500EA0B7C /* grendergraph.cpp in Sources */,
 				DE9D0CB12B4A14D500EA0B7C /* gquaternion.cpp in Sources */,
 				DE9D0CC52B4A14D500EA0B7C /* gvulkanimage.cpp in Sources */,
+				DEDD0F1F2B6A9C4300F6F9B1 /* geventsservice.cpp in Sources */,
 				DE9D0CC02B4A14D500EA0B7C /* gmatrix.cpp in Sources */,
 				DE69D2132B4BFABB002D28E2 /* gmesh.cpp in Sources */,
 				DE9D0CC62B4A14D500EA0B7C /* gvulkandevice.cpp in Sources */,
@@ -398,6 +437,7 @@
 				DE9D0CBC2B4A14D500EA0B7C /* gvulkanapi.cpp in Sources */,
 				DE9D0CAD2B4A14D500EA0B7C /* gvector.cpp in Sources */,
 				DE69D20F2B4BFAA6002D28E2 /* ggraphnode.cpp in Sources */,
+				DEDD0F262B6AAF6C00F6F9B1 /* geventwindoweresize.cpp in Sources */,
 				DE9D0CC32B4A14D500EA0B7C /* gvulkanpipeline.cpp in Sources */,
 				DE9D0CAA2B4A14D500EA0B7C /* gganesha.cpp in Sources */,
 				DE9D0CCE2B4A14D500EA0B7C /* gpoint.cpp in Sources */,

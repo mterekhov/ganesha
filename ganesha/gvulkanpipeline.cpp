@@ -9,16 +9,16 @@ GVULKANPipeline::GVULKANPipeline() {
 GVULKANPipeline::~GVULKANPipeline() {
 }
 
-void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapChain& swapChain, GRenderGraph& renderGraph, VkDescriptorSetLayout descriptorsetLayout) {
+void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapChain& swapChain, std::vector<VkPipelineShaderStageCreateInfo> &shadersArray, VkDescriptorSetLayout descriptorsetLayout) {
     VkPipelineVertexInputStateCreateInfo vertexInputInfo = { };
-    VkVertexInputBindingDescription bindingDescription = GRenderGraph::getBindingDescription();
-    std::array<VkVertexInputAttributeDescription, 2> attributeDescription = GRenderGraph::getAttributeDescriptions();
+    VkVertexInputBindingDescription bindingDescription = getBindingDescription();
+    std::array<VkVertexInputAttributeDescription, 2> attributeDescription = getAttributeDescriptions();
     vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     vertexInputInfo.vertexBindingDescriptionCount = 1;
     vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
     vertexInputInfo.vertexAttributeDescriptionCount = static_cast<TUInt>(attributeDescription.size());
     vertexInputInfo.pVertexAttributeDescriptions = attributeDescription.data();
-
+    
     VkPipelineInputAssemblyStateCreateInfo inputAssembly = { };
     inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
     inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
@@ -41,7 +41,7 @@ void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapCha
     viewportState.pViewports = &viewport;
     viewportState.scissorCount = 1;
     viewportState.pScissors = &scissor;
-
+    
     VkPipelineRasterizationStateCreateInfo rasterizer = createRasterizer();
     
     VkPipelineMultisampleStateCreateInfo multisampling = { };
@@ -81,11 +81,11 @@ void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapCha
     depthStencil.depthCompareOp = VK_COMPARE_OP_LESS;
     depthStencil.depthBoundsTestEnable = VK_FALSE;
     depthStencil.stencilTestEnable = VK_FALSE;
-
+    
     VkGraphicsPipelineCreateInfo pipelineInfo{};
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-    pipelineInfo.stageCount = renderGraph.getShadersArray().size();
-    pipelineInfo.pStages = renderGraph.getShadersArray().data();
+    pipelineInfo.stageCount = shadersArray.size();
+    pipelineInfo.pStages = shadersArray.data();
     pipelineInfo.pVertexInputState = &vertexInputInfo;
     pipelineInfo.pInputAssemblyState = &inputAssembly;
     pipelineInfo.pViewportState = &viewportState;
@@ -151,5 +151,32 @@ VkPipelineLayout GVULKANPipeline::createPipelineLayout(VkDevice device, VkDescri
     
     return newPipelineLayout;
 }
+
+VkVertexInputBindingDescription GVULKANPipeline::getBindingDescription() {
+    VkVertexInputBindingDescription bindingDescription {};
+    
+    bindingDescription.binding = 0;
+    bindingDescription.stride = sizeof(TFloat) * 5;
+    bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+    
+    return bindingDescription;
+}
+
+std::array<VkVertexInputAttributeDescription, 2> GVULKANPipeline::getAttributeDescriptions()  {
+    std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions{};
+    
+    attributeDescriptions[0].binding = 0;
+    attributeDescriptions[0].location = 0;
+    attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
+    attributeDescriptions[0].offset = 0;
+    
+    attributeDescriptions[1].binding = 0;
+    attributeDescriptions[1].location = 1;
+    attributeDescriptions[1].format = VK_FORMAT_R32G32_SFLOAT;
+    attributeDescriptions[1].offset = sizeof(TFloat) * 3;
+    
+    return attributeDescriptions;
+}
+
 
 }

@@ -16,11 +16,9 @@ namespace spcGaneshaEngine {
 /// Manipulates with current position
 class GRenderGraph {
 public:
-    static VkVertexInputBindingDescription getBindingDescription();
-    static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions();
-
     GRenderGraph(GCommandServiceProtocol *commandService);
     ~GRenderGraph();
+    
     void createGraph(GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice);
     void destroyGraph(VkDevice device);
     
@@ -30,17 +28,13 @@ public:
     void pushNode(GGraphNode *node);
     
     std::vector<GGraphNode *>& getNodeArray();
-    std::vector<VkPipelineShaderStageCreateInfo>& getShadersArray();
     GVULKANBuffer& getModelBuffer();
 
 private:
     GVULKANBuffer modelBuffer;
     GCommandServiceProtocol *commandService;
     std::vector<GGraphNode *> graphNodeArray;
-    std::vector<VkPipelineShaderStageCreateInfo> shadersArray;
     GMaterialsServiceProtocol *materialsService;
-
-    VkPipelineShaderStageCreateInfo createShader(const std::string& shaderFile,  const VkShaderStageFlagBits stage, VkDevice device);
 };
 
 };  //  spcGaneshaEngine

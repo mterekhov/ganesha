@@ -32,5 +32,7 @@
 #include "gganeshacontent.h"
 #include "gdescriptorsetservice.h"
 #include "gcommandservice.h"
+#include "gshadersservice.h"
+
 
 #endif  //  GANESHA_H

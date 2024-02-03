@@ -16,6 +16,7 @@
 #include "gmaterialsservice.h"
 #include "gdescriptorsetservice.h"
 #include "gcommandservice.h"
+#include "gshadersservice.h"
 
 namespace spcGaneshaEngine {
 
@@ -43,6 +44,7 @@ private:
     GVULKANPipeline vulkanPipeline;
     GDescriptorsetServiceProtocol *descriptorService;
     GCommandServiceProtocol *commandService;
+    GShadersServiceProtocol *shadersService;
     
     VkSurfaceKHR metalSurface;
 
