@@ -50,8 +50,8 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
     
     vulkanSwapChain.createSwapChain(frameWidth, frameHeight, vulkanDevice, metalSurface);
     
-    descriptorService = new GDescriptorsetService();
-    descriptorService->init(vulkanDevice.getLogicalDevice());
+    descriptorService = new GDescriptorsetService(vulkanDevice);
+    descriptorService->init();
     
     commandService = new GCommandService(vulkanDevice);
     commandService->init();
@@ -87,7 +87,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
                                          false,
                                          vulkanDevice,
                                          commandService);
-        descriptorService->attachBufferToDescriptorset(newProjectionBuffer, 0, vulkanDevice.getLogicalDevice());
+        descriptorService->attachBufferToDescriptorset(newProjectionBuffer, 0);
         vulkanProjectionBuffers.push_back(newProjectionBuffer);
 
         //  render commands
@@ -116,9 +116,9 @@ void GVULKANAPI::destroyAPI() {
     for (GRenderGraph graph:renderGraphArray) {
         graph.destroyGraph(vulkanDevice.getLogicalDevice());
     }
-    descriptorService->destroy(vulkanDevice.getLogicalDevice());
-    commandService->destroy();
     
+    descriptorService->destroy();
+    commandService->destroy();
     shadersService->destroy();
     
     vulkanDevice.destroyDevice();

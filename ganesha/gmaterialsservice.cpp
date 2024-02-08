@@ -3,7 +3,7 @@
 
 namespace spcGaneshaEngine {
 
-GMaterialsService::GMaterialsService(GCommandServiceProtocol *commandService) : commandService(commandService) {
+GMaterialsService::GMaterialsService(GCommandServiceProtocol *commandService, GVULKANDevice& vulkanDevice) : commandService(commandService), vulkanDevice(vulkanDevice) {
     
 }
 
@@ -12,7 +12,18 @@ GMaterialsService::~GMaterialsService() {
 
 #pragma mark - GMaterialsServiceProtocol -
 
-GVULKANImage *GMaterialsService::createMaterial(const std::string &imageFilePath, GVULKANDevice& vulkanDevice) {
+void GMaterialsService::init() {
+}
+
+void GMaterialsService::destroy() {
+    VkDevice device = vulkanDevice.getLogicalDevice();
+    for (auto &pair : materialsMap) {
+        pair.second->destroyImage(device);
+        delete pair.second;
+    }
+}
+
+GVULKANImage *GMaterialsService::createMaterial(const std::string &imageFilePath) {
     GTGA tgaFile(imageFilePath);
     
     GVULKANImage *newImage = new GVULKANImage();
@@ -37,13 +48,6 @@ GVULKANImage *GMaterialsService::findMaterial(const std::string& imageFilePath) 
 
 std::map<std::string, GVULKANImage *>& GMaterialsService::getMaterialsMap() {
     return materialsMap;
-}
-
-void GMaterialsService::destroyMaterials(VkDevice device) {
-    for (auto &pair : materialsMap) {
-        pair.second->destroyImage(device);
-        delete pair.second;
-    }
 }
 
 };

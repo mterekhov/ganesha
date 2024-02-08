@@ -11,7 +11,7 @@ GCommandService::~GCommandService() {
 #pragma mark - GCommandServiceProtocol -
 
 void GCommandService::init() {
-    commandPool = createCommandPool(vulkanDevice);
+    commandPool = createCommandPool();
 }
 
 void GCommandService::destroy() {
@@ -73,14 +73,14 @@ void GCommandService::submitCommandBuffer(std::vector<VkCommandBuffer> commandBu
 
 #pragma mark - Routine -
 
-VkCommandPool GCommandService::createCommandPool(GVULKANDevice& device) {
+VkCommandPool GCommandService::createCommandPool() {
     VkCommandPoolCreateInfo poolInfo = { };
     poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-    poolInfo.queueFamilyIndex = device.getGraphicsQueueIndex();
+    poolInfo.queueFamilyIndex = vulkanDevice.getGraphicsQueueIndex();
     
     VkCommandPool newCommandPool;
-    if (vkCreateCommandPool(device.getLogicalDevice(), &poolInfo, nullptr, &newCommandPool) != VK_SUCCESS) {
+    if (vkCreateCommandPool(vulkanDevice.getLogicalDevice(), &poolInfo, nullptr, &newCommandPool) != VK_SUCCESS) {
         GLOG_ERROR("failed to create command pool\n");
     }
     

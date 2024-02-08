@@ -12,7 +12,8 @@ GRenderGraph::~GRenderGraph() {
 }
 
 void GRenderGraph::createGraph(GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice) {
-    materialsService = new GMaterialsService(commandService);
+    materialsService = new GMaterialsService(commandService, vulkanDevice);
+    materialsService->init();
     
     GMatrix identityMatrix = GMatrix::identityMatrix();
     modelBuffer.createBuffer(&identityMatrix,
@@ -22,7 +23,7 @@ void GRenderGraph::createGraph(GDescriptorsetServiceProtocol *descriptorsetServi
                              false,
                              vulkanDevice,
                              commandService);
-    descriptorsetService->attachBufferToDescriptorset(modelBuffer, 1, vulkanDevice.getLogicalDevice());
+    descriptorsetService->attachBufferToDescriptorset(modelBuffer, 1);
 }
 
 void GRenderGraph::destroyGraph(VkDevice device) {
@@ -32,7 +33,7 @@ void GRenderGraph::destroyGraph(VkDevice device) {
         delete node;
     }
     
-    materialsService->destroyMaterials(device);
+    materialsService->destroy();
     delete materialsService;
     
     modelBuffer.destroyBuffer(device);
@@ -54,8 +55,8 @@ GGraphNode *GRenderGraph::createSpriteNode(const std::string& materialFilePath, 
     //  creating mesh
     GVULKANImage *material = materialsService->findMaterial(materialFilePath);
     if (material == 0) {
-        material = materialsService->createMaterial(materialFilePath, vulkanDevice);
-        descriptorsetService->attachImageToDescriptorset(*material, 2, vulkanDevice.getLogicalDevice());
+        material = materialsService->createMaterial(materialFilePath);
+        descriptorsetService->attachImageToDescriptorset(*material, 2);
     }
     GSpriteMesh *spriteMesh = new GSpriteMesh(material, vulkanDevice, commandService);
     

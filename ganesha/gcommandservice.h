@@ -37,7 +37,7 @@ public:
                                      bool freeCommandBuffer = true);
 
 private:
-    VkCommandPool createCommandPool(GVULKANDevice& device);
+    VkCommandPool createCommandPool();
     
     GVULKANDevice& vulkanDevice;
     VkCommandPool commandPool;

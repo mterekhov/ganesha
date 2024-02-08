@@ -13,25 +13,30 @@ namespace spcGaneshaEngine {
 
 class GMaterialsServiceProtocol {
 public:
-    virtual GVULKANImage *createMaterial(const std::string& imageFilePath, GVULKANDevice& vulkanDevice) = 0;
+    virtual void init() = 0;
+    virtual void destroy() = 0;
+    
+    virtual GVULKANImage *createMaterial(const std::string& imageFilePath) = 0;
     virtual std::map<std::string, GVULKANImage *>& getMaterialsMap() = 0;
     virtual GVULKANImage *findMaterial(const std::string& imageFilePath) = 0;
-    virtual void destroyMaterials(VkDevice device) = 0;
 
 };
 
 class GMaterialsService: public GMaterialsServiceProtocol {
 public:
-    GMaterialsService(GCommandServiceProtocol *commandService);
+    GMaterialsService(GCommandServiceProtocol *commandService, GVULKANDevice& vulkanDevice);
     virtual ~GMaterialsService();
 
-    GVULKANImage *createMaterial(const std::string& imageFilePath, GVULKANDevice& vulkanDevice);
-    std::map<std::string, GVULKANImage *>& getMaterialsMap();
-    GVULKANImage *findMaterial(const std::string& imageFilePath);
-    void destroyMaterials(VkDevice device);
+    virtual void init();
+    virtual void destroy();
+
+    virtual GVULKANImage *createMaterial(const std::string& imageFilePath);
+    virtual std::map<std::string, GVULKANImage *>& getMaterialsMap();
+    virtual GVULKANImage *findMaterial(const std::string& imageFilePath);
 
 private:
     GCommandServiceProtocol *commandService;
+    GVULKANDevice& vulkanDevice;
     std::map<std::string, GVULKANImage *> materialsMap;
 };
 

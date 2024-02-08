@@ -24,13 +24,13 @@ public:
     GDescriptorsetService(GVULKANDevice& vulkanDevice);
     virtual ~GDescriptorsetService();
     
-    void init();
-    void destroy();
-    VkDescriptorSetLayout getDescriptorsetLayout();
-    VkDescriptorSet getDescriptorset();
+    virtual void init();
+    virtual void destroy();
+    virtual VkDescriptorSetLayout getDescriptorsetLayout();
+    virtual VkDescriptorSet getDescriptorset();
     
-    void attachImageToDescriptorset(GVULKANImage& image, TUInt bindingIndex);
-    void attachBufferToDescriptorset(GVULKANBuffer& buffer, TUInt bindingIndex);
+    virtual void attachImageToDescriptorset(GVULKANImage& image, TUInt bindingIndex);
+    virtual void attachBufferToDescriptorset(GVULKANBuffer& buffer, TUInt bindingIndex);
 
 private:
     GVULKANDevice& vulkanDevice;
