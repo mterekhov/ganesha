@@ -2,7 +2,7 @@
 
 namespace spcGaneshaEngine {
 
-GDescriptorsetService::GDescriptorsetService() {
+GDescriptorsetService::GDescriptorsetService(GVULKANDevice& vulkanDevice) : vulkanDevice(vulkanDevice) {
     
 }
 
@@ -10,27 +10,18 @@ GDescriptorsetService::~GDescriptorsetService() {
     
 }
 
-void GDescriptorsetService::init(VkDevice device) {
+void GDescriptorsetService::init() {
+    VkDevice device = vulkanDevice.getLogicalDevice();
+    
     descriptorsetsPool = createDescriptorsetsPool(device);
     descriptorsetsLayout = createDescriptorsetsLayout(device);
     descriptorset = createDescriptorset(descriptorsetsPool, descriptorsetsLayout, device);
 }
 
-void GDescriptorsetService::destroy(VkDevice device) {
+void GDescriptorsetService::destroy() {
+    VkDevice device = vulkanDevice.getLogicalDevice();
     vkDestroyDescriptorPool(device, descriptorsetsPool, nullptr);
     vkDestroyDescriptorSetLayout(device, descriptorsetsLayout, nullptr);
-}
-
-VkDescriptorSet GDescriptorsetService::createDescriptorset(VkDescriptorPool pool, VkDescriptorSetLayout layout, VkDevice device) {
-    VkDescriptorSetAllocateInfo allocInfo = { };
-    allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-    allocInfo.descriptorPool = pool;
-    allocInfo.descriptorSetCount = 1;
-    allocInfo.pSetLayouts = &layout;
-    VkDescriptorSet newDescriptorset;
-    vkAllocateDescriptorSets(device, &allocInfo, &newDescriptorset);
-    
-    return newDescriptorset;
 }
 
 VkDescriptorSetLayout GDescriptorsetService::getDescriptorsetLayout() {
@@ -41,7 +32,7 @@ VkDescriptorSet GDescriptorsetService::getDescriptorset() {
     return descriptorset;
 }
 
-void GDescriptorsetService::attachImageToDescriptorset(GVULKANImage& image, TUInt bindingIndex, VkDevice device) {
+void GDescriptorsetService::attachImageToDescriptorset(GVULKANImage& image, TUInt bindingIndex) {
     VkDescriptorImageInfo imageInfo = { };
     imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
     imageInfo.imageView = image.getImageView();
@@ -56,10 +47,10 @@ void GDescriptorsetService::attachImageToDescriptorset(GVULKANImage& image, TUIn
     writeDescriptorset.descriptorCount = 1;
     writeDescriptorset.pImageInfo = &imageInfo;
     
-    vkUpdateDescriptorSets(device, 1, &writeDescriptorset, 0, nullptr);
+    vkUpdateDescriptorSets(vulkanDevice.getLogicalDevice(), 1, &writeDescriptorset, 0, nullptr);
 }
 
-void GDescriptorsetService::attachBufferToDescriptorset(GVULKANBuffer& buffer, TUInt bindingIndex, VkDevice device) {
+void GDescriptorsetService::attachBufferToDescriptorset(GVULKANBuffer& buffer, TUInt bindingIndex) {
     VkDescriptorBufferInfo bufferInfo = { };
     bufferInfo.buffer = buffer.getBuffer();
     bufferInfo.offset = 0;
@@ -74,8 +65,20 @@ void GDescriptorsetService::attachBufferToDescriptorset(GVULKANBuffer& buffer, T
     writeDescriptorset.descriptorCount = 1;
     writeDescriptorset.pBufferInfo = &bufferInfo;
     
-    vkUpdateDescriptorSets(device, 1, &writeDescriptorset, 0, nullptr);
+    vkUpdateDescriptorSets(vulkanDevice.getLogicalDevice(), 1, &writeDescriptorset, 0, nullptr);
+}
 
+VkDescriptorSet GDescriptorsetService::createDescriptorset(VkDescriptorPool pool, VkDescriptorSetLayout layout, VkDevice device) {
+    VkDescriptorSetAllocateInfo allocInfo = { };
+    
+    allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+    allocInfo.descriptorPool = pool;
+    allocInfo.descriptorSetCount = 1;
+    allocInfo.pSetLayouts = &layout;
+    VkDescriptorSet newDescriptorset;
+    vkAllocateDescriptorSets(vulkanDevice.getLogicalDevice(), &allocInfo, &newDescriptorset);
+    
+    return newDescriptorset;
 }
 
 VkDescriptorPool GDescriptorsetService::createDescriptorsetsPool(VkDevice device) {

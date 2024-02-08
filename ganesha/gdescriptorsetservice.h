@@ -10,29 +10,30 @@ namespace spcGaneshaEngine {
 
 class GDescriptorsetServiceProtocol {
 public:
-    virtual void init(VkDevice device) = 0;
-    virtual void destroy(VkDevice device) = 0;
+    virtual void init() = 0;
+    virtual void destroy() = 0;
     
     virtual VkDescriptorSetLayout getDescriptorsetLayout() = 0;
     virtual VkDescriptorSet getDescriptorset() = 0;
-    virtual void attachImageToDescriptorset(GVULKANImage& image, TUInt bindingIndex, VkDevice device) = 0;
-    virtual void attachBufferToDescriptorset(GVULKANBuffer& buffer, TUInt bindingIndex, VkDevice device) = 0;
+    virtual void attachImageToDescriptorset(GVULKANImage& image, TUInt bindingIndex) = 0;
+    virtual void attachBufferToDescriptorset(GVULKANBuffer& buffer, TUInt bindingIndex) = 0;
 };
 
 class GDescriptorsetService: public GDescriptorsetServiceProtocol {
 public:
-    GDescriptorsetService();
+    GDescriptorsetService(GVULKANDevice& vulkanDevice);
     virtual ~GDescriptorsetService();
     
-    void init(VkDevice device);
-    void destroy(VkDevice device);
+    void init();
+    void destroy();
     VkDescriptorSetLayout getDescriptorsetLayout();
     VkDescriptorSet getDescriptorset();
     
-    void attachImageToDescriptorset(GVULKANImage& image, TUInt bindingIndex, VkDevice device);
-    void attachBufferToDescriptorset(GVULKANBuffer& buffer, TUInt bindingIndex, VkDevice device);
+    void attachImageToDescriptorset(GVULKANImage& image, TUInt bindingIndex);
+    void attachBufferToDescriptorset(GVULKANBuffer& buffer, TUInt bindingIndex);
 
 private:
+    GVULKANDevice& vulkanDevice;
     VkDescriptorPool descriptorsetsPool;
     VkDescriptorSetLayout descriptorsetsLayout;
     VkDescriptorSet descriptorset;
