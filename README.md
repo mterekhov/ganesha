@@ -9,3 +9,9 @@ This repository is an attempt to develop 3D-engine on basis of VULKAN API for Ma
 - Everywhere services should be declared through it's interface classes
 - Every service should eat GVULKANDevice reference in it's constructor
 - Every service should have init()/destroy() methods
+
+# Layers, Events and Application
+
+Every application should interact with engine through GApplication ancestor. The main purpose of GApplication is to establish connection between different system events and engine. In constructor of GApplication ancestor you should list layers which will be involved in interaction.
+
+GLayer ancestror is some kind of logic which will be changing content. For example separate layer to process window resize or keyboard-mouse events. 
