@@ -14,7 +14,7 @@ GGanesha::~GGanesha() {
 }
 
 TBool GGanesha::initEngine(void *metalLayer, const TUInt width, const TUInt height, GGaneshaContent& content) {
-    graphicsAPI->initAPI(metalLayer, width, height, content);
+    graphicsAPI->initAPI(metalLayer, content);
     graphicsAPI->installIsometricView(M_PI_4, 0.000001, 100.0f);
     graphicsAPI->installViewMatrix(camera.viewMatrix());
     

@@ -22,15 +22,15 @@ void GGaneshaContent::addVertexShader(const std::string& shaderFilePath) {
     vertexShadersArray.push_back(shaderFilePath);
 }
 
-TStringsArray& GGaneshaContent::getSpritesMaterialsArray() {
+const TStringsArray& GGaneshaContent::getSpritesMaterialsArray() const {
     return spritesMaterialsArray;
 }
 
-TStringsArray& GGaneshaContent::getVertexShadersArray() {
+const TStringsArray& GGaneshaContent::getVertexShadersArray() const {
     return vertexShadersArray;
 }
 
-TStringsArray& GGaneshaContent::getFragmetShadersArrray() {
+const TStringsArray& GGaneshaContent::getFragmetShadersArrray() const {
     return fragmetShadersArrray;
 }
 

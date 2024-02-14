@@ -15,7 +15,7 @@ public:
     
     const GQuaternion& operator *=(const GQuaternion &q);
     
-    void euler(TFloat pitch, TFloat yaw, TFloat roll);
+    GQuaternion euler(const TFloat pitch, const TFloat yaw, const TFloat roll) const;
     GMatrix matrix() const;
     TFloat euler_x() const;
     TFloat euler_y() const;

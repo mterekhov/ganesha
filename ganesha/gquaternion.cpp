@@ -36,7 +36,7 @@ const GQuaternion& GQuaternion::operator*=(const GQuaternion &q) {
     return (*this);
 }
 
-void GQuaternion::euler(TFloat pitch, TFloat yaw, TFloat roll) {
+GQuaternion GQuaternion::euler(const TFloat pitch, const TFloat yaw, const TFloat roll) const {
     TFloat halfPitch = pitch / 2.0f;
     TFloat halfYaw = yaw / 2.0f;
     TFloat halfRoll = roll / 2.0f;
@@ -53,10 +53,12 @@ void GQuaternion::euler(TFloat pitch, TFloat yaw, TFloat roll) {
     TFloat cYsZ = cY * sZ;
     TFloat sYcZ = sY * cZ;
 
-    w = cX * cYcZ + sX * sYsZ;
-    x = sX * cYcZ - cX * sYsZ;
-    y = cX * sYcZ + sX * cYsZ;
-    z = cX * cYsZ - sX * sYcZ;
+    GQuaternion updatedVersion;
+    updatedVersion.w = cX * cYcZ + sX * sYsZ;
+    updatedVersion.x = sX * cYcZ - cX * sYsZ;
+    updatedVersion.y = cX * sYcZ + sX * cYsZ;
+    updatedVersion.z = cX * cYsZ - sX * sYcZ;
+    return updatedVersion;
 }
 
 TFloat GQuaternion::euler_x() const {

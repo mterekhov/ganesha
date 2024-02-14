@@ -2,6 +2,9 @@
 #define SPCGANESHAENGINE_GGANESHACONTENT_H
 
 #include "ganeshatypes.h"
+#include "gmatrix.h"
+#include "gviewport.h"
+#include "gcameradata.h"
 
 namespace spcGaneshaEngine {
 
@@ -14,9 +17,12 @@ public:
     void addFragmentShader(const std::string& shaderFilePath);
     void addVertexShader(const std::string& shaderFilePath);
     
-    TStringsArray& getSpritesMaterialsArray();
-    TStringsArray& getVertexShadersArray();
-    TStringsArray& getFragmetShadersArrray();
+    const TStringsArray& getSpritesMaterialsArray() const;
+    const TStringsArray& getVertexShadersArray() const;
+    const TStringsArray& getFragmetShadersArrray() const;
+
+    GViewport viewport;
+    GCameraData cameraData;
 
 private:
     TStringsArray spritesMaterialsArray;

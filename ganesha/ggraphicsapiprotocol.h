@@ -9,7 +9,7 @@ namespace spcGaneshaEngine {
 
 class GGraphicsAPIProtocol {
 public:
-    virtual void initAPI(void *metalLayer, const TUInt frameWidth, const TUInt frameHeight, GGaneshaContent& content) = 0;
+    virtual void initAPI(void *metalLayer, const GGaneshaContent& content) = 0;
     virtual void destroyAPI() = 0;
     virtual void drawFrame() = 0;
     virtual void frameResized(const TFloat width, const TFloat height) = 0;

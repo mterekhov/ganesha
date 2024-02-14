@@ -38,7 +38,7 @@ GVULKANAPI::~GVULKANAPI() {
 
 #pragma mark - GGraphicsAPIProtocol -
 
-void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt frameHeight, GGaneshaContent& content) {
+void GVULKANAPI::initAPI(void *metalLayer, const GGaneshaContent& content) {
     //  create VULKAN instance
     vulkanInstance.createInstance("DOOM", khronosValidationLayers, avoidInstanceExtensions);
     
@@ -48,7 +48,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
     //  creates physicalDevice
     vulkanDevice.createDevice(vulkanInstance, useDeviceExtensions, metalSurface);
     
-    vulkanSwapChain.createSwapChain(frameWidth, frameHeight, vulkanDevice, metalSurface);
+    vulkanSwapChain.createSwapChain(content.viewport.width, content.viewport.height, vulkanDevice, metalSurface);
     
     descriptorService = new GDescriptorsetService(vulkanDevice);
     descriptorService->init();
@@ -58,11 +58,13 @@ void GVULKANAPI::initAPI(void *metalLayer, const TUInt frameWidth, const TUInt f
     
     shadersService = new GShadersService(vulkanDevice);
     shadersService->init();
-    for (auto shader:content.getVertexShadersArray()) {
-        shadersService->addVertexShader(shader);
+    const TStringsArray& vertexShadersArray = content.getVertexShadersArray();
+    for (TStringsArray::const_iterator iter = vertexShadersArray.begin(); iter != vertexShadersArray.end(); iter++) {
+        shadersService->addVertexShader(*iter);
     }
-    for (auto shader:content.getFragmetShadersArrray()) {
-        shadersService->addFragmentShader(shader);
+    const TStringsArray& fragmentShadersArray = content.getFragmetShadersArrray();
+    for (TStringsArray::const_iterator iter = fragmentShadersArray.begin(); iter != fragmentShadersArray.end(); iter++) {
+        shadersService->addFragmentShader(*iter);
     }
 
     for (TUInt i = 0; i < maxFramesInFlight; i++) {
@@ -150,6 +152,7 @@ void GVULKANAPI::installViewMatrix(const GMatrix& newViewMatrix) {
 void GVULKANAPI::drawFrame() {
     vkWaitForFences(vulkanDevice.getLogicalDevice(), 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
     
+    //  index of frame buffer in which we are going to render
     TUInt imageIndex;
     vkAcquireNextImageKHR(vulkanDevice.getLogicalDevice(), vulkanSwapChain.getVulkanSwapChain(), UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
 
@@ -234,6 +237,7 @@ void GVULKANAPI::recordRenderCommand(VkCommandBuffer renderCommand,
             TUInt counter = 1;
             for (GGraphNode *graphNode:renderGraph.getNodeArray()) {
                 GLOG_INFO("object %i\n", counter++);
+                graphNode->rts.print();
                 modelBuffer.refreshBuffer(&graphNode->rts, vulkanDevice.getLogicalDevice());
                 graphNode->mesh->render(renderCommand);
             }

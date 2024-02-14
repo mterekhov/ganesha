@@ -64,7 +64,7 @@ void GVULKANSwapChain::createSwapChain(const TUInt screenWidth, const TUInt scre
     if (!recreateSwapChain) {
         renderPass = createRenderPass(vulkanDevice, imageFormat);
     }
-    GVULKANTools tools;
+
     depthImage.createImage(extent,
                            vulkanDevice.findDepthImageFormat(),
                            VK_IMAGE_ASPECT_DEPTH_BIT,

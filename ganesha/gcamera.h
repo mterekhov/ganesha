@@ -2,10 +2,8 @@
 #define SPCGANESHAENGINE_GCAMERA_H
 
 #include "ganeshatypes.h"
-#include "gvector.h"
 #include "gmatrix.h"
-#include "gquaternion.h"
-#include "glog.h"
+#include "gcameradata.h"
 
 namespace spcGaneshaEngine {
 
@@ -15,29 +13,20 @@ public:
     GCamera();
     ~GCamera();
     
-    GMatrix viewMatrix();
+    GMatrix viewMatrix(const GQuaternion& orientation, const GPoint& positionPoint);
 
-    void mouseCamera(const TFloat diff_x, const TFloat diff_y);
-    void strafeRightCamera();
-    void strafeLeftCamera();
-    void upCamera();
-    void downCamera();
-    void forwardCamera();
-    void backwardCamera();
+    GQuaternion mouseCamera(const GQuaternion& orientation, const TFloat diff_x, const TFloat diff_y, const TFloat mouseSens);
+
+    GPoint upCamera(const GPoint& positionPoint, const TFloat keyboardSpeed);
+    GPoint downCamera(const GPoint& positionPoint, const TFloat keyboardSpeed);
+    GPoint strafeLeftCamera(const GPoint& positionPoint, const TFloat keyboardSpeed);
+    GPoint strafeRightCamera(const GPoint& positionPoint, const TFloat keyboardSpeed);
+    GPoint forwardCamera(const GPoint& positionPoint, const TFloat keyboardSpeed);
+    GPoint backwardCamera(const GPoint& positionPoint, const TFloat keyboardSpeed);
 
 private:
-    GQuaternion orientation;
-    GPoint positionPoint;
-    GPoint centerPoint;
-    
-    const TFloat DefaultMouseSens = 0.001f;
-    TFloat mouseSens = DefaultMouseSens;
-    
-    const TFloat DefaultKeyboardSpeed = 0.1;
-    TFloat keyboardSpeed = DefaultKeyboardSpeed;
-
-    TFloat aroundX(const TFloat diff, const TFloat currentAngle);
-    TFloat aroundY(const TFloat diff, const TFloat currentAngle);
+    TFloat aroundX(const TFloat mouseSens, const TFloat diff, const TFloat currentAngle);
+    TFloat aroundY(const TFloat mouseSens, const TFloat diff, const TFloat currentAngle);
 };
 
 };  //  spcGaneshaEngine

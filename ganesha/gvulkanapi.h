@@ -17,6 +17,7 @@
 #include "gdescriptorsetservice.h"
 #include "gcommandservice.h"
 #include "gshadersservice.h"
+#include "grendergraph.h"
 
 namespace spcGaneshaEngine {
 
@@ -30,7 +31,7 @@ public:
     GVULKANAPI();
     virtual ~GVULKANAPI();
 
-    virtual void initAPI(void *metalLayer, const TUInt frameWidth, const TUInt frameHeight, GGaneshaContent& content);
+    virtual void initAPI(void *metalLayer, const GGaneshaContent& content);
     virtual void destroyAPI();
     virtual void drawFrame();
     virtual void frameResized(const TFloat width, const TFloat height);

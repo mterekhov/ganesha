@@ -28,8 +28,8 @@ void GShadersService::destroy() {
     vertexShadersArray.clear();
 }
 
-std::vector<VkPipelineShaderStageCreateInfo> GShadersService::getAllShadersArray() {
-    std::vector<VkPipelineShaderStageCreateInfo> result = vertexShadersArray;
+TShadersArray GShadersService::getAllShadersArray() {
+    TShadersArray result = vertexShadersArray;
 
     result.insert(result.end(), fragmentShadersArray.begin(), fragmentShadersArray.end());
 
@@ -40,7 +40,7 @@ void GShadersService::addFragmentShader(const std::string& shaderFile) {
     fragmentShadersArray.push_back(createShader(shaderFile, VK_SHADER_STAGE_FRAGMENT_BIT, vulkanDevice.getLogicalDevice()));
 }
 
-std::vector<VkPipelineShaderStageCreateInfo>& GShadersService::getFrgamentShadersArray() {
+TShadersArray& GShadersService::getFrgamentShadersArray() {
     return fragmentShadersArray;
 }
 
@@ -48,7 +48,7 @@ void GShadersService::addVertexShader(const std::string& shaderFile) {
     vertexShadersArray.push_back(createShader(shaderFile, VK_SHADER_STAGE_VERTEX_BIT, vulkanDevice.getLogicalDevice()));
 }
 
-std::vector<VkPipelineShaderStageCreateInfo>& GShadersService::getVertexShadersArray() {
+TShadersArray& GShadersService::getVertexShadersArray() {
     return vertexShadersArray;
 }
 

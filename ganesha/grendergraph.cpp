@@ -39,16 +39,17 @@ void GRenderGraph::destroyGraph(VkDevice device) {
     modelBuffer.destroyBuffer(device);
 }
 
-void GRenderGraph::loadContent(GGaneshaContent& contentLoader, GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice) {
+void GRenderGraph::loadContent(const GGaneshaContent& contentLoader, GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice) {
     //  creating sprites
-    for (auto spriteMaterial:contentLoader.getSpritesMaterialsArray()) {
-        GGraphNode *newSprite = createSpriteNode(spriteMaterial, descriptorsetService, vulkanDevice);
-        pushNode(newSprite);
-        
-        newSprite = createSpriteNode(spriteMaterial, descriptorsetService, vulkanDevice);
-//        newSprite->rts.m[3][1] = 5;
-        pushNode(newSprite);
-    }
+    const TStringsArray& materialsArray = contentLoader.getSpritesMaterialsArray();
+
+    GGraphNode *newSprite = createSpriteNode(*materialsArray.begin(), descriptorsetService, vulkanDevice);
+    pushNode(newSprite);
+    
+    newSprite = createSpriteNode(*materialsArray.begin(), descriptorsetService, vulkanDevice);
+    newSprite->rts.m[3][1] = 5;
+    pushNode(newSprite);
+    GLOG_INFO("sprite added\n");
 }
 
 GGraphNode *GRenderGraph::createSpriteNode(const std::string& materialFilePath, GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice) {
