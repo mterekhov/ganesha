@@ -2,8 +2,8 @@
 #include "gkeyboardevent.h"
 #include "gwindowevent.h"
 #include "gmouseevent.h"
-#include "gupdateprojectionevent.h"
-#include "gupdateviewportevent.h"
+#include "gupdateviewmatrixevent.h"
+#include "gupdateframesizeevent.h"
 
 namespace spcGaneshaEngine {
 
@@ -35,6 +35,15 @@ std::vector<GEventShell> GSystemLayer::onEvent(GEventShell& shell) {
     return additionalEvents;
 }
 
+std::vector<GEventShell> GSystemLayer::processWindowResize(GEvent *event) {
+    GWindowEvent *windowEvent = static_cast<GWindowEvent *>(event);
+
+    content.viewport.width = windowEvent->width;
+    content.viewport.height = windowEvent->height;
+    
+    return { eventsService->updateFrameSizeEvent(windowEvent->width, windowEvent->height) };
+}
+
 std::vector<GEventShell> GSystemLayer::processMouseMove(GEvent *event) {
     GMouseEvent *mouseEvent = static_cast<GMouseEvent *>(event);
 
@@ -44,16 +53,7 @@ std::vector<GEventShell> GSystemLayer::processMouseMove(GEvent *event) {
                                                         content.cameraData.mouseSens);
     
     GMatrix newCameraMatrix = camera.viewMatrix(content.cameraData.orientation, content.cameraData.positionPoint);
-    return { eventsService->updateProjectionEvent(newCameraMatrix) };
-}
-
-std::vector<GEventShell> GSystemLayer::processWindowResize(GEvent *event) {
-    GWindowEvent *windowEvent = static_cast<GWindowEvent *>(event);
-
-    content.viewport.width = windowEvent->width;
-    content.viewport.height = windowEvent->height;
-    
-    return { eventsService->updateViewportEvent(content.viewport) };
+    return { eventsService->updateViewMatrixEvent(newCameraMatrix) };
 }
 
 std::vector<GEventShell> GSystemLayer::processKeyboard(GEvent *event) {
@@ -83,7 +83,7 @@ std::vector<GEventShell> GSystemLayer::processKeyboard(GEvent *event) {
     }
     
     GMatrix newCameraMatrix = camera.viewMatrix(content.cameraData.orientation, content.cameraData.positionPoint);
-    return { eventsService->updateProjectionEvent(newCameraMatrix) };
+    return { eventsService->updateViewMatrixEvent(newCameraMatrix) };
 }
 
 };

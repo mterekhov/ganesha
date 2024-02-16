@@ -31,6 +31,7 @@
 #include "gvulkanswapchain.h"
 #include "gvulkanbuffer.h"
 #include "gcamera.h"
+#include "gcameradata.h"
 
 //  Content
 #include "grendergraph.h"
@@ -42,7 +43,6 @@
 
 //  Application
 #include "gapplication.h"
-#include "gganesha.h"
 #include "ganeshatypes.h"
 
 //  Events

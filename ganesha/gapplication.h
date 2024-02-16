@@ -5,7 +5,6 @@
 #include "ganeshatypes.h"
 #include "gevent.h"
 #include "geventshell.h"
-#include "gganesha.h"
 #include "gvulkanapi.h"
 #include "geventsservice.h"
 
@@ -25,7 +24,6 @@ public:
 
 private:
     GLayersServiceProtocol *layerService;
-    GGraphicsAPIProtocol *vulkanAPI;
     GGaneshaContent content;
 };
 

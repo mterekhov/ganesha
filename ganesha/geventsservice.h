@@ -17,8 +17,8 @@ public:
     virtual GEventShell mouseEvent(const TFloat position_x, const TFloat position_y) = 0;
     virtual GEventShell keyboardEvent(const TUInt keyCode) = 0;
     virtual GEventShell windowEvent(const TFloat width, const TFloat height) = 0;
-    virtual GEventShell updateProjectionEvent(const GMatrix& matrix) = 0;
-    virtual GEventShell updateViewportEvent(const GViewport& viewport) = 0;
+    virtual GEventShell updateViewMatrixEvent(const GMatrix& matrix) = 0;
+    virtual GEventShell updateFrameSizeEvent(const TFloat width, const TFloat height) = 0;
 };
 
 class GEventsService: public GEventsServiceProtocol {
@@ -34,8 +34,8 @@ public:
     virtual GEventShell mouseEvent(const TFloat position_x, const TFloat position_y);
     virtual GEventShell keyboardEvent(const TUInt keyCode);
     virtual GEventShell windowEvent(const TFloat width, const TFloat height);
-    virtual GEventShell updateProjectionEvent(const GMatrix& matrix);
-    virtual GEventShell updateViewportEvent(const GViewport& viewport);
+    virtual GEventShell updateViewMatrixEvent(const GMatrix& matrix);
+    virtual GEventShell updateFrameSizeEvent(const TFloat width, const TFloat height);
 };
 
 };  //  spcGaneshaEngine

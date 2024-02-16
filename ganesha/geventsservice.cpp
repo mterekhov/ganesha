@@ -2,8 +2,8 @@
 #include "gmouseevent.h"
 #include "gkeyboardevent.h"
 #include "gwindowevent.h"
-#include "gupdateviewportevent.h"
-#include "gupdateprojectionevent.h"
+#include "gupdateframesizeevent.h"
+#include "gupdateviewmatrixevent.h"
 
 namespace spcGaneshaEngine {
 
@@ -50,13 +50,13 @@ GEventShell GEventsService::windowEvent(const TFloat width, const TFloat height)
     return GEventShell(newEvent);
 }
 
-GEventShell GEventsService::updateProjectionEvent(const GMatrix& matrix) {
-    GUpdateProjectionEvent *newEvent = new GUpdateProjectionEvent(matrix);
+GEventShell GEventsService::updateViewMatrixEvent(const GMatrix& matrix) {
+    GUpdateViewMatrixEvent *newEvent = new GUpdateViewMatrixEvent(matrix);
     return GEventShell(newEvent);
 }
 
-GEventShell GEventsService::updateViewportEvent(const GViewport& viewport) {
-    GUpdateViewportEvent *newEvent = new GUpdateViewportEvent(viewport);
+GEventShell GEventsService::updateFrameSizeEvent(const TFloat width, const TFloat height) {
+    GUpdateFrameSizeEvent *newEvent = new GUpdateFrameSizeEvent(width, height);
     return GEventShell(newEvent);
 }
 

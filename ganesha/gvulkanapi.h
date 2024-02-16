@@ -33,9 +33,9 @@ public:
 
     virtual void initAPI(void *metalLayer, const GGaneshaContent& content);
     virtual void destroyAPI();
-    virtual void drawFrame();
+    virtual void render();
     virtual void frameResized(const TFloat width, const TFloat height);
-    virtual void installIsometricView(const TFloat fieldOfView, const TFloat near, const TFloat far);
+    virtual void installIsometricProjection(const TFloat fieldOfView, const TFloat near, const TFloat far);
     virtual void installViewMatrix(const GMatrix& newViewMatrix);
 
 private:

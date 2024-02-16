@@ -130,10 +130,10 @@ void GVULKANAPI::destroyAPI() {
 
 void GVULKANAPI::frameResized(const TFloat width, const TFloat height) {
     vulkanSwapChain.updateScreenSize(width, height, vulkanDevice, metalSurface);
-    installIsometricView(fov, nearPlane, farPlane);
+    installIsometricProjection(fov, nearPlane, farPlane);
 }
 
-void GVULKANAPI::installIsometricView(const TFloat fieldOfView, const TFloat near, const TFloat far) {
+void GVULKANAPI::installIsometricProjection(const TFloat fieldOfView, const TFloat near, const TFloat far) {
     VkExtent2D swapChainExtent = vulkanSwapChain.getExtent();
     TFloat aspect = static_cast<TFloat>(swapChainExtent.width) / static_cast<TFloat>(swapChainExtent.height);
     TFloat size = near * tanf(fieldOfView / 2.0);
@@ -149,7 +149,7 @@ void GVULKANAPI::installViewMatrix(const GMatrix& newViewMatrix) {
     viewMatrix = newViewMatrix;
 }
 
-void GVULKANAPI::drawFrame() {
+void GVULKANAPI::render() {
     vkWaitForFences(vulkanDevice.getLogicalDevice(), 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
     
     //  index of frame buffer in which we are going to render

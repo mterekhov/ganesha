@@ -5,9 +5,6 @@ namespace spcGaneshaEngine {
 GApplication::GApplication(void *metalLayer, GGaneshaContent& content) : layerService(new GLayersService()), eventsService(new GEventsService()), content(content) {
     layerService->init();
     eventsService->init();
-    GVULKANAPI *newVulkanAPI = new GVULKANAPI();
-    newVulkanAPI->initAPI(metalLayer, content);
-    vulkanAPI = newVulkanAPI;
 }
 
 GApplication::~GApplication() {
@@ -21,12 +18,21 @@ GApplication::~GApplication() {
 void GApplication::handleEvent(GEventShell shell) {
     //  In some cases it is needed that one type of events created another sequenmce of events.
     //  E.g. when position of object changed we need to update data in GPU memory. Or in case we moved camera we need to update projection matrix
-    std::vector<GEventShell> additionalEvents;
+    std::vector<GEventShell> additionalEvents = { shell };
     do {
-        for (auto it = layerService->end(); it != layerService->begin(); --it) {
-            additionalEvents = (*it)->onEvent(shell);
-            if (eventsService->doesHandled(shell)) {
-                break;
+        std::vector<GEventShell> eventsArray = additionalEvents;
+        additionalEvents.clear();
+        for (auto shellIt = eventsArray.begin(); shellIt != eventsArray.end(); shellIt++) {
+            for (auto it = layerService->begin(); it != layerService->end(); it++) {
+                GLayer *layer = *it;
+                GEventShell n = *shellIt;
+                std::vector<GEventShell> tmpEvents = layer->onEvent(*shellIt);
+                if (!tmpEvents.empty()) {
+                    additionalEvents.insert(additionalEvents.end(), tmpEvents.begin(), tmpEvents.end());
+                }
+                if (eventsService->doesHandled(*shellIt)) {
+                    break;
+                }
             }
         }
     } while(!additionalEvents.empty());
