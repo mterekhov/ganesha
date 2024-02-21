@@ -10,7 +10,7 @@ struct GMatrix {
 public:
     TFloat m[4][4];
     
-    void print();
+    const std::string print() const;
     
     void transponate();
     
