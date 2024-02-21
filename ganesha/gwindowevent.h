@@ -9,9 +9,11 @@ class GWindowEvent: public GEvent {
 public:
     GWindowEvent(const TFloat width, const TFloat height);
     virtual ~GWindowEvent();
-
+    
     const TFloat width;
     const TFloat height;
+    
+    virtual const std::string about();
 };
 
 };

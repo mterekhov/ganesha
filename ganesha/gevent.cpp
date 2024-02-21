@@ -14,4 +14,8 @@ const EEventType GEvent::getType() const {
     return eventType;
 }
 
+const std::string GEvent::about() {
+    return "empty base class event";
+}
+
 }

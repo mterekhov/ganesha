@@ -10,7 +10,7 @@ public:
     GEventShell(GEvent *event);
     ~GEventShell();
     
-    GEvent *event;
+    GEvent *event;    
 };
 
 };

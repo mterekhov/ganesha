@@ -10,4 +10,12 @@ GUpdateViewMatrixEvent::~GUpdateViewMatrixEvent() {
     
 }
 
+const std::string GUpdateViewMatrixEvent::about() {
+    std::string aboutString = "GUpdateViewMatrixEvent new matrix:\n";
+    
+    aboutString += matrix.print();
+    
+    return aboutString;
+}
+
 }

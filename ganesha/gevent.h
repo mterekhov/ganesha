@@ -46,6 +46,7 @@ public:
     virtual ~GEvent();
     
     const EEventType getType() const;
+    virtual const std::string about();
 
 private:
     EEventType eventType;

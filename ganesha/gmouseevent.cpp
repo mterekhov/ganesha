@@ -10,4 +10,14 @@ GMouseEvent::~GMouseEvent() {
     
 }
 
+const std::string GMouseEvent::about() {
+    std::string aboutString = "GMouseEvent position_x = ";
+    
+    aboutString += std::to_string(position_x);
+    aboutString += ", position_y = ";
+    aboutString += std::to_string(position_y);
+    
+    return aboutString;
+}
+
 }

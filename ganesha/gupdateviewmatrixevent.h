@@ -12,6 +12,8 @@ public:
     virtual ~GUpdateViewMatrixEvent();
     
     const GMatrix matrix;
+    
+    virtual const std::string about();
 };
 
 };

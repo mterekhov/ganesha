@@ -12,6 +12,7 @@ public:
 
     const TFloat position_x;
     const TFloat position_y;
+    virtual const std::string about();
 };
 
 };

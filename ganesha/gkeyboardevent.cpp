@@ -10,4 +10,12 @@ GKeyboardEvent::~GKeyboardEvent() {
     
 }
 
+const std::string GKeyboardEvent::about() {
+    std::string aboutString = "GKeyboardEvent keyCode = ";
+    
+    aboutString += std::to_string(keyCode);
+
+    return aboutString;
+}
+
 }

@@ -13,6 +13,8 @@ public:
     
     const TFloat width;
     const TFloat height;
+    
+    virtual const std::string about();
 };
 
 };

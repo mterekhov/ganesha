@@ -9,8 +9,10 @@ class GKeyboardEvent: public GEvent {
 public:
     GKeyboardEvent(const TUInt keyCode);
     virtual ~GKeyboardEvent();
-
+    
     const TUInt keyCode;
+    
+    virtual const std::string about();
 };
 
 };

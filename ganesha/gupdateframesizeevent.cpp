@@ -10,4 +10,14 @@ GUpdateFrameSizeEvent::~GUpdateFrameSizeEvent() {
     
 }
 
+const std::string GUpdateFrameSizeEvent::about() {
+    std::string aboutString = "GUpdateFrameSizeEvent new frame size(";
+    
+    aboutString += std::to_string(width);
+    aboutString += " : ";
+    aboutString += std::to_string(height);
+    
+    return aboutString;
+}
+
 }
