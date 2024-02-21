@@ -4,6 +4,8 @@
 #include "gmouseevent.h"
 #include "gupdateviewmatrixevent.h"
 #include "gupdateframesizeevent.h"
+#include "mackeycode.h"
+#include "glog.h"
 
 namespace spcGaneshaEngine {
 
@@ -62,22 +64,25 @@ std::vector<GEventShell> GSystemLayer::processKeyboard(GEvent *event) {
     GKeyboardEvent *keyboardEvent = static_cast<GKeyboardEvent *>(event);
 
     switch (keyboardEvent->keyCode) {
-        case 14:
+        case MACKEYCODE_E:
             content.cameraData.positionPoint = camera.downCamera(content.cameraData.positionPoint, content.cameraData.keyboardSpeed);
             break;
-        case 12:
+        case MACKEYCODE_Q:
             content.cameraData.positionPoint = camera.upCamera(content.cameraData.positionPoint, content.cameraData.keyboardSpeed);
             break;
-        case 13:
+        case MACKEYCODE_W:
             content.cameraData.positionPoint = camera.forwardCamera(content.cameraData.positionPoint, content.cameraData.keyboardSpeed);
             break;
-        case 1:
+        case MACKEYCODE_S:
             content.cameraData.positionPoint = camera.backwardCamera(content.cameraData.positionPoint, content.cameraData.keyboardSpeed);
             break;
-        case 0:
+        case MACKEYCODE_A:
+            GLOG_INFO("old position %.3f\t%.3f\t%.3f\n", content.cameraData.positionPoint.x, content.cameraData.positionPoint.y, content.cameraData.positionPoint.z);
             content.cameraData.positionPoint = camera.strafeLeftCamera(content.cameraData.positionPoint, content.cameraData.keyboardSpeed);
-            break;
-        case 2:
+            GLOG_INFO("new position %.3f\t%.3f\t%.3f\n", content.cameraData.positionPoint.x, content.cameraData.positionPoint.y, content.cameraData.positionPoint.z);
+            GLOG_INFO("matrix:\n%s\n\n\n", camera.viewMatrix(content.cameraData.orientation, content.cameraData.positionPoint).print().c_str());
+        break;
+        case MACKEYCODE_D:
             content.cameraData.positionPoint = camera.strafeRightCamera(content.cameraData.positionPoint, content.cameraData.keyboardSpeed);
             break;
         default:
