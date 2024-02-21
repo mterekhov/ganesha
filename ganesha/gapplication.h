@@ -12,17 +12,15 @@ namespace spcGaneshaEngine {
 
 class GApplication {
 public:
-    GApplication(void *metalLayer, GGaneshaContent& content);
+    GApplication(GEventsServiceProtocol *eventsService, GLayersServiceProtocol *layerService, void *metalLayer, GGaneshaContent& content);
     virtual ~GApplication();
 
-    void handleEvent(GEventShell shell);
+    void handleEvent(GEventShell& shell);
     void processRunLoop();
     void pushLayer(GLayer *layer);
     void pushOverlay(GLayer *layer);
-    
-    GEventsServiceProtocol *eventsService;
 
-private:
+    GEventsServiceProtocol *eventsService;
     GLayersServiceProtocol *layerService;
     GGaneshaContent content;
 };
