@@ -12,15 +12,17 @@ namespace spcGaneshaEngine {
 /// This is the base class for layers in Ganesha engine. Every layer can modify content which will be rendered
 class GLayer {
 public:
-    GLayer(GGaneshaContent& content, GEventsServiceProtocol *eventsService);
+    GLayer(const std::string& name, GGaneshaContent& content, GEventsServiceProtocol *eventsService);
     virtual ~GLayer();
 
     virtual void onAttach();
     virtual void onDetach();
     virtual void onUpdate();
     virtual std::vector<GEventShell> onEvent(GEventShell& shell);
+    std::string getName();
 
 protected:
+    const std::string name;
     GGaneshaContent& content;
     GEventsServiceProtocol *eventsService;
 };

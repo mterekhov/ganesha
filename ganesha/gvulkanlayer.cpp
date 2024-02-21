@@ -5,7 +5,7 @@
 
 namespace spcGaneshaEngine {
 
-GVULKANLayer::GVULKANLayer(void *metalLayer, GGaneshaContent& content, GEventsServiceProtocol *eventsService) : GLayer(content, eventsService), metalLayer(metalLayer) {
+GVULKANLayer::GVULKANLayer(void *metalLayer, GGaneshaContent& content, GEventsServiceProtocol *eventsService) : GLayer("VULKAN", content, eventsService), metalLayer(metalLayer) {
     vulkanAPI = new GVULKANAPI();
 }
 

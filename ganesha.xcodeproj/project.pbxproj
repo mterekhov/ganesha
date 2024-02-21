@@ -332,12 +332,12 @@
 				DE69D1FF2B4B47C1002D28E2 /* Basics */,
 				DE69D2002B4B47D6002D28E2 /* VULKAN */,
 				DE69D2012B4B47F4002D28E2 /* Tools */,
+				DE2BE7EE2B7A94ED0047C5D5 /* Application */,
 				DE9D0C812B4A14D400EA0B7C /* ganeshatypes.h */,
 				DEBE14932B51E548001EF6FB /* gganeshacontent.cpp */,
 				DEBE14942B51E548001EF6FB /* gganeshacontent.h */,
 				DE9D0C7B2B4A14D400EA0B7C /* gganesha.cpp */,
 				DE9D0C882B4A14D400EA0B7C /* gganesha.h */,
-				DE2BE7EE2B7A94ED0047C5D5 /* Application */,
 				DE9D0C932B4A14D500EA0B7C /* ganesha.h */,
 			);
 			name = ganesha;
