@@ -28,6 +28,7 @@
 		DE2BE80B2B7D5D980047C5D5 /* geventsservice.h in Headers */ = {isa = PBXBuildFile; fileRef = DE2BE8092B7D5D980047C5D5 /* geventsservice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE2BE80E2B7D62090047C5D5 /* geventshell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE2BE80C2B7D62090047C5D5 /* geventshell.cpp */; };
 		DE2BE80F2B7D62090047C5D5 /* geventshell.h in Headers */ = {isa = PBXBuildFile; fileRef = DE2BE80D2B7D62090047C5D5 /* geventshell.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE5FD1432B8693F0002207A1 /* mackeycode.h in Headers */ = {isa = PBXBuildFile; fileRef = DE5FD1412B8693F0002207A1 /* mackeycode.h */; };
 		DE69D20F2B4BFAA6002D28E2 /* ggraphnode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE69D20D2B4BFAA6002D28E2 /* ggraphnode.cpp */; };
 		DE69D2102B4BFAA6002D28E2 /* ggraphnode.h in Headers */ = {isa = PBXBuildFile; fileRef = DE69D20E2B4BFAA6002D28E2 /* ggraphnode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE69D2132B4BFABB002D28E2 /* gmesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE69D2112B4BFABB002D28E2 /* gmesh.cpp */; };
@@ -118,6 +119,7 @@
 		DE2BE8092B7D5D980047C5D5 /* geventsservice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = geventsservice.h; path = ganesha/geventsservice.h; sourceTree = "<group>"; };
 		DE2BE80C2B7D62090047C5D5 /* geventshell.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = geventshell.cpp; path = ganesha/geventshell.cpp; sourceTree = "<group>"; };
 		DE2BE80D2B7D62090047C5D5 /* geventshell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = geventshell.h; path = ganesha/geventshell.h; sourceTree = "<group>"; };
+		DE5FD1412B8693F0002207A1 /* mackeycode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = mackeycode.h; path = ganesha/mackeycode.h; sourceTree = "<group>"; };
 		DE69D20D2B4BFAA6002D28E2 /* ggraphnode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ggraphnode.cpp; path = ganesha/ggraphnode.cpp; sourceTree = "<group>"; };
 		DE69D20E2B4BFAA6002D28E2 /* ggraphnode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ggraphnode.h; path = ganesha/ggraphnode.h; sourceTree = "<group>"; };
 		DE69D2112B4BFABB002D28E2 /* gmesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gmesh.cpp; path = ganesha/gmesh.cpp; sourceTree = "<group>"; };
@@ -141,7 +143,6 @@
 		DE9D0C772B4A14D400EA0B7C /* gcamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gcamera.cpp; path = ganesha/gcamera.cpp; sourceTree = "<group>"; };
 		DE9D0C782B4A14D400EA0B7C /* gquaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gquaternion.h; path = ganesha/gquaternion.h; sourceTree = "<group>"; };
 		DE9D0C792B4A14D400EA0B7C /* gmatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gmatrix.h; path = ganesha/gmatrix.h; sourceTree = "<group>"; };
-		DE9D0C7B2B4A14D400EA0B7C /* gganesha.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gganesha.cpp; path = ganesha/gganesha.cpp; sourceTree = "<group>"; };
 		DE9D0C7C2B4A14D400EA0B7C /* grendergraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = grendergraph.cpp; path = ganesha/grendergraph.cpp; sourceTree = "<group>"; };
 		DE9D0C7E2B4A14D400EA0B7C /* gvector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gvector.cpp; path = ganesha/gvector.cpp; sourceTree = "<group>"; };
 		DE9D0C7F2B4A14D400EA0B7C /* gcamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gcamera.h; path = ganesha/gcamera.h; sourceTree = "<group>"; };
@@ -153,7 +154,6 @@
 		DE9D0C852B4A14D400EA0B7C /* gtga.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gtga.h; path = ganesha/gtga.h; sourceTree = "<group>"; };
 		DE9D0C862B4A14D400EA0B7C /* gvector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvector.h; path = ganesha/gvector.h; sourceTree = "<group>"; };
 		DE9D0C872B4A14D400EA0B7C /* gvulkanbuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gvulkanbuffer.cpp; path = ganesha/gvulkanbuffer.cpp; sourceTree = "<group>"; };
-		DE9D0C882B4A14D400EA0B7C /* gganesha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gganesha.h; path = ganesha/gganesha.h; sourceTree = "<group>"; };
 		DE9D0C8A2B4A14D400EA0B7C /* gpoint2d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gpoint2d.cpp; path = ganesha/gpoint2d.cpp; sourceTree = "<group>"; };
 		DE9D0C8C2B4A14D400EA0B7C /* gvulkandevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvulkandevice.h; path = ganesha/gvulkandevice.h; sourceTree = "<group>"; };
 		DE9D0C8D2B4A14D400EA0B7C /* gvulkanapi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gvulkanapi.cpp; path = ganesha/gvulkanapi.cpp; sourceTree = "<group>"; };
@@ -333,12 +333,11 @@
 				DE69D2002B4B47D6002D28E2 /* VULKAN */,
 				DE69D2012B4B47F4002D28E2 /* Tools */,
 				DE2BE7EE2B7A94ED0047C5D5 /* Application */,
-				DE9D0C812B4A14D400EA0B7C /* ganeshatypes.h */,
 				DEBE14932B51E548001EF6FB /* gganeshacontent.cpp */,
 				DEBE14942B51E548001EF6FB /* gganeshacontent.h */,
-				DE9D0C7B2B4A14D400EA0B7C /* gganesha.cpp */,
-				DE9D0C882B4A14D400EA0B7C /* gganesha.h */,
 				DE9D0C932B4A14D500EA0B7C /* ganesha.h */,
+				DE9D0C812B4A14D400EA0B7C /* ganeshatypes.h */,
+				DE5FD1412B8693F0002207A1 /* mackeycode.h */,
 			);
 			name = ganesha;
 			sourceTree = "<group>";
@@ -413,6 +412,7 @@
 				DE2BE7ED2B7A8F870047C5D5 /* gkeyboardevent.h in Headers */,
 				DE2BE7F62B7ABECA0047C5D5 /* gsystemlayer.h in Headers */,
 				DE6C59FC2B7542A400795843 /* glayersservice.h in Headers */,
+				DE5FD1432B8693F0002207A1 /* mackeycode.h in Headers */,
 				DE9D0CB22B4A14D500EA0B7C /* gcolor.h in Headers */,
 				DE9D0CA82B4A14D500EA0B7C /* gmatrix.h in Headers */,
 				DEBE14962B51E548001EF6FB /* gganeshacontent.h in Headers */,
