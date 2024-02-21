@@ -36,16 +36,17 @@ std::vector<GEventShell> GVULKANLayer::onEvent(GEventShell& shell) {
     switch (shell.event->getType()) {
         case EVENT_TYPE_VULKAN_UPDATE_VIEW_MATRIX:
             processUpdateViewMatrix(shell.event);
+            eventsService->markAsHandled(shell);
             break;
         case EVENT_TYPE_VULKAN_UPDATE_FRAME_SIZE:
             processUpdateFrameSize(shell.event);
+            eventsService->markAsHandled(shell);
             break;
             
         default:
             break;
     }
     
-    eventsService->markAsHandled(shell);
     return additionalEvents;
 }
 

@@ -19,19 +19,21 @@ std::vector<GEventShell> GSystemLayer::onEvent(GEventShell& shell) {
     switch (shell.event->getType()) {
         case EVENT_TYPE_KEY_DOWN:
             additionalEvents = processKeyboard(shell.event);
+            eventsService->markAsHandled(shell);
             break;
         case EVENT_TYPE_WINDOW_RESIZE:
             additionalEvents = processWindowResize(shell.event);
+            eventsService->markAsHandled(shell);
             break;
         case EVENT_TYPE_MOUSE_MOVED:
             additionalEvents = processMouseMove(shell.event);
+            eventsService->markAsHandled(shell);
             break;
             
         default:
             break;
     }
     
-    eventsService->markAsHandled(shell);
     return additionalEvents;
 }
 
