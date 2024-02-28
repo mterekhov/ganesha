@@ -8,7 +8,7 @@ namespace spcGaneshaEngine {
     
 struct GMatrix {
 public:
-    TFloat m[4][4];
+    TFloat m[4][4] = { 0 };
     
     const std::string print() const;
     

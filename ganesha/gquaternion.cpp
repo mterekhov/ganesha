@@ -12,7 +12,19 @@ GQuaternion::GQuaternion(const GVector& axis, const TFloat angle) {
     
     TFloat halfAngle = angle / 2.0f;    
     TFloat sinus = sinf(halfAngle);
+    if (sinus > 1.0f) {
+        sinus = 1.0;
+    }
+    if (sinus < -1.0f) {
+        sinus = -1.0;
+    }
     TFloat cosinus = cosf(halfAngle);
+    if (cosinus > 1.0f) {
+        cosinus = 1.0;
+    }
+    if (cosinus < -1.0f) {
+        cosinus = -1.0;
+    }
 
     x = normalizedAxis.x * sinus;
     y = normalizedAxis.y * sinus;
@@ -97,7 +109,7 @@ GMatrix GQuaternion::matrix() const {
     TFloat wy = w * y2;
     TFloat wz = w * z2;
     
-    GMatrix result;
+    GMatrix result = GMatrix::zeroMatrix();
     
     result.m[0][0] = 1.0 - (yy + zz);
     result.m[1][0] = xy - wz;
