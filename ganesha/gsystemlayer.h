@@ -12,7 +12,7 @@ public:
     GSystemLayer(const std::string& jsonKeyBindings, GGaneshaContent& content, GEventsServiceProtocol *eventsService);
     virtual ~GSystemLayer();
 
-    virtual std::vector<GEventShell> onEvent(GEventShell& shell);
+    std::vector<GEventShell> onEvent(GEventShell& shell) override;
     
 private:
     std::vector<GEventShell> processKeyboard(GEvent *event);

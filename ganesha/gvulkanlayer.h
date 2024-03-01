@@ -13,11 +13,11 @@ public:
     GVULKANLayer(void *metalLayer, GGaneshaContent& content, GEventsServiceProtocol *eventsService);
     virtual ~GVULKANLayer();
     
-    virtual std::vector<GEventShell> onEvent(GEventShell& shell);
-    virtual void onAttach();
-    virtual void onDetach();
-    virtual void onUpdate();
-    
+    void onAttach() override;
+    void onDetach() override;
+    void onUpdate() override;
+    std::vector<GEventShell> onEvent(GEventShell& shell) override;
+
 private:
     GGraphicsAPIProtocol *vulkanAPI;
     void* metalLayer;

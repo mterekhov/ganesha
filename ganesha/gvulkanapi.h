@@ -31,12 +31,12 @@ public:
     GVULKANAPI();
     virtual ~GVULKANAPI();
 
-    virtual void initAPI(void *metalLayer, const GGaneshaContent& content);
-    virtual void destroyAPI();
-    virtual void render();
-    virtual void frameResized(const TFloat width, const TFloat height);
-    virtual void installIsometricProjection(const TFloat fieldOfView, const TFloat near, const TFloat far);
-    virtual void installViewMatrix(const GMatrix& newViewMatrix);
+    void initAPI(void *metalLayer, const GGaneshaContent& content) override;
+    void destroyAPI() override;
+    void render() override;
+    void frameResized(const TFloat width, const TFloat height) override;
+    void installIsometricProjection(const TFloat fieldOfView, const TFloat near, const TFloat far) override;
+    void installViewMatrix(const GMatrix& newViewMatrix) override;
 
 private:
     GVULKANDevice vulkanDevice;
