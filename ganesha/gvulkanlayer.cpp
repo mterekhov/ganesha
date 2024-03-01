@@ -1,6 +1,6 @@
 #include "gvulkanlayer.h"
 #include "gvulkanapi.h"
-#include "gupdateframesizeevent.h"
+#include "gupdateviewportevent.h"
 #include "gupdateviewmatrixevent.h"
 
 namespace spcGaneshaEngine {
@@ -15,9 +15,7 @@ GVULKANLayer::~GVULKANLayer() {
 
 void GVULKANLayer::onAttach() {
     vulkanAPI->initAPI(metalLayer, content);
-    vulkanAPI->installIsometricProjection(content.viewport.fov,
-                                          content.viewport.near,
-                                          content.viewport.far);
+    vulkanAPI->installIsometricProjection(content.viewport);
     vulkanAPI->installViewMatrix(camera.viewMatrix(content.cameraData.orientation, 
                                                    content.cameraData.positionPoint));
 }
@@ -38,8 +36,8 @@ std::vector<GEventShell> GVULKANLayer::onEvent(GEventShell& shell) {
             processUpdateViewMatrix(shell.event);
             eventsService->markAsHandled(shell);
             break;
-        case EVENT_TYPE_VULKAN_UPDATE_FRAME_SIZE:
-            processUpdateFrameSize(shell.event);
+        case EVENT_TYPE_VULKAN_UPDATE_VIEWPORT:
+            processUpdateViewport(shell.event);
             eventsService->markAsHandled(shell);
             break;
             
@@ -59,10 +57,11 @@ std::vector<GEventShell> GVULKANLayer::processUpdateViewMatrix(GEvent *event) {
 }
 
 //  window size changes generate this event
-std::vector<GEventShell> GVULKANLayer::processUpdateFrameSize(GEvent *event) {
-    GUpdateFrameSizeEvent *updateViewportEvent = static_cast<GUpdateFrameSizeEvent *>(event);
-    vulkanAPI->frameResized(updateViewportEvent->width,
-                            updateViewportEvent->height);
+std::vector<GEventShell> GVULKANLayer::processUpdateViewport(GEvent *event) {
+    GUpdateViewportEvent *updateViewportEvent = static_cast<GUpdateViewportEvent *>(event);
+    content.viewport = updateViewportEvent->viewport;
+    vulkanAPI->updateSwapChain(content.viewport);
+    vulkanAPI->installIsometricProjection(content.viewport);
 
     return { };
 }

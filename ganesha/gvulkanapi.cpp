@@ -128,21 +128,17 @@ void GVULKANAPI::destroyAPI() {
     vulkanInstance.destroyInstance();
 }
 
-void GVULKANAPI::frameResized(const TFloat width, const TFloat height) {
-    vulkanSwapChain.updateScreenSize(width, height, vulkanDevice, metalSurface);
-    installIsometricProjection(fov, nearPlane, farPlane);
+void GVULKANAPI::updateSwapChain(const GViewport& viewport) {
+    vulkanSwapChain.updateScreenSize(viewport.width, viewport.height, vulkanDevice, metalSurface);
 }
 
-void GVULKANAPI::installIsometricProjection(const TFloat fieldOfView, const TFloat near, const TFloat far) {
+void GVULKANAPI::installIsometricProjection(const GViewport& viewport) {
     VkExtent2D swapChainExtent = vulkanSwapChain.getExtent();
     TFloat aspect = static_cast<TFloat>(swapChainExtent.width) / static_cast<TFloat>(swapChainExtent.height);
-    TFloat size = near * tanf(fieldOfView / 2.0);
+    TFloat size = viewport.near * tanf(viewport.fov / 2.0);
     TFloat aspectHeight = aspect * size;
     
-    nearPlane = near;
-    farPlane = far;
-    fov = fieldOfView;
-    projectionMatrix = GMatrix::frustum(-aspectHeight, aspectHeight, -size, size, near, far);
+    projectionMatrix = GMatrix::frustum(-aspectHeight, aspectHeight, -size, size, viewport.near, viewport.far);
 }
 
 void GVULKANAPI::installViewMatrix(const GMatrix& newViewMatrix) {
@@ -236,12 +232,10 @@ void GVULKANAPI::recordRenderCommand(VkCommandBuffer renderCommand,
             GVULKANBuffer& modelBuffer = renderGraph.getModelBuffer();
             TUInt counter = 1;
             for (GGraphNode *graphNode:renderGraph.getNodeArray()) {
-                GLOG_INFO("object %i\n", counter++);
                 graphNode->rts.print();
                 modelBuffer.refreshBuffer(&graphNode->rts, vulkanDevice.getLogicalDevice());
                 graphNode->mesh->render(renderCommand);
             }
-            GLOG_INFO("finished\n");
         vkCmdEndRenderPass(renderCommand);
     vkEndCommandBuffer(renderCommand);
 }

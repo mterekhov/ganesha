@@ -22,8 +22,8 @@
 		DE2BE7FE2B7AC5FF0047C5D5 /* gupdateviewmatrixevent.h in Headers */ = {isa = PBXBuildFile; fileRef = DE2BE7FC2B7AC5FF0047C5D5 /* gupdateviewmatrixevent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE2BE8012B7AC75D0047C5D5 /* gcameradata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE2BE7FF2B7AC75D0047C5D5 /* gcameradata.cpp */; };
 		DE2BE8022B7AC75D0047C5D5 /* gcameradata.h in Headers */ = {isa = PBXBuildFile; fileRef = DE2BE8002B7AC75D0047C5D5 /* gcameradata.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		DE2BE8062B7D5A9B0047C5D5 /* gupdateframesizeevent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE2BE8042B7D5A9B0047C5D5 /* gupdateframesizeevent.cpp */; };
-		DE2BE8072B7D5A9B0047C5D5 /* gupdateframesizeevent.h in Headers */ = {isa = PBXBuildFile; fileRef = DE2BE8052B7D5A9B0047C5D5 /* gupdateframesizeevent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE2BE8062B7D5A9B0047C5D5 /* gupdateviewportevent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE2BE8042B7D5A9B0047C5D5 /* gupdateviewportevent.cpp */; };
+		DE2BE8072B7D5A9B0047C5D5 /* gupdateviewportevent.h in Headers */ = {isa = PBXBuildFile; fileRef = DE2BE8052B7D5A9B0047C5D5 /* gupdateviewportevent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE2BE80A2B7D5D980047C5D5 /* geventsservice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE2BE8082B7D5D980047C5D5 /* geventsservice.cpp */; };
 		DE2BE80B2B7D5D980047C5D5 /* geventsservice.h in Headers */ = {isa = PBXBuildFile; fileRef = DE2BE8092B7D5D980047C5D5 /* geventsservice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE2BE80E2B7D62090047C5D5 /* geventshell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE2BE80C2B7D62090047C5D5 /* geventshell.cpp */; };
@@ -113,8 +113,8 @@
 		DE2BE7FC2B7AC5FF0047C5D5 /* gupdateviewmatrixevent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gupdateviewmatrixevent.h; path = ganesha/gupdateviewmatrixevent.h; sourceTree = "<group>"; };
 		DE2BE7FF2B7AC75D0047C5D5 /* gcameradata.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gcameradata.cpp; path = ganesha/gcameradata.cpp; sourceTree = "<group>"; };
 		DE2BE8002B7AC75D0047C5D5 /* gcameradata.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gcameradata.h; path = ganesha/gcameradata.h; sourceTree = "<group>"; };
-		DE2BE8042B7D5A9B0047C5D5 /* gupdateframesizeevent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gupdateframesizeevent.cpp; path = ganesha/gupdateframesizeevent.cpp; sourceTree = "<group>"; };
-		DE2BE8052B7D5A9B0047C5D5 /* gupdateframesizeevent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gupdateframesizeevent.h; path = ganesha/gupdateframesizeevent.h; sourceTree = "<group>"; };
+		DE2BE8042B7D5A9B0047C5D5 /* gupdateviewportevent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gupdateviewportevent.cpp; path = ganesha/gupdateviewportevent.cpp; sourceTree = "<group>"; };
+		DE2BE8052B7D5A9B0047C5D5 /* gupdateviewportevent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gupdateviewportevent.h; path = ganesha/gupdateviewportevent.h; sourceTree = "<group>"; };
 		DE2BE8082B7D5D980047C5D5 /* geventsservice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = geventsservice.cpp; path = ganesha/geventsservice.cpp; sourceTree = "<group>"; };
 		DE2BE8092B7D5D980047C5D5 /* geventsservice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = geventsservice.h; path = ganesha/geventsservice.h; sourceTree = "<group>"; };
 		DE2BE80C2B7D62090047C5D5 /* geventshell.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = geventshell.cpp; path = ganesha/geventshell.cpp; sourceTree = "<group>"; };
@@ -378,8 +378,8 @@
 				DEDD0F242B6AAF6C00F6F9B1 /* gwindowevent.cpp */,
 				DE2BE7FC2B7AC5FF0047C5D5 /* gupdateviewmatrixevent.h */,
 				DE2BE7FB2B7AC5FF0047C5D5 /* gupdateviewmatrixevent.cpp */,
-				DE2BE8052B7D5A9B0047C5D5 /* gupdateframesizeevent.h */,
-				DE2BE8042B7D5A9B0047C5D5 /* gupdateframesizeevent.cpp */,
+				DE2BE8052B7D5A9B0047C5D5 /* gupdateviewportevent.h */,
+				DE2BE8042B7D5A9B0047C5D5 /* gupdateviewportevent.cpp */,
 			);
 			name = Events;
 			sourceTree = "<group>";
@@ -395,7 +395,7 @@
 				DEBE14922B4DC2C5001EF6FB /* gmaterialsservice.h in Headers */,
 				DE2BE7F22B7AB3E20047C5D5 /* gviewport.h in Headers */,
 				DE2BE7FA2B7AC5530047C5D5 /* gvulkanlayer.h in Headers */,
-				DE2BE8072B7D5A9B0047C5D5 /* gupdateframesizeevent.h in Headers */,
+				DE2BE8072B7D5A9B0047C5D5 /* gupdateviewportevent.h in Headers */,
 				DE9D0CA12B4A14D500EA0B7C /* gvulkanpipeline.h in Headers */,
 				DE9D0CA32B4A14D500EA0B7C /* gpoint.h in Headers */,
 				DE2BE80F2B7D62090047C5D5 /* geventshell.h in Headers */,
@@ -530,7 +530,7 @@
 				DEBE14952B51E548001EF6FB /* gganeshacontent.cpp in Sources */,
 				DE2BE7F12B7AB3E20047C5D5 /* gviewport.cpp in Sources */,
 				DE2BE7EC2B7A8F870047C5D5 /* gkeyboardevent.cpp in Sources */,
-				DE2BE8062B7D5A9B0047C5D5 /* gupdateframesizeevent.cpp in Sources */,
+				DE2BE8062B7D5A9B0047C5D5 /* gupdateviewportevent.cpp in Sources */,
 				DEFDBCFB2B6C0569001EBFF6 /* gshadersservice.cpp in Sources */,
 				DE9D0CAB2B4A14D500EA0B7C /* grendergraph.cpp in Sources */,
 				DE2BE80E2B7D62090047C5D5 /* geventshell.cpp in Sources */,

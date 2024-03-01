@@ -18,7 +18,7 @@ public:
     virtual GEventShell keyboardEvent(const TUInt keyCode) = 0;
     virtual GEventShell windowEvent(const TFloat width, const TFloat height) = 0;
     virtual GEventShell updateViewMatrixEvent(const GMatrix& matrix) = 0;
-    virtual GEventShell updateFrameSizeEvent(const TFloat width, const TFloat height) = 0;
+    virtual GEventShell updateViewportEvent(const GViewport& viewport) = 0;
 };
 
 class GEventsService: public GEventsServiceProtocol {
@@ -35,7 +35,7 @@ public:
     GEventShell keyboardEvent(const TUInt keyCode) override;
     GEventShell windowEvent(const TFloat width, const TFloat height) override;
     GEventShell updateViewMatrixEvent(const GMatrix& matrix) override;
-    GEventShell updateFrameSizeEvent(const TFloat width, const TFloat height) override;
+    GEventShell updateViewportEvent(const GViewport& viewport) override;
 };
 
 };  //  spcGaneshaEngine

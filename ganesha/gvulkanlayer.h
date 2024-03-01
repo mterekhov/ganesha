@@ -24,7 +24,7 @@ private:
     GCamera camera;
     
     std::vector<GEventShell> processUpdateViewMatrix(GEvent *event);
-    std::vector<GEventShell> processUpdateFrameSize(GEvent *event);
+    std::vector<GEventShell> processUpdateViewport(GEvent *event);
 };
 
 };  //  spcGaneshaEngine

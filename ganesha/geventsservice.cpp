@@ -2,7 +2,7 @@
 #include "gmouseevent.h"
 #include "gkeyboardevent.h"
 #include "gwindowevent.h"
-#include "gupdateframesizeevent.h"
+#include "gupdateviewportevent.h"
 #include "gupdateviewmatrixevent.h"
 
 namespace spcGaneshaEngine {
@@ -55,8 +55,8 @@ GEventShell GEventsService::updateViewMatrixEvent(const GMatrix& matrix) {
     return GEventShell(newEvent);
 }
 
-GEventShell GEventsService::updateFrameSizeEvent(const TFloat width, const TFloat height) {
-    GUpdateFrameSizeEvent *newEvent = new GUpdateFrameSizeEvent(width, height);
+GEventShell GEventsService::updateViewportEvent(const GViewport& viewport) {
+    GUpdateViewportEvent *newEvent = new GUpdateViewportEvent(viewport);
     return GEventShell(newEvent);
 }
 

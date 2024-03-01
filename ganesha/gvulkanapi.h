@@ -34,8 +34,8 @@ public:
     void initAPI(void *metalLayer, const GGaneshaContent& content) override;
     void destroyAPI() override;
     void render() override;
-    void frameResized(const TFloat width, const TFloat height) override;
-    void installIsometricProjection(const TFloat fieldOfView, const TFloat near, const TFloat far) override;
+    void updateSwapChain(const GViewport& viewport) override;
+    void installIsometricProjection(const GViewport& viewport) override;
     void installViewMatrix(const GMatrix& newViewMatrix) override;
 
 private:
@@ -49,9 +49,6 @@ private:
     
     VkSurfaceKHR metalSurface;
 
-    TFloat nearPlane;
-    TFloat farPlane;
-    TFloat fov;
     GMatrix projectionMatrix;
     GMatrix viewMatrix;
 

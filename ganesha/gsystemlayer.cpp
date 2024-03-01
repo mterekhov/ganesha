@@ -3,7 +3,7 @@
 #include "gwindowevent.h"
 #include "gmouseevent.h"
 #include "gupdateviewmatrixevent.h"
-#include "gupdateframesizeevent.h"
+#include "gupdateviewportevent.h"
 #include "mackeycode.h"
 #include "glog.h"
 
@@ -45,7 +45,7 @@ std::vector<GEventShell> GSystemLayer::processWindowResize(GEvent *event) {
     content.viewport.width = windowEvent->width;
     content.viewport.height = windowEvent->height;
     
-    return { eventsService->updateFrameSizeEvent(windowEvent->width, windowEvent->height) };
+    return { eventsService->updateViewportEvent(content.viewport) };
 }
 
 std::vector<GEventShell> GSystemLayer::processMouseMove(GEvent *event) {
