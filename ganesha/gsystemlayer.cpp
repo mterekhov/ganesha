@@ -86,7 +86,7 @@ std::vector<GEventShell> GSystemLayer::processKeyboard(GEvent *event) {
                       content.cameraData.positionPoint.x,
                       content.cameraData.positionPoint.y,
                       content.cameraData.positionPoint.z);
-            content.cameraData.positionPoint = camera.strafeLeftCamera(content.cameraData.positionPoint, 0.01);//content.cameraData.keyboardSpeed);
+            content.cameraData.positionPoint = camera.strafeLeftCamera(content.cameraData.positionPoint, content.cameraData.keyboardSpeed);
             GLOG_INFO("new position %.3f\t%.3f\t%.3f\n", 
                       content.cameraData.positionPoint.x,
                       content.cameraData.positionPoint.y,
