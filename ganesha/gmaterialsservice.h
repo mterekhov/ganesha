@@ -27,12 +27,12 @@ public:
     GMaterialsService(GCommandServiceProtocol *commandService, GVULKANDevice& vulkanDevice);
     virtual ~GMaterialsService();
 
-    virtual void init();
-    virtual void destroy();
+    void init() override;
+    void destroy() override;
 
-    virtual GVULKANImage *createMaterial(const std::string& imageFilePath);
-    virtual std::map<std::string, GVULKANImage *>& getMaterialsMap();
-    virtual GVULKANImage *findMaterial(const std::string& imageFilePath);
+    GVULKANImage *createMaterial(const std::string& imageFilePath) override;
+    std::map<std::string, GVULKANImage *>& getMaterialsMap() override;
+    GVULKANImage *findMaterial(const std::string& imageFilePath) override;
 
 private:
     GCommandServiceProtocol *commandService;

@@ -27,14 +27,14 @@ public:
     GShadersService(GVULKANDevice& vulkanDevice);
     virtual ~GShadersService();
     
-    virtual void init();
-    virtual void destroy();
+    void init() override;
+    void destroy() override;
 
-    virtual TShadersArray getAllShadersArray();
-    virtual TShadersArray& getVertexShadersArray();
-    virtual TShadersArray& getFrgamentShadersArray();
-    virtual void addFragmentShader(const std::string& shaderFile);
-    virtual void addVertexShader(const std::string& shaderFile);
+    TShadersArray getAllShadersArray() override;
+    TShadersArray& getVertexShadersArray() override;
+    TShadersArray& getFrgamentShadersArray() override;
+    void addFragmentShader(const std::string& shaderFile) override;
+    void addVertexShader(const std::string& shaderFile) override;
 
 private:
     GVULKANDevice& vulkanDevice;

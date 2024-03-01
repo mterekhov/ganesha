@@ -26,15 +26,15 @@ public:
     GCommandService(GVULKANDevice& vulkanDevice);
     virtual ~GCommandService();
 
-    virtual void init();
-    virtual void destroy();
-    virtual VkCommandBuffer allocateCommandBuffer();
-    virtual void submitCommandBuffer(std::vector<VkCommandBuffer> commandBuffersArray,
-                                     std::vector<VkSemaphore> waitSemaphoresArray = std::vector<VkSemaphore>(),
-                                     std::vector<VkSemaphore> signalSemaphoresArray = std::vector<VkSemaphore>(),
-                                     VkFence fence = VK_NULL_HANDLE,
-                                     bool waitIdle = true,
-                                     bool freeCommandBuffer = true);
+    void init() override;
+    void destroy() override;
+    VkCommandBuffer allocateCommandBuffer() override;
+    void submitCommandBuffer(std::vector<VkCommandBuffer> commandBuffersArray,
+                             std::vector<VkSemaphore> waitSemaphoresArray = std::vector<VkSemaphore>(),
+                             std::vector<VkSemaphore> signalSemaphoresArray = std::vector<VkSemaphore>(),
+                             VkFence fence = VK_NULL_HANDLE,
+                             bool waitIdle = true,
+                             bool freeCommandBuffer = true) override;
 
 private:
     VkCommandPool createCommandPool();

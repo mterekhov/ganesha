@@ -26,16 +26,16 @@ public:
     GEventsService();
     virtual ~GEventsService();
     
-    virtual void init();
-    virtual void destroy();
+    void init() override;
+    void destroy() override;
     
-    virtual void markAsHandled(GEventShell& shell);
-    virtual TBool doesHandled(GEventShell& shell);
-    virtual GEventShell mouseEvent(const TFloat position_x, const TFloat position_y);
-    virtual GEventShell keyboardEvent(const TUInt keyCode);
-    virtual GEventShell windowEvent(const TFloat width, const TFloat height);
-    virtual GEventShell updateViewMatrixEvent(const GMatrix& matrix);
-    virtual GEventShell updateFrameSizeEvent(const TFloat width, const TFloat height);
+    void markAsHandled(GEventShell& shell) override;
+    TBool doesHandled(GEventShell& shell) override;
+    GEventShell mouseEvent(const TFloat position_x, const TFloat position_y) override;
+    GEventShell keyboardEvent(const TUInt keyCode) override;
+    GEventShell windowEvent(const TFloat width, const TFloat height) override;
+    GEventShell updateViewMatrixEvent(const GMatrix& matrix) override;
+    GEventShell updateFrameSizeEvent(const TFloat width, const TFloat height) override;
 };
 
 };  //  spcGaneshaEngine

@@ -26,15 +26,15 @@ public:
     GLayersService();
     virtual ~GLayersService();
 
-    virtual void init();
-    virtual void destroy();
+    void init() override;
+    void destroy() override;
 
-    virtual void pushLayer(GLayer *layer);
-    virtual void pushOverlay(GLayer *layer);
-    virtual void popLayer(GLayer *layer);
-    virtual void popOverlay(GLayer *layer);
-    virtual TLayersArray::iterator begin();
-    virtual TLayersArray::iterator end();
+    void pushLayer(GLayer *layer) override;
+    void pushOverlay(GLayer *layer) override;
+    void popLayer(GLayer *layer) override;
+    void popOverlay(GLayer *layer) override;
+    TLayersArray::iterator begin() override;
+    TLayersArray::iterator end() override;
 
 private:
     TLayersArray layersArray;
