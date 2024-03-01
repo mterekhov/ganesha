@@ -13,7 +13,7 @@ public:
     
     const GMatrix matrix;
     
-    virtual const std::string about();
+    const std::string about() override;
 };
 
 };
