@@ -19,6 +19,8 @@ private:
     std::vector<GEventShell> processWindowResize(GEvent *event);
     std::vector<GEventShell> processMouseMove(GEvent *event);
 
+    std::vector<GEventShell> cameraPositionEvent(const GQuaternion& orientation, const GPoint& positionPoint);
+
     GCamera camera;
 };
 

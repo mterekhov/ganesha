@@ -62,25 +62,37 @@ std::vector<GEventShell> GSystemLayer::processMouseMove(GEvent *event) {
 
 std::vector<GEventShell> GSystemLayer::processKeyboard(GEvent *event) {
     GKeyboardEvent *keyboardEvent = static_cast<GKeyboardEvent *>(event);
+    std::vector<GEventShell> newEvents = { };
 
     switch (keyboardEvent->keyCode) {
         case MACKEYCODE_E:
             content.cameraData.positionPoint = camera.downCamera(content.cameraData.positionPoint, content.cameraData.keyboardSpeed);
+            newEvents = cameraPositionEvent(content.cameraData.orientation, content.cameraData.positionPoint);
             break;
         case MACKEYCODE_Q:
             content.cameraData.positionPoint = camera.upCamera(content.cameraData.positionPoint, content.cameraData.keyboardSpeed);
+            newEvents = cameraPositionEvent(content.cameraData.orientation, content.cameraData.positionPoint);
             break;
         case MACKEYCODE_W:
             content.cameraData.positionPoint = camera.forwardCamera(content.cameraData.positionPoint, content.cameraData.keyboardSpeed);
+            newEvents = cameraPositionEvent(content.cameraData.orientation, content.cameraData.positionPoint);
             break;
         case MACKEYCODE_S:
             content.cameraData.positionPoint = camera.backwardCamera(content.cameraData.positionPoint, content.cameraData.keyboardSpeed);
+            newEvents = cameraPositionEvent(content.cameraData.orientation, content.cameraData.positionPoint);
             break;
-        case MACKEYCODE_A:
-            GLOG_INFO("old position %.3f\t%.3f\t%.3f\n", content.cameraData.positionPoint.x, content.cameraData.positionPoint.y, content.cameraData.positionPoint.z);
-            content.cameraData.positionPoint = camera.strafeLeftCamera(content.cameraData.positionPoint, content.cameraData.keyboardSpeed);
-            GLOG_INFO("new position %.3f\t%.3f\t%.3f\n", content.cameraData.positionPoint.x, content.cameraData.positionPoint.y, content.cameraData.positionPoint.z);
-            GLOG_INFO("matrix:\n%s\n\n\n", camera.viewMatrix(content.cameraData.orientation, content.cameraData.positionPoint).print().c_str());
+        case MACKEYCODE_A: {
+            GLOG_INFO("old position %.3f\t%.3f\t%.3f\n", 
+                      content.cameraData.positionPoint.x,
+                      content.cameraData.positionPoint.y,
+                      content.cameraData.positionPoint.z);
+            content.cameraData.positionPoint = camera.strafeLeftCamera(content.cameraData.positionPoint, 0.01);//content.cameraData.keyboardSpeed);
+            GLOG_INFO("new position %.3f\t%.3f\t%.3f\n", 
+                      content.cameraData.positionPoint.x,
+                      content.cameraData.positionPoint.y,
+                      content.cameraData.positionPoint.z);
+            newEvents = cameraPositionEvent(content.cameraData.orientation, content.cameraData.positionPoint);
+        }
         break;
         case MACKEYCODE_D:
             content.cameraData.positionPoint = camera.strafeRightCamera(content.cameraData.positionPoint, content.cameraData.keyboardSpeed);
@@ -89,7 +101,13 @@ std::vector<GEventShell> GSystemLayer::processKeyboard(GEvent *event) {
             break;
     }
     
-    GMatrix newCameraMatrix = camera.viewMatrix(content.cameraData.orientation, content.cameraData.positionPoint);
+    return newEvents;
+}
+
+std::vector<GEventShell> GSystemLayer::cameraPositionEvent(const GQuaternion& orientation, const GPoint& positionPoint) {
+    GMatrix newCameraMatrix = camera.viewMatrix(orientation, positionPoint);
+    GLOG_INFO("matrix:\n%s\n\n\n", newCameraMatrix.print().c_str());
+
     return { eventsService->updateViewMatrixEvent(newCameraMatrix) };
 }
 
