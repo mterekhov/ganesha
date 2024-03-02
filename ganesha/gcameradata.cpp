@@ -2,7 +2,7 @@
 
 namespace spcGaneshaEngine {
 
-GCameraData::GCameraData() : positionPoint(GPoint(0, -1, 10)) {
+GCameraData::GCameraData() : targetPoint(0, 0, 0), eyePoint(1,1,1), upVector(0, 1, 0) {
 }
 
 GCameraData::~GCameraData() {

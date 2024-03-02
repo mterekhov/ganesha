@@ -16,8 +16,9 @@ GVULKANLayer::~GVULKANLayer() {
 void GVULKANLayer::onAttach() {
     vulkanAPI->initAPI(metalLayer, content);
     vulkanAPI->installIsometricProjection(content.viewport);
-    vulkanAPI->installViewMatrix(camera.viewMatrix(content.cameraData.orientation, 
-                                                   content.cameraData.positionPoint));
+    vulkanAPI->installViewMatrix(camera.viewMatrix(content.cameraData.eyePoint,
+                                                   content.cameraData.targetPoint,
+                                                   content.cameraData.upVector));
 }
 
 void GVULKANLayer::onDetach() {

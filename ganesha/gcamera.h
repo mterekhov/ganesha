@@ -13,9 +13,9 @@ public:
     GCamera();
     ~GCamera();
     
-    GMatrix viewMatrix(const GQuaternion& orientation, const GPoint& positionPoint);
+    GMatrix viewMatrix(const GPoint& eyePoint, const GPoint& targetPoint, const GVector& upVector);
 
-    GQuaternion mouseCamera(const GQuaternion& orientation, const TFloat diff_x, const TFloat diff_y, const TFloat mouseSens);
+    GPoint mouseCamera(const GPoint& targetPoint, const TFloat diff_x, const TFloat diff_y, const TFloat mouseSens);
 
     GPoint upCamera(const GPoint& positionPoint, const TFloat keyboardSpeed);
     GPoint downCamera(const GPoint& positionPoint, const TFloat keyboardSpeed);

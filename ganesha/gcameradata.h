@@ -12,11 +12,16 @@ public:
     GCameraData();
     ~GCameraData();
 
-    GQuaternion orientation;
-    GPoint positionPoint;
-    GPoint centerPoint;
+    //  position of camera
+    GPoint eyePoint;
     
-    const TFloat DefaultMouseSens = 0.001f;
+    //  the point where we are looking to
+    GPoint targetPoint;
+    
+    //  Vertical vector
+    GVector upVector;
+    
+    const TFloat DefaultMouseSens = 0.01f;
     TFloat mouseSens = DefaultMouseSens;
     
     const TFloat DefaultKeyboardSpeed = 0.1;

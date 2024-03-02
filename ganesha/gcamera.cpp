@@ -10,21 +10,45 @@ GCamera::~GCamera() {
     
 }
 
-GQuaternion GCamera::mouseCamera(const GQuaternion& orientation, const TFloat diff_x, const TFloat diff_y, const TFloat mouseSens) {
-    TFloat around_x = aroundX(diff_y, orientation.euler_x(), mouseSens);
-    TFloat around_y = aroundY(diff_x, orientation.euler_y(), mouseSens);
-    TFloat around_z = orientation.euler_z();
+GMatrix GCamera::viewMatrix(const GPoint& eyePoint, const GPoint& targetPoint, const GVector& upVector) {
+    GVector zaxis = GVector(eyePoint.x - targetPoint.x, eyePoint.y - targetPoint.y, eyePoint.z - targetPoint.z);
+    zaxis.normalize();
     
-    return orientation.euler(around_x, around_y, around_z);
+    GVector xaxis = upVector.cross(zaxis);
+    xaxis.normalize();
+
+    GVector yaxis = zaxis.cross(xaxis);
+    
+    GMatrix matrix = GMatrix::identityMatrix();
+    
+    matrix.m[0][0] = xaxis.x;
+    matrix.m[0][1] = yaxis.x;
+    matrix.m[0][2] = zaxis.x;
+
+    matrix.m[1][0] = xaxis.y;
+    matrix.m[1][1] = yaxis.y;
+    matrix.m[1][2] = zaxis.y;
+
+    matrix.m[2][0] = xaxis.z;
+    matrix.m[2][1] = yaxis.z;
+    matrix.m[2][2] = zaxis.z;
+
+    GVector eyeVector = GVector(eyePoint.x, eyePoint.y, eyePoint.z);
+
+    matrix.m[3][0] = -eyeVector.dot(xaxis);
+    matrix.m[3][1] = -eyeVector.dot(yaxis);
+    matrix.m[3][2] = -eyeVector.dot(zaxis);
+
+    return matrix;
 }
 
-GMatrix GCamera::viewMatrix(const GQuaternion& orientation, const GPoint& positionPoint) {
-    GMatrix lookAtMatrix = orientation.matrix();
-    lookAtMatrix.m[3][0] = positionPoint.x;
-    lookAtMatrix.m[3][1] = positionPoint.y;
-    lookAtMatrix.m[3][2] = -positionPoint.z;
+GPoint GCamera::mouseCamera(const GPoint& targetPoint, const TFloat diff_x, const TFloat diff_y, const TFloat mouseSens) {
+    GPoint newPoint = targetPoint;
 
-    return lookAtMatrix;
+    newPoint.x -= diff_x * mouseSens;
+    newPoint.y -= diff_y * mouseSens;
+
+    return newPoint;
 }
 
 GPoint GCamera::upCamera(const GPoint& positionPoint, const TFloat keyboardSpeed) {
