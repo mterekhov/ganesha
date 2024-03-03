@@ -10,23 +10,22 @@ namespace spcGaneshaEngine {
 /// Manipulates with current position
 class GCamera {
 public:
-    GCamera();
+    GCamera(GCameraData& cameraData);
     ~GCamera();
     
-    GMatrix viewMatrix(const GPoint& eyePoint, const GPoint& targetPoint, const GVector& upVector);
+    GMatrix viewMatrix();
 
-    GPoint mouseCamera(const GPoint& targetPoint, const TFloat diff_x, const TFloat diff_y, const TFloat mouseSens);
+    void mouseCamera(const TFloat diff_x, const TFloat diff_y);
 
-    GPoint upCamera(const GPoint& positionPoint, const TFloat keyboardSpeed);
-    GPoint downCamera(const GPoint& positionPoint, const TFloat keyboardSpeed);
-    GPoint strafeLeftCamera(const GPoint& positionPoint, const TFloat keyboardSpeed);
-    GPoint strafeRightCamera(const GPoint& positionPoint, const TFloat keyboardSpeed);
-    GPoint forwardCamera(const GPoint& positionPoint, const TFloat keyboardSpeed);
-    GPoint backwardCamera(const GPoint& positionPoint, const TFloat keyboardSpeed);
+    void upCamera();
+    void downCamera();
+    void strafeLeftCamera();
+    void strafeRightCamera();
+    void forwardCamera();
+    void backwardCamera();
 
 private:
-    TFloat aroundX(const TFloat mouseSens, const TFloat diff, const TFloat currentAngle);
-    TFloat aroundY(const TFloat mouseSens, const TFloat diff, const TFloat currentAngle);
+    GCameraData& cameraData;
 };
 
 };  //  spcGaneshaEngine

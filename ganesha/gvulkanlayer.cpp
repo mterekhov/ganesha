@@ -5,7 +5,7 @@
 
 namespace spcGaneshaEngine {
 
-GVULKANLayer::GVULKANLayer(void *metalLayer, GGaneshaContent& content, GEventsServiceProtocol *eventsService) : GLayer("VULKAN", content, eventsService), metalLayer(metalLayer) {
+GVULKANLayer::GVULKANLayer(void *metalLayer, GGaneshaContent& content, GEventsServiceProtocol *eventsService) : GLayer("VULKAN", content, eventsService), metalLayer(metalLayer), camera(content.cameraData) {
     vulkanAPI = new GVULKANAPI();
 }
 
@@ -16,9 +16,7 @@ GVULKANLayer::~GVULKANLayer() {
 void GVULKANLayer::onAttach() {
     vulkanAPI->initAPI(metalLayer, content);
     vulkanAPI->installIsometricProjection(content.viewport);
-    vulkanAPI->installViewMatrix(camera.viewMatrix(content.cameraData.eyePoint,
-                                                   content.cameraData.targetPoint,
-                                                   content.cameraData.upVector));
+    vulkanAPI->installViewMatrix(camera.viewMatrix());
 }
 
 void GVULKANLayer::onDetach() {

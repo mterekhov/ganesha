@@ -9,7 +9,7 @@
 
 namespace spcGaneshaEngine {
 
-GSystemLayer::GSystemLayer(const std::string& jsonKeyBindings, GGaneshaContent& content, GEventsServiceProtocol *eventsService) : GLayer("system", content, eventsService) {
+GSystemLayer::GSystemLayer(const std::string& jsonKeyBindings, GGaneshaContent& content, GEventsServiceProtocol *eventsService) : GLayer("system", content, eventsService), camera(content.cameraData) {
 }
 
 GSystemLayer::~GSystemLayer() {
@@ -51,16 +51,8 @@ std::vector<GEventShell> GSystemLayer::processWindowResize(GEvent *event) {
 std::vector<GEventShell> GSystemLayer::processMouseMove(GEvent *event) {
     GMouseEvent *mouseEvent = static_cast<GMouseEvent *>(event);
 
-    content.cameraData.targetPoint = camera.mouseCamera(content.cameraData.targetPoint,
-                                                        mouseEvent->position_x,
-                                                        mouseEvent->position_y,
-                                                        content.cameraData.mouseSens);
-
-    GMatrix newCameraMatrix = camera.viewMatrix(content.cameraData.eyePoint,
-                                                content.cameraData.targetPoint,
-                                                content.cameraData.upVector);
-
-    return { eventsService->updateViewMatrixEvent(newCameraMatrix) };
+    camera.mouseCamera(mouseEvent->position_x, mouseEvent->position_y);
+    return { eventsService->updateViewMatrixEvent(camera.viewMatrix()) };
 }
 
 std::vector<GEventShell> GSystemLayer::processKeyboard(GEvent *event) {
@@ -69,51 +61,45 @@ std::vector<GEventShell> GSystemLayer::processKeyboard(GEvent *event) {
 
     switch (keyboardEvent->keyCode) {
         case MACKEYCODE_E:
-            content.cameraData.targetPoint.y += content.cameraData.keyboardSpeed;
-            content.cameraData.eyePoint.y += content.cameraData.keyboardSpeed;
+            camera.upCamera();
             newEvents = cameraPositionEvent(content.cameraData.eyePoint,
                                             content.cameraData.targetPoint,
                                             content.cameraData.upVector);
             break;
         case MACKEYCODE_Q:
-            content.cameraData.targetPoint.y -= content.cameraData.keyboardSpeed;
-            content.cameraData.eyePoint.y -= content.cameraData.keyboardSpeed;
+            camera.downCamera();
             newEvents = cameraPositionEvent(content.cameraData.eyePoint,
                                             content.cameraData.targetPoint,
                                             content.cameraData.upVector);
             break;
-        case MACKEYCODE_W:
-            content.cameraData.targetPoint.x -= content.cameraData.keyboardSpeed;
-            content.cameraData.targetPoint.y -= content.cameraData.keyboardSpeed;
-            content.cameraData.targetPoint.z -= content.cameraData.keyboardSpeed;
-
-            content.cameraData.eyePoint.x -= content.cameraData.keyboardSpeed;
-            content.cameraData.eyePoint.y -= content.cameraData.keyboardSpeed;
-            content.cameraData.eyePoint.z -= content.cameraData.keyboardSpeed;
+        case MACKEYCODE_W:  {
+            camera.forwardCamera();
             newEvents = cameraPositionEvent(content.cameraData.eyePoint,
                                             content.cameraData.targetPoint,
                                             content.cameraData.upVector);
+        }
             break;
-        case MACKEYCODE_S:
-            content.cameraData.targetPoint.x += content.cameraData.keyboardSpeed;
-            content.cameraData.targetPoint.y += content.cameraData.keyboardSpeed;
-            content.cameraData.targetPoint.z += content.cameraData.keyboardSpeed;
-
-            content.cameraData.eyePoint.x += content.cameraData.keyboardSpeed;
-            content.cameraData.eyePoint.y += content.cameraData.keyboardSpeed;
-            content.cameraData.eyePoint.z += content.cameraData.keyboardSpeed;
+        case MACKEYCODE_S: {
+            camera.backwardCamera();
             newEvents = cameraPositionEvent(content.cameraData.eyePoint,
                                             content.cameraData.targetPoint,
                                             content.cameraData.upVector);
+        }
             break;
-//        case MACKEYCODE_A: {
-//            content.cameraData.positionPoint = camera.strafeLeftCamera(content.cameraData.positionPoint, content.cameraData.keyboardSpeed);
-//            newEvents = cameraPositionEvent(content.cameraData.orientation, content.cameraData.positionPoint);
-//        }
-//        break;
-//        case MACKEYCODE_D:
-//            content.cameraData.positionPoint = camera.strafeRightCamera(content.cameraData.positionPoint, content.cameraData.keyboardSpeed);
-//            break;
+        case MACKEYCODE_A: {
+            camera.strafeLeftCamera();
+            newEvents = cameraPositionEvent(content.cameraData.eyePoint,
+                                            content.cameraData.targetPoint,
+                                            content.cameraData.upVector);
+        }
+        break;
+        case MACKEYCODE_D: {
+            camera.strafeRightCamera();
+            newEvents = cameraPositionEvent(content.cameraData.eyePoint,
+                                            content.cameraData.targetPoint,
+                                            content.cameraData.upVector);
+        }
+            break;
         default:
             break;
     }
@@ -122,8 +108,8 @@ std::vector<GEventShell> GSystemLayer::processKeyboard(GEvent *event) {
 }
 
 std::vector<GEventShell> GSystemLayer::cameraPositionEvent(const GPoint& eyePoint, const GPoint& targetPoint, const GVector& upVector) {
-    GMatrix newCameraMatrix = camera.viewMatrix(eyePoint, targetPoint, upVector);
+    GMatrix newCameraMatrix = camera.viewMatrix();
     return { eventsService->updateViewMatrixEvent(newCameraMatrix) };
 }
 
-};
+}

@@ -3,18 +3,20 @@
 
 namespace spcGaneshaEngine {
 
-GCamera::GCamera() {
+GCamera::GCamera(GCameraData& cameraData) : cameraData(cameraData) {
 }
 
 GCamera::~GCamera() {
     
 }
 
-GMatrix GCamera::viewMatrix(const GPoint& eyePoint, const GPoint& targetPoint, const GVector& upVector) {
-    GVector zaxis = GVector(eyePoint.x - targetPoint.x, eyePoint.y - targetPoint.y, eyePoint.z - targetPoint.z);
+GMatrix GCamera::viewMatrix() {
+    GVector zaxis = GVector(cameraData.eyePoint.x - cameraData.targetPoint.x,
+                            cameraData.eyePoint.y - cameraData.targetPoint.y,
+                            cameraData.eyePoint.z - cameraData.targetPoint.z);
     zaxis.normalize();
     
-    GVector xaxis = upVector.cross(zaxis);
+    GVector xaxis = cameraData.upVector.cross(zaxis);
     xaxis.normalize();
 
     GVector yaxis = zaxis.cross(xaxis);
@@ -33,7 +35,7 @@ GMatrix GCamera::viewMatrix(const GPoint& eyePoint, const GPoint& targetPoint, c
     matrix.m[2][1] = yaxis.z;
     matrix.m[2][2] = zaxis.z;
 
-    GVector eyeVector = GVector(eyePoint.x, eyePoint.y, eyePoint.z);
+    GVector eyeVector = GVector(cameraData.eyePoint.x, cameraData.eyePoint.y, cameraData.eyePoint.z);
 
     matrix.m[3][0] = -eyeVector.dot(xaxis);
     matrix.m[3][1] = -eyeVector.dot(yaxis);
@@ -42,75 +44,83 @@ GMatrix GCamera::viewMatrix(const GPoint& eyePoint, const GPoint& targetPoint, c
     return matrix;
 }
 
-GPoint GCamera::mouseCamera(const GPoint& targetPoint, const TFloat diff_x, const TFloat diff_y, const TFloat mouseSens) {
-    GPoint newPoint = targetPoint;
-
-    newPoint.x -= diff_x * mouseSens;
-    newPoint.y -= diff_y * mouseSens;
-
-    return newPoint;
+void GCamera::mouseCamera(const TFloat diff_x, const TFloat diff_y) {
+    cameraData.targetPoint.x -= diff_x * cameraData.mouseSens;
+    cameraData.targetPoint.y -= diff_y * cameraData.mouseSens;
 }
 
-GPoint GCamera::upCamera(const GPoint& positionPoint, const TFloat keyboardSpeed) {
-    GPoint updated = positionPoint;
-    updated.y += keyboardSpeed;
-    return updated;
+void GCamera::upCamera() {
+    cameraData.targetPoint.y += cameraData.keyboardSpeed;
+    cameraData.eyePoint.y += cameraData.keyboardSpeed;
 }
 
-GPoint GCamera::downCamera(const GPoint& positionPoint, const TFloat keyboardSpeed) {
-    GPoint updated = positionPoint;
-    updated.y -= keyboardSpeed;
-    return updated;
+void GCamera::downCamera() {
+    cameraData.targetPoint.y -= cameraData.keyboardSpeed;
+    cameraData.eyePoint.y -= cameraData.keyboardSpeed;
 }
 
-GPoint GCamera::strafeLeftCamera(const GPoint& positionPoint, const TFloat keyboardSpeed) {
-    GPoint updated = positionPoint;
-    updated.x += keyboardSpeed;
-    return updated;
-}
-
-GPoint GCamera::strafeRightCamera(const GPoint& positionPoint, const TFloat keyboardSpeed) {
-    GPoint updated = positionPoint;
-    updated.x -= keyboardSpeed;
-    return updated;
-}
-
-GPoint GCamera::forwardCamera(const GPoint& positionPoint, const TFloat keyboardSpeed) {
-    GPoint updated = positionPoint;
-    updated.z -= keyboardSpeed;
-    return updated;
-}
-
-GPoint GCamera::backwardCamera(const GPoint& positionPoint, const TFloat keyboardSpeed) {
-    GPoint updated = positionPoint;
-    updated.z += keyboardSpeed;
-    return updated;
-}
-
-TFloat GCamera::aroundX(const TFloat diff, const TFloat currentAngle, const TFloat mouseSens) {
-    TFloat angle = mouseSens * M_PI;
-    if (diff < 0) {
-        angle *= -1;
-    }
-
-    TFloat resultAngle = currentAngle + angle;
-    if (resultAngle > M_PI_2) {
-        resultAngle = M_PI_2;
-    }
-    if (resultAngle < 0) {
-        resultAngle = 0;
-    }
+void GCamera::forwardCamera() {
+    GVector directionVector = GVector(cameraData.eyePoint.x - cameraData.targetPoint.x,
+                                      cameraData.eyePoint.y - cameraData.targetPoint.y,
+                                      cameraData.eyePoint.z - cameraData.targetPoint.z);
+    directionVector.normalize();
+    cameraData.targetPoint.x -= directionVector.x * cameraData.keyboardSpeed;
+    cameraData.targetPoint.y -= directionVector.y * cameraData.keyboardSpeed;
+    cameraData.targetPoint.z -= directionVector.z * cameraData.keyboardSpeed;
     
-    return resultAngle;
+    cameraData.eyePoint.x -= directionVector.x * cameraData.keyboardSpeed;
+    cameraData.eyePoint.y -= directionVector.y * cameraData.keyboardSpeed;
+    cameraData.eyePoint.z -= directionVector.z * cameraData.keyboardSpeed;
 }
 
-TFloat GCamera::aroundY(const TFloat diff, const TFloat currentAngle, const TFloat mouseSens) {
-    TFloat angle = mouseSens * M_PI;
-    if (diff < 0) {
-        angle = -angle;
-    }
+void GCamera::backwardCamera() {
+    GVector directionVector = GVector(cameraData.eyePoint.x - cameraData.targetPoint.x,
+                                      cameraData.eyePoint.y - cameraData.targetPoint.y,
+                                      cameraData.eyePoint.z - cameraData.targetPoint.z);
+    directionVector.normalize();
+    cameraData.targetPoint.x += directionVector.x * cameraData.keyboardSpeed;
+    cameraData.targetPoint.y += directionVector.y * cameraData.keyboardSpeed;
+    cameraData.targetPoint.z += directionVector.z * cameraData.keyboardSpeed;
+    
+    cameraData.eyePoint.x += directionVector.x * cameraData.keyboardSpeed;
+    cameraData.eyePoint.y += directionVector.y * cameraData.keyboardSpeed;
+    cameraData.eyePoint.z += directionVector.z * cameraData.keyboardSpeed;
+}
 
-    return currentAngle + angle;
+void GCamera::strafeLeftCamera() {
+    GVector zaxis = GVector(cameraData.eyePoint.x - cameraData.targetPoint.x,
+                            cameraData.eyePoint.y - cameraData.targetPoint.y,
+                            cameraData.eyePoint.z - cameraData.targetPoint.z);
+    zaxis.normalize();
+    
+    GVector strafeVector = cameraData.upVector.cross(zaxis);
+    strafeVector.normalize();
+
+    cameraData.targetPoint.x -= strafeVector.x * cameraData.keyboardSpeed;
+    cameraData.targetPoint.y -= strafeVector.y * cameraData.keyboardSpeed;
+    cameraData.targetPoint.z -= strafeVector.z * cameraData.keyboardSpeed;
+    
+    cameraData.eyePoint.x -= strafeVector.x * cameraData.keyboardSpeed;
+    cameraData.eyePoint.y -= strafeVector.y * cameraData.keyboardSpeed;
+    cameraData.eyePoint.z -= strafeVector.z * cameraData.keyboardSpeed;
+}
+
+void GCamera::strafeRightCamera() {
+    GVector zaxis = GVector(cameraData.eyePoint.x - cameraData.targetPoint.x,
+                            cameraData.eyePoint.y - cameraData.targetPoint.y,
+                            cameraData.eyePoint.z - cameraData.targetPoint.z);
+    zaxis.normalize();
+    
+    GVector strafeVector = cameraData.upVector.cross(zaxis);
+    strafeVector.normalize();
+
+    cameraData.targetPoint.x += strafeVector.x * cameraData.keyboardSpeed;
+    cameraData.targetPoint.y += strafeVector.y * cameraData.keyboardSpeed;
+    cameraData.targetPoint.z += strafeVector.z * cameraData.keyboardSpeed;
+    
+    cameraData.eyePoint.x += strafeVector.x * cameraData.keyboardSpeed;
+    cameraData.eyePoint.y += strafeVector.y * cameraData.keyboardSpeed;
+    cameraData.eyePoint.z += strafeVector.z * cameraData.keyboardSpeed;
 }
 
 }
