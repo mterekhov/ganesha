@@ -5,7 +5,7 @@
 namespace spcGaneshaEngine  {
 
 const std::string GMatrix::print() const {
-    char const *format = "%.3f\t\t%.3f\t\t%.3f\t\t%.3f\n%.3f\t\t%.3f\t\t%.3f\t\t%.3f\n%.3f\t\t%.3f\t\t%.3f\t\t%.3f\n";
+    char const *format = "%.3f\t\t%.3f\t\t%.3f\t\t%.3f\n%.3f\t\t%.3f\t\t%.3f\t\t%.3f\n%.3f\t\t%.3f\t\t%.3f\t\t%.3f\n%.3f\t\t%.3f\t\t%.3f\t\t%.3f\n";
     char printBuffer[BUFSIZ] = {0};
     
     snprintf(printBuffer, BUFSIZ, format,

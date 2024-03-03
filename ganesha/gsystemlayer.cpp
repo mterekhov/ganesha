@@ -9,7 +9,7 @@
 
 namespace spcGaneshaEngine {
 
-GSystemLayer::GSystemLayer(const std::string& jsonKeyBindings, GGaneshaContent& content, GEventsServiceProtocol *eventsService) : GLayer("system", content, eventsService) {
+GSystemLayer::GSystemLayer(const std::string& jsonKeyBindings, GGaneshaContent& content, GEventsServiceProtocol *eventsService) : GLayer("system", content, eventsService), camera(content.cameraData) {
 }
 
 GSystemLayer::~GSystemLayer() {
@@ -51,13 +51,8 @@ std::vector<GEventShell> GSystemLayer::processWindowResize(GEvent *event) {
 std::vector<GEventShell> GSystemLayer::processMouseMove(GEvent *event) {
     GMouseEvent *mouseEvent = static_cast<GMouseEvent *>(event);
 
-    content.cameraData.orientation = camera.mouseCamera(content.cameraData.orientation,
-                                                        mouseEvent->position_x,
-                                                        mouseEvent->position_y,
-                                                        content.cameraData.mouseSens);
-    
-    GMatrix newCameraMatrix = camera.viewMatrix(content.cameraData.orientation, content.cameraData.positionPoint);
-    return { eventsService->updateViewMatrixEvent(newCameraMatrix) };
+    camera.mouseCamera(mouseEvent->position_x, mouseEvent->position_y);
+    return { eventsService->updateViewMatrixEvent(camera.viewMatrix()) };
 }
 
 std::vector<GEventShell> GSystemLayer::processKeyboard(GEvent *event) {
@@ -66,36 +61,44 @@ std::vector<GEventShell> GSystemLayer::processKeyboard(GEvent *event) {
 
     switch (keyboardEvent->keyCode) {
         case MACKEYCODE_E:
-            content.cameraData.positionPoint = camera.downCamera(content.cameraData.positionPoint, content.cameraData.keyboardSpeed);
-            newEvents = cameraPositionEvent(content.cameraData.orientation, content.cameraData.positionPoint);
+            camera.upCamera();
+            newEvents = cameraPositionEvent(content.cameraData.eyePoint,
+                                            content.cameraData.targetPoint,
+                                            content.cameraData.upVector);
             break;
         case MACKEYCODE_Q:
-            content.cameraData.positionPoint = camera.upCamera(content.cameraData.positionPoint, content.cameraData.keyboardSpeed);
-            newEvents = cameraPositionEvent(content.cameraData.orientation, content.cameraData.positionPoint);
+            camera.downCamera();
+            newEvents = cameraPositionEvent(content.cameraData.eyePoint,
+                                            content.cameraData.targetPoint,
+                                            content.cameraData.upVector);
             break;
-        case MACKEYCODE_W:
-            content.cameraData.positionPoint = camera.forwardCamera(content.cameraData.positionPoint, content.cameraData.keyboardSpeed);
-            newEvents = cameraPositionEvent(content.cameraData.orientation, content.cameraData.positionPoint);
+        case MACKEYCODE_W:  {
+            camera.forwardCamera();
+            newEvents = cameraPositionEvent(content.cameraData.eyePoint,
+                                            content.cameraData.targetPoint,
+                                            content.cameraData.upVector);
+        }
             break;
-        case MACKEYCODE_S:
-            content.cameraData.positionPoint = camera.backwardCamera(content.cameraData.positionPoint, content.cameraData.keyboardSpeed);
-            newEvents = cameraPositionEvent(content.cameraData.orientation, content.cameraData.positionPoint);
+        case MACKEYCODE_S: {
+            camera.backwardCamera();
+            newEvents = cameraPositionEvent(content.cameraData.eyePoint,
+                                            content.cameraData.targetPoint,
+                                            content.cameraData.upVector);
+        }
             break;
         case MACKEYCODE_A: {
-            GLOG_INFO("old position %.3f\t%.3f\t%.3f\n", 
-                      content.cameraData.positionPoint.x,
-                      content.cameraData.positionPoint.y,
-                      content.cameraData.positionPoint.z);
-            content.cameraData.positionPoint = camera.strafeLeftCamera(content.cameraData.positionPoint, content.cameraData.keyboardSpeed);
-            GLOG_INFO("new position %.3f\t%.3f\t%.3f\n", 
-                      content.cameraData.positionPoint.x,
-                      content.cameraData.positionPoint.y,
-                      content.cameraData.positionPoint.z);
-            newEvents = cameraPositionEvent(content.cameraData.orientation, content.cameraData.positionPoint);
+            camera.strafeLeftCamera();
+            newEvents = cameraPositionEvent(content.cameraData.eyePoint,
+                                            content.cameraData.targetPoint,
+                                            content.cameraData.upVector);
         }
         break;
-        case MACKEYCODE_D:
-            content.cameraData.positionPoint = camera.strafeRightCamera(content.cameraData.positionPoint, content.cameraData.keyboardSpeed);
+        case MACKEYCODE_D: {
+            camera.strafeRightCamera();
+            newEvents = cameraPositionEvent(content.cameraData.eyePoint,
+                                            content.cameraData.targetPoint,
+                                            content.cameraData.upVector);
+        }
             break;
         default:
             break;
@@ -104,11 +107,9 @@ std::vector<GEventShell> GSystemLayer::processKeyboard(GEvent *event) {
     return newEvents;
 }
 
-std::vector<GEventShell> GSystemLayer::cameraPositionEvent(const GQuaternion& orientation, const GPoint& positionPoint) {
-    GMatrix newCameraMatrix = camera.viewMatrix(orientation, positionPoint);
-    GLOG_INFO("matrix:\n%s\n\n\n", newCameraMatrix.print().c_str());
-
+std::vector<GEventShell> GSystemLayer::cameraPositionEvent(const GPoint& eyePoint, const GPoint& targetPoint, const GVector& upVector) {
+    GMatrix newCameraMatrix = camera.viewMatrix();
     return { eventsService->updateViewMatrixEvent(newCameraMatrix) };
 }
 
-};
+}
