@@ -23,6 +23,7 @@ public:
 
     GViewport viewport;
     GCameraData cameraData;
+    std::string applicationTitle;
 
 private:
     TStringsArray spritesMaterialsArray;

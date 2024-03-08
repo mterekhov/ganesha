@@ -38,9 +38,9 @@ GVULKANAPI::~GVULKANAPI() {
 
 #pragma mark - GGraphicsAPIProtocol -
 
-void GVULKANAPI::initAPI(void *metalLayer, const GGaneshaContent& content) {
+void GVULKANAPI::initAPI(const std::string& applicationTitle, void *metalLayer, const GGaneshaContent& content) {
     //  create VULKAN instance
-    vulkanInstance.createInstance("DOOM", khronosValidationLayers, avoidInstanceExtensions);
+    vulkanInstance.createInstance(applicationTitle.c_str(), khronosValidationLayers, avoidInstanceExtensions);
     
     //  create surface
     metalSurface = createSurface(metalLayer);
@@ -205,9 +205,11 @@ void GVULKANAPI::recordRenderCommand(VkCommandBuffer renderCommand,
             renderPassInfo.framebuffer = framebuffer;
             renderPassInfo.renderArea.offset = {0, 0};
             renderPassInfo.renderArea.extent = swapChainExtent;
+    
             std::array<VkClearValue, 2> clearValues = { };
             clearValues[0].color = {{0.0f, 0.0f, 0.0f, 1.0f}};
             clearValues[1].depthStencil = {1.0f, 0};
+    
             renderPassInfo.clearValueCount = clearValues.size();
             renderPassInfo.pClearValues = clearValues.data();
             

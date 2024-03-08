@@ -31,7 +31,7 @@ public:
     GVULKANAPI();
     virtual ~GVULKANAPI();
 
-    void initAPI(void *metalLayer, const GGaneshaContent& content) override;
+    void initAPI(const std::string& applicationTitle, void *metalLayer, const GGaneshaContent& content) override;
     void destroyAPI() override;
     void render() override;
     void updateSwapChain(const GViewport& viewport) override;
