@@ -111,11 +111,11 @@ VkDescriptorSetLayout GDescriptorsetService::createDescriptorsetsLayout(VkDevice
     projectionBinding.descriptorCount = 1;
     projectionBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
     
-    VkDescriptorSetLayoutBinding modelBinding = { };
-    modelBinding.binding = 1;
-    modelBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    modelBinding.descriptorCount = 1;
-    modelBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+    VkDescriptorSetLayoutBinding instanceBinding = { };
+    instanceBinding.binding = 1;
+    instanceBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    instanceBinding.descriptorCount = 1;
+    instanceBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
     
     VkDescriptorSetLayoutBinding fragmentBinding = { };
     fragmentBinding.binding = 2;
@@ -124,7 +124,7 @@ VkDescriptorSetLayout GDescriptorsetService::createDescriptorsetsLayout(VkDevice
     fragmentBinding.pImmutableSamplers = nullptr;
     fragmentBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
     
-    std::array<VkDescriptorSetLayoutBinding, 3> bindingsArray = { projectionBinding, modelBinding, fragmentBinding };
+    std::array<VkDescriptorSetLayoutBinding, 3> bindingsArray = { projectionBinding, instanceBinding, fragmentBinding };
     
     VkDescriptorSetLayoutCreateInfo layoutInfo = { };
     layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
@@ -145,6 +145,10 @@ std::vector<VkVertexInputBindingDescription> GDescriptorsetService::getBindingDe
     newBindingDescr.stride = sizeof(TFloat) * 5;
     newBindingDescr.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
+    newBindingDescr.binding = 1;
+    newBindingDescr.stride = sizeof(TFloat) * 16;
+    newBindingDescr.inputRate = VK_VERTEX_INPUT_RATE_INSTANCE;
+
     bindingDescriptions.push_back(newBindingDescr);
     
     return bindingDescriptions;
@@ -152,7 +156,8 @@ std::vector<VkVertexInputBindingDescription> GDescriptorsetService::getBindingDe
 
 std::vector<VkVertexInputAttributeDescription> GDescriptorsetService::getAttributeDescriptions()  {
     std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
-    
+
+    //  vertex coords
     VkVertexInputAttributeDescription newAttributeDescr {};
     newAttributeDescr.binding = 0;
     newAttributeDescr.location = 0;
@@ -160,11 +165,33 @@ std::vector<VkVertexInputAttributeDescription> GDescriptorsetService::getAttribu
     newAttributeDescr.offset = 0;
     attributeDescriptions.push_back(newAttributeDescr);
 
+    //  vertex UV coords
     newAttributeDescr.binding = 0;
     newAttributeDescr.location = 1;
     newAttributeDescr.format = VK_FORMAT_R32G32_SFLOAT;
     newAttributeDescr.offset = sizeof(TFloat) * 3;
     attributeDescriptions.push_back(newAttributeDescr);
+
+//    //  model instance translation
+//    newAttributeDescr.binding = 1;
+//    newAttributeDescr.location = 2;
+//    newAttributeDescr.format = VK_FORMAT_R32G32B32_SFLOAT;
+//    newAttributeDescr.offset = 0;
+//    attributeDescriptions.push_back(newAttributeDescr);
+//
+//    //  model instance rotation
+//    newAttributeDescr.binding = 1;
+//    newAttributeDescr.location = 3;
+//    newAttributeDescr.format = VK_FORMAT_R32G32B32_SFLOAT;
+//    newAttributeDescr.offset = sizeof(TFloat) * 3;
+//    attributeDescriptions.push_back(newAttributeDescr);
+//
+//    //  model instance scale
+//    newAttributeDescr.binding = 1;
+//    newAttributeDescr.location = 4;
+//    newAttributeDescr.format = VK_FORMAT_R32G32B32_SFLOAT;
+//    newAttributeDescr.offset = sizeof(TFloat) * 6;
+//    attributeDescriptions.push_back(newAttributeDescr);
 
     return attributeDescriptions;
 }
