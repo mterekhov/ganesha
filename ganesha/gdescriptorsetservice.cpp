@@ -137,29 +137,35 @@ VkDescriptorSetLayout GDescriptorsetService::createDescriptorsetsLayout(VkDevice
     return newLayout;
 }
 
-VkVertexInputBindingDescription GDescriptorsetService::getBindingDescription() {
-    VkVertexInputBindingDescription bindingDescription {};
+std::vector<VkVertexInputBindingDescription> GDescriptorsetService::getBindingDescription() {
+    std::vector<VkVertexInputBindingDescription> bindingDescriptions;
     
-    bindingDescription.binding = 0;
-    bindingDescription.stride = sizeof(TFloat) * 5;
-    bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+    VkVertexInputBindingDescription newBindingDescr {};
+    newBindingDescr.binding = 0;
+    newBindingDescr.stride = sizeof(TFloat) * 5;
+    newBindingDescr.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+    bindingDescriptions.push_back(newBindingDescr);
     
-    return bindingDescription;
+    return bindingDescriptions;
 }
 
-std::array<VkVertexInputAttributeDescription, 2> GDescriptorsetService::getAttributeDescriptions()  {
-    std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions{};
+std::vector<VkVertexInputAttributeDescription> GDescriptorsetService::getAttributeDescriptions()  {
+    std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
     
-    attributeDescriptions[0].binding = 0;
-    attributeDescriptions[0].location = 0;
-    attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-    attributeDescriptions[0].offset = 0;
-    
-    attributeDescriptions[1].binding = 0;
-    attributeDescriptions[1].location = 1;
-    attributeDescriptions[1].format = VK_FORMAT_R32G32_SFLOAT;
-    attributeDescriptions[1].offset = sizeof(TFloat) * 3;
-    
+    VkVertexInputAttributeDescription newAttributeDescr {};
+    newAttributeDescr.binding = 0;
+    newAttributeDescr.location = 0;
+    newAttributeDescr.format = VK_FORMAT_R32G32B32_SFLOAT;
+    newAttributeDescr.offset = 0;
+    attributeDescriptions.push_back(newAttributeDescr);
+
+    newAttributeDescr.binding = 0;
+    newAttributeDescr.location = 1;
+    newAttributeDescr.format = VK_FORMAT_R32G32_SFLOAT;
+    newAttributeDescr.offset = sizeof(TFloat) * 3;
+    attributeDescriptions.push_back(newAttributeDescr);
+
     return attributeDescriptions;
 }
 

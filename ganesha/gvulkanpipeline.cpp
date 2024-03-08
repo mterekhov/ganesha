@@ -11,11 +11,11 @@ GVULKANPipeline::~GVULKANPipeline() {
 
 void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapChain& swapChain, std::vector<VkPipelineShaderStageCreateInfo> &shadersArray, GDescriptorsetServiceProtocol *descriptorsetService) {
     VkPipelineVertexInputStateCreateInfo vertexInputInfo = { };
-    VkVertexInputBindingDescription bindingDescription = descriptorsetService->getBindingDescription();
-    std::array<VkVertexInputAttributeDescription, 2> attributeDescription = descriptorsetService->getAttributeDescriptions();
+    std::vector<VkVertexInputBindingDescription> bindingDescription = descriptorsetService->getBindingDescription();
+    std::vector<VkVertexInputAttributeDescription> attributeDescription = descriptorsetService->getAttributeDescriptions();
     vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    vertexInputInfo.vertexBindingDescriptionCount = 1;
-    vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
+    vertexInputInfo.vertexBindingDescriptionCount = static_cast<TUInt>(bindingDescription.size());
+    vertexInputInfo.pVertexBindingDescriptions = bindingDescription.data();
     vertexInputInfo.vertexAttributeDescriptionCount = static_cast<TUInt>(attributeDescription.size());
     vertexInputInfo.pVertexAttributeDescriptions = attributeDescription.data();
     

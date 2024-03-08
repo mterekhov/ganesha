@@ -17,8 +17,8 @@ public:
     virtual VkDescriptorSet getDescriptorset() = 0;
     virtual void attachImageToDescriptorset(GVULKANImage& image, TUInt bindingIndex) = 0;
     virtual void attachBufferToDescriptorset(GVULKANBuffer& buffer, TUInt bindingIndex) = 0;
-    virtual VkVertexInputBindingDescription getBindingDescription() = 0;
-    virtual std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions() = 0;
+    virtual std::vector<VkVertexInputBindingDescription> getBindingDescription() = 0;
+    virtual std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions() = 0;
 };
 
 class GDescriptorsetService: public GDescriptorsetServiceProtocol {
@@ -34,8 +34,8 @@ public:
     void attachImageToDescriptorset(GVULKANImage& image, TUInt bindingIndex) override;
     void attachBufferToDescriptorset(GVULKANBuffer& buffer, TUInt bindingIndex) override;
 
-    VkVertexInputBindingDescription getBindingDescription() override;
-    std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions() override;
+    std::vector<VkVertexInputBindingDescription> getBindingDescription() override;
+    std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions() override;
     
 private:
     GVULKANDevice& vulkanDevice;
