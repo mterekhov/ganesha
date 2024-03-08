@@ -75,7 +75,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const GGaneshaContent& content) {
     }
     
     std::vector<VkPipelineShaderStageCreateInfo> shadersArray = shadersService->getAllShadersArray();
-    vulkanPipeline.createPipeline(vulkanDevice, vulkanSwapChain, shadersArray, descriptorService->getDescriptorsetLayout());
+    vulkanPipeline.createPipeline(vulkanDevice, vulkanSwapChain, shadersArray, descriptorService);
 
     TUInt framebuffersNumber = static_cast<TUInt>(vulkanSwapChain.framebuffersNumber());
     for (TUInt i = 0; i < framebuffersNumber; i++) {

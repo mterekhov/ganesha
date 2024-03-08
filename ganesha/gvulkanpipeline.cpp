@@ -9,10 +9,10 @@ GVULKANPipeline::GVULKANPipeline() {
 GVULKANPipeline::~GVULKANPipeline() {
 }
 
-void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapChain& swapChain, std::vector<VkPipelineShaderStageCreateInfo> &shadersArray, VkDescriptorSetLayout descriptorsetLayout) {
+void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapChain& swapChain, std::vector<VkPipelineShaderStageCreateInfo> &shadersArray, GDescriptorsetServiceProtocol *descriptorsetService) {
     VkPipelineVertexInputStateCreateInfo vertexInputInfo = { };
-    VkVertexInputBindingDescription bindingDescription = getBindingDescription();
-    std::array<VkVertexInputAttributeDescription, 2> attributeDescription = getAttributeDescriptions();
+    VkVertexInputBindingDescription bindingDescription = descriptorsetService->getBindingDescription();
+    std::array<VkVertexInputAttributeDescription, 2> attributeDescription = descriptorsetService->getAttributeDescriptions();
     vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     vertexInputInfo.vertexBindingDescriptionCount = 1;
     vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
@@ -72,7 +72,7 @@ void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapCha
     dynamicState.dynamicStateCount = static_cast<TUInt>(dynamicStates.size());
     dynamicState.pDynamicStates = dynamicStates.data();
     
-    pipelineLayout = createPipelineLayout(vulkanDevice.getLogicalDevice(), descriptorsetLayout);
+    pipelineLayout = createPipelineLayout(vulkanDevice.getLogicalDevice(), descriptorsetService->getDescriptorsetLayout());
     
     VkPipelineDepthStencilStateCreateInfo depthStencil = { };
     depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
@@ -151,32 +151,5 @@ VkPipelineLayout GVULKANPipeline::createPipelineLayout(VkDevice device, VkDescri
     
     return newPipelineLayout;
 }
-
-VkVertexInputBindingDescription GVULKANPipeline::getBindingDescription() {
-    VkVertexInputBindingDescription bindingDescription {};
-    
-    bindingDescription.binding = 0;
-    bindingDescription.stride = sizeof(TFloat) * 5;
-    bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-    
-    return bindingDescription;
-}
-
-std::array<VkVertexInputAttributeDescription, 2> GVULKANPipeline::getAttributeDescriptions()  {
-    std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions{};
-    
-    attributeDescriptions[0].binding = 0;
-    attributeDescriptions[0].location = 0;
-    attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-    attributeDescriptions[0].offset = 0;
-    
-    attributeDescriptions[1].binding = 0;
-    attributeDescriptions[1].location = 1;
-    attributeDescriptions[1].format = VK_FORMAT_R32G32_SFLOAT;
-    attributeDescriptions[1].offset = sizeof(TFloat) * 3;
-    
-    return attributeDescriptions;
-}
-
 
 }

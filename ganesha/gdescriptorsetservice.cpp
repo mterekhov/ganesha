@@ -37,7 +37,7 @@ void GDescriptorsetService::attachImageToDescriptorset(GVULKANImage& image, TUIn
     imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
     imageInfo.imageView = image.getImageView();
     imageInfo.sampler = image.getSampler();
-
+    
     VkWriteDescriptorSet writeDescriptorset = { };
     writeDescriptorset.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorset.dstSet = descriptorset;
@@ -73,8 +73,8 @@ VkDescriptorSet GDescriptorsetService::createDescriptorset(VkDescriptorPool pool
     
     allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
     allocInfo.descriptorPool = pool;
-    allocInfo.descriptorSetCount = 1;
     allocInfo.pSetLayouts = &layout;
+    allocInfo.descriptorSetCount = 1;
     VkDescriptorSet newDescriptorset;
     vkAllocateDescriptorSets(vulkanDevice.getLogicalDevice(), &allocInfo, &newDescriptorset);
     
@@ -100,7 +100,7 @@ VkDescriptorPool GDescriptorsetService::createDescriptorsetsPool(VkDevice device
     
     VkDescriptorPool newPool;
     vkCreateDescriptorPool(device, &poolInfo, nullptr, &newPool);
-
+    
     return newPool;
 }
 
@@ -135,6 +135,32 @@ VkDescriptorSetLayout GDescriptorsetService::createDescriptorsetsLayout(VkDevice
     vkCreateDescriptorSetLayout(device, &layoutInfo, nullptr, &newLayout);
     
     return newLayout;
+}
+
+VkVertexInputBindingDescription GDescriptorsetService::getBindingDescription() {
+    VkVertexInputBindingDescription bindingDescription {};
+    
+    bindingDescription.binding = 0;
+    bindingDescription.stride = sizeof(TFloat) * 5;
+    bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+    
+    return bindingDescription;
+}
+
+std::array<VkVertexInputAttributeDescription, 2> GDescriptorsetService::getAttributeDescriptions()  {
+    std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions{};
+    
+    attributeDescriptions[0].binding = 0;
+    attributeDescriptions[0].location = 0;
+    attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
+    attributeDescriptions[0].offset = 0;
+    
+    attributeDescriptions[1].binding = 0;
+    attributeDescriptions[1].location = 1;
+    attributeDescriptions[1].format = VK_FORMAT_R32G32_SFLOAT;
+    attributeDescriptions[1].offset = sizeof(TFloat) * 3;
+    
+    return attributeDescriptions;
 }
 
 }
