@@ -15,7 +15,7 @@ public:
     GSpriteMesh(GVULKANImage *material, GVULKANDevice& vulkanDevice, GCommandServiceProtocol *commandService);
     virtual ~GSpriteMesh();
 
-    void render(VkCommandBuffer renderCommand) override;
+    void render(TUInt instancesNumber, VkCommandBuffer renderCommand) override;
     void destroyNode(VkDevice device) override;
 
 private:

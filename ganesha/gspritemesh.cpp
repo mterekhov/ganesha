@@ -14,8 +14,8 @@ GSpriteMesh::GSpriteMesh(GVULKANImage *material, GVULKANDevice& vulkanDevice, GC
                                 VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
                                 VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
                                 true,
-                                vulkanDevice,
-                                commandService);
+                                commandService,
+                                vulkanDevice);
     
     const TIndexArray indexesArray = {
         2, 1, 0, 0, 3, 2
@@ -25,8 +25,8 @@ GSpriteMesh::GSpriteMesh(GVULKANImage *material, GVULKANDevice& vulkanDevice, GC
                                VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
                                true,
-                               vulkanDevice,
-                               commandService);
+                               commandService,
+                               vulkanDevice);
 }
 
 GSpriteMesh::~GSpriteMesh() {
@@ -37,12 +37,12 @@ void GSpriteMesh::destroyNode(VkDevice device) {
     indexesBuffer.destroyBuffer(device);
 }
 
-void GSpriteMesh::render(VkCommandBuffer renderCommand) {
+void GSpriteMesh::render(TUInt instancesNumber, VkCommandBuffer renderCommand) {
     VkBuffer vertexBuffers[] = { vertexesBuffer.getBuffer() };
     VkDeviceSize offsets[] = {0};
     vkCmdBindVertexBuffers(renderCommand, 0, 1, vertexBuffers, offsets);
     vkCmdBindIndexBuffer(renderCommand, indexesBuffer.getBuffer(), 0, VK_INDEX_TYPE_UINT32);
-    vkCmdDrawIndexed(renderCommand, indexesBuffer.getBufferSize() / sizeof(TIndex), 1, 0, 0, 0);
+    vkCmdDrawIndexed(renderCommand, indexesBuffer.getBufferSize() / sizeof(TIndex), instancesNumber, 0, 0, 0);
 }
 
 };

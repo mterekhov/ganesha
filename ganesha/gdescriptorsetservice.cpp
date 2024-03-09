@@ -144,13 +144,13 @@ std::vector<VkVertexInputBindingDescription> GDescriptorsetService::getBindingDe
     newBindingDescr.binding = 0;
     newBindingDescr.stride = sizeof(TFloat) * 5;
     newBindingDescr.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+    bindingDescriptions.push_back(newBindingDescr);
 
     newBindingDescr.binding = 1;
-    newBindingDescr.stride = sizeof(TFloat) * 16;
+    newBindingDescr.stride = sizeof(TFloat) * 9;
     newBindingDescr.inputRate = VK_VERTEX_INPUT_RATE_INSTANCE;
-
     bindingDescriptions.push_back(newBindingDescr);
-    
+
     return bindingDescriptions;
 }
 
@@ -172,26 +172,26 @@ std::vector<VkVertexInputAttributeDescription> GDescriptorsetService::getAttribu
     newAttributeDescr.offset = sizeof(TFloat) * 3;
     attributeDescriptions.push_back(newAttributeDescr);
 
-//    //  model instance translation
-//    newAttributeDescr.binding = 1;
-//    newAttributeDescr.location = 2;
-//    newAttributeDescr.format = VK_FORMAT_R32G32B32_SFLOAT;
-//    newAttributeDescr.offset = 0;
-//    attributeDescriptions.push_back(newAttributeDescr);
-//
-//    //  model instance rotation
-//    newAttributeDescr.binding = 1;
-//    newAttributeDescr.location = 3;
-//    newAttributeDescr.format = VK_FORMAT_R32G32B32_SFLOAT;
-//    newAttributeDescr.offset = sizeof(TFloat) * 3;
-//    attributeDescriptions.push_back(newAttributeDescr);
-//
-//    //  model instance scale
-//    newAttributeDescr.binding = 1;
-//    newAttributeDescr.location = 4;
-//    newAttributeDescr.format = VK_FORMAT_R32G32B32_SFLOAT;
-//    newAttributeDescr.offset = sizeof(TFloat) * 6;
-//    attributeDescriptions.push_back(newAttributeDescr);
+    //  translation
+    newAttributeDescr.binding = 1;
+    newAttributeDescr.location = 2;
+    newAttributeDescr.format = VK_FORMAT_R32G32B32_SFLOAT;
+    newAttributeDescr.offset = 0;
+    attributeDescriptions.push_back(newAttributeDescr);
+
+    //  rotation
+    newAttributeDescr.binding = 1;
+    newAttributeDescr.location = 3;
+    newAttributeDescr.format = VK_FORMAT_R32G32B32_SFLOAT;
+    newAttributeDescr.offset = sizeof(TFloat) * 3;
+    attributeDescriptions.push_back(newAttributeDescr);
+
+    //  scale
+    newAttributeDescr.binding = 1;
+    newAttributeDescr.location = 4;
+    newAttributeDescr.format = VK_FORMAT_R32G32B32_SFLOAT;
+    newAttributeDescr.offset = sizeof(TFloat) * 6;
+    attributeDescriptions.push_back(newAttributeDescr);
 
     return attributeDescriptions;
 }

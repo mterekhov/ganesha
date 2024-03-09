@@ -64,9 +64,9 @@ void GVULKANImage::deployData(GTGA& tgaFile,
                                VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
                                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
                                false,
-                               vulkanDevice,
-                               commandService);
-    
+                               commandService,
+                               vulkanDevice);
+
     transitionImageLayout(image,
                           VK_FORMAT_R8G8B8A8_SRGB,
                           VK_IMAGE_LAYOUT_UNDEFINED,

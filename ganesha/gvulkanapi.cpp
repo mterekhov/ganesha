@@ -87,8 +87,8 @@ void GVULKANAPI::initAPI(const std::string& applicationTitle, void *metalLayer, 
                                          VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
                                          VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
                                          false,
-                                         vulkanDevice,
-                                         commandService);
+                                         commandService,
+                                         vulkanDevice);
         descriptorService->attachBufferToDescriptorset(newProjectionBuffer, 0);
         vulkanProjectionBuffers.push_back(newProjectionBuffer);
 
@@ -230,13 +230,12 @@ void GVULKANAPI::recordRenderCommand(VkCommandBuffer renderCommand,
             scissor.extent = swapChainExtent;
             vkCmdSetScissor(renderCommand, 0, 1, &scissor);
 
+            VkDeviceSize offsets[1] = { 0 };
             vkCmdBindDescriptorSets(renderCommand, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.getPipelineLayout(), 0, 1, &descriptorset, 0, nullptr);
-            GVULKANBuffer& modelBuffer = renderGraph.getModelBuffer();
-            TUInt counter = 1;
             for (GGraphNode *graphNode:renderGraph.getNodeArray()) {
-                graphNode->rts.print();
-                modelBuffer.refreshBuffer(&graphNode->rts, vulkanDevice.getLogicalDevice());
-                graphNode->mesh->render(renderCommand);
+                VkBuffer instanceBuffer = graphNode->instanceBuffer.getBuffer();
+                vkCmdBindVertexBuffers(renderCommand, 1, 1, &instanceBuffer, offsets);
+                graphNode->mesh->render(graphNode->getInstancesCount(), renderCommand);
             }
         vkCmdEndRenderPass(renderCommand);
     vkEndCommandBuffer(renderCommand);

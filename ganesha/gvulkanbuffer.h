@@ -18,10 +18,16 @@ public:
                       const VkBufferUsageFlags usage,
                       const VkMemoryPropertyFlags properties,
                       const TBool protectAccess,
-                      GVULKANDevice& vulkanDevice,
-                      GCommandServiceProtocol *commandService);
+                      GCommandServiceProtocol *commandService,
+                      GVULKANDevice& vulkanDevice);
     void destroyBuffer(VkDevice device);
+    
+    /// Refresh data which size is the same
+    /// - Parameters:
+    ///   - data: new data
+    ///   - device: VULKAN logical device
     void refreshBuffer(const void *data, VkDevice device);
+    
     VkBuffer getBuffer();
     TUInt getBufferSize();
 

@@ -3,11 +3,13 @@
 
 #include <vulkan/vulkan.h>
 
+#include "ganeshatypes.h"
+
 namespace spcGaneshaEngine {
 
 class GMesh {
 public:
-    virtual void render(VkCommandBuffer renderCommand) = 0;
+    virtual void render(TUInt instancesNumber, VkCommandBuffer renderCommand) = 0;
     virtual void destroyNode(VkDevice device) = 0;
 };
 

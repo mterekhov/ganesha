@@ -11,13 +11,13 @@ GVULKANBuffer::~GVULKANBuffer() {
     
 }
 
-void GVULKANBuffer::createBuffer(const void *data, 
-                                 const VkDeviceSize size,
-                                 const VkBufferUsageFlags usage,
-                                 const VkMemoryPropertyFlags properties,
-                                 const TBool protectAccess,
-                                 GVULKANDevice& vulkanDevice,
-                                 GCommandServiceProtocol *commandService) {
+void GVULKANBuffer::createBuffer(const void *data,
+                  const VkDeviceSize size,
+                  const VkBufferUsageFlags usage,
+                  const VkMemoryPropertyFlags properties,
+                  const TBool protectAccess,
+                  GCommandServiceProtocol *commandService,
+                  GVULKANDevice& vulkanDevice) {
     if (protectAccess) {
         VkBuffer stagingBuffer = createBuffer(size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, vulkanDevice.getLogicalDevice());
         VkDeviceMemory stagingBufferMemory = allocateBufferMemory(stagingBuffer, 

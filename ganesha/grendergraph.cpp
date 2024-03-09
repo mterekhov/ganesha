@@ -1,5 +1,4 @@
 #include "grendergraph.h"
-#include "gspritemesh.h"
 #include "gvulkantools.h"
 
 namespace spcGaneshaEngine {
@@ -14,16 +13,6 @@ GRenderGraph::~GRenderGraph() {
 void GRenderGraph::createGraph(GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice) {
     materialsService = new GMaterialsService(commandService, vulkanDevice);
     materialsService->init();
-    
-    GMatrix identityMatrix = GMatrix::identityMatrix();
-    modelBuffer.createBuffer(&identityMatrix,
-                             sizeof(GMatrix),
-                             VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
-                             VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-                             false,
-                             vulkanDevice,
-                             commandService);
-    descriptorsetService->attachBufferToDescriptorset(modelBuffer, 1);
 }
 
 void GRenderGraph::destroyGraph(VkDevice device) {
@@ -35,35 +24,32 @@ void GRenderGraph::destroyGraph(VkDevice device) {
     
     materialsService->destroy();
     delete materialsService;
-    
-    modelBuffer.destroyBuffer(device);
 }
 
 void GRenderGraph::loadContent(const GGaneshaContent& contentLoader, GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice) {
-    //  creating sprites
+    //  creating material
     const TStringsArray& materialsArray = contentLoader.getSpritesMaterialsArray();
-
-    GGraphNode *newSprite = createSpriteNode(*materialsArray.begin(), descriptorsetService, vulkanDevice);
-    pushNode(newSprite);
     
-    newSprite = createSpriteNode(*materialsArray.begin(), descriptorsetService, vulkanDevice);
-    newSprite->rts.m[3][1] = 5;
-    pushNode(newSprite);
-    GLOG_INFO("sprite added\n");
+    //  creating meshj
+    GSpriteMesh *spriteMesh = createSpriteMesh(*materialsArray.begin(), descriptorsetService, vulkanDevice);
+    
+    //  creating mesh instances
+    GGraphNode *meshInstance = new GGraphNode(spriteMesh, descriptorsetService, commandService, vulkanDevice);
+    meshInstance->addInstance(GVector(0.0, 0.0, 0.0), GVector(0.0, 0.0, 0.0), GVector(1.0, 1.0, 1.0));
+    meshInstance->addInstance(GVector(0.0, 0.0, 0.5), GVector(0.0, 3.14f/180.0f*45.0f, 0.0), GVector(1.0, 1.0, 1.0));
+    meshInstance->addInstance(GVector(-2, 0.0, 0.0), GVector(0.0, 0.0, 0.0), GVector(1.0, 1.0, 1.0));
+    pushNode(meshInstance);
 }
 
-GGraphNode *GRenderGraph::createSpriteNode(const std::string& materialFilePath, GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice) {
+GSpriteMesh *GRenderGraph::createSpriteMesh(const std::string& materialFilePath, GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice) {
     //  creating mesh
     GVULKANImage *material = materialsService->findMaterial(materialFilePath);
     if (material == 0) {
         material = materialsService->createMaterial(materialFilePath);
         descriptorsetService->attachImageToDescriptorset(*material, 2);
     }
-    GSpriteMesh *spriteMesh = new GSpriteMesh(material, vulkanDevice, commandService);
     
-    //  creating mesh instance
-    GGraphNode *meshInstance = new GGraphNode(spriteMesh);
-    return meshInstance;
+    return new GSpriteMesh(material, vulkanDevice, commandService);
 }
 
 void GRenderGraph::pushNode(GGraphNode *node) {
@@ -73,10 +59,5 @@ void GRenderGraph::pushNode(GGraphNode *node) {
 std::vector<GGraphNode *>& GRenderGraph::getNodeArray() {
     return graphNodeArray;
 }
-
-GVULKANBuffer& GRenderGraph::getModelBuffer() {
-    return modelBuffer;
-}
-
 
 };  //  spcGaneshaEngine

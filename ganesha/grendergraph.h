@@ -10,6 +10,7 @@
 #include "gganeshacontent.h"
 #include "gdescriptorsetservice.h"
 #include "gcommandservice.h"
+#include "gspritemesh.h"
 
 namespace spcGaneshaEngine {
 
@@ -24,14 +25,12 @@ public:
     
     void loadContent(const GGaneshaContent& contentLoader, GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice);
 
-    GGraphNode *createSpriteNode(const std::string& materialFilePath, GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice);
+    GSpriteMesh *createSpriteMesh(const std::string& materialFilePath, GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice);
     void pushNode(GGraphNode *node);
     
     std::vector<GGraphNode *>& getNodeArray();
-    GVULKANBuffer& getModelBuffer();
 
 private:
-    GVULKANBuffer modelBuffer;
     GCommandServiceProtocol *commandService;
     std::vector<GGraphNode *> graphNodeArray;
     GMaterialsServiceProtocol *materialsService;

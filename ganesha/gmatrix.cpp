@@ -123,6 +123,27 @@ GMatrix GMatrix::frustum(const TFloat left,
     return frustumMatrix;
 }
 
+GMatrix GMatrix::scale(const TFloat x, const TFloat y, const TFloat z) {
+    GMatrix result = GMatrix::identityMatrix();
+    
+    result.m[0][0] = x;
+    result.m[1][1] = y;
+    result.m[2][2] = z;
+    
+    return result;
+}
+
+GMatrix GMatrix::translastion(const TFloat x, const TFloat y, const TFloat z) {
+    GMatrix result = GMatrix::identityMatrix();
+    
+    result.m[3][0] = x;
+    result.m[3][1] = y;
+    result.m[3][2] = z;
+    
+    return result;
+
+}
+
 GMatrix GMatrix::rotationX(const TFloat angle) {
 	TFloat sine = sinf(angle);
 	TFloat cosine = cosf(angle);

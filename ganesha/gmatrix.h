@@ -16,6 +16,9 @@ public:
     
     static GMatrix zeroMatrix();
     static GMatrix identityMatrix();
+
+    static GMatrix scale(const TFloat x, const TFloat y, const TFloat z);
+    static GMatrix translastion(const TFloat x, const TFloat y, const TFloat z);
     static GMatrix rotationX(const TFloat angle);
     static GMatrix rotationY(const TFloat angle);
     static GMatrix rotationZ(const TFloat angle);
