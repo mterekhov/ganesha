@@ -165,7 +165,6 @@ VkDevice GVULKANDevice::createLogicalDevice(VkPhysicalDevice device, const TStri
     }
 
     for (const auto& name : deviceExtensionsNamesArray) {
-        GLOG_INFO("\t%s\n", name);
         delete [] name;
     }
 
@@ -222,9 +221,7 @@ TBool GVULKANDevice::checkPhysicalDeviceCapability(VkPhysicalDevice device, cons
 
 TBool GVULKANDevice::checkPhysicalDeviceExtensionSupport(VkPhysicalDevice device, const TStringsArray& useDeviceExtensions, const std::vector<VkExtensionProperties>& availableExtensions) {
     std::set<std::string> requiredExtensions(useDeviceExtensions.begin(), useDeviceExtensions.end());
-    GLOG_INFO("physical device extensions:\n");
     for (const auto& extension : availableExtensions) {
-        GLOG_INFO("\t%s\n", extension.extensionName);
         requiredExtensions.erase(extension.extensionName);
     }
     

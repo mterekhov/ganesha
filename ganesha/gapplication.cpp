@@ -21,10 +21,8 @@ void GApplication::handleEvent(GEventShell& shell) {
         std::vector<GEventShell> eventsArray = additionalEvents;
         additionalEvents.clear();
         for (auto shellIt = eventsArray.begin(); shellIt != eventsArray.end(); shellIt++) {
-            GLOG_INFO("processing event %s\n", shellIt->event->about().c_str());
             for (auto it = layerService->begin(); it != layerService->end(); it++) {
                 GLayer *layer = *it;
-                GLOG_INFO("\t\t\tlayer <%s>\n", layer->getName().c_str());
                 std::vector<GEventShell> tmpEvents = layer->onEvent(*shellIt);
                 if (!tmpEvents.empty()) {
                     additionalEvents.insert(additionalEvents.end(), tmpEvents.begin(), tmpEvents.end());

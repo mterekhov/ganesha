@@ -21,9 +21,7 @@ void GVULKANInstance::createInstance(const std::string& applicationName, const T
         GLOG_ERROR("error creating VULKAN instance\n");
     }
     
-    GLOG_INFO("extensions:\n");
     for (const auto& name : extensionsNamesArray) {
-        GLOG_INFO("\t%s\n", name);
         delete [] name;
     }
 
@@ -57,9 +55,7 @@ TCharPointersArray GVULKANInstance::collectValidationLayers(const TCharPointersA
         return supportedValidationLayersArray;
     }
 
-    GLOG_INFO("validation layers:\n");
     for (const auto& layerProperties : availableLayersArray) {
-        GLOG_INFO("\t%s\n", layerProperties.layerName);
         for (const auto layerName : layersNamesArray) {
             if (strcmp(layerName, layerProperties.layerName) == 0) {
                 supportedValidationLayersArray.push_back(layerName);
