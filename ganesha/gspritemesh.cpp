@@ -11,7 +11,7 @@ GSpriteMesh::GSpriteMesh(GVULKANImage *material, GVULKANDevice& vulkanDevice, GC
     };
     vertexesBuffer.createBuffer(vertexesArray.data(),
                                 sizeof(TFloat) * vertexesArray.size(),
-                                VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+                                VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
                                 VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
                                 true,
                                 commandService,
@@ -22,7 +22,7 @@ GSpriteMesh::GSpriteMesh(GVULKANImage *material, GVULKANDevice& vulkanDevice, GC
     };
     indexesBuffer.createBuffer(indexesArray.data(),
                                sizeof(TIndex) * indexesArray.size(),
-                               VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
+                               VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
                                true,
                                commandService,

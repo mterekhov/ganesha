@@ -46,7 +46,7 @@ GSpriteMesh *GRenderGraph::createSpriteMesh(const std::string& materialFilePath,
     GVULKANImage *material = materialsService->findMaterial(materialFilePath);
     if (material == 0) {
         material = materialsService->createMaterial(materialFilePath);
-        descriptorsetService->attachImageToDescriptorset(*material, 2);
+        descriptorsetService->updateDescriptorset(*material, 2);
     }
     
     return new GSpriteMesh(material, vulkanDevice, commandService);

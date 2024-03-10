@@ -89,7 +89,7 @@ void GVULKANAPI::initAPI(const std::string& applicationTitle, void *metalLayer, 
                                          false,
                                          commandService,
                                          vulkanDevice);
-        descriptorService->attachBufferToDescriptorset(newProjectionBuffer, 0);
+        descriptorService->updateDescriptorset(newProjectionBuffer, 0);
         vulkanProjectionBuffers.push_back(newProjectionBuffer);
 
         //  render commands

@@ -15,8 +15,8 @@ public:
     
     virtual VkDescriptorSetLayout getDescriptorsetLayout() = 0;
     virtual VkDescriptorSet getDescriptorset() = 0;
-    virtual void attachImageToDescriptorset(GVULKANImage& image, TUInt bindingIndex) = 0;
-    virtual void attachBufferToDescriptorset(GVULKANBuffer& buffer, TUInt bindingIndex) = 0;
+    virtual void updateDescriptorset(GVULKANImage& image, TUInt bindingIndex) = 0;
+    virtual void updateDescriptorset(GVULKANBuffer& buffer, TUInt bindingIndex) = 0;
     virtual std::vector<VkVertexInputBindingDescription> getBindingDescription() = 0;
     virtual std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions() = 0;
 };
@@ -31,8 +31,8 @@ public:
     VkDescriptorSetLayout getDescriptorsetLayout() override;
     VkDescriptorSet getDescriptorset() override;
     
-    void attachImageToDescriptorset(GVULKANImage& image, TUInt bindingIndex) override;
-    void attachBufferToDescriptorset(GVULKANBuffer& buffer, TUInt bindingIndex) override;
+    void updateDescriptorset(GVULKANImage& image, TUInt bindingIndex) override;
+    void updateDescriptorset(GVULKANBuffer& buffer, TUInt bindingIndex) override;
 
     std::vector<VkVertexInputBindingDescription> getBindingDescription() override;
     std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions() override;

@@ -32,7 +32,7 @@ VkDescriptorSet GDescriptorsetService::getDescriptorset() {
     return descriptorset;
 }
 
-void GDescriptorsetService::attachImageToDescriptorset(GVULKANImage& image, TUInt bindingIndex) {
+void GDescriptorsetService::updateDescriptorset(GVULKANImage& image, TUInt bindingIndex) {
     VkDescriptorImageInfo imageInfo = { };
     imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
     imageInfo.imageView = image.getImageView();
@@ -50,7 +50,7 @@ void GDescriptorsetService::attachImageToDescriptorset(GVULKANImage& image, TUIn
     vkUpdateDescriptorSets(vulkanDevice.getLogicalDevice(), 1, &writeDescriptorset, 0, nullptr);
 }
 
-void GDescriptorsetService::attachBufferToDescriptorset(GVULKANBuffer& buffer, TUInt bindingIndex) {
+void GDescriptorsetService::updateDescriptorset(GVULKANBuffer& buffer, TUInt bindingIndex) {
     VkDescriptorBufferInfo bufferInfo = { };
     bufferInfo.buffer = buffer.getBuffer();
     bufferInfo.offset = 0;
