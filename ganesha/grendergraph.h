@@ -7,7 +7,7 @@
 #include "ggraphnode.h"
 #include "gmaterialsservice.h"
 #include "gvulkanbuffer.h"
-#include "gganeshacontent.h"
+#include "gscene.h"
 #include "gdescriptorsetservice.h"
 #include "gcommandservice.h"
 #include "gspritemesh.h"
@@ -23,7 +23,7 @@ public:
     void createGraph(GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice);
     void destroyGraph(VkDevice device);
     
-    void loadContent(const GGaneshaContent& contentLoader, GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice);
+    void loadContent(const GScene& contentLoader, GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice);
 
     GSpriteMesh *createSpriteMesh(const std::string& materialFilePath, GDescriptorsetServiceProtocol *descriptorsetService, GVULKANDevice& vulkanDevice);
     void pushNode(GGraphNode *node);

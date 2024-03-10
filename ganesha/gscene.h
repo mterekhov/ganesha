@@ -1,5 +1,5 @@
-#ifndef SPCGANESHAENGINE_GGANESHACONTENT_H
-#define SPCGANESHAENGINE_GGANESHACONTENT_H
+#ifndef SPCGANESHAENGINE_GSCENE_H
+#define SPCGANESHAENGINE_GSCENE_H
 
 #include "ganeshatypes.h"
 #include "gmatrix.h"
@@ -8,10 +8,10 @@
 
 namespace spcGaneshaEngine {
 
-class GGaneshaContent {
+class GScene {
 public:
-    GGaneshaContent();
-    ~GGaneshaContent();
+    GScene();
+    ~GScene();
     
     void addSprite(const std::string& materialFilePath);
     void addFragmentShader(const std::string& shaderFilePath);
@@ -23,7 +23,6 @@ public:
 
     GViewport viewport;
     GCameraData cameraData;
-    std::string applicationTitle;
 
 private:
     TStringsArray spritesMaterialsArray;
@@ -33,4 +32,4 @@ private:
 
 };  //  spcGaneshaEngine
 
-#endif  //  SPCGANESHAENGINE_GGANESHACONTENT_H
+#endif  //  SPCGANESHAENGINE_GSCENE_H

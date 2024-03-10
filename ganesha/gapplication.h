@@ -12,7 +12,7 @@ namespace spcGaneshaEngine {
 
 class GApplication {
 public:
-    GApplication(GEventsServiceProtocol *eventsService, GLayersServiceProtocol *layerService, void *metalLayer, const GGaneshaContent& loadContent);
+    GApplication(GEventsServiceProtocol *eventsService, GLayersServiceProtocol *layerService, void *metalLayer, const GScene& loadContent);
     virtual ~GApplication();
 
     void handleEvent(GEventShell& shell);
@@ -23,7 +23,7 @@ public:
     //  dependency injections
     GEventsServiceProtocol *eventsService;
     GLayersServiceProtocol *layerService;
-    GGaneshaContent content;
+    GScene content;
 };
 
 };  //  spcGaneshaEngine

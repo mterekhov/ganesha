@@ -28,10 +28,10 @@ struct ProjectionsBufferObject {
 
 class GVULKANAPI: public GGraphicsAPIProtocol {
 public:
-    GVULKANAPI();
+    GVULKANAPI(const std::string& applicationTitle);
     virtual ~GVULKANAPI();
 
-    void initAPI(const std::string& applicationTitle, void *metalLayer, const GGaneshaContent& content) override;
+    void initAPI(void *metalLayer, const GScene& content) override;
     void destroyAPI() override;
     void render() override;
     void updateSwapChain(const GViewport& viewport) override;
@@ -39,6 +39,7 @@ public:
     void installViewMatrix(const GMatrix& newViewMatrix) override;
 
 private:
+    std::string applicationTitle;
     GVULKANDevice vulkanDevice;
     GVULKANInstance vulkanInstance;
     GVULKANSwapChain vulkanSwapChain;

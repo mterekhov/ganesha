@@ -26,7 +26,7 @@ const TStringsArray useDeviceExtensions = {
     "VK_KHR_portability_subset"
 };
 
-GVULKANAPI::GVULKANAPI() {
+GVULKANAPI::GVULKANAPI(const std::string& applicationTitle) : applicationTitle(applicationTitle) {
     
 }
 
@@ -38,7 +38,7 @@ GVULKANAPI::~GVULKANAPI() {
 
 #pragma mark - GGraphicsAPIProtocol -
 
-void GVULKANAPI::initAPI(const std::string& applicationTitle, void *metalLayer, const GGaneshaContent& content) {
+void GVULKANAPI::initAPI(void *metalLayer, const GScene& content) {
     //  create VULKAN instance
     vulkanInstance.createInstance(applicationTitle.c_str(), khronosValidationLayers, avoidInstanceExtensions);
     

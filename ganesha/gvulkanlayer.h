@@ -10,7 +10,7 @@ namespace spcGaneshaEngine {
 /// This layer should process keyboard, mouse and window events
 class GVULKANLayer : public GLayer {
 public:
-    GVULKANLayer(void *metalLayer, GGaneshaContent& content, GEventsServiceProtocol *eventsService);
+    GVULKANLayer(const std::string& applicationTitle, void *metalLayer, GScene& content, GEventsServiceProtocol *eventsService);
     virtual ~GVULKANLayer();
     
     void onAttach() override;

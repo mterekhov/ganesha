@@ -9,7 +9,7 @@
 
 namespace spcGaneshaEngine {
 
-GSystemLayer::GSystemLayer(const std::string& jsonKeyBindings, GGaneshaContent& content, GEventsServiceProtocol *eventsService) : GLayer("system", content, eventsService), camera(content.cameraData) {
+GSystemLayer::GSystemLayer(const std::string& jsonKeyBindings, GScene& content, GEventsServiceProtocol *eventsService) : GLayer("system", content, eventsService), camera(content.cameraData) {
 }
 
 GSystemLayer::~GSystemLayer() {

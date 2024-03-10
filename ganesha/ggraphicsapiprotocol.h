@@ -3,13 +3,13 @@
 
 #include "ganeshatypes.h"
 #include "gmatrix.h"
-#include "gganeshacontent.h"
+#include "gscene.h"
 
 namespace spcGaneshaEngine {
 
 class GGraphicsAPIProtocol {
 public:
-    virtual void initAPI(const std::string& applicationTitle, void *metalLayer, const GGaneshaContent& content) = 0;
+    virtual void initAPI(void *metalLayer, const GScene& content) = 0;
     virtual void destroyAPI() = 0;
     virtual void render() = 0;
     virtual void updateSwapChain(const GViewport& viewport) = 0;

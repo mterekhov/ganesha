@@ -2,7 +2,7 @@
 
 namespace spcGaneshaEngine {
 
-GApplication::GApplication(GEventsServiceProtocol *eventsService, GLayersServiceProtocol *layerService, void *metalLayer, const GGaneshaContent& loadContent) : layerService(layerService), eventsService(eventsService), content(loadContent) {
+GApplication::GApplication(GEventsServiceProtocol *eventsService, GLayersServiceProtocol *layerService, void *metalLayer, const GScene& loadContent) : layerService(layerService), eventsService(eventsService), content(loadContent) {
 }
 
 GApplication::~GApplication() {

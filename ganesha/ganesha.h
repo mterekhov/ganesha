@@ -36,7 +36,7 @@
 //  Content
 #include "grendergraph.h"
 #include "gmaterialsservice.h"
-#include "gganeshacontent.h"
+#include "gscene.h"
 #include "gdescriptorsetservice.h"
 #include "gshadersservice.h"
 #include "gviewport.h"

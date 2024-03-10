@@ -2,7 +2,7 @@
 
 namespace spcGaneshaEngine {
 
-GLayer::GLayer(const std::string& name, GGaneshaContent& content, GEventsServiceProtocol *eventsService) : name(name), content(content), eventsService(eventsService) {
+GLayer::GLayer(const std::string& name, GScene& content, GEventsServiceProtocol *eventsService) : name(name), content(content), eventsService(eventsService) {
 }
 
 GLayer::~GLayer() {

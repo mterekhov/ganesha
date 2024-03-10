@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "geventshell.h"
-#include "gganeshacontent.h"
+#include "gscene.h"
 #include "geventsservice.h"
 
 namespace spcGaneshaEngine {
@@ -12,7 +12,7 @@ namespace spcGaneshaEngine {
 /// This is the base class for layers in Ganesha engine. Every layer can modify content which will be rendered
 class GLayer {
 public:
-    GLayer(const std::string& name, GGaneshaContent& content, GEventsServiceProtocol *eventsService);
+    GLayer(const std::string& name, GScene& content, GEventsServiceProtocol *eventsService);
     virtual ~GLayer();
 
     virtual void onAttach();
@@ -23,7 +23,7 @@ public:
 
 protected:
     const std::string name;
-    GGaneshaContent& content;
+    GScene& content;
     GEventsServiceProtocol *eventsService;
 };
 

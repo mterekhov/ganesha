@@ -9,7 +9,7 @@ namespace spcGaneshaEngine {
 /// This layer should process keyboard, mouse and window events
 class GSystemLayer : public GLayer {
 public:
-    GSystemLayer(const std::string& jsonKeyBindings, GGaneshaContent& content, GEventsServiceProtocol *eventsService);
+    GSystemLayer(const std::string& jsonKeyBindings, GScene& content, GEventsServiceProtocol *eventsService);
     virtual ~GSystemLayer();
 
     std::vector<GEventShell> onEvent(GEventShell& shell) override;

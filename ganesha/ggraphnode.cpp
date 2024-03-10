@@ -28,7 +28,6 @@ void GGraphNode::addInstance(const GVector& translation, const GVector& rotation
                                 true,
                                 commandService,
                                 vulkanDevice);
-//    descriptorsetService->attachBufferToDescriptorset(instanceBuffer, 1);
 }
 
 };
