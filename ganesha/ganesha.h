@@ -25,6 +25,7 @@
 #include "ggraphicsapiprotocol.h"
 #include "gvulkanapi.h"
 #include "gcommandservice.h"
+#include "gdescriptorsetservice.h"
 #include "gvulkaninstance.h"
 #include "gvulkandevice.h"
 #include "gvulkanpipeline.h"
@@ -34,10 +35,8 @@
 #include "gcameradata.h"
 
 //  Content
-#include "grendergraph.h"
-#include "gmaterialsservice.h"
 #include "gscene.h"
-#include "gdescriptorsetservice.h"
+#include "gmaterialsservice.h"
 #include "gshadersservice.h"
 #include "gviewport.h"
 

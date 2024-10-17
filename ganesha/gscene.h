@@ -5,6 +5,9 @@
 #include "gmatrix.h"
 #include "gviewport.h"
 #include "gcameradata.h"
+#include "gmesh.h"
+#include "gscenenode.h"
+#include "gmaterialsservice.h"
 
 namespace spcGaneshaEngine {
 
@@ -13,21 +16,13 @@ public:
     GScene();
     ~GScene();
     
-    void addSprite(const std::string& materialFilePath);
-    void addFragmentShader(const std::string& shaderFilePath);
-    void addVertexShader(const std::string& shaderFilePath);
-    
-    const TStringsArray& getSpritesMaterialsArray() const;
-    const TStringsArray& getVertexShadersArray() const;
-    const TStringsArray& getFragmetShadersArrray() const;
-
     GViewport viewport;
     GCameraData cameraData;
-
-private:
-    TStringsArray spritesMaterialsArray;
+    std::vector<std::shared_ptr<GSceneNode>> nodesArray;
+    std::vector<std::shared_ptr<GMesh>> meshesArray;
+    TStringsArray materialsArray;
     TStringsArray vertexShadersArray;
-    TStringsArray fragmetShadersArrray;
+    TStringsArray fragmentShadersArrray;
 };
 
 };  //  spcGaneshaEngine
