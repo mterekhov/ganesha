@@ -16,9 +16,9 @@ public:
     virtual void init() = 0;
     virtual void destroy() = 0;
     
-    virtual GVULKANImage *createMaterial(const std::string& imageFilePath) = 0;
-    virtual std::map<std::string, GVULKANImage *>& getMaterialsMap() = 0;
-    virtual GVULKANImage *findMaterial(const std::string& imageFilePath) = 0;
+    virtual std::shared_ptr<GVULKANImage> createMaterial(const std::string& imageFilePath) = 0;
+    virtual std::map<std::string, std::shared_ptr<GVULKANImage>>& getMaterialsMap() = 0;
+    virtual std::shared_ptr<GVULKANImage> findMaterial(const std::string& imageFilePath) = 0;
 
 };
 
@@ -30,14 +30,14 @@ public:
     void init() override;
     void destroy() override;
 
-    GVULKANImage *createMaterial(const std::string& imageFilePath) override;
-    std::map<std::string, GVULKANImage *>& getMaterialsMap() override;
-    GVULKANImage *findMaterial(const std::string& imageFilePath) override;
+    std::shared_ptr<GVULKANImage> createMaterial(const std::string& imageFilePath) override;
+    std::map<std::string, std::shared_ptr<GVULKANImage>>& getMaterialsMap() override;
+    std::shared_ptr<GVULKANImage> findMaterial(const std::string& imageFilePath) override;
 
 private:
     GCommandServiceProtocol *commandService;
     GVULKANDevice& vulkanDevice;
-    std::map<std::string, GVULKANImage *> materialsMap;
+    std::map<std::string, std::shared_ptr<GVULKANImage>> materialsMap;
 };
 
 };  //  spcGaneshaEngine

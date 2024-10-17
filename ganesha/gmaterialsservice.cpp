@@ -17,16 +17,13 @@ void GMaterialsService::init() {
 
 void GMaterialsService::destroy() {
     VkDevice device = vulkanDevice.getLogicalDevice();
-    for (auto &pair : materialsMap) {
-        pair.second->destroyImage(device);
-        delete pair.second;
-    }
+    materialsMap.clear();
 }
 
-GVULKANImage *GMaterialsService::createMaterial(const std::string &imageFilePath) {
+std::shared_ptr<GVULKANImage> GMaterialsService::createMaterial(const std::string &imageFilePath) {
     GTGA tgaFile(imageFilePath);
     
-    GVULKANImage *newImage = new GVULKANImage();
+    std::shared_ptr<GVULKANImage> newImage =  std::make_shared<GVULKANImage>();
     newImage->createImage({ tgaFile.getWidth(), tgaFile.getHeight() },
                          VK_FORMAT_R8G8B8A8_SRGB,
                          VK_IMAGE_ASPECT_COLOR_BIT,
@@ -42,11 +39,11 @@ GVULKANImage *GMaterialsService::createMaterial(const std::string &imageFilePath
     return materialsMap[imageFilePath];
 }
 
-GVULKANImage *GMaterialsService::findMaterial(const std::string& imageFilePath) {
+std::shared_ptr<GVULKANImage> GMaterialsService::findMaterial(const std::string& imageFilePath) {
     return materialsMap[imageFilePath];
 }
 
-std::map<std::string, GVULKANImage *>& GMaterialsService::getMaterialsMap() {
+std::map<std::string, std::shared_ptr<GVULKANImage>>& GMaterialsService::getMaterialsMap() {
     return materialsMap;
 }
 
