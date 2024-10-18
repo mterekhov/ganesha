@@ -5,7 +5,12 @@
 
 namespace spcGaneshaEngine {
 
-GVULKANImage::GVULKANImage() {
+GVULKANImage::GVULKANImage(const std::string& textureFileName) : textureFileName(textureFileName),
+                                                                imageExtent{0, 0},
+                                                                image(VK_NULL_HANDLE),
+                                                                imageMemory(VK_NULL_HANDLE),
+                                                                imageView(VK_NULL_HANDLE),
+                                                                sampler(VK_NULL_HANDLE) {
     
 }
 
@@ -13,12 +18,21 @@ GVULKANImage::~GVULKANImage() {
     
 }
 
-void GVULKANImage::createImage(const VkExtent2D& extent,
-                               VkFormat format,
-                               VkImageAspectFlags aspectFlags,
-                               VkImageTiling tiling,
-                               VkImageUsageFlags usage,
-                               GVULKANDevice& vulkanDevice) {
+bool GVULKANImage::isDeployed() {
+    if (image == VK_NULL_HANDLE) {
+        return false;
+    }
+    
+    return true;
+}
+
+void GVULKANImage::deploy(const VkExtent2D& extent,
+                          VkFormat format,
+                          VkImageAspectFlags aspectFlags,
+                          VkImageTiling tiling,
+                          VkImageUsageFlags usage,
+                          GCommandServiceProtocol *commandService,
+                          GVULKANDevice& vulkanDevice) {
     GVULKANTools tools;
     imageExtent = extent;
     
@@ -53,7 +67,27 @@ void GVULKANImage::createImage(const VkExtent2D& extent,
     
     imageView = tools.createImageView(image, format, aspectFlags, vulkanDevice.getLogicalDevice());
     sampler = createTextureSampler(vulkanDevice);
+    
+    GTGA tgaImage(textureFileName);
+    deployData(tgaImage, vulkanDevice, commandService);
 }
+
+void GVULKANImage::destroyImage(VkDevice device) {
+    vkDestroySampler(device, sampler, nullptr);
+    vkDestroyImageView(device, imageView, nullptr);
+    vkDestroyImage(device, image, nullptr);
+    vkFreeMemory(device, imageMemory, nullptr);
+}
+
+VkImageView GVULKANImage::getImageView() {
+    return imageView;
+}
+
+VkSampler GVULKANImage::getSampler() {
+    return sampler;
+}
+
+#pragma mark - Routine -
 
 void GVULKANImage::deployData(GTGA& tgaFile,
                               GVULKANDevice& vulkanDevice,
@@ -83,23 +117,6 @@ void GVULKANImage::deployData(GTGA& tgaFile,
     
     stagingBuffer.destroyBuffer(vulkanDevice.getLogicalDevice());
 }
-
-void GVULKANImage::destroyImage(VkDevice device) {
-    vkDestroySampler(device, sampler, nullptr);
-    vkDestroyImageView(device, imageView, nullptr);
-    vkDestroyImage(device, image, nullptr);
-    vkFreeMemory(device, imageMemory, nullptr);
-}
-
-VkImageView GVULKANImage::getImageView() {
-    return imageView;
-}
-
-VkSampler GVULKANImage::getSampler() {
-    return sampler;
-}
-
-#pragma mark - Routine -
 
 VkSampler GVULKANImage::createTextureSampler(GVULKANDevice& device) {
     VkPhysicalDeviceProperties properties = device.getPhysicalDeviceProperties();
