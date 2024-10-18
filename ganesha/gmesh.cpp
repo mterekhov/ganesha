@@ -3,18 +3,22 @@
 namespace spcGaneshaEngine {
 
 GMesh::GMesh(const std::vector<TFloat>& vertexesArray,
-                         const TIndexArray& indexesArray,
-                         GCommandServiceProtocol *commandService,
-                         GVULKANDevice& vulkanDevice) {
-//    const std::vector<TFloat> vertexesArray = {
-//        -0.5f, -0.3, -0.5f, uvScale, 0.0f,
-//        0.5f, -0.3, -0.5f,  0.0f, 0.0,
-//        0.5f, -0.3, 0.5f,   0.0f, uvScale,
-//        -0.5f, -0.3, 0.5f,  uvScale, uvScale,
-//    };
-//    const TIndexArray indexesArray = {
-//        2, 1, 0, 0, 3, 2
-//    };
+             const TIndexArray& indexesArray) : vertexesArray(vertexesArray), indexesArray(indexesArray) {
+}
+
+GMesh::~GMesh() {
+}
+
+bool GMesh::isDeployed() {
+    if (indexesArray.empty() && vertexesArray.empty()) {
+        return true;
+    }
+    
+    return false;
+}
+
+void GMesh::deploy(GCommandServiceProtocol *commandService,
+                   GVULKANDevice& vulkanDevice) {
     vertexesBuffer.createBuffer(vertexesArray.data(),
                                 sizeof(TFloat) * vertexesArray.size(),
                                 VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
@@ -30,12 +34,11 @@ GMesh::GMesh(const std::vector<TFloat>& vertexesArray,
                                true,
                                commandService,
                                vulkanDevice);
+    vertexesArray.clear();
+    indexesArray.clear();
 }
 
-GMesh::~GMesh() {
-}
-
-void GMesh::destroyNode(VkDevice device) {
+void GMesh::destroyMesh(VkDevice device) {
     vertexesBuffer.destroyBuffer(device);
     indexesBuffer.destroyBuffer(device);
 }
@@ -47,4 +50,5 @@ void GMesh::render(TUInt instancesNumber, VkCommandBuffer renderCommand) {
     vkCmdBindIndexBuffer(renderCommand, indexesBuffer.getBuffer(), 0, VK_INDEX_TYPE_UINT32);
     vkCmdDrawIndexed(renderCommand, indexesBuffer.getBufferSize() / sizeof(TIndex), instancesNumber, 0, 0, 0);
 }
+
 };

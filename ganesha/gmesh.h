@@ -13,14 +13,18 @@ namespace spcGaneshaEngine {
 class GMesh {
 public:
     GMesh(const std::vector<TFloat>& vertexesArray,
-          const TIndexArray& indexesArray,
-          GCommandServiceProtocol *commandService,
-          GVULKANDevice& vulkanDevice);
+          const TIndexArray& indexesArray);
     virtual ~GMesh();
     
+    virtual bool isDeployed();
+    virtual void deploy(GCommandServiceProtocol *commandService,
+                        GVULKANDevice& vulkanDevice);
     virtual void render(TUInt instancesNumber, VkCommandBuffer renderCommand);
-    virtual void destroyNode(VkDevice device);
+    virtual void destroyMesh(VkDevice device);
+    
 private:
+    std::vector<TFloat> vertexesArray;
+    TIndexArray indexesArray;
     GVULKANBuffer vertexesBuffer;
     GVULKANBuffer indexesBuffer;
 };
