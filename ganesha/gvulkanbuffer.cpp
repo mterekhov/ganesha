@@ -3,7 +3,7 @@
 
 namespace spcGaneshaEngine {
 
-GVULKANBuffer::GVULKANBuffer() {
+GVULKANBuffer::GVULKANBuffer() : buffer(VK_NULL_HANDLE), bufferSize(0), bufferMemory(VK_NULL_HANDLE) {
     
 }
 
