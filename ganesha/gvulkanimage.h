@@ -16,13 +16,12 @@ public:
     ~GVULKANImage();
 
     bool isDeployed();
-    void deploy(const VkExtent2D& extent,
-                     VkFormat format,
-                     VkImageAspectFlags aspectFlags,
-                     VkImageTiling tiling,
-                     VkImageUsageFlags usage,
-                     GCommandServiceProtocol *commandService,
-                     GVULKANDevice& vulkanDevice);
+    void deploy(VkFormat format,
+                VkImageAspectFlags aspectFlags,
+                VkImageTiling tiling,
+                VkImageUsageFlags usage,
+                GCommandServiceProtocol *commandService,
+                GVULKANDevice& vulkanDevice);
     void destroyImage(VkDevice device);
     
     VkImageView getImageView();

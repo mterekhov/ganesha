@@ -17,6 +17,7 @@ public:
     virtual void destroy() = 0;
     
     virtual std::shared_ptr<GVULKANImage> createMaterial(const std::string& imageFilePath) = 0;
+    virtual void deployMaterial(std::shared_ptr<GVULKANImage> material);
     virtual std::map<std::string, std::shared_ptr<GVULKANImage>>& getMaterialsMap() = 0;
     virtual std::shared_ptr<GVULKANImage> findMaterial(const std::string& imageFilePath) = 0;
 
@@ -29,7 +30,6 @@ public:
 
     void init() override;
     void destroy() override;
-
     std::shared_ptr<GVULKANImage> createMaterial(const std::string& imageFilePath) override;
     std::map<std::string, std::shared_ptr<GVULKANImage>>& getMaterialsMap() override;
     std::shared_ptr<GVULKANImage> findMaterial(const std::string& imageFilePath) override;

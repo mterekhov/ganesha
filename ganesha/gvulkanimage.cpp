@@ -26,21 +26,21 @@ bool GVULKANImage::isDeployed() {
     return true;
 }
 
-void GVULKANImage::deploy(const VkExtent2D& extent,
-                          VkFormat format,
+void GVULKANImage::deploy(VkFormat format,
                           VkImageAspectFlags aspectFlags,
                           VkImageTiling tiling,
                           VkImageUsageFlags usage,
                           GCommandServiceProtocol *commandService,
                           GVULKANDevice& vulkanDevice) {
     GVULKANTools tools;
-    imageExtent = extent;
+    GTGA tgaImage(textureFileName);
+    imageExtent = {tgaImage.getWidth(), tgaImage.getHeight()};
     
     VkImageCreateInfo imageInfo = {};
     imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
     imageInfo.imageType = VK_IMAGE_TYPE_2D;
-    imageInfo.extent.width = extent.width;
-    imageInfo.extent.height = extent.height;
+    imageInfo.extent.width = imageExtent.width;
+    imageInfo.extent.height = imageExtent.height;
     imageInfo.extent.depth = 1;
     imageInfo.mipLevels = 1;
     imageInfo.arrayLayers = 1;
@@ -68,7 +68,6 @@ void GVULKANImage::deploy(const VkExtent2D& extent,
     imageView = tools.createImageView(image, format, aspectFlags, vulkanDevice.getLogicalDevice());
     sampler = createTextureSampler(vulkanDevice);
     
-    GTGA tgaImage(textureFileName);
     deployData(tgaImage, vulkanDevice, commandService);
 }
 

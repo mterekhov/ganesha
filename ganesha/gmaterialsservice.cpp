@@ -21,22 +21,20 @@ void GMaterialsService::destroy() {
 }
 
 std::shared_ptr<GVULKANImage> GMaterialsService::createMaterial(const std::string &imageFilePath) {
-    GTGA tgaFile(imageFilePath);
-    
-    std::shared_ptr<GVULKANImage> newImage =  std::make_shared<GVULKANImage>();
-    newImage->createImage({ tgaFile.getWidth(), tgaFile.getHeight() },
-                         VK_FORMAT_R8G8B8A8_SRGB,
-                         VK_IMAGE_ASPECT_COLOR_BIT,
-                         VK_IMAGE_TILING_OPTIMAL,
-                          VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
-                         vulkanDevice);
-    newImage->deployData(tgaFile,
-                        vulkanDevice,
-                        commandService);
-    
+    std::shared_ptr<GVULKANImage> newImage =  std::make_shared<GVULKANImage>(imageFilePath);
+
     materialsMap[imageFilePath] = newImage;
     
     return materialsMap[imageFilePath];
+}
+
+void GMaterialsService::deployMaterial(std::shared_ptr<GVULKANImage> material) {
+    material->deploy(VK_FORMAT_R8G8B8A8_SRGB,
+                     VK_IMAGE_ASPECT_COLOR_BIT,
+                     VK_IMAGE_TILING_OPTIMAL,
+                      VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
+                     commandService,
+                     vulkanDevice);
 }
 
 std::shared_ptr<GVULKANImage> GMaterialsService::findMaterial(const std::string& imageFilePath) {
