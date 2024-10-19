@@ -10,6 +10,9 @@
 
 #include <vector>
 #include <string>
+#include <vulkan/vulkan.h>
+
+#include "gshader.h"
 
 namespace spcGaneshaEngine {
 
@@ -29,6 +32,10 @@ typedef TUInt TIndex;
 typedef std::vector<TIndex> TIndexArray;
 typedef std::vector<const char *> TCharPointersArray;
 typedef std::vector<std::string> TStringsArray;
+
+typedef std::vector<std::shared_ptr<GShader>> TShadersArray;
+typedef std::vector<VkPipelineShaderStageCreateInfo> TShadersPipelineInfoArray;
+
 }   //  namespace spcGaneshaEngine
 
 #endif  //  SPCGANESHAENGINE_GANESHATYPES_H

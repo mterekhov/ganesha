@@ -38,7 +38,7 @@ GVULKANAPI::~GVULKANAPI() {
 
 #pragma mark - GGraphicsAPIProtocol -
 
-void GVULKANAPI::initAPI(void *metalLayer, const GScene& content) {
+void GVULKANAPI::initAPI(void *metalLayer, const GScene& scene) {
     //  create VULKAN instance
     vulkanInstance.createInstance(applicationTitle.c_str(), khronosValidationLayers, avoidInstanceExtensions);
     
@@ -48,7 +48,7 @@ void GVULKANAPI::initAPI(void *metalLayer, const GScene& content) {
     //  creates physicalDevice
     vulkanDevice.createDevice(vulkanInstance, useDeviceExtensions, metalSurface);
     
-    vulkanSwapChain.createSwapChain(content.viewport.width, content.viewport.height, vulkanDevice, metalSurface);
+    vulkanSwapChain.createSwapChain(scene.viewport.width, scene.viewport.height, vulkanDevice, metalSurface);
     
     descriptorService = new GDescriptorsetService(vulkanDevice);
     descriptorService->init();
@@ -56,25 +56,27 @@ void GVULKANAPI::initAPI(void *metalLayer, const GScene& content) {
     commandService = new GCommandService(vulkanDevice);
     commandService->init();
     
-    shadersService = new GShadersService(vulkanDevice);
+    materialsService = new GMaterialsService(commandService, vulkanDevice);
+    shadersService = new GShadersService(commandService, vulkanDevice);
     shadersService->init();
-    const TStringsArray& vertexShadersArray = content.getVertexShadersArray();
-    for (TStringsArray::const_iterator iter = vertexShadersArray.begin(); iter != vertexShadersArray.end(); iter++) {
-        shadersService->addVertexShader(*iter);
-    }
-    const TStringsArray& fragmentShadersArray = content.getFragmetShadersArrray();
-    for (TStringsArray::const_iterator iter = fragmentShadersArray.begin(); iter != fragmentShadersArray.end(); iter++) {
-        shadersService->addFragmentShader(*iter);
-    }
-
-    for (TUInt i = 0; i < maxFramesInFlight; i++) {
-        GRenderGraph newRenderGraph(commandService);
-        newRenderGraph.createGraph(descriptorService, vulkanDevice);
-        newRenderGraph.loadContent(content, descriptorService, vulkanDevice);
-        renderGraphArray.push_back(newRenderGraph);
-    }
+//    const TStringsArray& vertexShadersArray = content.getVertexShadersArray();
+//    for (TStringsArray::const_iterator iter = vertexShadersArray.begin(); iter != vertexShadersArray.end(); iter++) {
+//        shadersService->addVertexShader(*iter);
+//    }
+//    const TStringsArray& fragmentShadersArray = content.getFragmetShadersArrray();
+//    for (TStringsArray::const_iterator iter = fragmentShadersArray.begin(); iter != fragmentShadersArray.end(); iter++) {
+//        shadersService->addFragmentShader(*iter);
+//    }
+//
+//    for (TUInt i = 0; i < maxFramesInFlight; i++) {
+//        GScene newScene(descriptorService, commandService, vulkanDevice);
+//        newRenderGraph.createGraph(descriptorService, vulkanDevice);
+//        newRenderGraph.loadContent(content, descriptorService, vulkanDevice);
+//        scenesArray.push_back(newRenderGraph);
+//    }
     
-    std::vector<VkPipelineShaderStageCreateInfo> shadersArray = shadersService->getAllShadersArray();
+    TShadersPipelineInfoArray shadersArray = shadersService->getShadersPipelineInfo(scene.fragmentShadersArray, VK_SHADER_STAGE_FRAGMENT_BIT, commandService, vulkanDevice);
+    shadersArray.push_back(shadersService->getShadersPipelineInfo(scene.vertexShadersArray, VK_SHADER_STAGE_VERTEX_BIT, commandService, vulkanDevice));
     vulkanPipeline.createPipeline(vulkanDevice, vulkanSwapChain, shadersArray, descriptorService);
 
     TUInt framebuffersNumber = static_cast<TUInt>(vulkanSwapChain.framebuffersNumber());

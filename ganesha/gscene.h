@@ -5,9 +5,8 @@
 #include "gmatrix.h"
 #include "gviewport.h"
 #include "gcameradata.h"
-#include "gmesh.h"
+#include "gshader.h"
 #include "gscenenode.h"
-#include "gmaterialsservice.h"
 
 namespace spcGaneshaEngine {
 
@@ -20,9 +19,10 @@ public:
     GCameraData cameraData;
     std::vector<std::shared_ptr<GSceneNode>> nodesArray;
     std::vector<std::shared_ptr<GMesh>> meshesArray;
-    TStringsArray materialsArray;
-    TStringsArray vertexShadersArray;
-    TStringsArray fragmentShadersArrray;
+    
+    std::vector<std::shared_ptr<GVULKANImage>> materialsArray;
+    TShadersArray vertexShadersArray;
+    TShadersArray fragmentShadersArray;
 };
 
 };  //  spcGaneshaEngine

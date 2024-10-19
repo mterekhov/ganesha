@@ -6,41 +6,40 @@
 #include <string>
 
 #include "gvulkandevice.h"
+#include "gshader.h"
+#include "gcommandservice.h"
 
 namespace spcGaneshaEngine {
 
-typedef std::vector<VkPipelineShaderStageCreateInfo> TShadersArray;
 
 class GShadersServiceProtocol {
 public:
     virtual void init() = 0;
-    virtual void destroy() = 0;
-    virtual TShadersArray getAllShadersArray() = 0;
-    virtual TShadersArray& getVertexShadersArray() = 0;
-    virtual TShadersArray& getFrgamentShadersArray() = 0;
-    virtual void addFragmentShader(const std::string& shaderFile) = 0;
-    virtual void addVertexShader(const std::string& shaderFile) = 0;
+    virtual void destroy(GVULKANDevice& vulkanDevice) = 0;
+    virtual void deployShader(std::shared_ptr<GShader> shader, GCommandServiceProtocol *commandService, GVULKANDevice& vulkanDevice) = 0;
+    virtual std::shared_ptr<GShader> createFragmentShader(const std::string& shaderFile) = 0;
+    virtual std::shared_ptr<GShader> createVertexShader(const std::string& shaderFile) = 0;
+    virtual TShadersPipelineInfoArray getShadersPipelineInfo(TShadersArray& shadersArray, const VkShaderStageFlagBits stage, GCommandServiceProtocol *commandService, GVULKANDevice& vulkanDevice) = 0;
+    virtual void destroyShader(std::shared_ptr<GShader> shader, VkDevice device) = 0;
+    virtual bool isDeployed(std::shared_ptr<GShader> shader) = 0;
 };
 
 class GShadersService: public GShadersServiceProtocol {
 public:
-    GShadersService(GVULKANDevice& vulkanDevice);
+    GShadersService();
     virtual ~GShadersService();
     
     void init() override;
-    void destroy() override;
-
-    TShadersArray getAllShadersArray() override;
-    TShadersArray& getVertexShadersArray() override;
-    TShadersArray& getFrgamentShadersArray() override;
-    void addFragmentShader(const std::string& shaderFile) override;
-    void addVertexShader(const std::string& shaderFile) override;
+    void destroy(GVULKANDevice& vulkanDevice) override;
+    void deployShader(std::shared_ptr<GShader> shader, GCommandServiceProtocol *commandService, GVULKANDevice& vulkanDevice) override;
+    TShadersPipelineInfoArray getShadersPipelineInfo(TShadersArray& shadersArray, const VkShaderStageFlagBits stage, GCommandServiceProtocol *commandService, GVULKANDevice& vulkanDevice) override;
+    std::shared_ptr<GShader> createFragmentShader(const std::string& shaderFile) override;
+    std::shared_ptr<GShader> createVertexShader(const std::string& shaderFile) override;
+    void destroyShader(std::shared_ptr<GShader> shader, VkDevice device) override;
+    bool isDeployed(std::shared_ptr<GShader> shader) override;
 
 private:
-    GVULKANDevice& vulkanDevice;
-    VkPipelineShaderStageCreateInfo createShader(const std::string& shaderFile,  const VkShaderStageFlagBits stage, VkDevice device);
-    TShadersArray fragmentShadersArray;
-    TShadersArray vertexShadersArray;
+    VkPipelineShaderStageCreateInfo shaderPipelineInfo(std::shared_ptr<GShader> shader, const VkShaderStageFlagBits stage);
 };
 
 };  //  spcGaneshaEngine

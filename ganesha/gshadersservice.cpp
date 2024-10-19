@@ -1,9 +1,11 @@
+#include <vulkan/vulkan.h>
+
 #include "gshadersservice.h"
 #include "gvulkantools.h"
 
 namespace spcGaneshaEngine {
 
-GShadersService::GShadersService(GVULKANDevice& vulkanDevice) : vulkanDevice(vulkanDevice) {
+GShadersService::GShadersService() {
     
 }
 
@@ -15,60 +17,65 @@ void GShadersService::init() {
     
 }
 
-void GShadersService::destroy() {
-    VkDevice device = vulkanDevice.getLogicalDevice();
-    for (auto shader:fragmentShadersArray) {
-        vkDestroyShaderModule(device, shader.module, nullptr);
+void GShadersService::destroy(GVULKANDevice& vulkanDevice) {
+}
+
+void GShadersService::destroyShader(std::shared_ptr<GShader> shader, VkDevice device) {
+    vkDestroyShaderModule(device, shader->getShaderModule(), nullptr);
+}
+
+bool GShadersService::isDeployed(std::shared_ptr<GShader> shader) {
+    if (shader->getShaderModule() == VK_NULL_HANDLE) {
+        return false;
     }
-    fragmentShadersArray.clear();
     
-    for (auto shader:vertexShadersArray) {
-        vkDestroyShaderModule(device, shader.module, nullptr);
-    }
-    vertexShadersArray.clear();
+    return true;
 }
 
-TShadersArray GShadersService::getAllShadersArray() {
-    TShadersArray result = vertexShadersArray;
-
-    result.insert(result.end(), fragmentShadersArray.begin(), fragmentShadersArray.end());
-
-    return result;
-}
-
-void GShadersService::addFragmentShader(const std::string& shaderFile) {
-    fragmentShadersArray.push_back(createShader(shaderFile, VK_SHADER_STAGE_FRAGMENT_BIT, vulkanDevice.getLogicalDevice()));
-}
-
-TShadersArray& GShadersService::getFrgamentShadersArray() {
-    return fragmentShadersArray;
-}
-
-void GShadersService::addVertexShader(const std::string& shaderFile) {
-    vertexShadersArray.push_back(createShader(shaderFile, VK_SHADER_STAGE_VERTEX_BIT, vulkanDevice.getLogicalDevice()));
-}
-
-TShadersArray& GShadersService::getVertexShadersArray() {
-    return vertexShadersArray;
-}
-
-VkPipelineShaderStageCreateInfo GShadersService::createShader(const std::string& shaderFile, const VkShaderStageFlagBits stage, VkDevice device) {
+void GShadersService::deployShader(std::shared_ptr<GShader> shader, GCommandServiceProtocol *commandService, GVULKANDevice& vulkanDevice) {
     GVULKANTools tools;
-    const std::vector<uint8_t> code = tools.readFile(shaderFile);
+    const std::vector<uint8_t> code = tools.readFile(shader->getShaderFileName());
     VkShaderModuleCreateInfo createInfo = { };
     createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
     createInfo.codeSize = code.size();
     createInfo.pCode = reinterpret_cast<const TUInt*>(code.data());
     
-    VkShaderModule shaderModule;
-    if (vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
+    VkShaderModule newModule;
+    if (vkCreateShaderModule(vulkanDevice.getLogicalDevice(), &createInfo, nullptr, &newModule) != VK_SUCCESS) {
         GLOG_ERROR("No chance to create shader module\n");
     }
+    shader->setShaderModule(newModule);
+}
+
+std::shared_ptr<GShader> GShadersService::createFragmentShader(const std::string& shaderFile) {
+    std::shared_ptr<GShader> newShader = std::make_shared<GShader>(shaderFile);
+    return newShader;
+}
+
+std::shared_ptr<GShader> GShadersService::createVertexShader(const std::string& shaderFile) {
+    std::shared_ptr<GShader> newShader = std::make_shared<GShader>(shaderFile);
+    return newShader;
+}
+
+TShadersPipelineInfoArray GShadersService::getShadersPipelineInfo(TShadersArray& shadersArray, const VkShaderStageFlagBits stage, GCommandServiceProtocol *commandService, GVULKANDevice& vulkanDevice) {
+    TShadersPipelineInfoArray infoArray;
     
+    for (std::shared_ptr<GShader> shader:shadersArray) {
+        if (!isDeployed(shader)) {
+            deployShader(shader, commandService, vulkanDevice);
+        }
+        infoArray.push_back(shaderPipelineInfo(shader, VK_SHADER_STAGE_FRAGMENT_BIT));
+    }
+
+    return infoArray;
+}
+
+VkPipelineShaderStageCreateInfo GShadersService::shaderPipelineInfo(std::shared_ptr<GShader> shader, const VkShaderStageFlagBits stage) {
     VkPipelineShaderStageCreateInfo shaderStageInfo = { };
+    
     shaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
     shaderStageInfo.stage = stage;
-    shaderStageInfo.module = shaderModule;
+    shaderStageInfo.module = shader->getShaderModule();
     shaderStageInfo.pName = "main";
     
     return shaderStageInfo;
