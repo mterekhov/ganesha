@@ -5,6 +5,7 @@
 
 #include "gvulkandevice.h"
 #include "gcommandservice.h"
+#include "ganeshatypes.h"
 
 namespace spcGaneshaEngine {
 
@@ -41,6 +42,6 @@ private:
     VkDeviceMemory allocateBufferMemory(VkBuffer originalBuffer, const VkMemoryPropertyFlags properties, GVULKANDevice& vulkanDevice);
 };
 
-}   //  namespace spcGaneshaEngine
+};   //  namespace spcGaneshaEngine
 
 #endif  //  SPCGANESHAENGINE_GVULKANBUFFER_H

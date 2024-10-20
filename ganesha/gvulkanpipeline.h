@@ -8,6 +8,7 @@
 #include "gvulkandevice.h"
 #include "gvulkanswapchain.h"
 #include "gdescriptorsetservice.h"
+#include "gshadersservice.h"
 
 namespace spcGaneshaEngine {
 
@@ -18,7 +19,7 @@ public:
     
     void createPipeline(GVULKANDevice& vulkanDevice, 
                         GVULKANSwapChain& swapChain,
-                        std::vector<VkPipelineShaderStageCreateInfo> &shadersArray,
+                        std::vector<VkPipelineShaderStageCreateInfo>& shadersArray,
                         GDescriptorsetServiceProtocol *descriptorsetService);
     void destroyPipeline(GVULKANDevice& vulkanDevice);
     VkPipeline getGraphicsPipeline();

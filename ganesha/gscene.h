@@ -21,8 +21,8 @@ public:
     std::vector<std::shared_ptr<GMesh>> meshesArray;
     
     std::vector<std::shared_ptr<GVULKANImage>> materialsArray;
-    TShadersArray vertexShadersArray;
-    TShadersArray fragmentShadersArray;
+    std::vector<std::shared_ptr<GShader>> vertexShadersArray;
+    std::vector<std::shared_ptr<GShader>> fragmentShadersArray;
 };
 
 };  //  spcGaneshaEngine

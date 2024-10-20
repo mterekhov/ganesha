@@ -9,7 +9,7 @@ GVULKANPipeline::GVULKANPipeline() {
 GVULKANPipeline::~GVULKANPipeline() {
 }
 
-void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapChain& swapChain, std::vector<VkPipelineShaderStageCreateInfo> &shadersArray, GDescriptorsetServiceProtocol *descriptorsetService) {
+void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapChain& swapChain, std::vector<VkPipelineShaderStageCreateInfo>& shadersArray, GDescriptorsetServiceProtocol *descriptorsetService) {
     VkPipelineVertexInputStateCreateInfo vertexInputInfo = { };
     std::vector<VkVertexInputBindingDescription> bindingDescription = descriptorsetService->getBindingDescription();
     std::vector<VkVertexInputAttributeDescription> attributeDescription = descriptorsetService->getAttributeDescriptions();

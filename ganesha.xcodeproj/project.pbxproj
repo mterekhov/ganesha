@@ -45,6 +45,8 @@
 		DE7DD1632B5A8A6E00E22894 /* gcommandservice.h in Headers */ = {isa = PBXBuildFile; fileRef = DE7DD1612B5A8A6E00E22894 /* gcommandservice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE7FAE422B9E408C00E4C648 /* gsceneservice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE7FAE402B9E408C00E4C648 /* gsceneservice.cpp */; };
 		DE7FAE432B9E408C00E4C648 /* gsceneservice.h in Headers */ = {isa = PBXBuildFile; fileRef = DE7FAE412B9E408C00E4C648 /* gsceneservice.h */; };
+		DE8E318B2CC2B7F90026F9ED /* gshader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE8E31892CC2B7F90026F9ED /* gshader.cpp */; };
+		DE8E318C2CC2B7F90026F9ED /* gshader.h in Headers */ = {isa = PBXBuildFile; fileRef = DE8E318A2CC2B7F90026F9ED /* gshader.h */; };
 		DE9D0CA12B4A14D500EA0B7C /* gvulkanpipeline.h in Headers */ = {isa = PBXBuildFile; fileRef = DE9D0C722B4A14D400EA0B7C /* gvulkanpipeline.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE9D0CA22B4A14D500EA0B7C /* gvulkantools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE9D0C732B4A14D400EA0B7C /* gvulkantools.cpp */; };
 		DE9D0CA32B4A14D500EA0B7C /* gpoint.h in Headers */ = {isa = PBXBuildFile; fileRef = DE9D0C742B4A14D400EA0B7C /* gpoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -138,6 +140,8 @@
 		DE7FAE402B9E408C00E4C648 /* gsceneservice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gsceneservice.cpp; path = ganesha/gsceneservice.cpp; sourceTree = "<group>"; };
 		DE7FAE412B9E408C00E4C648 /* gsceneservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gsceneservice.h; path = ganesha/gsceneservice.h; sourceTree = "<group>"; };
 		DE82CE5C2B4A149500EF0925 /* ganesha.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ganesha.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE8E31892CC2B7F90026F9ED /* gshader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gshader.cpp; path = ganesha/gshader.cpp; sourceTree = "<group>"; };
+		DE8E318A2CC2B7F90026F9ED /* gshader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gshader.h; path = ganesha/gshader.h; sourceTree = "<group>"; };
 		DE9D0C722B4A14D400EA0B7C /* gvulkanpipeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvulkanpipeline.h; path = ganesha/gvulkanpipeline.h; sourceTree = "<group>"; };
 		DE9D0C732B4A14D400EA0B7C /* gvulkantools.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gvulkantools.cpp; path = ganesha/gvulkantools.cpp; sourceTree = "<group>"; };
 		DE9D0C742B4A14D400EA0B7C /* gpoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gpoint.h; path = ganesha/gpoint.h; sourceTree = "<group>"; };
@@ -265,8 +269,6 @@
 				DE9D0C982B4A14D500EA0B7C /* gvulkanswapchain.cpp */,
 				DE9D0C8F2B4A14D500EA0B7C /* gvulkanbuffer.h */,
 				DE9D0C872B4A14D400EA0B7C /* gvulkanbuffer.cpp */,
-				DE9D0C762B4A14D400EA0B7C /* gvulkanimage.h */,
-				DE9D0C962B4A14D500EA0B7C /* gvulkanimage.cpp */,
 				DEDF76772B58711000F569A7 /* gdescriptorsetservice.h */,
 				DEDF76762B58711000F569A7 /* gdescriptorsetservice.cpp */,
 				DE7DD1612B5A8A6E00E22894 /* gcommandservice.h */,
@@ -304,12 +306,10 @@
 		DE7FAE3F2B9E3CDD00E4C648 /* Content */ = {
 			isa = PBXGroup;
 			children = (
-				DEBE14902B4DC2C5001EF6FB /* gmaterialsservice.h */,
-				DEBE148F2B4DC2C5001EF6FB /* gmaterialsservice.cpp */,
+				DE8E31882CC2B7D10026F9ED /* Shaders */,
+				DE8E31872CC2B7BE0026F9ED /* Materials */,
 				DE2BE8002B7AC75D0047C5D5 /* gcameradata.h */,
 				DE2BE7FF2B7AC75D0047C5D5 /* gcameradata.cpp */,
-				DEFDBCFA2B6C0569001EBFF6 /* gshadersservice.h */,
-				DEFDBCF92B6C0569001EBFF6 /* gshadersservice.cpp */,
 				DE69D20C2B4BFA63002D28E2 /* Scene */,
 				DEBE148E2B4C8B89001EF6FB /* Meshes */,
 			);
@@ -351,6 +351,28 @@
 				DE5FD1412B8693F0002207A1 /* mackeycode.h */,
 			);
 			name = ganesha;
+			sourceTree = "<group>";
+		};
+		DE8E31872CC2B7BE0026F9ED /* Materials */ = {
+			isa = PBXGroup;
+			children = (
+				DE9D0C762B4A14D400EA0B7C /* gvulkanimage.h */,
+				DE9D0C962B4A14D500EA0B7C /* gvulkanimage.cpp */,
+				DEBE14902B4DC2C5001EF6FB /* gmaterialsservice.h */,
+				DEBE148F2B4DC2C5001EF6FB /* gmaterialsservice.cpp */,
+			);
+			name = Materials;
+			sourceTree = "<group>";
+		};
+		DE8E31882CC2B7D10026F9ED /* Shaders */ = {
+			isa = PBXGroup;
+			children = (
+				DE8E318A2CC2B7F90026F9ED /* gshader.h */,
+				DE8E31892CC2B7F90026F9ED /* gshader.cpp */,
+				DEFDBCFA2B6C0569001EBFF6 /* gshadersservice.h */,
+				DEFDBCF92B6C0569001EBFF6 /* gshadersservice.cpp */,
+			);
+			name = Shaders;
 			sourceTree = "<group>";
 		};
 		DE9D0CD02B4A17E500EA0B7C /* Frameworks */ = {
@@ -420,6 +442,7 @@
 				DE9D0CC12B4A14D500EA0B7C /* glog.h in Headers */,
 				DE2BE7EA2B7A8F870047C5D5 /* gmouseevent.h in Headers */,
 				DE9D0CBF2B4A14D500EA0B7C /* gpoint2d.h in Headers */,
+				DE8E318C2CC2B7F90026F9ED /* gshader.h in Headers */,
 				DE9D0CC22B4A14D500EA0B7C /* ganesha.h in Headers */,
 				DE2BE7ED2B7A8F870047C5D5 /* gkeyboardevent.h in Headers */,
 				DE2BE7F62B7ABECA0047C5D5 /* gsystemlayer.h in Headers */,
@@ -556,6 +579,7 @@
 				DE9D0CAD2B4A14D500EA0B7C /* gvector.cpp in Sources */,
 				DE69D20F2B4BFAA6002D28E2 /* gscenenode.cpp in Sources */,
 				DEDD0F262B6AAF6C00F6F9B1 /* gwindowevent.cpp in Sources */,
+				DE8E318B2CC2B7F90026F9ED /* gshader.cpp in Sources */,
 				DE2BE7F52B7ABECA0047C5D5 /* gsystemlayer.cpp in Sources */,
 				DE9D0CC32B4A14D500EA0B7C /* gvulkanpipeline.cpp in Sources */,
 				DE2BE7FD2B7AC5FF0047C5D5 /* gupdateviewmatrixevent.cpp in Sources */,

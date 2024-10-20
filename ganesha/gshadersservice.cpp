@@ -57,8 +57,8 @@ std::shared_ptr<GShader> GShadersService::createVertexShader(const std::string& 
     return newShader;
 }
 
-TShadersPipelineInfoArray GShadersService::getShadersPipelineInfo(TShadersArray& shadersArray, const VkShaderStageFlagBits stage, GCommandServiceProtocol *commandService, GVULKANDevice& vulkanDevice) {
-    TShadersPipelineInfoArray infoArray;
+std::vector<VkPipelineShaderStageCreateInfo> GShadersService::getShadersPipelineInfo(std::vector<std::shared_ptr<GShader>>& shadersArray, const VkShaderStageFlagBits stage, GCommandServiceProtocol *commandService, GVULKANDevice& vulkanDevice) {
+    std::vector<VkPipelineShaderStageCreateInfo> infoArray;
     
     for (std::shared_ptr<GShader> shader:shadersArray) {
         if (!isDeployed(shader)) {
