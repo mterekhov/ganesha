@@ -7,6 +7,15 @@
 
 namespace spcGaneshaEngine {
 
+enum EMovementDirection {
+    MOVEMENT_DIRECTION_UP,
+    MOVEMENT_DIRECTION_DOWN,
+    MOVEMENT_DIRECTION_FORWARD,
+    MOVEMENT_DIRECTION_BACKWARD,
+    MOVEMENT_DIRECTION_STRAFE_LEFT,
+    MOVEMENT_DIRECTION_STRAFE_RIGHT
+};
+
 class GCameraData {
 public:
     GCameraData();
