@@ -3,25 +3,30 @@
 
 namespace spcGaneshaEngine {
 
-GVULKANSwapChain::GVULKANSwapChain() {
+GVULKANSwapChain::GVULKANSwapChain() : swapChain(VK_NULL_HANDLE), imageFormat(VK_FORMAT_UNDEFINED), extent({0, 0}), renderPass(VK_NULL_HANDLE), depthImage("") {
 }
 
 GVULKANSwapChain::~GVULKANSwapChain() {
 }
 
 void GVULKANSwapChain::createSwapChain(const TUInt screenWidth, const TUInt screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
-    createSwapChain(screenWidth, screenHeight, vulkanDevice, surface, false);
+    createSwapChain(screenWidth, screenHeight, true, surface, vulkanDevice);
 }
 
 void GVULKANSwapChain::destroySwapChain(GVULKANDevice& vulkanDevice) {
+    if (swapChain == VK_NULL_HANDLE) {
+        return;
+    }
+    
     destroyExtentDependency(vulkanDevice);
     destroyRenderPass(vulkanDevice.getLogicalDevice());
 }
 
 void GVULKANSwapChain::updateScreenSize(const TUInt screenWidth, const TUInt screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
     vkDeviceWaitIdle(vulkanDevice.getLogicalDevice());
+    
     destroyExtentDependency(vulkanDevice);
-    createSwapChain(screenWidth, screenHeight, vulkanDevice, surface, true);
+    createSwapChain(screenWidth, screenHeight, false, surface, vulkanDevice);
 }
 
 std::vector<VkImageView>& GVULKANSwapChain::getImageViewsArray() {
@@ -54,15 +59,15 @@ std::vector<VkFramebuffer>& GVULKANSwapChain::getFramebuffers() {
 
 #pragma mark - Routine -
 
-void GVULKANSwapChain::createSwapChain(const TUInt screenWidth, const TUInt screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface, const TBool recreateSwapChain) {
+void GVULKANSwapChain::createSwapChain(const TUInt screenWidth, const TUInt screenHeight, const TBool shouldCreateRenderPass, VkSurfaceKHR& surface, GVULKANDevice& vulkanDevice) {
     SwapChainSupportDetails supportDetails = vulkanDevice.querySwapChainSupport(surface);
     
     swapChain = createNewSwapChain(screenWidth, screenHeight, supportDetails, vulkanDevice, surface);
     imageFormat = selectSwapSurfaceFormat(supportDetails.formats).format;
     extent = selectSwapExtent(supportDetails.surfaceCapabilities, screenWidth, screenHeight);
 
-    if (!recreateSwapChain) {
-        renderPass = createRenderPass(vulkanDevice, imageFormat);
+    if (shouldCreateRenderPass) {
+        renderPass = createRenderPass(imageFormat, vulkanDevice);
     }
 
     depthImage.createImage(extent,
@@ -141,15 +146,20 @@ void GVULKANSwapChain::destroyExtentDependency(GVULKANDevice& vulkanDevice) {
     }
     
     depthImage.destroyImage(vulkanDevice.getLogicalDevice());
-
+    depthImage = GVULKANImage("");
+    
     vkDestroySwapchainKHR(vulkanDevice.getLogicalDevice(), swapChain, nullptr);
+    swapChain = VK_NULL_HANDLE;
+    extent = {0, 0};
+    imageFormat = VK_FORMAT_UNDEFINED;
 }
 
 void GVULKANSwapChain::destroyRenderPass(VkDevice device) {
     vkDestroyRenderPass(device, renderPass, nullptr);
+    renderPass = VK_NULL_HANDLE;
 }
 
-VkRenderPass GVULKANSwapChain::createRenderPass(GVULKANDevice& vulkanDevice, VkFormat format) {
+VkRenderPass GVULKANSwapChain::createRenderPass(VkFormat format, GVULKANDevice& vulkanDevice) {
     VkAttachmentDescription colorAttachment = { };
     colorAttachment.format = format;
     colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
