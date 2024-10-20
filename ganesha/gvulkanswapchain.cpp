@@ -3,14 +3,18 @@
 
 namespace spcGaneshaEngine {
 
-GVULKANSwapChain::GVULKANSwapChain() : swapChain(VK_NULL_HANDLE), imageFormat(VK_FORMAT_UNDEFINED), extent({0, 0}), renderPass(VK_NULL_HANDLE), depthImage("") {
+GVULKANSwapChain::GVULKANSwapChain() : swapChain(VK_NULL_HANDLE), imageFormat(VK_FORMAT_UNDEFINED), extent({800, 600}), renderPass(VK_NULL_HANDLE), depthImage("") {
 }
 
 GVULKANSwapChain::~GVULKANSwapChain() {
 }
 
+void GVULKANSwapChain::createSwapChain(VkSurfaceKHR& surface, GVULKANDevice& vulkanDevice) {
+    createSwapChain(extent, true, surface, vulkanDevice);
+}
+
 void GVULKANSwapChain::createSwapChain(const TUInt screenWidth, const TUInt screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
-    createSwapChain(screenWidth, screenHeight, true, surface, vulkanDevice);
+    createSwapChain({screenWidth, screenHeight}, true, surface, vulkanDevice);
 }
 
 void GVULKANSwapChain::destroySwapChain(GVULKANDevice& vulkanDevice) {
@@ -26,7 +30,7 @@ void GVULKANSwapChain::updateScreenSize(const TUInt screenWidth, const TUInt scr
     vkDeviceWaitIdle(vulkanDevice.getLogicalDevice());
     
     destroySwapChainAndDependency(vulkanDevice);
-    createSwapChain(screenWidth, screenHeight, false, surface, vulkanDevice);
+    createSwapChain({screenWidth, screenHeight}, false, surface, vulkanDevice);
 }
 
 std::vector<VkImageView>& GVULKANSwapChain::getImageViewsArray() {
@@ -59,10 +63,10 @@ std::vector<VkFramebuffer>& GVULKANSwapChain::getFramebuffers() {
 
 #pragma mark - Routine -
 
-void GVULKANSwapChain::createSwapChain(const TUInt screenWidth, const TUInt screenHeight, const TBool shouldCreateRenderPass, VkSurfaceKHR& surface, GVULKANDevice& vulkanDevice) {
+void GVULKANSwapChain::createSwapChain(const VkExtent2D& initialExtent, const TBool shouldCreateRenderPass, VkSurfaceKHR& surface, GVULKANDevice& vulkanDevice) {
     SwapChainSupportDetails supportDetails = vulkanDevice.querySwapChainSupport(surface);
     
-    swapChain = createNewSwapChain(screenWidth, screenHeight, supportDetails, vulkanDevice, surface);
+    swapChain = createNewSwapChain(initialExtent, supportDetails, vulkanDevice, surface);
     imageFormat = selectSwapSurfaceFormat(supportDetails.formats).format;
     extent = selectSwapExtent(supportDetails.surfaceCapabilities, screenWidth, screenHeight);
 
@@ -81,9 +85,9 @@ void GVULKANSwapChain::createSwapChain(const TUInt screenWidth, const TUInt scre
     framebuffersArray = createFramebuffers(vulkanDevice.getLogicalDevice(), imageViewsArray, depthImage.getImageView(), renderPass, extent);
 }
 
-VkSwapchainKHR GVULKANSwapChain::createNewSwapChain(const TUInt screenWidth, const TUInt screenHeight, const SwapChainSupportDetails& supportDetails, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
+VkSwapchainKHR GVULKANSwapChain::createNewSwapChain(const VkExtent2D& initialExtent, const SwapChainSupportDetails& supportDetails, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
     VkSurfaceFormatKHR surfaceFormat = selectSwapSurfaceFormat(supportDetails.formats);
-    VkExtent2D newExtent = selectSwapExtent(supportDetails.surfaceCapabilities, screenWidth, screenHeight);
+    VkExtent2D newExtent = selectSwapExtent(supportDetails.surfaceCapabilities, initialExtent);
     
     TUInt count = supportDetails.surfaceCapabilities.minImageCount + 1;
     if (supportDetails.surfaceCapabilities.maxImageCount > 0 && count > supportDetails.surfaceCapabilities.maxImageCount) {
@@ -262,8 +266,8 @@ std::vector<VkImageView> GVULKANSwapChain::createImageViews(VkDevice logicalDevi
     return newImageViewsArray;
 }
 
-VkExtent2D GVULKANSwapChain::selectSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities, const TUInt screenWidth, const TUInt screenHeight) {
-    VkExtent2D actualExtent = {screenWidth, screenHeight};
+VkExtent2D GVULKANSwapChain::selectSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities, const VkExtent2D& initialExtent) {
+    VkExtent2D actualExtent = initialExtent;
     
     if (surfaceCapabilities.currentExtent.width != std::numeric_limits<TUInt>::max()) {
         return surfaceCapabilities.currentExtent;
