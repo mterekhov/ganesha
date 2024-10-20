@@ -7,10 +7,10 @@ namespace spcGaneshaEngine {
 
 class GEventShell {
 public:
-    GEventShell(GEvent *event);
+    GEventShell(std::shared_ptr<GEvent> event);
     ~GEventShell();
     
-    GEvent *event;    
+    std::shared_ptr<GEvent> event;
 };
 
 };

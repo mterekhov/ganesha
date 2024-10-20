@@ -2,7 +2,7 @@
 
 namespace spcGaneshaEngine {
 
-GEventShell::GEventShell(GEvent *event) : event(event) {
+GEventShell::GEventShell(std::shared_ptr<GEvent> event) : event(event) {
     
 }
 

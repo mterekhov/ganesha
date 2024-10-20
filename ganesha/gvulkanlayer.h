@@ -10,7 +10,7 @@ namespace spcGaneshaEngine {
 /// This layer should process keyboard, mouse and window events
 class GVULKANLayer : public GLayer {
 public:
-    GVULKANLayer(const std::string& applicationTitle, void *metalLayer, GScene& content, GEventsServiceProtocol *eventsService);
+    GVULKANLayer(const std::string& applicationTitle, void *metalLayer, GEventsServiceProtocol *eventsService);
     virtual ~GVULKANLayer();
     
     void onAttach() override;
@@ -19,12 +19,14 @@ public:
     std::vector<GEventShell> onEvent(GEventShell& shell) override;
 
 private:
-    GGraphicsAPIProtocol *vulkanAPI;
-    void* metalLayer;
-    GCamera camera;
+    std::shared_ptr<GVULKANAPI> vulkanAPI;
+    GScene scene;
     
-    std::vector<GEventShell> processUpdateViewMatrix(GEvent *event);
-    std::vector<GEventShell> processUpdateViewport(GEvent *event);
+    std::vector<GEventShell> processCameraPositionUpdate(std::shared_ptr<GEvent> event);
+    std::vector<GEventShell> processCameraLookUpdate(std::shared_ptr<GEvent> event);
+    std::vector<GEventShell> processLoadGundle(std::shared_ptr<GEvent> event);
+    std::vector<GEventShell> processUpdateViewMatrix(std::shared_ptr<GEvent> event);
+    std::vector<GEventShell> processUpdateViewport(std::shared_ptr<GEvent> event);
 };
 
 };  //  spcGaneshaEngine

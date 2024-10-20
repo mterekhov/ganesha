@@ -41,12 +41,18 @@
 		DE6C59FC2B7542A400795843 /* glayersservice.h in Headers */ = {isa = PBXBuildFile; fileRef = DE6C59FA2B7542A400795843 /* glayersservice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE6C5ACB2B757A6100795843 /* gapplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE6C5AC92B757A6100795843 /* gapplication.cpp */; };
 		DE6C5ACC2B757A6100795843 /* gapplication.h in Headers */ = {isa = PBXBuildFile; fileRef = DE6C5ACA2B757A6100795843 /* gapplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE7A417A2CC57F3C000C6C6A /* gupdatecameralookevent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE7A41782CC57F3C000C6C6A /* gupdatecameralookevent.cpp */; };
+		DE7A417B2CC57F3C000C6C6A /* gupdatecameralookevent.h in Headers */ = {isa = PBXBuildFile; fileRef = DE7A41792CC57F3C000C6C6A /* gupdatecameralookevent.h */; };
+		DE7A41802CC5860C000C6C6A /* gupdatecamerapositionevent.h in Headers */ = {isa = PBXBuildFile; fileRef = DE7A417E2CC5860C000C6C6A /* gupdatecamerapositionevent.h */; };
+		DE7A41812CC5860C000C6C6A /* gupdatecamerapositionevent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE7A417F2CC5860C000C6C6A /* gupdatecamerapositionevent.cpp */; };
 		DE7DD1622B5A8A6E00E22894 /* gcommandservice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE7DD1602B5A8A6E00E22894 /* gcommandservice.cpp */; };
 		DE7DD1632B5A8A6E00E22894 /* gcommandservice.h in Headers */ = {isa = PBXBuildFile; fileRef = DE7DD1612B5A8A6E00E22894 /* gcommandservice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE7FAE422B9E408C00E4C648 /* gsceneservice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE7FAE402B9E408C00E4C648 /* gsceneservice.cpp */; };
 		DE7FAE432B9E408C00E4C648 /* gsceneservice.h in Headers */ = {isa = PBXBuildFile; fileRef = DE7FAE412B9E408C00E4C648 /* gsceneservice.h */; };
 		DE8E318B2CC2B7F90026F9ED /* gshader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE8E31892CC2B7F90026F9ED /* gshader.cpp */; };
 		DE8E318C2CC2B7F90026F9ED /* gshader.h in Headers */ = {isa = PBXBuildFile; fileRef = DE8E318A2CC2B7F90026F9ED /* gshader.h */; };
+		DE8E318F2CC4FE770026F9ED /* gloadgundleevent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE8E318D2CC4FE770026F9ED /* gloadgundleevent.cpp */; };
+		DE8E31902CC4FE770026F9ED /* gloadgundleevent.h in Headers */ = {isa = PBXBuildFile; fileRef = DE8E318E2CC4FE770026F9ED /* gloadgundleevent.h */; };
 		DE9D0CA12B4A14D500EA0B7C /* gvulkanpipeline.h in Headers */ = {isa = PBXBuildFile; fileRef = DE9D0C722B4A14D400EA0B7C /* gvulkanpipeline.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE9D0CA22B4A14D500EA0B7C /* gvulkantools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE9D0C732B4A14D400EA0B7C /* gvulkantools.cpp */; };
 		DE9D0CA32B4A14D500EA0B7C /* gpoint.h in Headers */ = {isa = PBXBuildFile; fileRef = DE9D0C742B4A14D400EA0B7C /* gpoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -92,8 +98,6 @@
 		DEBE14962B51E548001EF6FB /* gscene.h in Headers */ = {isa = PBXBuildFile; fileRef = DEBE14942B51E548001EF6FB /* gscene.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DEDD0F222B6AAE1D00F6F9B1 /* gevent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEDD0F202B6AAE1D00F6F9B1 /* gevent.cpp */; };
 		DEDD0F232B6AAE1D00F6F9B1 /* gevent.h in Headers */ = {isa = PBXBuildFile; fileRef = DEDD0F212B6AAE1D00F6F9B1 /* gevent.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		DEDD0F262B6AAF6C00F6F9B1 /* gwindowevent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEDD0F242B6AAF6C00F6F9B1 /* gwindowevent.cpp */; };
-		DEDD0F272B6AAF6D00F6F9B1 /* gwindowevent.h in Headers */ = {isa = PBXBuildFile; fileRef = DEDD0F252B6AAF6C00F6F9B1 /* gwindowevent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DEDF76782B58711000F569A7 /* gdescriptorsetservice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEDF76762B58711000F569A7 /* gdescriptorsetservice.cpp */; };
 		DEDF76792B58711000F569A7 /* gdescriptorsetservice.h in Headers */ = {isa = PBXBuildFile; fileRef = DEDF76772B58711000F569A7 /* gdescriptorsetservice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DEFDBCFB2B6C0569001EBFF6 /* gshadersservice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DEFDBCF92B6C0569001EBFF6 /* gshadersservice.cpp */; };
@@ -135,6 +139,10 @@
 		DE6C59FA2B7542A400795843 /* glayersservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = glayersservice.h; path = ganesha/glayersservice.h; sourceTree = "<group>"; };
 		DE6C5AC92B757A6100795843 /* gapplication.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gapplication.cpp; path = ganesha/gapplication.cpp; sourceTree = "<group>"; };
 		DE6C5ACA2B757A6100795843 /* gapplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gapplication.h; path = ganesha/gapplication.h; sourceTree = "<group>"; };
+		DE7A41782CC57F3C000C6C6A /* gupdatecameralookevent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gupdatecameralookevent.cpp; path = ganesha/gupdatecameralookevent.cpp; sourceTree = "<group>"; };
+		DE7A41792CC57F3C000C6C6A /* gupdatecameralookevent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gupdatecameralookevent.h; path = ganesha/gupdatecameralookevent.h; sourceTree = "<group>"; };
+		DE7A417E2CC5860C000C6C6A /* gupdatecamerapositionevent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gupdatecamerapositionevent.h; path = ganesha/gupdatecamerapositionevent.h; sourceTree = "<group>"; };
+		DE7A417F2CC5860C000C6C6A /* gupdatecamerapositionevent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gupdatecamerapositionevent.cpp; path = ganesha/gupdatecamerapositionevent.cpp; sourceTree = "<group>"; };
 		DE7DD1602B5A8A6E00E22894 /* gcommandservice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gcommandservice.cpp; path = ganesha/gcommandservice.cpp; sourceTree = "<group>"; };
 		DE7DD1612B5A8A6E00E22894 /* gcommandservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gcommandservice.h; path = ganesha/gcommandservice.h; sourceTree = "<group>"; };
 		DE7FAE402B9E408C00E4C648 /* gsceneservice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gsceneservice.cpp; path = ganesha/gsceneservice.cpp; sourceTree = "<group>"; };
@@ -142,6 +150,8 @@
 		DE82CE5C2B4A149500EF0925 /* ganesha.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ganesha.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE8E31892CC2B7F90026F9ED /* gshader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gshader.cpp; path = ganesha/gshader.cpp; sourceTree = "<group>"; };
 		DE8E318A2CC2B7F90026F9ED /* gshader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gshader.h; path = ganesha/gshader.h; sourceTree = "<group>"; };
+		DE8E318D2CC4FE770026F9ED /* gloadgundleevent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gloadgundleevent.cpp; path = ganesha/gloadgundleevent.cpp; sourceTree = "<group>"; };
+		DE8E318E2CC4FE770026F9ED /* gloadgundleevent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gloadgundleevent.h; path = ganesha/gloadgundleevent.h; sourceTree = "<group>"; };
 		DE9D0C722B4A14D400EA0B7C /* gvulkanpipeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvulkanpipeline.h; path = ganesha/gvulkanpipeline.h; sourceTree = "<group>"; };
 		DE9D0C732B4A14D400EA0B7C /* gvulkantools.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gvulkantools.cpp; path = ganesha/gvulkantools.cpp; sourceTree = "<group>"; };
 		DE9D0C742B4A14D400EA0B7C /* gpoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gpoint.h; path = ganesha/gpoint.h; sourceTree = "<group>"; };
@@ -187,8 +197,6 @@
 		DEBE14942B51E548001EF6FB /* gscene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gscene.h; path = ganesha/gscene.h; sourceTree = "<group>"; };
 		DEDD0F202B6AAE1D00F6F9B1 /* gevent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gevent.cpp; path = ganesha/gevent.cpp; sourceTree = "<group>"; };
 		DEDD0F212B6AAE1D00F6F9B1 /* gevent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gevent.h; path = ganesha/gevent.h; sourceTree = "<group>"; };
-		DEDD0F242B6AAF6C00F6F9B1 /* gwindowevent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gwindowevent.cpp; path = ganesha/gwindowevent.cpp; sourceTree = "<group>"; };
-		DEDD0F252B6AAF6C00F6F9B1 /* gwindowevent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gwindowevent.h; path = ganesha/gwindowevent.h; sourceTree = "<group>"; };
 		DEDF76762B58711000F569A7 /* gdescriptorsetservice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gdescriptorsetservice.cpp; path = ganesha/gdescriptorsetservice.cpp; sourceTree = "<group>"; };
 		DEDF76772B58711000F569A7 /* gdescriptorsetservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gdescriptorsetservice.h; path = ganesha/gdescriptorsetservice.h; sourceTree = "<group>"; };
 		DEFDBCF92B6C0569001EBFF6 /* gshadersservice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gshadersservice.cpp; path = ganesha/gshadersservice.cpp; sourceTree = "<group>"; };
@@ -222,8 +230,8 @@
 		DE2BE8032B7D58860047C5D5 /* Layers */ = {
 			isa = PBXGroup;
 			children = (
-				DE6C59F92B7542A400795843 /* glayersservice.cpp */,
 				DE6C59FA2B7542A400795843 /* glayersservice.h */,
+				DE6C59F92B7542A400795843 /* glayersservice.cpp */,
 				DE6C59F62B7541C500795843 /* glayer.h */,
 				DE6C59F52B7541C500795843 /* glayer.cpp */,
 				DE2BE7F42B7ABECA0047C5D5 /* gsystemlayer.h */,
@@ -303,13 +311,39 @@
 			name = Scene;
 			sourceTree = "<group>";
 		};
+		DE7A417C2CC584A4000C6C6A /* SystemEvents */ = {
+			isa = PBXGroup;
+			children = (
+				DE2BE7E62B7A8F870047C5D5 /* gmouseevent.h */,
+				DE2BE7E72B7A8F870047C5D5 /* gmouseevent.cpp */,
+				DE2BE7E92B7A8F870047C5D5 /* gkeyboardevent.h */,
+				DE2BE7E82B7A8F870047C5D5 /* gkeyboardevent.cpp */,
+			);
+			name = SystemEvents;
+			sourceTree = "<group>";
+		};
+		DE7A417D2CC584B6000C6C6A /* VULKANEvents */ = {
+			isa = PBXGroup;
+			children = (
+				DE7A417F2CC5860C000C6C6A /* gupdatecamerapositionevent.cpp */,
+				DE7A417E2CC5860C000C6C6A /* gupdatecamerapositionevent.h */,
+				DE8E318E2CC4FE770026F9ED /* gloadgundleevent.h */,
+				DE8E318D2CC4FE770026F9ED /* gloadgundleevent.cpp */,
+				DE2BE7FC2B7AC5FF0047C5D5 /* gupdateviewmatrixevent.h */,
+				DE2BE7FB2B7AC5FF0047C5D5 /* gupdateviewmatrixevent.cpp */,
+				DE7A41792CC57F3C000C6C6A /* gupdatecameralookevent.h */,
+				DE7A41782CC57F3C000C6C6A /* gupdatecameralookevent.cpp */,
+				DE2BE8052B7D5A9B0047C5D5 /* gupdateviewportevent.h */,
+				DE2BE8042B7D5A9B0047C5D5 /* gupdateviewportevent.cpp */,
+			);
+			name = VULKANEvents;
+			sourceTree = "<group>";
+		};
 		DE7FAE3F2B9E3CDD00E4C648 /* Content */ = {
 			isa = PBXGroup;
 			children = (
 				DE8E31882CC2B7D10026F9ED /* Shaders */,
 				DE8E31872CC2B7BE0026F9ED /* Materials */,
-				DE2BE8002B7AC75D0047C5D5 /* gcameradata.h */,
-				DE2BE7FF2B7AC75D0047C5D5 /* gcameradata.cpp */,
 				DE69D20C2B4BFA63002D28E2 /* Scene */,
 				DEBE148E2B4C8B89001EF6FB /* Meshes */,
 			);
@@ -342,6 +376,8 @@
 				DE2BE7EF2B7AB3E20047C5D5 /* gviewport.cpp */,
 				DE9D0C7F2B4A14D400EA0B7C /* gcamera.h */,
 				DE9D0C772B4A14D400EA0B7C /* gcamera.cpp */,
+				DE2BE8002B7AC75D0047C5D5 /* gcameradata.h */,
+				DE2BE7FF2B7AC75D0047C5D5 /* gcameradata.cpp */,
 				DE69D1FF2B4B47C1002D28E2 /* Basics */,
 				DE69D2002B4B47D6002D28E2 /* VULKAN */,
 				DE69D2012B4B47F4002D28E2 /* Tools */,
@@ -404,16 +440,8 @@
 				DEDD0F202B6AAE1D00F6F9B1 /* gevent.cpp */,
 				DE2BE80D2B7D62090047C5D5 /* geventshell.h */,
 				DE2BE80C2B7D62090047C5D5 /* geventshell.cpp */,
-				DE2BE7E62B7A8F870047C5D5 /* gmouseevent.h */,
-				DE2BE7E72B7A8F870047C5D5 /* gmouseevent.cpp */,
-				DE2BE7E92B7A8F870047C5D5 /* gkeyboardevent.h */,
-				DE2BE7E82B7A8F870047C5D5 /* gkeyboardevent.cpp */,
-				DEDD0F252B6AAF6C00F6F9B1 /* gwindowevent.h */,
-				DEDD0F242B6AAF6C00F6F9B1 /* gwindowevent.cpp */,
-				DE2BE7FC2B7AC5FF0047C5D5 /* gupdateviewmatrixevent.h */,
-				DE2BE7FB2B7AC5FF0047C5D5 /* gupdateviewmatrixevent.cpp */,
-				DE2BE8052B7D5A9B0047C5D5 /* gupdateviewportevent.h */,
-				DE2BE8042B7D5A9B0047C5D5 /* gupdateviewportevent.cpp */,
+				DE7A417C2CC584A4000C6C6A /* SystemEvents */,
+				DE7A417D2CC584B6000C6C6A /* VULKANEvents */,
 			);
 			name = Events;
 			sourceTree = "<group>";
@@ -435,10 +463,10 @@
 				DE2BE80F2B7D62090047C5D5 /* geventshell.h in Headers */,
 				DE9D0CAF2B4A14D500EA0B7C /* ggraphicsapiprotocol.h in Headers */,
 				DE2BE8022B7AC75D0047C5D5 /* gcameradata.h in Headers */,
-				DEDD0F272B6AAF6D00F6F9B1 /* gwindowevent.h in Headers */,
 				DE9D0CCB2B4A14D500EA0B7C /* gvulkaninstance.h in Headers */,
 				DEDD0F232B6AAE1D00F6F9B1 /* gevent.h in Headers */,
 				DE9D0CB02B4A14D500EA0B7C /* ganeshatypes.h in Headers */,
+				DE8E31902CC4FE770026F9ED /* gloadgundleevent.h in Headers */,
 				DE9D0CC12B4A14D500EA0B7C /* glog.h in Headers */,
 				DE2BE7EA2B7A8F870047C5D5 /* gmouseevent.h in Headers */,
 				DE9D0CBF2B4A14D500EA0B7C /* gpoint2d.h in Headers */,
@@ -458,12 +486,14 @@
 				DE7DD1632B5A8A6E00E22894 /* gcommandservice.h in Headers */,
 				DE9D0CB52B4A14D500EA0B7C /* gvector.h in Headers */,
 				DE9D0CA72B4A14D500EA0B7C /* gquaternion.h in Headers */,
+				DE7A417B2CC57F3C000C6C6A /* gupdatecameralookevent.h in Headers */,
 				DE9D0CB42B4A14D500EA0B7C /* gtga.h in Headers */,
 				DE6C5ACC2B757A6100795843 /* gapplication.h in Headers */,
 				DE69D2182B4BFC3E002D28E2 /* gspritemesh.h in Headers */,
 				DE69D2142B4BFABB002D28E2 /* gmesh.h in Headers */,
 				DEFDBCFC2B6C0569001EBFF6 /* gshadersservice.h in Headers */,
 				DE69D2102B4BFAA6002D28E2 /* gscenenode.h in Headers */,
+				DE7A41802CC5860C000C6C6A /* gupdatecamerapositionevent.h in Headers */,
 				DE6C59F82B7541C500795843 /* glayer.h in Headers */,
 				DEDF76792B58711000F569A7 /* gdescriptorsetservice.h in Headers */,
 				DE9D0CC42B4A14D500EA0B7C /* gvulkantools.h in Headers */,
@@ -548,11 +578,13 @@
 				DE2BE7F92B7AC5530047C5D5 /* gvulkanlayer.cpp in Sources */,
 				DE2BE7EB2B7A8F870047C5D5 /* gmouseevent.cpp in Sources */,
 				DE2BE8012B7AC75D0047C5D5 /* gcameradata.cpp in Sources */,
+				DE7A41812CC5860C000C6C6A /* gupdatecamerapositionevent.cpp in Sources */,
 				DE9D0CC82B4A14D500EA0B7C /* gtga.cpp in Sources */,
 				DE2BE80A2B7D5D980047C5D5 /* geventsservice.cpp in Sources */,
 				DE6C5ACB2B757A6100795843 /* gapplication.cpp in Sources */,
 				DE9D0CC72B4A14D500EA0B7C /* gvulkanswapchain.cpp in Sources */,
 				DEDD0F222B6AAE1D00F6F9B1 /* gevent.cpp in Sources */,
+				DE8E318F2CC4FE770026F9ED /* gloadgundleevent.cpp in Sources */,
 				DE9D0CB32B4A14D500EA0B7C /* glog.cpp in Sources */,
 				DE9D0CCF2B4A14D500EA0B7C /* gcolor.cpp in Sources */,
 				DE9D0CB92B4A14D500EA0B7C /* gpoint2d.cpp in Sources */,
@@ -565,6 +597,7 @@
 				DEBE14952B51E548001EF6FB /* gscene.cpp in Sources */,
 				DE2BE7F12B7AB3E20047C5D5 /* gviewport.cpp in Sources */,
 				DE2BE7EC2B7A8F870047C5D5 /* gkeyboardevent.cpp in Sources */,
+				DE7A417A2CC57F3C000C6C6A /* gupdatecameralookevent.cpp in Sources */,
 				DE2BE8062B7D5A9B0047C5D5 /* gupdateviewportevent.cpp in Sources */,
 				DEFDBCFB2B6C0569001EBFF6 /* gshadersservice.cpp in Sources */,
 				DE2BE80E2B7D62090047C5D5 /* geventshell.cpp in Sources */,
@@ -578,7 +611,6 @@
 				DE9D0CBC2B4A14D500EA0B7C /* gvulkanapi.cpp in Sources */,
 				DE9D0CAD2B4A14D500EA0B7C /* gvector.cpp in Sources */,
 				DE69D20F2B4BFAA6002D28E2 /* gscenenode.cpp in Sources */,
-				DEDD0F262B6AAF6C00F6F9B1 /* gwindowevent.cpp in Sources */,
 				DE8E318B2CC2B7F90026F9ED /* gshader.cpp in Sources */,
 				DE2BE7F52B7ABECA0047C5D5 /* gsystemlayer.cpp in Sources */,
 				DE9D0CC32B4A14D500EA0B7C /* gvulkanpipeline.cpp in Sources */,
