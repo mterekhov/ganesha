@@ -140,10 +140,13 @@ void GVULKANSwapChain::destroyExtentDependency(GVULKANDevice& vulkanDevice) {
     for (auto framebuffer : framebuffersArray) {
         vkDestroyFramebuffer(vulkanDevice.getLogicalDevice(), framebuffer, nullptr);
     }
+    framebuffersArray.clear();
 
     for (auto imageView : imageViewsArray) {
         vkDestroyImageView(vulkanDevice.getLogicalDevice(), imageView, nullptr);
     }
+    imageViewsArray.clear();
+    imagesArray.clear();
     
     depthImage.destroyImage(vulkanDevice.getLogicalDevice());
     depthImage = GVULKANImage("");
