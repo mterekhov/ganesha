@@ -2,19 +2,19 @@
 
 namespace spcGaneshaEngine {
 
-GApplication::GApplication(GEventsServiceProtocol *eventsService, GLayersServiceProtocol *layerService, void *metalLayer, const GScene& loadContent) : layerService(layerService), eventsService(eventsService), content(loadContent) {
+GApplication::GApplication() : layerService(std::make_shared<spcGaneshaEngine::GLayersService>()),
+                               eventsService(std::make_shared<spcGaneshaEngine::GEventsService>()) {
+    layerService->init();
+    eventsService->init();
 }
 
 GApplication::~GApplication() {
     layerService->destroy();
     eventsService->destroy();
-    
-    delete layerService;
-    delete eventsService;
 }
 
 void GApplication::handleEvent(GEventShell& shell) {
-    //  In some cases it is needed that one type of events created another sequenmce of events.
+    //  In some cases it is needed that one type of events created another sequence of events.
     //  E.g. when position of object changed we need to update data in GPU memory. Or in case we moved camera we need to update projection matrix
     std::vector<GEventShell> additionalEvents = { shell };
     do {
@@ -22,7 +22,7 @@ void GApplication::handleEvent(GEventShell& shell) {
         additionalEvents.clear();
         for (auto shellIt = eventsArray.begin(); shellIt != eventsArray.end(); shellIt++) {
             for (auto it = layerService->begin(); it != layerService->end(); it++) {
-                GLayer *layer = *it;
+                std::shared_ptr<GLayer> layer = *it;
                 std::vector<GEventShell> tmpEvents = layer->onEvent(*shellIt);
                 if (!tmpEvents.empty()) {
                     additionalEvents.insert(additionalEvents.end(), tmpEvents.begin(), tmpEvents.end());
@@ -41,11 +41,11 @@ void GApplication::processRunLoop() {
     }
 }
 
-void GApplication::pushLayer(GLayer *layer) {
+void GApplication::pushLayer(std::shared_ptr<GLayer> layer) {
     layerService->pushLayer(layer);
 }
 
-void GApplication::pushOverlay(GLayer *layer) {
+void GApplication::pushOverlay(std::shared_ptr<GLayer> layer) {
     layerService->pushOverlay(layer);
 }
 

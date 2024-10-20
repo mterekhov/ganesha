@@ -2,28 +2,28 @@
 #define SPCGANESHAENGINE_GAPPLICATION_H
 
 #include "glayersservice.h"
+#include "geventsservice.h"
 #include "ganeshatypes.h"
 #include "gevent.h"
 #include "geventshell.h"
 #include "gvulkanapi.h"
-#include "geventsservice.h"
 
 namespace spcGaneshaEngine {
 
 class GApplication {
 public:
-    GApplication(GEventsServiceProtocol *eventsService, GLayersServiceProtocol *layerService, void *metalLayer, const GScene& loadContent);
+    GApplication();
     virtual ~GApplication();
 
     void handleEvent(GEventShell& shell);
     void processRunLoop();
-    void pushLayer(GLayer *layer);
-    void pushOverlay(GLayer *layer);
+    void pushLayer(std::shared_ptr<GLayer> layer);
+    void pushOverlay(std::shared_ptr<GLayer> layer);
 
-    //  dependency injections
-    GEventsServiceProtocol *eventsService;
-    GLayersServiceProtocol *layerService;
-    GScene content;
+    std::shared_ptr<GEventsServiceProtocol> eventsService;
+    
+private:
+    std::shared_ptr<GLayersServiceProtocol> layerService;
 };
 
 };  //  spcGaneshaEngine
