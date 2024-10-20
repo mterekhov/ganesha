@@ -15,23 +15,22 @@ void GLayersService::init() {
 }
 
 void GLayersService::destroy() {
-    for (GLayer * layer:layersArray) {
+    for (std::shared_ptr<GLayer> layer:layersArray) {
         layer->onDetach();
-        delete layer;
     }
 }
 
-void GLayersService::pushLayer(GLayer *layer) {
+void GLayersService::pushLayer(std::shared_ptr<GLayer> layer) {
     layerInsert = layersArray.emplace(layerInsert, layer);
     layer->onAttach();
 }
 
-void GLayersService::pushOverlay(GLayer *layer) {
+void GLayersService::pushOverlay(std::shared_ptr<GLayer> layer) {
     layersArray.emplace_back(layer);
     layer->onAttach();
 }
 
-void GLayersService::popLayer(GLayer *layer) {
+void GLayersService::popLayer(std::shared_ptr<GLayer> layer) {
     auto it = std::find(layersArray.begin(), layersArray.end(), layer);
     if (it != layersArray.end()) {
         (*it)->onDetach();
@@ -40,7 +39,7 @@ void GLayersService::popLayer(GLayer *layer) {
     }
 }
 
-void GLayersService::popOverlay(GLayer *layer) {
+void GLayersService::popOverlay(std::shared_ptr<GLayer> layer) {
     auto it = std::find(layersArray.begin(), layersArray.end(), layer);
     if (it != layersArray.end()) {
         (*it)->onDetach();
