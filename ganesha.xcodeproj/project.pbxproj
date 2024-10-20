@@ -325,14 +325,14 @@
 		DE7A417D2CC584B6000C6C6A /* VULKANEvents */ = {
 			isa = PBXGroup;
 			children = (
+				DE7A41792CC57F3C000C6C6A /* gupdatecameralookevent.h */,
+				DE7A41782CC57F3C000C6C6A /* gupdatecameralookevent.cpp */,
 				DE7A417F2CC5860C000C6C6A /* gupdatecamerapositionevent.cpp */,
 				DE7A417E2CC5860C000C6C6A /* gupdatecamerapositionevent.h */,
 				DE8E318E2CC4FE770026F9ED /* gloadgundleevent.h */,
 				DE8E318D2CC4FE770026F9ED /* gloadgundleevent.cpp */,
 				DE2BE7FC2B7AC5FF0047C5D5 /* gupdateviewmatrixevent.h */,
 				DE2BE7FB2B7AC5FF0047C5D5 /* gupdateviewmatrixevent.cpp */,
-				DE7A41792CC57F3C000C6C6A /* gupdatecameralookevent.h */,
-				DE7A41782CC57F3C000C6C6A /* gupdatecameralookevent.cpp */,
 				DE2BE8052B7D5A9B0047C5D5 /* gupdateviewportevent.h */,
 				DE2BE8042B7D5A9B0047C5D5 /* gupdateviewportevent.cpp */,
 			);

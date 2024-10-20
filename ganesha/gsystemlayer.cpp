@@ -8,7 +8,7 @@
 
 namespace spcGaneshaEngine {
 
-GSystemLayer::GSystemLayer(const std::string& jsonKeyBindings, GEventsServiceProtocol *eventsService) : GLayer("system", eventsService) {
+GSystemLayer::GSystemLayer(GEventsServiceProtocol *eventsService) : GLayer("system", eventsService) {
 }
 
 GSystemLayer::~GSystemLayer() {
@@ -18,6 +18,10 @@ std::vector<GEventShell> GSystemLayer::onEvent(GEventShell& shell) {
     std::vector<GEventShell> additionalEvents;
     
     switch (shell.event->getType()) {
+        case EVENT_TYPE_WINDOW_RESIZED:
+            additionalEvents = processWindowResize(shell.event);
+            eventsService->markAsHandled(shell);
+            break;
         case EVENT_TYPE_MOUSE_MOVED:
             additionalEvents = processMouseMove(shell.event);
             eventsService->markAsHandled(shell);
@@ -71,6 +75,10 @@ std::vector<GEventShell> GSystemLayer::processKeyboard(std::shared_ptr<GEvent> e
     }
     
     return newEvents;
+}
+
+std::vector<GEventShell> GSystemLayer::processWindowResize(std::shared_ptr<GEvent> event) {
+    
 }
 
 }

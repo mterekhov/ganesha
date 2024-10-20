@@ -112,6 +112,7 @@ std::vector<GEventShell> GVULKANLayer::processUpdateViewMatrix(std::shared_ptr<G
 
 std::vector<GEventShell> GVULKANLayer::processLoadGundle(std::shared_ptr<GEvent> event) {
     std::shared_ptr<GLoadGundleEvent> loadGundleEvent = static_pointer_cast<GLoadGundleEvent>(event);
+    
     vulkanAPI->loadGundle(loadGundleEvent->gundleFilePath);
 
     return { };
