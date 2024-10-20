@@ -20,7 +20,7 @@ public:
     void createPipeline(GVULKANDevice& vulkanDevice, 
                         GVULKANSwapChain& swapChain,
                         std::vector<VkPipelineShaderStageCreateInfo>& shadersArray,
-                        GDescriptorsetServiceProtocol *descriptorsetService);
+                        std::shared_ptr<GDescriptorsetServiceProtocol> descriptorsetService);
     void destroyPipeline(GVULKANDevice& vulkanDevice);
     VkPipeline getGraphicsPipeline();
     VkPipelineLayout getPipelineLayout();

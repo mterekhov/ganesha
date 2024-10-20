@@ -3,13 +3,13 @@
 
 namespace spcGaneshaEngine {
 
-GVULKANPipeline::GVULKANPipeline() {
+GVULKANPipeline::GVULKANPipeline() : graphicsPipeline(VK_NULL_HANDLE), pipelineLayout(VK_NULL_HANDLE) {
 }
 
 GVULKANPipeline::~GVULKANPipeline() {
 }
 
-void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapChain& swapChain, std::vector<VkPipelineShaderStageCreateInfo>& shadersArray, GDescriptorsetServiceProtocol *descriptorsetService) {
+void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapChain& swapChain, std::vector<VkPipelineShaderStageCreateInfo>& shadersArray, std::shared_ptr<GDescriptorsetServiceProtocol> descriptorsetService) {
     VkPipelineVertexInputStateCreateInfo vertexInputInfo = { };
     std::vector<VkVertexInputBindingDescription> bindingDescription = descriptorsetService->getBindingDescription();
     std::vector<VkVertexInputAttributeDescription> attributeDescription = descriptorsetService->getAttributeDescriptions();
@@ -33,6 +33,7 @@ void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapCha
     viewport.y = 0.0f;
     viewport.width = static_cast<TFloat>(extent.width);
     viewport.height = static_cast<TFloat>(extent.height);
+    //  TODO: get far/near from camera content
     viewport.minDepth = 0.0f;
     viewport.maxDepth = 1.0f;
     VkPipelineViewportStateCreateInfo viewportState = { };
@@ -106,10 +107,17 @@ void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapCha
 }
 
 void GVULKANPipeline::destroyPipeline(GVULKANDevice& vulkanDevice) {
+    if (graphicsPipeline == VK_NULL_HANDLE) {
+        return;
+    }
+    
     VkDevice logicalDevice = vulkanDevice.getLogicalDevice();
     
     vkDestroyPipeline(logicalDevice, graphicsPipeline, nullptr);
     vkDestroyPipelineLayout(logicalDevice, pipelineLayout, nullptr);
+    
+    graphicsPipeline = VK_NULL_HANDLE;
+    pipelineLayout = VK_NULL_HANDLE;
 }
 
 VkPipeline GVULKANPipeline::getGraphicsPipeline() {
