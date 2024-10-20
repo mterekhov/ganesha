@@ -17,7 +17,7 @@
 #include "gdescriptorsetservice.h"
 #include "gcommandservice.h"
 #include "gshadersservice.h"
-#include "grendergraph.h"
+#include "gsceneservice.h"
 
 namespace spcGaneshaEngine {
 
@@ -26,27 +26,31 @@ struct ProjectionsBufferObject {
     GMatrix proj;
 };
 
-class GVULKANAPI: public GGraphicsAPIProtocol {
+class GVULKANAPI {
 public:
-    GVULKANAPI(const std::string& applicationTitle);
+    GVULKANAPI(const std::string& applicationTitle, void *metalLayer);
     virtual ~GVULKANAPI();
 
-    void initAPI(void *metalLayer, const GScene& content) override;
-    void destroyAPI() override;
-    void render() override;
-    void updateSwapChain(const GViewport& viewport) override;
-    void installIsometricProjection(const GViewport& viewport) override;
-    void installViewMatrix(const GMatrix& newViewMatrix) override;
+    void loadScene(GScene& scene);
+    void loadGundle(const std::string& gundleFilePath);
+    void destroyAPI();
+    void render();
+    void updateSwapChain(const GViewport& viewport);
+    void installIsometricProjection(const GViewport& viewport);
+    void installViewMatrix(const GMatrix& newViewMatrix);
 
+    std::shared_ptr<GShadersServiceProtocol> shadersService;
+    std::shared_ptr<GMaterialsServiceProtocol> materialsService;
+    std::shared_ptr<GSceneServiceProtocol> sceneService;
 private:
     std::string applicationTitle;
     GVULKANDevice vulkanDevice;
     GVULKANInstance vulkanInstance;
     GVULKANSwapChain vulkanSwapChain;
     GVULKANPipeline vulkanPipeline;
-    GDescriptorsetServiceProtocol *descriptorService;
-    GCommandServiceProtocol *commandService;
-    GShadersServiceProtocol *shadersService;
+    
+    std::shared_ptr<GDescriptorsetServiceProtocol> descriptorService;
+    std::shared_ptr<GCommandServiceProtocol> commandService;
     
     VkSurfaceKHR metalSurface;
 
@@ -59,12 +63,12 @@ private:
     size_t currentFrame = 0;
 
     std::vector<VkCommandBuffer> renderCommands;
-    std::vector<GRenderGraph> renderGraphArray;
+    std::vector<GScene> scenesArray;
 
     const TUInt maxFramesInFlight = 2;
 
     void recordRenderCommand(VkCommandBuffer renderCommand,
-                             GRenderGraph& renderGraph,
+                             GScene& scene,
                              VkFramebuffer framebuffer,
                              GVULKANSwapChain& swapChain,
                              GVULKANPipeline& pipeline,

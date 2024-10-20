@@ -26,19 +26,7 @@ const TStringsArray useDeviceExtensions = {
     "VK_KHR_portability_subset"
 };
 
-GVULKANAPI::GVULKANAPI(const std::string& applicationTitle) : applicationTitle(applicationTitle) {
-    
-}
-
-GVULKANAPI::~GVULKANAPI() {
-    delete descriptorService;
-    delete shadersService;
-    delete commandService;
-}
-
-#pragma mark - GGraphicsAPIProtocol -
-
-void GVULKANAPI::initAPI(void *metalLayer, const GScene& scene) {
+GVULKANAPI::GVULKANAPI(const std::string& applicationTitle, void *metalLayer) : applicationTitle(applicationTitle) {
     //  create VULKAN instance
     vulkanInstance.createInstance(applicationTitle.c_str(), khronosValidationLayers, avoidInstanceExtensions);
     
@@ -48,35 +36,41 @@ void GVULKANAPI::initAPI(void *metalLayer, const GScene& scene) {
     //  creates physicalDevice
     vulkanDevice.createDevice(vulkanInstance, useDeviceExtensions, metalSurface);
     
-    vulkanSwapChain.createSwapChain(scene.viewport.width, scene.viewport.height, vulkanDevice, metalSurface);
-    
-    descriptorService = new GDescriptorsetService(vulkanDevice);
+    descriptorService = std::make_shared<GDescriptorsetService>(vulkanDevice);
     descriptorService->init();
     
-    commandService = new GCommandService(vulkanDevice);
+    commandService = std::make_shared<GCommandService>(vulkanDevice);
     commandService->init();
     
-    materialsService = new GMaterialsService(commandService, vulkanDevice);
-    shadersService = new GShadersService(commandService, vulkanDevice);
-    shadersService->init();
-//    const TStringsArray& vertexShadersArray = content.getVertexShadersArray();
-//    for (TStringsArray::const_iterator iter = vertexShadersArray.begin(); iter != vertexShadersArray.end(); iter++) {
-//        shadersService->addVertexShader(*iter);
-//    }
-//    const TStringsArray& fragmentShadersArray = content.getFragmetShadersArrray();
-//    for (TStringsArray::const_iterator iter = fragmentShadersArray.begin(); iter != fragmentShadersArray.end(); iter++) {
-//        shadersService->addFragmentShader(*iter);
-//    }
-//
-//    for (TUInt i = 0; i < maxFramesInFlight; i++) {
-//        GScene newScene(descriptorService, commandService, vulkanDevice);
-//        newRenderGraph.createGraph(descriptorService, vulkanDevice);
-//        newRenderGraph.loadContent(content, descriptorService, vulkanDevice);
-//        scenesArray.push_back(newRenderGraph);
-//    }
+    materialsService = std::make_shared<GMaterialsService>(commandService, vulkanDevice);
+    materialsService->init();
     
-    TShadersPipelineInfoArray shadersArray = shadersService->getShadersPipelineInfo(scene.fragmentShadersArray, VK_SHADER_STAGE_FRAGMENT_BIT, commandService, vulkanDevice);
-    shadersArray.push_back(shadersService->getShadersPipelineInfo(scene.vertexShadersArray, VK_SHADER_STAGE_VERTEX_BIT, commandService, vulkanDevice));
+    shadersService = std::make_shared<GShadersService>(commandService, vulkanDevice);
+    shadersService->init();
+    
+    sceneService = std::make_shared<GSceneService>(descriptorService, commandService, vulkanDevice);
+    sceneService->init();
+    
+    vulkanSwapChain.createSwapChain(metalSurface,
+                                    vulkanDevice);
+}
+
+GVULKANAPI::~GVULKANAPI() {
+    descriptorService->destroy();
+    commandService->destroy();
+    shadersService->destroy();
+}
+
+#pragma mark - GGraphicsAPIProtocol -
+
+void GVULKANAPI::loadScene(GScene& scene) {
+    vkDeviceWaitIdle(vulkanDevice.getLogicalDevice());
+    
+    vulkanPipeline.destroyPipeline(vulkanDevice);
+
+    std::vector<VkPipelineShaderStageCreateInfo> shadersArray = shadersService->getShadersPipelineInfo(scene.fragmentShadersArray, VK_SHADER_STAGE_FRAGMENT_BIT, commandService, vulkanDevice);
+    std::vector<VkPipelineShaderStageCreateInfo> shadersArray2 = shadersService->getShadersPipelineInfo(scene.vertexShadersArray, VK_SHADER_STAGE_VERTEX_BIT, commandService, vulkanDevice);
+    shadersArray.insert(shadersArray.end(), shadersArray2.begin(), shadersArray2.end());
     vulkanPipeline.createPipeline(vulkanDevice, vulkanSwapChain, shadersArray, descriptorService);
 
     TUInt framebuffersNumber = static_cast<TUInt>(vulkanSwapChain.framebuffersNumber());
@@ -101,6 +95,9 @@ void GVULKANAPI::initAPI(void *metalLayer, const GScene& scene) {
     createSemaphores();
 }
 
+void GVULKANAPI::loadGundle(const std::string& gundleFilePath) {
+}
+
 void GVULKANAPI::destroyAPI() {
     vkDeviceWaitIdle(vulkanDevice.getLogicalDevice());
     
@@ -117,8 +114,8 @@ void GVULKANAPI::destroyAPI() {
         vkDestroyFence(vulkanDevice.getLogicalDevice(), inFlightFences[i], nullptr);
     }
         
-    for (GRenderGraph graph:renderGraphArray) {
-        graph.destroyGraph(vulkanDevice.getLogicalDevice());
+    for (GScene scene:scenesArray) {
+        scene.clear();
     }
     
     descriptorService->destroy();
@@ -160,7 +157,7 @@ void GVULKANAPI::render() {
     vkResetFences(vulkanDevice.getLogicalDevice(), 1, &inFlightFences[currentFrame]);
     vkResetCommandBuffer(renderCommands[currentFrame], 0);
     recordRenderCommand(renderCommands[currentFrame],
-                        renderGraphArray[currentFrame],
+                        scenesArray[currentFrame],
                         vulkanSwapChain.getFramebuffers()[imageIndex],
                         vulkanSwapChain,
                         vulkanPipeline,
@@ -191,7 +188,7 @@ void GVULKANAPI::render() {
 #pragma mark - Routine -
 
 void GVULKANAPI::recordRenderCommand(VkCommandBuffer renderCommand,
-                                     GRenderGraph& renderGraph,
+                                     GScene& scene,
                                      VkFramebuffer framebuffer,
                                      GVULKANSwapChain& swapChain,
                                      GVULKANPipeline& pipeline,
@@ -234,10 +231,11 @@ void GVULKANAPI::recordRenderCommand(VkCommandBuffer renderCommand,
 
             VkDeviceSize offsets[1] = { 0 };
             vkCmdBindDescriptorSets(renderCommand, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.getPipelineLayout(), 0, 1, &descriptorset, 0, nullptr);
-            for (GGraphNode *graphNode:renderGraph.getNodeArray()) {
-                VkBuffer instanceBuffer = graphNode->instanceBuffer.getBuffer();
+            const std::vector<GSceneNode *>& sceneNodesArray = scene.getNodesArray();
+            for (GSceneNode *node:sceneNodesArray) {
+                VkBuffer instanceBuffer = node->getInstanceBuffer().getBuffer();
                 vkCmdBindVertexBuffers(renderCommand, 1, 1, &instanceBuffer, offsets);
-                graphNode->mesh->render(graphNode->getInstancesCount(), renderCommand);
+                node->getMesh()->render(1, renderCommand);
             }
         vkCmdEndRenderPass(renderCommand);
     vkEndCommandBuffer(renderCommand);
