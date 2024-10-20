@@ -18,14 +18,14 @@ void GVULKANSwapChain::destroySwapChain(GVULKANDevice& vulkanDevice) {
         return;
     }
     
-    destroyExtentDependency(vulkanDevice);
+    destroySwapChainAndDependency(vulkanDevice);
     destroyRenderPass(vulkanDevice.getLogicalDevice());
 }
 
 void GVULKANSwapChain::updateScreenSize(const TUInt screenWidth, const TUInt screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
     vkDeviceWaitIdle(vulkanDevice.getLogicalDevice());
     
-    destroyExtentDependency(vulkanDevice);
+    destroySwapChainAndDependency(vulkanDevice);
     createSwapChain(screenWidth, screenHeight, false, surface, vulkanDevice);
 }
 
@@ -136,7 +136,7 @@ std::vector<VkImage> GVULKANSwapChain::ejectImagesArray(VkDevice device, const V
     return newImagesArray;
 }
 
-void GVULKANSwapChain::destroyExtentDependency(GVULKANDevice& vulkanDevice) {
+void GVULKANSwapChain::destroySwapChainAndDependency(GVULKANDevice& vulkanDevice) {
     for (auto framebuffer : framebuffersArray) {
         vkDestroyFramebuffer(vulkanDevice.getLogicalDevice(), framebuffer, nullptr);
     }

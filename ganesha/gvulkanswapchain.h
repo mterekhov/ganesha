@@ -46,7 +46,7 @@ private:
     VkExtent2D selectSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities, const TUInt screenWidth, const TUInt screenHeight);
     VkSurfaceFormatKHR selectSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
     VkPresentModeKHR selectSwapPresentMode(const std::vector<VkPresentModeKHR>& presentModesArray);
-    void destroyExtentDependency(GVULKANDevice& vulkanDevice);
+    void destroySwapChainAndDependency(GVULKANDevice& vulkanDevice);
     void destroyRenderPass(VkDevice device);
 };
 
