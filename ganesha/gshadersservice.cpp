@@ -64,7 +64,7 @@ std::vector<VkPipelineShaderStageCreateInfo> GShadersService::getShadersPipeline
         if (!isDeployed(shader)) {
             deployShader(shader, commandService, vulkanDevice);
         }
-        infoArray.push_back(shaderPipelineInfo(shader, VK_SHADER_STAGE_FRAGMENT_BIT));
+        infoArray.push_back(shaderPipelineInfo(shader, stage));
     }
 
     return infoArray;
