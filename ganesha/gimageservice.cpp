@@ -25,17 +25,17 @@ std::shared_ptr<GVULKANImage> GImageService::createImage(const std::string &imag
     return newMaterial;
 }
 
-void GImageService::destroyImage(std::shared_ptr<GVULKANImage> material, GVULKANDevice& vulkanDevice) {
+void GImageService::destroyImage(std::shared_ptr<GVULKANImage> vulkanImage, GVULKANDevice& vulkanDevice) {
     VkDevice device = vulkanDevice.getLogicalDevice();
     
-    vkDestroySampler(device, material->sampler, nullptr);
-    vkDestroyImageView(device, material->imageView, nullptr);
-    vkDestroyImage(device, material->image, nullptr);
-    vkFreeMemory(device, material->imageMemory, nullptr);
+    vkDestroySampler(device, vulkanImage->sampler, nullptr);
+    vkDestroyImageView(device, vulkanImage->imageView, nullptr);
+    vkDestroyImage(device, vulkanImage->image, nullptr);
+    vkFreeMemory(device, vulkanImage->imageMemory, nullptr);
 }
 
-void GImageService::deployImage(std::shared_ptr<GVULKANImage> material, GCommandServiceProtocol *commandService, GVULKANDevice& vulkanDevice) {
-    deployImage(material,
+void GImageService::deployImage(std::shared_ptr<GVULKANImage> vulkanImage, GCommandServiceProtocol *commandService, GVULKANDevice& vulkanDevice) {
+    deployImage(vulkanImage,
                    VK_FORMAT_R8G8B8A8_SRGB,
                    VK_IMAGE_ASPECT_COLOR_BIT,
                    VK_IMAGE_TILING_OPTIMAL,
@@ -44,29 +44,29 @@ void GImageService::deployImage(std::shared_ptr<GVULKANImage> material, GCommand
                    vulkanDevice);
 }
 
-bool GImageService::isDeployed(std::shared_ptr<GVULKANImage> image) {
-    if (image->image == VK_NULL_HANDLE) {
+bool GImageService::isDeployed(std::shared_ptr<GVULKANImage> vulkanImage) {
+    if (vulkanImage->image == VK_NULL_HANDLE) {
         return false;
     }
     
     return true;
 }
 
-void GImageService::deployImage(std::shared_ptr<GVULKANImage> material,
+void GImageService::deployImage(std::shared_ptr<GVULKANImage> vulkanImage,
                                     VkFormat format,
                                     VkImageAspectFlags aspectFlags,
                                     VkImageTiling tiling,
                                     VkImageUsageFlags usage,
                                     GCommandServiceProtocol *commandService,
                                     GVULKANDevice& vulkanDevice) {
-    GTGA tgaImage(material->textureFileName);
-    material->imageExtent = {tgaImage.getWidth(), tgaImage.getHeight()};
+    GTGA tgaImage(vulkanImage->textureFileName);
+    vulkanImage->imageExtent = {tgaImage.getWidth(), tgaImage.getHeight()};
     
     VkImageCreateInfo imageInfo = {};
     imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
     imageInfo.imageType = VK_IMAGE_TYPE_2D;
-    imageInfo.extent.width = material->imageExtent.width;
-    imageInfo.extent.height = material->imageExtent.height;
+    imageInfo.extent.width = vulkanImage->imageExtent.width;
+    imageInfo.extent.height = vulkanImage->imageExtent.height;
     imageInfo.extent.depth = 1;
     imageInfo.mipLevels = 1;
     imageInfo.arrayLayers = 1;
@@ -80,27 +80,27 @@ void GImageService::deployImage(std::shared_ptr<GVULKANImage> material,
     if (vkCreateImage(vulkanDevice.getLogicalDevice(), &imageInfo, nullptr, &newImage) != VK_SUCCESS) {
         GLOG_ERROR("can not create image\n");
     }
-    material->image = newImage;
+    vulkanImage->image = newImage;
     
     VkMemoryRequirements memoryRequirements;
-    vkGetImageMemoryRequirements(vulkanDevice.getLogicalDevice(), material->image, &memoryRequirements);
+    vkGetImageMemoryRequirements(vulkanDevice.getLogicalDevice(), vulkanImage->image, &memoryRequirements);
     VkMemoryAllocateInfo allocInfo = { };
     allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     allocInfo.allocationSize = memoryRequirements.size;
     allocInfo.memoryTypeIndex = vulkanDevice.findMemoryType(memoryRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-    if (vkAllocateMemory(vulkanDevice.getLogicalDevice(), &allocInfo, nullptr, &material->imageMemory) != VK_SUCCESS) {
+    if (vkAllocateMemory(vulkanDevice.getLogicalDevice(), &allocInfo, nullptr, &vulkanImage->imageMemory) != VK_SUCCESS) {
         GLOG_ERROR("failed to allocate image memory!");
     }
-    vkBindImageMemory(vulkanDevice.getLogicalDevice(), material->image, material->imageMemory, 0);
+    vkBindImageMemory(vulkanDevice.getLogicalDevice(), vulkanImage->image, vulkanImage->imageMemory, 0);
     
     GVULKANTools tools;
-    material->imageView = tools.createImageView(material->image, format, aspectFlags, vulkanDevice.getLogicalDevice());
-    material->sampler = createTextureSampler(vulkanDevice);
+    vulkanImage->imageView = tools.createImageView(vulkanImage->image, format, aspectFlags, vulkanDevice.getLogicalDevice());
+    vulkanImage->sampler = createTextureSampler(vulkanDevice);
     
-    deployImageData(material, tgaImage, commandService, vulkanDevice);
+    deployImageData(vulkanImage, tgaImage, commandService, vulkanDevice);
 }
 
-void GImageService::deployImageData(std::shared_ptr<GVULKANImage> material,
+void GImageService::deployImageData(std::shared_ptr<GVULKANImage> vulkanImage,
                                            GTGA& tgaFile,
                                            GCommandServiceProtocol *commandService,
                                            GVULKANDevice& vulkanDevice) {
@@ -113,15 +113,15 @@ void GImageService::deployImageData(std::shared_ptr<GVULKANImage> material,
                                commandService,
                                vulkanDevice);
     
-    transitionImageLayout(material->image,
+    transitionImageLayout(vulkanImage->image,
                           VK_FORMAT_R8G8B8A8_SRGB,
                           VK_IMAGE_LAYOUT_UNDEFINED,
                           VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                           commandService);
     
-    copyBufferToImage(stagingBuffer.getBuffer(), material->image, material->imageExtent, commandService);
+    copyBufferToImage(stagingBuffer.getBuffer(), vulkanImage->image, vulkanImage->imageExtent, commandService);
     
-    transitionImageLayout(material->image,
+    transitionImageLayout(vulkanImage->image,
                           VK_FORMAT_R8G8B8A8_SRGB,
                           VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                           VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
