@@ -1,31 +1,31 @@
-#include "gmaterialsservice.h"
+#include "gimageservice.h"
 #include "gtga.h"
 #include "gvulkantools.h"
 #include "gvulkanbuffer.h"
 
 namespace spcGaneshaEngine {
 
-GMaterialsService::GMaterialsService() {
+GImageService::GImageService() {
     
 }
 
-GMaterialsService::~GMaterialsService() {
+GImageService::~GImageService() {
 }
 
-#pragma mark - GMaterialsServiceProtocol -
+#pragma mark - GImageServiceProtocol -
 
-void GMaterialsService::init() {
+void GImageService::init() {
 }
 
-void GMaterialsService::destroy() {
+void GImageService::destroy() {
 }
 
-std::shared_ptr<GVULKANImage> GMaterialsService::createMaterial(const std::string &imageFilePath) {
+std::shared_ptr<GVULKANImage> GImageService::createImage(const std::string &imageFilePath) {
     std::shared_ptr<GVULKANImage> newMaterial =  std::make_shared<GVULKANImage>(imageFilePath);
     return newMaterial;
 }
 
-void GMaterialsService::destroyMaterial(std::shared_ptr<GVULKANImage> material, GVULKANDevice& vulkanDevice) {
+void GImageService::destroyImage(std::shared_ptr<GVULKANImage> material, GVULKANDevice& vulkanDevice) {
     VkDevice device = vulkanDevice.getLogicalDevice();
     
     vkDestroySampler(device, material->sampler, nullptr);
@@ -34,8 +34,8 @@ void GMaterialsService::destroyMaterial(std::shared_ptr<GVULKANImage> material, 
     vkFreeMemory(device, material->imageMemory, nullptr);
 }
 
-void GMaterialsService::deployMaterial(std::shared_ptr<GVULKANImage> material, GCommandServiceProtocol *commandService, GVULKANDevice& vulkanDevice) {
-    deployMaterial(material,
+void GImageService::deployImage(std::shared_ptr<GVULKANImage> material, GCommandServiceProtocol *commandService, GVULKANDevice& vulkanDevice) {
+    deployImage(material,
                    VK_FORMAT_R8G8B8A8_SRGB,
                    VK_IMAGE_ASPECT_COLOR_BIT,
                    VK_IMAGE_TILING_OPTIMAL,
@@ -44,7 +44,7 @@ void GMaterialsService::deployMaterial(std::shared_ptr<GVULKANImage> material, G
                    vulkanDevice);
 }
 
-bool GMaterialsService::isDeployed(std::shared_ptr<GVULKANImage> image) {
+bool GImageService::isDeployed(std::shared_ptr<GVULKANImage> image) {
     if (image->image == VK_NULL_HANDLE) {
         return false;
     }
@@ -52,7 +52,7 @@ bool GMaterialsService::isDeployed(std::shared_ptr<GVULKANImage> image) {
     return true;
 }
 
-void GMaterialsService::deployMaterial(std::shared_ptr<GVULKANImage> material,
+void GImageService::deployImage(std::shared_ptr<GVULKANImage> material,
                                     VkFormat format,
                                     VkImageAspectFlags aspectFlags,
                                     VkImageTiling tiling,
@@ -97,10 +97,10 @@ void GMaterialsService::deployMaterial(std::shared_ptr<GVULKANImage> material,
     material->imageView = tools.createImageView(material->image, format, aspectFlags, vulkanDevice.getLogicalDevice());
     material->sampler = createTextureSampler(vulkanDevice);
     
-    deployMaterialData(material, tgaImage, commandService, vulkanDevice);
+    deployImageData(material, tgaImage, commandService, vulkanDevice);
 }
 
-void GMaterialsService::deployMaterialData(std::shared_ptr<GVULKANImage> material,
+void GImageService::deployImageData(std::shared_ptr<GVULKANImage> material,
                                            GTGA& tgaFile,
                                            GCommandServiceProtocol *commandService,
                                            GVULKANDevice& vulkanDevice) {
@@ -130,7 +130,7 @@ void GMaterialsService::deployMaterialData(std::shared_ptr<GVULKANImage> materia
     stagingBuffer.destroyBuffer(vulkanDevice.getLogicalDevice());
 }
 
-VkSampler GMaterialsService::createTextureSampler(GVULKANDevice& device) {
+VkSampler GImageService::createTextureSampler(GVULKANDevice& device) {
     VkPhysicalDeviceProperties properties = device.getPhysicalDeviceProperties();
     
     VkSamplerCreateInfo samplerInfo{};
@@ -156,7 +156,7 @@ VkSampler GMaterialsService::createTextureSampler(GVULKANDevice& device) {
     return newSampler;
 }
 
-void GMaterialsService::copyBufferToImage(VkBuffer buffer, VkImage image, VkExtent2D extent, GCommandServiceProtocol *commandService) {
+void GImageService::copyBufferToImage(VkBuffer buffer, VkImage image, VkExtent2D extent, GCommandServiceProtocol *commandService) {
     VkCommandBuffer commandBuffer = commandService->allocateCommandBuffer();
     
     VkCommandBufferBeginInfo beginInfo{};
@@ -179,7 +179,7 @@ void GMaterialsService::copyBufferToImage(VkBuffer buffer, VkImage image, VkExte
     commandService->submitCommandBuffer({ commandBuffer });
 }
 
-void GMaterialsService::transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout, GCommandServiceProtocol *commandService) {
+void GImageService::transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout, GCommandServiceProtocol *commandService) {
     VkCommandBuffer commandBuffer = commandService->allocateCommandBuffer();
     
     VkCommandBufferBeginInfo beginInfo{};

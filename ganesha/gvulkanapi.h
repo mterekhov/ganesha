@@ -40,7 +40,7 @@ public:
     void installViewMatrix(const GMatrix& newViewMatrix);
 
     std::shared_ptr<GShadersServiceProtocol> shadersService;
-    std::shared_ptr<GMaterialsServiceProtocol> materialsService;
+    std::shared_ptr<GImageServiceProtocol> materialsService;
     std::shared_ptr<GSceneServiceProtocol> sceneService;
 private:
     std::string applicationTitle;

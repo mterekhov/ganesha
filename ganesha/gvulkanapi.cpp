@@ -42,7 +42,7 @@ GVULKANAPI::GVULKANAPI(const std::string& applicationTitle, void *metalLayer) : 
     commandService = std::make_shared<GCommandService>(vulkanDevice);
     commandService->init();
     
-    materialsService = std::make_shared<GMaterialsService>(commandService, vulkanDevice);
+    materialsService = std::make_shared<GImageService>(commandService, vulkanDevice);
     materialsService->init();
     
     shadersService = std::make_shared<GShadersService>(commandService, vulkanDevice);

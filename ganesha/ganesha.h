@@ -36,7 +36,8 @@
 
 //  Content
 #include "gscene.h"
-#include "gmaterialsservice.h"
+#include "gsceneservice.h"
+#include "gimageservice.h"
 #include "gshadersservice.h"
 #include "gviewport.h"
 
