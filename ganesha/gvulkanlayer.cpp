@@ -1,7 +1,6 @@
 #include "gvulkanlayer.h"
 #include "gvulkanapi.h"
-#include "gupdateviewportevent.h"
-#include "gupdateviewmatrixevent.h"
+#include "gupdateframesizeevent.h"
 #include "gloadgundleevent.h"
 #include "gupdatecameralookevent.h"
 #include "gupdatecamerapositionevent.h"
@@ -15,9 +14,8 @@ GVULKANLayer::~GVULKANLayer() {
 }
 
 void GVULKANLayer::onAttach() {
-    vulkanAPI->launchRender(content);
-    vulkanAPI->installIsometricProjection(content.viewport);
-    vulkanAPI->installViewMatrix(camera.viewMatrix());
+    vulkanAPI->installIsometricProjection(scene.viewport);
+    vulkanAPI->installViewMatrix(scene.camera.viewMatrix());
 }
 
 void GVULKANLayer::onDetach() {
@@ -32,12 +30,8 @@ std::vector<GEventShell> GVULKANLayer::onEvent(GEventShell& shell) {
     std::vector<GEventShell> additionalEvents;
     
     switch (shell.event->getType()) {
-        case EVENT_TYPE_VULKAN_UPDATE_VIEW_MATRIX:
-            additionalEvents = processUpdateViewMatrix(shell.event);
-            eventsService->markAsHandled(shell);
-            break;
-        case EVENT_TYPE_VULKAN_UPDATE_VIEWPORT:
-            additionalEvents = processUpdateViewport(shell.event);
+        case EVENT_TYPE_VULKAN_UPDATE_FRAME_SIZE:
+            additionalEvents = processUpdateFrameSize(shell.event);
             eventsService->markAsHandled(shell);
             break;
         case EVENT_TYPE_VULKAN_LOAD_GUNDLE:
@@ -102,14 +96,6 @@ std::vector<GEventShell> GVULKANLayer::processCameraLookUpdate(std::shared_ptr<G
     return { };
 }
 
-//  mouse and keyboard events generate this event
-std::vector<GEventShell> GVULKANLayer::processUpdateViewMatrix(std::shared_ptr<GEvent> event) {
-    std::shared_ptr<GUpdateViewMatrixEvent> updateProjectionEvent = static_pointer_cast<GUpdateViewMatrixEvent>(event);
-    vulkanAPI->installViewMatrix(updateProjectionEvent->matrix);
-
-    return { };
-}
-
 std::vector<GEventShell> GVULKANLayer::processLoadGundle(std::shared_ptr<GEvent> event) {
     std::shared_ptr<GLoadGundleEvent> loadGundleEvent = static_pointer_cast<GLoadGundleEvent>(event);
     
@@ -118,11 +104,13 @@ std::vector<GEventShell> GVULKANLayer::processLoadGundle(std::shared_ptr<GEvent>
     return { };
 }
 
-//  window size changes generate this event
-std::vector<GEventShell> GVULKANLayer::processUpdateViewport(std::shared_ptr<GEvent> event) {
-    std::shared_ptr<GUpdateViewportEvent> updateViewportEvent = static_pointer_cast<GUpdateViewportEvent>(event);
-    vulkanAPI->updateSwapChain(updateViewportEvent->viewport);
-    vulkanAPI->installIsometricProjection(updateViewportEvent->viewport);
+std::vector<GEventShell> GVULKANLayer::processUpdateFrameSize(std::shared_ptr<GEvent> event) {
+    std::shared_ptr<GUpdateFrameSizeEvent> updateFrameSizeEvent = static_pointer_cast<GUpdateFrameSizeEvent>(event);
+
+    scene.viewport.width = updateFrameSizeEvent->width;
+    scene.viewport.height = updateFrameSizeEvent->height;
+    vulkanAPI->updateSwapChain(scene.viewport.width, scene.viewport.height);
+    vulkanAPI->installIsometricProjection(scene.viewport);
 
     return { };
 }

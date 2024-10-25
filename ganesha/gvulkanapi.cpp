@@ -127,13 +127,16 @@ void GVULKANAPI::destroyAPI() {
     vulkanInstance.destroyInstance();
 }
 
-void GVULKANAPI::updateSwapChain(const GViewport& viewport) {
-    vulkanSwapChain.updateScreenSize(viewport.width, viewport.height, vulkanDevice, metalSurface);
+void GVULKANAPI::updateSwapChain(const TFloat width, const TFloat height) {
+    vulkanSwapChain.updateScreenSize({ static_cast<TUInt>(width), static_cast<TUInt>(height) },
+                                     commandService,
+                                     imageService,
+                                     metalSurface,
+                                     vulkanDevice);
 }
 
 void GVULKANAPI::installIsometricProjection(const GViewport& viewport) {
-    VkExtent2D swapChainExtent = vulkanSwapChain.getExtent();
-    TFloat aspect = static_cast<TFloat>(swapChainExtent.width) / static_cast<TFloat>(swapChainExtent.height);
+    TFloat aspect = static_cast<TFloat>(viewport.width) / static_cast<TFloat>(viewport.height);
     TFloat size = viewport.near * tanf(viewport.fov / 2.0);
     TFloat aspectHeight = aspect * size;
     

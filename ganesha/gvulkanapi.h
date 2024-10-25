@@ -35,7 +35,7 @@ public:
     void loadGundle(const std::string& gundleFilePath);
     void destroyAPI();
     void render();
-    void updateSwapChain(const GViewport& viewport);
+    void updateSwapChain(const TFloat width, const TFloat height);
     void installIsometricProjection(const GViewport& viewport);
     void installViewMatrix(const GMatrix& newViewMatrix);
 

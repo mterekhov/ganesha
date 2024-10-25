@@ -48,10 +48,16 @@
 //  Events
 #include "gevent.h"
 #include "geventshell.h"
-#include "gwindowevent.h"
+#include "geventsservice.h"
+#include "gwindowresizeevent.h"
 #include "gmouseevent.h"
 #include "gkeyboardevent.h"
-#include "geventsservice.h"
+
+#include "gupdatecameralookevent.h"
+#include "gupdatecamerapositionevent.h"
+#include "gloadgundleevent.h"
+#include "gupdateviewmatrixevent.h"
+#include "gupdateviewportevent.h"
 
 //  Layers
 #include "glayer.h"

@@ -25,8 +25,7 @@ private:
     std::vector<GEventShell> processCameraPositionUpdate(std::shared_ptr<GEvent> event);
     std::vector<GEventShell> processCameraLookUpdate(std::shared_ptr<GEvent> event);
     std::vector<GEventShell> processLoadGundle(std::shared_ptr<GEvent> event);
-    std::vector<GEventShell> processUpdateViewMatrix(std::shared_ptr<GEvent> event);
-    std::vector<GEventShell> processUpdateViewport(std::shared_ptr<GEvent> event);
+    std::vector<GEventShell> processUpdateFrameSize(std::shared_ptr<GEvent> event);
 };
 
 };  //  spcGaneshaEngine

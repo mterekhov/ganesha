@@ -1,11 +1,11 @@
 #include "geventsservice.h"
 #include "gmouseevent.h"
 #include "gkeyboardevent.h"
-#include "gupdateviewportevent.h"
-#include "gupdateviewmatrixevent.h"
+#include "gupdateframesizeevent.h"
 #include "gloadgundleevent.h"
 #include "gupdatecameralookevent.h"
 #include "gupdatecamerapositionevent.h"
+#include "gwindowresizeevent.h"
 
 namespace spcGaneshaEngine {
 
@@ -36,6 +36,12 @@ TBool GEventsService::doesHandled(GEventShell& shell) {
     return false;
 }
 
+GEventShell GEventsService::windowResizeEvent(const TFloat width, const TFloat height) {
+    std::shared_ptr<GWindowResizeEvent> newEvent = std::make_shared<GWindowResizeEvent>(width, height);
+    return GEventShell(newEvent);
+
+}
+
 GEventShell GEventsService::mouseEvent(const TFloat position_x, const TFloat position_y) {
     std::shared_ptr<GMouseEvent> newEvent = std::make_shared<GMouseEvent>(position_x, position_y);
     return GEventShell(newEvent);
@@ -46,14 +52,10 @@ GEventShell GEventsService::keyboardEvent(const TUInt keyCode) {
     return GEventShell(newEvent);
 }
 
-GEventShell GEventsService::updateViewMatrixEvent(const GMatrix& matrix) {
-    std::shared_ptr<GUpdateViewMatrixEvent> newEvent = std::make_shared<GUpdateViewMatrixEvent>(matrix);
+GEventShell GEventsService::updateFrameSizeEvent(const TFloat width, const TFloat height) {
+    std::shared_ptr<GUpdateFrameSizeEvent> newEvent = std::make_shared<GUpdateFrameSizeEvent>(width, height);
     return GEventShell(newEvent);
-}
 
-GEventShell GEventsService::updateViewportEvent(const GViewport& viewport) {
-    std::shared_ptr<GUpdateViewportEvent> newEvent = std::make_shared<GUpdateViewportEvent>(viewport);
-    return GEventShell(newEvent);
 }
 
 GEventShell GEventsService::loadGundle(const std::string& gundleFilePath) {

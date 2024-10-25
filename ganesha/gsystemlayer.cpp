@@ -1,8 +1,8 @@
 #include "gsystemlayer.h"
 #include "gkeyboardevent.h"
 #include "gmouseevent.h"
-#include "gupdateviewmatrixevent.h"
-#include "gupdateviewportevent.h"
+#include "gupdateframesizeevent.h"
+#include "gwindowresizeevent.h"
 #include "mackeycode.h"
 #include "glog.h"
 
@@ -78,7 +78,12 @@ std::vector<GEventShell> GSystemLayer::processKeyboard(std::shared_ptr<GEvent> e
 }
 
 std::vector<GEventShell> GSystemLayer::processWindowResize(std::shared_ptr<GEvent> event) {
+    std::shared_ptr<GWindowResizeEvent> windowResizeEvent = static_pointer_cast<GWindowResizeEvent>(event);
+    std::vector<GEventShell> newEvents = { };
     
+    newEvents.push_back(eventsService->updateFrameSizeEvent(windowResizeEvent->width, windowResizeEvent->height));
+    
+    return newEvents;
 }
 
 }

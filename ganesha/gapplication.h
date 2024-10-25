@@ -12,13 +12,14 @@ namespace spcGaneshaEngine {
 
 class GApplication {
 public:
-    GApplication();
+    GApplication(std::shared_ptr<GEventsServiceProtocol> eventsService);
     virtual ~GApplication();
+
+    void pushLayer(std::shared_ptr<GLayer> layer);
+    void pushOverlay(std::shared_ptr<GLayer> layer);
 
     void handleEvent(GEventShell& shell);
     void processRunLoop();
-    void pushLayer(std::shared_ptr<GLayer> layer);
-    void pushOverlay(std::shared_ptr<GLayer> layer);
 
     std::shared_ptr<GEventsServiceProtocol> eventsService;
     

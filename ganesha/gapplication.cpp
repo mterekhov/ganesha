@@ -2,8 +2,8 @@
 
 namespace spcGaneshaEngine {
 
-GApplication::GApplication() : layerService(std::make_shared<spcGaneshaEngine::GLayersService>()),
-                               eventsService(std::make_shared<spcGaneshaEngine::GEventsService>()) {
+GApplication::GApplication(std::shared_ptr<GEventsServiceProtocol> eventsService) : eventsService(eventsService),
+                                                                                    layerService(std::make_shared<spcGaneshaEngine::GLayersService>()) {
     layerService->init();
     eventsService->init();
 }
