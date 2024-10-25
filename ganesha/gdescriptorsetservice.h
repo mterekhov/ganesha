@@ -2,7 +2,9 @@
 #define SPCGANESHAENGINE_GDESCRIPTORSETSERVICE_H
 
 #include <vulkan/vulkan.h>
+#include <vector>
 
+#include "ganeshatypes.h"
 #include "gvulkanbuffer.h"
 #include "gvulkanimage.h"
 

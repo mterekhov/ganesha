@@ -1,8 +1,9 @@
 #ifndef SPCGANESHAENGINE_GLOAD_GUNDLE_EVENT_H
 #define SPCGANESHAENGINE_GLOAD_GUNDLE_EVENT_H
 
+#include <string>
+
 #include "gevent.h"
-#include "gscene.h"
 
 namespace spcGaneshaEngine {
 

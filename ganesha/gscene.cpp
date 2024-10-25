@@ -2,7 +2,7 @@
 
 namespace spcGaneshaEngine {
 
-GScene::GScene() {
+GScene::GScene() : camera(GCameraData()) {
 }
 
 GScene::~GScene() {

@@ -1,23 +1,24 @@
 #ifndef SPCGANESHAENGINE_GVULKANAPI_H
 #define SPCGANESHAENGINE_GVULKANAPI_H
 
-#include <stdio.h>
 #include <vector>
+#include <string>
 #include <vulkan/vulkan.h>
 
-#include "ggraphicsapiprotocol.h"
+#include "gmatrix.h"
+#include "ganeshatypes.h"
+#include "gshadersservice.h"
+#include "gsceneservice.h"
+#include "gimageservice.h"
+#include "gdescriptorsetservice.h"
+#include "gcommandservice.h"
 #include "gvulkaninstance.h"
 #include "gvulkandevice.h"
 #include "gvulkanswapchain.h"
 #include "gvulkanpipeline.h"
-#include "gmatrix.h"
 #include "gvulkanbuffer.h"
-#include "gvulkanimage.h"
-#include "gmaterialsservice.h"
-#include "gdescriptorsetservice.h"
-#include "gcommandservice.h"
-#include "gshadersservice.h"
-#include "gsceneservice.h"
+#include "gscene.h"
+
 
 namespace spcGaneshaEngine {
 
@@ -31,7 +32,6 @@ public:
     GVULKANAPI(const std::string& applicationTitle, void *metalLayer);
     virtual ~GVULKANAPI();
 
-    void loadScene(GScene& scene);
     void loadGundle(const std::string& gundleFilePath);
     void destroyAPI();
     void render();
@@ -40,8 +40,9 @@ public:
     void installViewMatrix(const GMatrix& newViewMatrix);
 
     std::shared_ptr<GShadersServiceProtocol> shadersService;
-    std::shared_ptr<GImageServiceProtocol> materialsService;
+    std::shared_ptr<GImageServiceProtocol> imageService;
     std::shared_ptr<GSceneServiceProtocol> sceneService;
+    
 private:
     std::string applicationTitle;
     GVULKANDevice vulkanDevice;

@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "gvulkandevice.h"
+#include "glog.h"
 
 namespace spcGaneshaEngine {
 

@@ -3,34 +3,61 @@
 
 namespace spcGaneshaEngine {
 
-GVULKANSwapChain::GVULKANSwapChain() : swapChain(VK_NULL_HANDLE), imageFormat(VK_FORMAT_UNDEFINED), extent({800, 600}), renderPass(VK_NULL_HANDLE), depthImage("") {
+GVULKANSwapChain::GVULKANSwapChain() : swapChain(VK_NULL_HANDLE), imageFormat(VK_FORMAT_UNDEFINED), extent({800, 600}), renderPass(VK_NULL_HANDLE), depthImage(nullptr) {
 }
 
 GVULKANSwapChain::~GVULKANSwapChain() {
 }
 
-void GVULKANSwapChain::createSwapChain(VkSurfaceKHR& surface, GVULKANDevice& vulkanDevice) {
-    createSwapChain(extent, true, surface, vulkanDevice);
+void GVULKANSwapChain::createSwapChain(VkSurfaceKHR& surface,
+                                       std::shared_ptr<GCommandServiceProtocol> commandService,
+                                       std::shared_ptr<GImageServiceProtocol> imageService,
+                                       GVULKANDevice& vulkanDevice) {
+    createSwapChain(extent, 
+                    true,
+                    surface,
+                    commandService,
+                    imageService,
+                    vulkanDevice);
 }
 
-void GVULKANSwapChain::createSwapChain(const TUInt screenWidth, const TUInt screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
-    createSwapChain({screenWidth, screenHeight}, true, surface, vulkanDevice);
+void GVULKANSwapChain::createSwapChain(const TUInt screenWidth,
+                                       const TUInt screenHeight,
+                                       std::shared_ptr<GCommandServiceProtocol> commandService,
+                                       std::shared_ptr<GImageServiceProtocol> imageService,
+                                       VkSurfaceKHR& surface,
+                                       GVULKANDevice& vulkanDevice) {
+    createSwapChain({screenWidth, screenHeight},
+                    true, 
+                    surface,
+                    commandService,
+                    imageService,
+                    vulkanDevice);
 }
 
-void GVULKANSwapChain::destroySwapChain(GVULKANDevice& vulkanDevice) {
+void GVULKANSwapChain::updateScreenSize(const VkExtent2D& newExtent,
+                                        std::shared_ptr<GCommandServiceProtocol> commandService,
+                                        std::shared_ptr<GImageServiceProtocol> imageService,
+                                        VkSurfaceKHR& surface,
+                                        GVULKANDevice& vulkanDevice) {
+    vkDeviceWaitIdle(vulkanDevice.getLogicalDevice());
+    
+    destroySwapChainAndDependency(imageService, vulkanDevice);
+    createSwapChain(newExtent,
+                    false,
+                    surface,
+                    commandService,
+                    imageService,
+                    vulkanDevice);
+}
+
+void GVULKANSwapChain::destroySwapChain(std::shared_ptr<GImageServiceProtocol> imageService, GVULKANDevice& vulkanDevice) {
     if (swapChain == VK_NULL_HANDLE) {
         return;
     }
     
-    destroySwapChainAndDependency(vulkanDevice);
+    destroySwapChainAndDependency(imageService, vulkanDevice);
     destroyRenderPass(vulkanDevice.getLogicalDevice());
-}
-
-void GVULKANSwapChain::updateScreenSize(const TUInt screenWidth, const TUInt screenHeight, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
-    vkDeviceWaitIdle(vulkanDevice.getLogicalDevice());
-    
-    destroySwapChainAndDependency(vulkanDevice);
-    createSwapChain({screenWidth, screenHeight}, false, surface, vulkanDevice);
 }
 
 std::vector<VkImageView>& GVULKANSwapChain::getImageViewsArray() {
@@ -63,29 +90,43 @@ std::vector<VkFramebuffer>& GVULKANSwapChain::getFramebuffers() {
 
 #pragma mark - Routine -
 
-void GVULKANSwapChain::createSwapChain(const VkExtent2D& initialExtent, const TBool shouldCreateRenderPass, VkSurfaceKHR& surface, GVULKANDevice& vulkanDevice) {
+void GVULKANSwapChain::createSwapChain(const VkExtent2D& initialExtent, 
+                                       const TBool shouldCreateRenderPass,
+                                       VkSurfaceKHR& surface,
+                                       std::shared_ptr<GCommandServiceProtocol> commandService,
+                                       std::shared_ptr<GImageServiceProtocol> imageService,
+                                       GVULKANDevice& vulkanDevice) {
     SwapChainSupportDetails supportDetails = vulkanDevice.querySwapChainSupport(surface);
     
     swapChain = createNewSwapChain(initialExtent, supportDetails, vulkanDevice, surface);
     imageFormat = selectSwapSurfaceFormat(supportDetails.formats).format;
-    extent = selectSwapExtent(supportDetails.surfaceCapabilities, screenWidth, screenHeight);
+    extent = selectSwapExtent(supportDetails.surfaceCapabilities, initialExtent);
 
     if (shouldCreateRenderPass) {
         renderPass = createRenderPass(imageFormat, vulkanDevice);
     }
 
-    depthImage.createImage(extent,
-                           vulkanDevice.findDepthImageFormat(),
-                           VK_IMAGE_ASPECT_DEPTH_BIT,
-                           VK_IMAGE_TILING_OPTIMAL,
-                           VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
-                           vulkanDevice);
-    imagesArray = ejectImagesArray(vulkanDevice.getLogicalDevice(), swapChain);
-    imageViewsArray = createImageViews(vulkanDevice.getLogicalDevice(), imagesArray);
-    framebuffersArray = createFramebuffers(vulkanDevice.getLogicalDevice(), imageViewsArray, depthImage.getImageView(), renderPass, extent);
+    depthImage = imageService->createImage("SwapCHainDepthImage",
+                                           extent,
+                                           vulkanDevice.findDepthImageFormat(),
+                                           VK_IMAGE_ASPECT_DEPTH_BIT,
+                                           VK_IMAGE_TILING_OPTIMAL,
+                                           VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+                                           commandService,
+                                           vulkanDevice);
+    imagesArray = ejectImagesArray(swapChain, vulkanDevice.getLogicalDevice());
+    imageViewsArray = createImageViews(imagesArray, vulkanDevice.getLogicalDevice());
+    framebuffersArray = createFramebuffers(imageViewsArray,
+                                           depthImage->imageView,
+                                           renderPass,
+                                           extent,
+                                           vulkanDevice.getLogicalDevice());
 }
 
-VkSwapchainKHR GVULKANSwapChain::createNewSwapChain(const VkExtent2D& initialExtent, const SwapChainSupportDetails& supportDetails, GVULKANDevice& vulkanDevice, VkSurfaceKHR& surface) {
+VkSwapchainKHR GVULKANSwapChain::createNewSwapChain(const VkExtent2D& initialExtent,
+                                                    const SwapChainSupportDetails& supportDetails,
+                                                    GVULKANDevice& vulkanDevice,
+                                                    VkSurfaceKHR& surface) {
     VkSurfaceFormatKHR surfaceFormat = selectSwapSurfaceFormat(supportDetails.formats);
     VkExtent2D newExtent = selectSwapExtent(supportDetails.surfaceCapabilities, initialExtent);
     
@@ -129,7 +170,7 @@ VkSwapchainKHR GVULKANSwapChain::createNewSwapChain(const VkExtent2D& initialExt
     return newSwapChain;
 }
 
-std::vector<VkImage> GVULKANSwapChain::ejectImagesArray(VkDevice device, const VkSwapchainKHR& swapChainSource) {
+std::vector<VkImage> GVULKANSwapChain::ejectImagesArray(const VkSwapchainKHR& swapChainSource, VkDevice device) {
     std::vector<VkImage> newImagesArray;
     
     TUInt count;
@@ -140,7 +181,7 @@ std::vector<VkImage> GVULKANSwapChain::ejectImagesArray(VkDevice device, const V
     return newImagesArray;
 }
 
-void GVULKANSwapChain::destroySwapChainAndDependency(GVULKANDevice& vulkanDevice) {
+void GVULKANSwapChain::destroySwapChainAndDependency(std::shared_ptr<GImageServiceProtocol> imageService, GVULKANDevice& vulkanDevice) {
     for (auto framebuffer : framebuffersArray) {
         vkDestroyFramebuffer(vulkanDevice.getLogicalDevice(), framebuffer, nullptr);
     }
@@ -152,8 +193,8 @@ void GVULKANSwapChain::destroySwapChainAndDependency(GVULKANDevice& vulkanDevice
     imageViewsArray.clear();
     imagesArray.clear();
     
-    depthImage.destroyImage(vulkanDevice.getLogicalDevice());
-    depthImage = GVULKANImage("");
+    imageService->destroyImage(depthImage, vulkanDevice);
+    depthImage = nullptr;
     
     vkDestroySwapchainKHR(vulkanDevice.getLogicalDevice(), swapChain, nullptr);
     swapChain = VK_NULL_HANDLE;
@@ -227,7 +268,7 @@ VkRenderPass GVULKANSwapChain::createRenderPass(VkFormat format, GVULKANDevice& 
     return newRenderPass;
 }
 
-std::vector<VkFramebuffer> GVULKANSwapChain::createFramebuffers(VkDevice device, const std::vector<VkImageView>& useImagesViewArray, VkImageView depthImageView, VkRenderPass useRenderPass, const VkExtent2D& useExtent) {
+std::vector<VkFramebuffer> GVULKANSwapChain::createFramebuffers(const std::vector<VkImageView>& useImagesViewArray, VkImageView depthImageView, VkRenderPass useRenderPass, const VkExtent2D& useExtent, VkDevice device) {
     std::vector<VkFramebuffer> newFramebuffersArray;
     
     newFramebuffersArray.resize(useImagesViewArray.size());
@@ -254,7 +295,7 @@ std::vector<VkFramebuffer> GVULKANSwapChain::createFramebuffers(VkDevice device,
     return newFramebuffersArray;
 }
 
-std::vector<VkImageView> GVULKANSwapChain::createImageViews(VkDevice logicalDevice, std::vector<VkImage>& swapChainImagesArray) {
+std::vector<VkImageView> GVULKANSwapChain::createImageViews(std::vector<VkImage>& swapChainImagesArray, VkDevice logicalDevice) {
     std::vector<VkImageView> newImageViewsArray;
 
     GVULKANTools tools;

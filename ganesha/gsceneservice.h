@@ -3,7 +3,16 @@
 
 #include <vector>
 
+#include "ganeshatypes.h"
 #include "gscene.h"
+#include "gmesh.h"
+#include "gvector.h"
+#include "gvulkanimage.h"
+#include "gvulkandevice.h"
+#include "gimageservice.h"
+#include "gshadersservice.h"
+#include "gdescriptorsetservice.h"
+#include "gcommandservice.h"
 
 namespace spcGaneshaEngine {
 
@@ -19,11 +28,17 @@ public:
     /// Creates new mesh object
     /// - Parameter vertexesArray: vertexes array
     /// - Parameter indexesArray: indexes array
-    virtual std::shared_ptr<GMesh> createNewMesh(const std::vector<TFloat>& vertexesArray, const TIndexArray& indexesArray) = 0;
+    virtual std::shared_ptr<GMesh> createNewMesh(const std::vector<TFloat>& vertexesArray, 
+                                                 const TIndexArray& indexesArray) = 0;
     
     /// Creates new mesh object
     /// - Parameter vertexesArray: gltf file which describes scene content
-    virtual void addMeshInstance(GScene& scene, std::shared_ptr<GMesh>, const GVector& translation, const GVector& rotation, const GVector& scale, std::shared_ptr<GVULKANImage> material) = 0;
+    virtual void addMeshInstance(GScene& scene, 
+                                 std::shared_ptr<GMesh>,
+                                 const GVector& translation,
+                                 const GVector& rotation,
+                                 const GVector& scale,
+                                 std::shared_ptr<GVULKANImage> material) = 0;
 
     /// Adds fragment shader to scene
     /// - Parameter scene: scene to which this shader should be added
@@ -36,27 +51,40 @@ public:
     virtual void addVertexShader(GScene& scene, const std::string& shaderFilePath) = 0;
 
     /// Takes all the content described in scene object and loads it to video memory. GMesh and GVULKANImage already loaded by that moment
-    virtual void loadScene(const GScene& scene) = 0;
+    virtual void deployScene(const GScene& scene) = 0;
     
+    virtual void clearScene(const GScene& scene) = 0;
 };
 
 class GSceneService: public GSceneServiceProtocol {
 public:
-    GSceneService(GDescriptorsetServiceProtocol *descriptorsetService, GCommandServiceProtocol *commandService, GVULKANDevice& vulkanDevice);
+    GSceneService(std::shared_ptr<GDescriptorsetServiceProtocol> descriptorsetService,
+                  std::shared_ptr<GImageServiceProtocol> imageService,
+                  std::shared_ptr<GShadersServiceProtocol> shaderService,
+                  std::shared_ptr<GCommandServiceProtocol> commandService,
+                  GVULKANDevice& vulkanDevice);
     virtual ~GSceneService();
     
     void init() override;
     void destroy() override;
     GScene createNewScene(const std::string& gltfFile) override;
     std::shared_ptr<GMesh> createNewMesh(const std::vector<TFloat>& vertexesArray, const TIndexArray& indexesArray) override;
-    void addMeshInstance(GScene& scene, std::shared_ptr<GMesh>, const GVector& translation, const GVector& rotation, const GVector& scale, std::shared_ptr<GVULKANImage> material) override;
+    void addMeshInstance(GScene& scene, 
+                         std::shared_ptr<GMesh>,
+                         const GVector& translation,
+                         const GVector& rotation,
+                         const GVector& scale,
+                         std::shared_ptr<GVULKANImage> material) override;
     void addFragmentShader(GScene& scene, const std::string& shaderFilePath) override;
     void addVertexShader(GScene& scene, const std::string& shaderFilePath) override;
-    void loadScene(const GScene& scene) override;
+    void deployScene(const GScene& scene) override;
+    void clearScene(const GScene& scene) override;
 
 private:
-    GDescriptorsetServiceProtocol *descriptorsetService;
-    GCommandServiceProtocol *commandService;
+    std::shared_ptr<GShadersServiceProtocol> shaderService;
+    std::shared_ptr<GImageServiceProtocol> imageService;
+    std::shared_ptr<GDescriptorsetServiceProtocol> descriptorsetService;
+    std::shared_ptr<GCommandServiceProtocol> commandService;
     GVULKANDevice& vulkanDevice;
 };
 

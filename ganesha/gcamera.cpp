@@ -1,9 +1,10 @@
 #include <math.h>
+
 #include "gcamera.h"
 
 namespace spcGaneshaEngine {
 
-GCamera::GCamera(GCameraData& cameraData) : cameraData(cameraData) {
+GCamera::GCamera(const GCameraData& cameraData) : cameraData(cameraData) {
 }
 
 GCamera::~GCamera() {

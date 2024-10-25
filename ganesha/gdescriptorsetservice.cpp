@@ -35,8 +35,8 @@ VkDescriptorSet GDescriptorsetService::getDescriptorset() {
 void GDescriptorsetService::updateDescriptorset(GVULKANImage& image, TUInt bindingIndex) {
     VkDescriptorImageInfo imageInfo = { };
     imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    imageInfo.imageView = image.getImageView();
-    imageInfo.sampler = image.getSampler();
+    imageInfo.imageView = image.imageView;
+    imageInfo.sampler = image.sampler;
     
     VkWriteDescriptorSet writeDescriptorset = { };
     writeDescriptorset.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;

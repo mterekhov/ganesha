@@ -2,13 +2,11 @@
 #define SPCGANESHAENGINE_GVULKANPIPELINE_H
 
 #include <vulkan/vulkan.h>
-#include <array>
+#include <vector>
 
-#include "glog.h"
 #include "gvulkandevice.h"
 #include "gvulkanswapchain.h"
 #include "gdescriptorsetservice.h"
-#include "gshadersservice.h"
 
 namespace spcGaneshaEngine {
 
@@ -17,10 +15,10 @@ public:
     GVULKANPipeline();
     ~GVULKANPipeline();
     
-    void createPipeline(GVULKANDevice& vulkanDevice, 
-                        GVULKANSwapChain& swapChain,
+    void createPipeline(GVULKANSwapChain& swapChain,
                         std::vector<VkPipelineShaderStageCreateInfo>& shadersArray,
-                        std::shared_ptr<GDescriptorsetServiceProtocol> descriptorsetService);
+                        std::shared_ptr<GDescriptorsetServiceProtocol> descriptorsetService,
+                        GVULKANDevice& vulkanDevice);
     void destroyPipeline(GVULKANDevice& vulkanDevice);
     VkPipeline getGraphicsPipeline();
     VkPipelineLayout getPipelineLayout();

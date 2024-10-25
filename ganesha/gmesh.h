@@ -2,11 +2,12 @@
 #define SPCGANESHAENGINE_GMESH_H
 
 #include <vulkan/vulkan.h>
+#include <vector>
 
 #include "ganeshatypes.h"
-#include "gvulkanbuffer.h"
-#include "gvulkanimage.h"
 #include "gcommandservice.h"
+#include "gvulkandevice.h"
+#include "gvulkanbuffer.h"
 
 namespace spcGaneshaEngine {
 
@@ -17,7 +18,7 @@ public:
     virtual ~GMesh();
     
     virtual bool isDeployed();
-    virtual void deploy(GCommandServiceProtocol *commandService,
+    virtual void deploy(std::shared_ptr<GCommandServiceProtocol> commandService,
                         GVULKANDevice& vulkanDevice);
     virtual void render(TUInt instancesNumber, VkCommandBuffer renderCommand);
     virtual void destroyMesh(VkDevice device);

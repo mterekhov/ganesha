@@ -2,6 +2,7 @@
 #define SPCGANESHAENGINE_GCOMMANDSERVICE_H
 
 #include <vulkan/vulkan.h>
+#include <vector>
 
 #include "gvulkandevice.h"
 

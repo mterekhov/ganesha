@@ -2,9 +2,8 @@
 #define SPCGANESHAENGINE_GVULKANTOOLS_H
 
 #include <vulkan/vulkan.h>
-
-#include "ganeshatypes.h"
-#include "gvulkandevice.h"
+#include <string>
+#include <vector>
 
 namespace spcGaneshaEngine {
 

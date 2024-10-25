@@ -1,5 +1,5 @@
 #include "gvulkanbuffer.h"
-#include "gvulkantools.h"
+#include "glog.h"
 
 namespace spcGaneshaEngine {
 
@@ -12,12 +12,12 @@ GVULKANBuffer::~GVULKANBuffer() {
 }
 
 void GVULKANBuffer::createBuffer(const void *data,
-                  const VkDeviceSize size,
-                  const VkBufferUsageFlags usage,
-                  const VkMemoryPropertyFlags properties,
-                  const TBool protectAccess,
-                  GCommandServiceProtocol *commandService,
-                  GVULKANDevice& vulkanDevice) {
+                                 const VkDeviceSize size,
+                                 const VkBufferUsageFlags usage,
+                                 const VkMemoryPropertyFlags properties,
+                                 const TBool protectAccess,
+                                 std::shared_ptr<GCommandServiceProtocol> commandService,
+                                 GVULKANDevice& vulkanDevice) {
     if (protectAccess) {
         VkBuffer stagingBuffer = createBuffer(size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, vulkanDevice.getLogicalDevice());
         VkDeviceMemory stagingBufferMemory = allocateBufferMemory(stagingBuffer, 
@@ -105,7 +105,7 @@ VkDeviceMemory GVULKANBuffer::allocateBufferMemory(VkBuffer originalBuffer, cons
     return newBufferMemory;
 }
 
-void GVULKANBuffer::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, const VkDeviceSize size, GCommandServiceProtocol *commandService) {
+void GVULKANBuffer::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, const VkDeviceSize size, std::shared_ptr<GCommandServiceProtocol> commandService) {
     VkCommandBuffer commandBuffer = commandService->allocateCommandBuffer();
     
     VkCommandBufferBeginInfo beginInfo = { };

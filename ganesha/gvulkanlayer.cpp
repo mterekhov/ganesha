@@ -1,5 +1,4 @@
 #include "gvulkanlayer.h"
-#include "gvulkanapi.h"
 #include "gupdateframesizeevent.h"
 #include "gloadgundleevent.h"
 #include "gupdatecameralookevent.h"
@@ -7,7 +6,7 @@
 
 namespace spcGaneshaEngine {
 
-GVULKANLayer::GVULKANLayer(const std::string& applicationTitle, void *metalLayer, GEventsServiceProtocol *eventsService) : GLayer("VULKAN", eventsService), vulkanAPI(std::make_shared<GVULKANAPI>(applicationTitle, metalLayer)) {
+GVULKANLayer::GVULKANLayer(const std::string& applicationTitle, void *metalLayer, std::shared_ptr<GEventsServiceProtocol> eventsService) : GLayer("VULKAN", eventsService), vulkanAPI(std::make_shared<GVULKANAPI>(applicationTitle, metalLayer)) {
 }
 
 GVULKANLayer::~GVULKANLayer() {

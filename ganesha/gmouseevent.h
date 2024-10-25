@@ -1,7 +1,10 @@
 #ifndef SPCGANESHAENGINE_GMOUSEEVENT_H
 #define SPCGANESHAENGINE_GMOUSEEVENT_H
 
+#include <string>
+
 #include "gevent.h"
+#include "ganeshatypes.h"
 
 namespace spcGaneshaEngine {
 

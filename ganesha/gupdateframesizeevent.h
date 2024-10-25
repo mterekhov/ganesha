@@ -1,8 +1,10 @@
 #ifndef SPCGANESHAENGINE_GUPDATE_FRAMESIZE_EVENT_H
 #define SPCGANESHAENGINE_GUPDATE_FRAMESIZE_EVENT_H
 
+#include <string>
+
 #include "gevent.h"
-#include "gviewport.h"
+#include "ganeshatypes.h"
 
 namespace spcGaneshaEngine {
 

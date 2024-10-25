@@ -1,68 +1,57 @@
-//
-//  ganesha.h
-//  ganesha
-//
-//  Created by Mihail Terekhov on 23.07.2021.
-//
-
 #ifndef GANESHA_H
 #define GANESHA_H
 
-//  This is umbrella header of Ganesha engine
+#include "ganeshatypes.h"
 
 //  Basics
 #include "gcolor.h"
 #include "gmatrix.h"
 #include "gpoint.h"
 #include "gpoint2d.h"
+#include "gquaternion.h"
 #include "gvector.h"
-#include "gcolor.h"
-
-//  Tools
-#include "glog.h"
 
 //  VULKAN
-#include "ggraphicsapiprotocol.h"
 #include "gvulkanapi.h"
-#include "gcommandservice.h"
-#include "gdescriptorsetservice.h"
 #include "gvulkaninstance.h"
 #include "gvulkandevice.h"
 #include "gvulkanpipeline.h"
 #include "gvulkanswapchain.h"
 #include "gvulkanbuffer.h"
-#include "gcamera.h"
-#include "gcameradata.h"
 
 //  Content
-#include "gscene.h"
-#include "gsceneservice.h"
-#include "gimageservice.h"
+#include "gshader.h"
 #include "gshadersservice.h"
+#include "gvulkanimage.h"
+#include "gimageservice.h"
+#include "gsceneservice.h"
+#include "gscene.h"
+#include "gscenenode.h"
+#include "gmesh.h"
+
 #include "gviewport.h"
+#include "gcamera.h"
+#include "gcameradata.h"
+#include "gdescriptorsetservice.h"
+#include "gcommandservice.h"
+#include "gvulkantools.h"
+#include "gtga.h"
 
-//  Application
-#include "gapplication.h"
-#include "ganeshatypes.h"
-
-//  Events
+//  Events and Layers
+#include "geventsservice.h"
 #include "gevent.h"
 #include "geventshell.h"
-#include "geventsservice.h"
 #include "gwindowresizeevent.h"
 #include "gmouseevent.h"
 #include "gkeyboardevent.h"
-
 #include "gupdatecameralookevent.h"
 #include "gupdatecamerapositionevent.h"
 #include "gloadgundleevent.h"
-#include "gupdateviewmatrixevent.h"
-#include "gupdateviewportevent.h"
-
-//  Layers
+#include "gupdateframesizeevent.h"
+#include "glayersservice.h"
 #include "glayer.h"
 #include "gsystemlayer.h"
-#include "glayersservice.h"
 #include "gvulkanlayer.h"
+#include "gapplication.h"
 
 #endif  //  GANESHA_H

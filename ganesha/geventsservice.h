@@ -1,12 +1,11 @@
 #ifndef SPCGANESHAENGINE_GEVENTSSERVICE_H
 #define SPCGANESHAENGINE_GEVENTSSERVICE_H
 
+#include <string>
+
 #include "geventshell.h"
-#include "gmatrix.h"
-#include "gviewport.h"
+#include "ganeshatypes.h"
 #include "gpoint2d.h"
-#include "gpoint.h"
-#include "gvector.h"
 #include "gcameradata.h"
 
 namespace spcGaneshaEngine {

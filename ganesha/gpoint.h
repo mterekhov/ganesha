@@ -2,6 +2,7 @@
 #define SPCGANESHAENGINE_GPOINT_H
 
 #include <vector>
+
 #include "ganeshatypes.h"
 
 namespace spcGaneshaEngine {

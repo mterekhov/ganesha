@@ -2,15 +2,15 @@
 #define SPCGANESHAENGINE_GCAMERA_H
 
 #include "ganeshatypes.h"
-#include "gmatrix.h"
 #include "gcameradata.h"
+#include "gmatrix.h"
 
 namespace spcGaneshaEngine {
 
 /// Manipulates with current position
 class GCamera {
 public:
-    GCamera(GCameraData& cameraData);
+    GCamera(const GCameraData& cameraData);
     ~GCamera();
     
     GMatrix viewMatrix();
@@ -25,7 +25,7 @@ public:
     void backwardCamera();
 
 private:
-    GCameraData& cameraData;
+    GCameraData cameraData;
 };
 
 };  //  spcGaneshaEngine

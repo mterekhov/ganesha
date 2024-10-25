@@ -1,15 +1,16 @@
 #ifndef SPCGANESHAENGINE_GSYSTEMLAYER_H
 #define SPCGANESHAENGINE_GSYSTEMLAYER_H
 
+#include <vector>
+
 #include "glayer.h"
-#include "gcamera.h"
 
 namespace spcGaneshaEngine {
 
 /// This layer should process keyboard, mouse and window events
 class GSystemLayer : public GLayer {
 public:
-    GSystemLayer(GEventsServiceProtocol *eventsService);
+    GSystemLayer(std::shared_ptr<GEventsServiceProtocol> eventsService);
     virtual ~GSystemLayer();
 
     std::vector<GEventShell> onEvent(GEventShell& shell) override;

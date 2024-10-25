@@ -1,6 +1,8 @@
 #ifndef SPCGANESHAENGINE_GEVENT_H
 #define SPCGANESHAENGINE_GEVENT_H
 
+#include <string>
+
 #include "ganeshatypes.h"
 
 namespace spcGaneshaEngine {

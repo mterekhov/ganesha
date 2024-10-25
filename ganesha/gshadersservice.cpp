@@ -2,6 +2,7 @@
 
 #include "gshadersservice.h"
 #include "gvulkantools.h"
+#include "glog.h"
 
 namespace spcGaneshaEngine {
 
@@ -32,7 +33,8 @@ bool GShadersService::isDeployed(std::shared_ptr<GShader> shader) {
     return true;
 }
 
-void GShadersService::deployShader(std::shared_ptr<GShader> shader, GCommandServiceProtocol *commandService, GVULKANDevice& vulkanDevice) {
+void GShadersService::deployShader(std::shared_ptr<GShader> shader,
+                                   GVULKANDevice& vulkanDevice) {
     GVULKANTools tools;
     const std::vector<uint8_t> code = tools.readFile(shader->getShaderFileName());
     VkShaderModuleCreateInfo createInfo = { };
@@ -57,12 +59,14 @@ std::shared_ptr<GShader> GShadersService::createVertexShader(const std::string& 
     return newShader;
 }
 
-std::vector<VkPipelineShaderStageCreateInfo> GShadersService::getShadersPipelineInfo(std::vector<std::shared_ptr<GShader>>& shadersArray, const VkShaderStageFlagBits stage, GCommandServiceProtocol *commandService, GVULKANDevice& vulkanDevice) {
+std::vector<VkPipelineShaderStageCreateInfo> GShadersService::getShadersPipelineInfo(std::vector<std::shared_ptr<GShader>>& shadersArray,
+                                                                                     const VkShaderStageFlagBits stage,
+                                                                                     GVULKANDevice& vulkanDevice) {
     std::vector<VkPipelineShaderStageCreateInfo> infoArray;
     
     for (std::shared_ptr<GShader> shader:shadersArray) {
         if (!isDeployed(shader)) {
-            deployShader(shader, commandService, vulkanDevice);
+            deployShader(shader, vulkanDevice);
         }
         infoArray.push_back(shaderPipelineInfo(shader, stage));
     }

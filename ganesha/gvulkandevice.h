@@ -2,8 +2,8 @@
 #define SPCGANESHAENGINE_GVULKANDEVICE_H
 
 #include <vulkan/vulkan.h>
+#include <vector>
 
-#include "glog.h"
 #include "ganeshatypes.h"
 #include "gvulkaninstance.h"
 

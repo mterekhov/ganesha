@@ -2,7 +2,6 @@
 #define SPCGANESHAENGINE_GMATRIX_H
 
 #include "ganeshatypes.h"
-#include "gpoint.h"
 
 namespace spcGaneshaEngine {
     

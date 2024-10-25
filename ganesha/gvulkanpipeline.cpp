@@ -1,5 +1,5 @@
 #include "gvulkanpipeline.h"
-#include "gvulkantools.h"
+#include "glog.h"
 
 namespace spcGaneshaEngine {
 
@@ -9,7 +9,7 @@ GVULKANPipeline::GVULKANPipeline() : graphicsPipeline(VK_NULL_HANDLE), pipelineL
 GVULKANPipeline::~GVULKANPipeline() {
 }
 
-void GVULKANPipeline::createPipeline(GVULKANDevice& vulkanDevice, GVULKANSwapChain& swapChain, std::vector<VkPipelineShaderStageCreateInfo>& shadersArray, std::shared_ptr<GDescriptorsetServiceProtocol> descriptorsetService) {
+void GVULKANPipeline::createPipeline(GVULKANSwapChain& swapChain, std::vector<VkPipelineShaderStageCreateInfo>& shadersArray, std::shared_ptr<GDescriptorsetServiceProtocol> descriptorsetService, GVULKANDevice& vulkanDevice) {
     VkPipelineVertexInputStateCreateInfo vertexInputInfo = { };
     std::vector<VkVertexInputBindingDescription> bindingDescription = descriptorsetService->getBindingDescription();
     std::vector<VkVertexInputAttributeDescription> attributeDescription = descriptorsetService->getAttributeDescriptions();

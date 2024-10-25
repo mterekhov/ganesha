@@ -1,4 +1,5 @@
 #include "gcommandservice.h"
+#include "glog.h"
 
 namespace spcGaneshaEngine {
 

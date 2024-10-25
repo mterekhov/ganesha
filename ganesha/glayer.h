@@ -2,6 +2,7 @@
 #define SPCGANESHAENGINE_GLAYER_H
 
 #include <vector>
+#include <string>
 
 #include "geventshell.h"
 #include "geventsservice.h"
@@ -11,7 +12,7 @@ namespace spcGaneshaEngine {
 /// This is the base class for layers in Ganesha engine. Every layer can modify content which will be rendered
 class GLayer {
 public:
-    GLayer(const std::string& name, GEventsServiceProtocol *eventsService);
+    GLayer(const std::string& name, std::shared_ptr<GEventsServiceProtocol> eventsService);
     virtual ~GLayer();
     
     /// after layer added into processing loop
@@ -28,7 +29,7 @@ public:
 
 protected:
     const std::string name;
-    GEventsServiceProtocol *eventsService;
+    std::shared_ptr<GEventsServiceProtocol> eventsService;
 };
 
 };  //  spcGaneshaEngine

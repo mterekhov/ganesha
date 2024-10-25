@@ -19,7 +19,7 @@ public:
                       const VkBufferUsageFlags usage,
                       const VkMemoryPropertyFlags properties,
                       const TBool protectAccess,
-                      GCommandServiceProtocol *commandService,
+                      std::shared_ptr<GCommandServiceProtocol> commandService,
                       GVULKANDevice& vulkanDevice);
     void destroyBuffer(VkDevice device);
     
@@ -37,7 +37,7 @@ private:
     TUInt bufferSize;
     VkDeviceMemory bufferMemory;
     
-    void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, const VkDeviceSize size, GCommandServiceProtocol *commandService);
+    void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, const VkDeviceSize size, std::shared_ptr<GCommandServiceProtocol> commandService);
     VkBuffer createBuffer(const VkDeviceSize size, const VkBufferUsageFlags usage, VkDevice device);
     VkDeviceMemory allocateBufferMemory(VkBuffer originalBuffer, const VkMemoryPropertyFlags properties, GVULKANDevice& vulkanDevice);
 };

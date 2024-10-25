@@ -2,9 +2,9 @@
 #define SPCGANESHAENGINE_GVULKANINSATANCE_H
 
 #include <vulkan/vulkan.h>
+#include <string>
 
 #include "ganeshatypes.h"
-#include "glog.h"
 
 namespace spcGaneshaEngine {
 

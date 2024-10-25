@@ -1,6 +1,8 @@
 #ifndef SPCGANESHAENGINE_GUPDATE_CAMERA_POSITION_EVENT_H
 #define SPCGANESHAENGINE_GUPDATE_CAMERA_POSITION_EVENT_H
 
+#include <string>
+
 #include "gevent.h"
 #include "gcameradata.h"
 

@@ -17,7 +17,7 @@ bool GMesh::isDeployed() {
     return false;
 }
 
-void GMesh::deploy(GCommandServiceProtocol *commandService,
+void GMesh::deploy(std::shared_ptr<GCommandServiceProtocol> commandService,
                    GVULKANDevice& vulkanDevice) {
     vertexesBuffer.createBuffer(vertexesArray.data(),
                                 sizeof(TFloat) * vertexesArray.size(),

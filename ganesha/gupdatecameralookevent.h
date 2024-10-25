@@ -1,6 +1,8 @@
 #ifndef SPCGANESHAENGINE_GUPDATE_CAMERA_LOOK_EVENT_H
 #define SPCGANESHAENGINE_GUPDATE_CAMERA_LOOK_EVENT_H
 
+#include <string>
+
 #include "gevent.h"
 #include "gpoint2d.h"
 

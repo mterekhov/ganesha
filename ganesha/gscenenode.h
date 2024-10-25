@@ -1,23 +1,25 @@
 #ifndef SPCGANESHAENGINE_GSCENE_NODE_H
 #define SPCGANESHAENGINE_GSCENE_NODE_H
 
-#include <vector>
-
 #include "gmesh.h"
 #include "gvector.h"
-#include "gmatrix.h"
-#include "gvulkanbuffer.h"
-#include "gvulkandevice.h"
 #include "gcommandservice.h"
-#include "gdescriptorsetservice.h"
+#include "gvulkandevice.h"
 #include "gvulkanimage.h"
+#include "gvulkanbuffer.h"
 
 namespace spcGaneshaEngine {
 
 class GSceneNode {
 public:
-    GSceneNode(std::shared_ptr<GMesh> mesh, const GVector& newTranslation, const GVector& newRotation, const GVector& newScale, std::shared_ptr<GVULKANImage> newMaterial);
+    GSceneNode(std::shared_ptr<GMesh> mesh, 
+               const GVector& newTranslation,
+               const GVector& newRotation,
+               const GVector& newScale,
+               std::shared_ptr<GVULKANImage> newMaterial);
     ~GSceneNode();
+
+    void deploy(std::shared_ptr<GCommandServiceProtocol> commandService, GVULKANDevice& vulkanDevice);
 
     std::shared_ptr<GMesh> mesh;
     GVector translation;
@@ -31,7 +33,7 @@ public:
     //    GVULKANBuffer& getInstanceBuffer();
     //    GMesh *getMesh();
     //
-    //    GVULKANBuffer instanceBuffer;
+        GVULKANBuffer instanceBuffer;
     //    GCommandServiceProtocol *commandService;
     //    GDescriptorsetServiceProtocol *descriptorsetService;
     //    GVULKANDevice& vulkanDevice;

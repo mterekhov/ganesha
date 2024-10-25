@@ -8,7 +8,7 @@
 
 namespace spcGaneshaEngine {
 
-GSystemLayer::GSystemLayer(GEventsServiceProtocol *eventsService) : GLayer("system", eventsService) {
+GSystemLayer::GSystemLayer(std::shared_ptr<GEventsServiceProtocol> eventsService) : GLayer("system", eventsService) {
 }
 
 GSystemLayer::~GSystemLayer() {

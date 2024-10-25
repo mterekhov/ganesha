@@ -3,7 +3,7 @@
 
 #include "ganeshatypes.h"
 #include "gvector.h"
-#include "gquaternion.h"
+#include "gpoint.h"
 
 namespace spcGaneshaEngine {
 

@@ -2,11 +2,7 @@
 #define SPCGANESHAENGINE_GSHADER_H
 
 #include <vulkan/vulkan.h>
-
-#include "ganeshatypes.h"
-#include "gvulkanbuffer.h"
-#include "gvulkanimage.h"
-#include "gcommandservice.h"
+#include <string>
 
 namespace spcGaneshaEngine {
 

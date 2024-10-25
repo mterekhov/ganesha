@@ -1,7 +1,10 @@
 #ifndef SPCGANESHAENGINE_GKEYBOARDEVENT_H
 #define SPCGANESHAENGINE_GKEYBOARDEVENT_H
 
+#include <string>
+
 #include "gevent.h"
+#include "ganeshatypes.h"
 
 namespace spcGaneshaEngine {
 

@@ -3,10 +3,7 @@
 
 #include "glayersservice.h"
 #include "geventsservice.h"
-#include "ganeshatypes.h"
-#include "gevent.h"
 #include "geventshell.h"
-#include "gvulkanapi.h"
 
 namespace spcGaneshaEngine {
 

@@ -1,4 +1,5 @@
 #include "gvulkaninstance.h"
+#include "glog.h"
 
 namespace spcGaneshaEngine {
 
