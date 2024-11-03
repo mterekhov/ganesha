@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DE20635B2B5E5AC700D8E12F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DE20635A2B5E5AC700D8E12F /* README.md */; };
 		DE2BE7EA2B7A8F870047C5D5 /* gmouseevent.h in Headers */ = {isa = PBXBuildFile; fileRef = DE2BE7E62B7A8F870047C5D5 /* gmouseevent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE2BE7EB2B7A8F870047C5D5 /* gmouseevent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE2BE7E72B7A8F870047C5D5 /* gmouseevent.cpp */; };
 		DE2BE7EC2B7A8F870047C5D5 /* gkeyboardevent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE2BE7E82B7A8F870047C5D5 /* gkeyboardevent.cpp */; };
@@ -45,6 +44,8 @@
 		DE7DD1632B5A8A6E00E22894 /* gcommandservice.h in Headers */ = {isa = PBXBuildFile; fileRef = DE7DD1612B5A8A6E00E22894 /* gcommandservice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE7FAE422B9E408C00E4C648 /* gsceneservice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE7FAE402B9E408C00E4C648 /* gsceneservice.cpp */; };
 		DE7FAE432B9E408C00E4C648 /* gsceneservice.h in Headers */ = {isa = PBXBuildFile; fileRef = DE7FAE412B9E408C00E4C648 /* gsceneservice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE8878392CD6B550009BC2F4 /* frag.spv in Resources */ = {isa = PBXBuildFile; fileRef = DE8878372CD6B550009BC2F4 /* frag.spv */; };
+		DE88783A2CD6B550009BC2F4 /* vert.spv in Resources */ = {isa = PBXBuildFile; fileRef = DE8878382CD6B550009BC2F4 /* vert.spv */; };
 		DE8E318B2CC2B7F90026F9ED /* gshader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE8E31892CC2B7F90026F9ED /* gshader.cpp */; };
 		DE8E318C2CC2B7F90026F9ED /* gshader.h in Headers */ = {isa = PBXBuildFile; fileRef = DE8E318A2CC2B7F90026F9ED /* gshader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DE8E318F2CC4FE770026F9ED /* gloadgundleevent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE8E318D2CC4FE770026F9ED /* gloadgundleevent.cpp */; };
@@ -140,6 +141,10 @@
 		DE7FAE402B9E408C00E4C648 /* gsceneservice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gsceneservice.cpp; path = ganesha/gsceneservice.cpp; sourceTree = "<group>"; };
 		DE7FAE412B9E408C00E4C648 /* gsceneservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gsceneservice.h; path = ganesha/gsceneservice.h; sourceTree = "<group>"; };
 		DE82CE5C2B4A149500EF0925 /* ganesha.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ganesha.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE8878332CD6B4E3009BC2F4 /* shader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shader.vert; sourceTree = "<group>"; };
+		DE8878342CD6B4E3009BC2F4 /* shader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shader.frag; sourceTree = "<group>"; };
+		DE8878372CD6B550009BC2F4 /* frag.spv */ = {isa = PBXFileReference; lastKnownFileType = file; path = frag.spv; sourceTree = "<group>"; };
+		DE8878382CD6B550009BC2F4 /* vert.spv */ = {isa = PBXFileReference; lastKnownFileType = file; path = vert.spv; sourceTree = "<group>"; };
 		DE8E31892CC2B7F90026F9ED /* gshader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gshader.cpp; path = ganesha/gshader.cpp; sourceTree = "<group>"; };
 		DE8E318A2CC2B7F90026F9ED /* gshader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gshader.h; path = ganesha/gshader.h; sourceTree = "<group>"; };
 		DE8E318D2CC4FE770026F9ED /* gloadgundleevent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gloadgundleevent.cpp; path = ganesha/gloadgundleevent.cpp; sourceTree = "<group>"; };
@@ -344,6 +349,7 @@
 		DE82CE522B4A149500EF0925 = {
 			isa = PBXGroup;
 			children = (
+				DE8878312CD6B4E3009BC2F4 /* resources */,
 				DE20635A2B5E5AC700D8E12F /* README.md */,
 				DE82CE5E2B4A149500EF0925 /* ganesha */,
 				DE82CE5D2B4A149500EF0925 /* Products */,
@@ -378,6 +384,25 @@
 				DE5FD1412B8693F0002207A1 /* mackeycode.h */,
 			);
 			name = ganesha;
+			sourceTree = "<group>";
+		};
+		DE8878312CD6B4E3009BC2F4 /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				DE8878322CD6B4E3009BC2F4 /* shaders */,
+			);
+			path = resources;
+			sourceTree = "<group>";
+		};
+		DE8878322CD6B4E3009BC2F4 /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+				DE8878372CD6B550009BC2F4 /* frag.spv */,
+				DE8878382CD6B550009BC2F4 /* vert.spv */,
+				DE8878332CD6B4E3009BC2F4 /* shader.vert */,
+				DE8878342CD6B4E3009BC2F4 /* shader.frag */,
+			);
+			path = shaders;
 			sourceTree = "<group>";
 		};
 		DE8E31872CC2B7BE0026F9ED /* Materials */ = {
@@ -549,7 +574,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DE20635B2B5E5AC700D8E12F /* README.md in Resources */,
+				DE88783A2CD6B550009BC2F4 /* vert.spv in Resources */,
+				DE8878392CD6B550009BC2F4 /* frag.spv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
