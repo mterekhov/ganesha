@@ -29,7 +29,7 @@ struct ProjectionsBufferObject {
 
 class GVULKANAPI {
 public:
-    GVULKANAPI(const std::string& applicationTitle, void *metalLayer);
+    GVULKANAPI(const std::string& applicationTitle, void *metalLayer, const std::string& engineGundle);
     virtual ~GVULKANAPI();
 
     void loadGundle(const std::string& gundleFilePath);
@@ -44,6 +44,7 @@ public:
     std::shared_ptr<GSceneServiceProtocol> sceneService;
     
 private:
+    std::vector<VkPipelineShaderStageCreateInfo> baseShadersArray;
     std::string applicationTitle;
     GVULKANDevice vulkanDevice;
     GVULKANInstance vulkanInstance;

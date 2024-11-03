@@ -18,7 +18,15 @@ const TStringsArray useDeviceExtensions = {
     "VK_KHR_portability_subset"
 };
 
-GVULKANAPI::GVULKANAPI(const std::string& applicationTitle, void *metalLayer) : applicationTitle(applicationTitle) {
+const TStringsArray baseVertexShadersFileName = {
+    "vert.spv",
+};
+
+const TStringsArray baseFragmentShadersFileName = {
+    "frag.spv"
+};
+
+GVULKANAPI::GVULKANAPI(const std::string& applicationTitle, void *metalLayer, const std::string& engineGundle) : applicationTitle(applicationTitle) {
     //  create VULKAN instance
     vulkanInstance.createInstance(applicationTitle.c_str(), khronosValidationLayers, avoidInstanceExtensions);
     
@@ -51,8 +59,16 @@ GVULKANAPI::GVULKANAPI(const std::string& applicationTitle, void *metalLayer) : 
                                     commandService,
                                     imageService,
                                     vulkanDevice);
-    std::vector<VkPipelineShaderStageCreateInfo> shadersArray;
-    vulkanPipeline.createPipeline(vulkanSwapChain, shadersArray, descriptorService, vulkanDevice);
+
+    for (const std::string& shaderFile:baseFragmentShadersFileName) {
+        std::shared_ptr<GShader> newShader = shadersService->createFragmentShader(engineGundle + "/Resources/" + shaderFile);
+        baseShadersArray.push_back(shadersService->getSingleShaderPipelineInfo(newShader, VK_SHADER_STAGE_FRAGMENT_BIT, vulkanDevice));
+    }
+    for (const std::string& shaderFile:baseVertexShadersFileName) {
+        std::shared_ptr<GShader> newShader = shadersService->createVertexShader(engineGundle + "/Resources/" + shaderFile);
+        baseShadersArray.push_back(shadersService->getSingleShaderPipelineInfo(newShader, VK_SHADER_STAGE_VERTEX_BIT, vulkanDevice));
+    }
+    vulkanPipeline.createPipeline(vulkanSwapChain, baseShadersArray, descriptorService, vulkanDevice);
 
     TUInt framebuffersNumber = static_cast<TUInt>(vulkanSwapChain.framebuffersNumber());
     for (TUInt i = 0; i < framebuffersNumber; i++) {
@@ -92,9 +108,13 @@ void GVULKANAPI::loadGundle(const std::string& gundleFilePath) {
     GScene newScene;
     
     //  Loading shaders into video memory
-    std::vector<VkPipelineShaderStageCreateInfo> shadersArray = shadersService->getShadersPipelineInfo(newScene.fragmentShadersArray, VK_SHADER_STAGE_FRAGMENT_BIT, vulkanDevice);
-    std::vector<VkPipelineShaderStageCreateInfo> shadersArray2 = shadersService->getShadersPipelineInfo(newScene.vertexShadersArray, VK_SHADER_STAGE_VERTEX_BIT, vulkanDevice);
-    shadersArray.insert(shadersArray.end(), shadersArray2.begin(), shadersArray2.end());
+    std::vector<VkPipelineShaderStageCreateInfo> shadersArray = baseShadersArray;
+    
+    std::vector<VkPipelineShaderStageCreateInfo> tmpShadersArray = shadersService->getShadersPipelineInfo(newScene.fragmentShadersArray, VK_SHADER_STAGE_FRAGMENT_BIT, vulkanDevice);
+    shadersArray.insert(shadersArray.end(), tmpShadersArray.begin(), tmpShadersArray.end());
+
+    tmpShadersArray = shadersService->getShadersPipelineInfo(newScene.vertexShadersArray, VK_SHADER_STAGE_VERTEX_BIT, vulkanDevice);
+    shadersArray.insert(shadersArray.end(), tmpShadersArray.begin(), tmpShadersArray.end());
 
     //  creating pipeline
     vulkanPipeline.createPipeline(vulkanSwapChain, shadersArray, descriptorService, vulkanDevice);

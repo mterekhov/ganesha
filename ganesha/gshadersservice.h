@@ -22,6 +22,9 @@ public:
     virtual std::vector<VkPipelineShaderStageCreateInfo> getShadersPipelineInfo(std::vector<std::shared_ptr<GShader>>& shadersArray,
                                                                                 const VkShaderStageFlagBits stage,
                                                                                 GVULKANDevice& vulkanDevice) = 0;
+    virtual VkPipelineShaderStageCreateInfo getSingleShaderPipelineInfo(std::shared_ptr<GShader> shader,
+                                                                        const VkShaderStageFlagBits stage,
+                                                                        GVULKANDevice& vulkanDevice) = 0;
     virtual void destroyShader(std::shared_ptr<GShader> shader, VkDevice device) = 0;
     virtual bool isDeployed(std::shared_ptr<GShader> shader) = 0;
 };
@@ -38,6 +41,9 @@ public:
     std::vector<VkPipelineShaderStageCreateInfo> getShadersPipelineInfo(std::vector<std::shared_ptr<GShader>>& shadersArray, 
                                                                         const VkShaderStageFlagBits stage,
                                                                         GVULKANDevice& vulkanDevice) override;
+    VkPipelineShaderStageCreateInfo getSingleShaderPipelineInfo(std::shared_ptr<GShader> shader,
+                                                                const VkShaderStageFlagBits stage,
+                                                                GVULKANDevice& vulkanDevice) override;
     std::shared_ptr<GShader> createFragmentShader(const std::string& shaderFile) override;
     std::shared_ptr<GShader> createVertexShader(const std::string& shaderFile) override;
     void destroyShader(std::shared_ptr<GShader> shader, VkDevice device) override;

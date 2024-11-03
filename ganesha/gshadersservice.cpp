@@ -65,13 +65,20 @@ std::vector<VkPipelineShaderStageCreateInfo> GShadersService::getShadersPipeline
     std::vector<VkPipelineShaderStageCreateInfo> infoArray;
     
     for (std::shared_ptr<GShader> shader:shadersArray) {
-        if (!isDeployed(shader)) {
-            deployShader(shader, vulkanDevice);
-        }
-        infoArray.push_back(shaderPipelineInfo(shader, stage));
+        infoArray.push_back(getSingleShaderPipelineInfo(shader, stage, vulkanDevice));
     }
 
     return infoArray;
+}
+
+VkPipelineShaderStageCreateInfo GShadersService::getSingleShaderPipelineInfo(std::shared_ptr<GShader> shader,
+                                                                             const VkShaderStageFlagBits stage,
+                                                                             GVULKANDevice& vulkanDevice) {
+    if (!isDeployed(shader)) {
+        deployShader(shader, vulkanDevice);
+    }
+    
+    return shaderPipelineInfo(shader, stage);
 }
 
 VkPipelineShaderStageCreateInfo GShadersService::shaderPipelineInfo(std::shared_ptr<GShader> shader, const VkShaderStageFlagBits stage) {
